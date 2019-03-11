@@ -2,14 +2,11 @@
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class ezuinoParser extends Parser {
+public class EzuinoParser extends Parser {
 	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -111,7 +108,7 @@ public class ezuinoParser extends Parser {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-	public ezuinoParser(TokenStream input) {
+	public EzuinoParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
@@ -129,11 +126,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_start; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterStart(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterStart(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitStart(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitStart(this);
 		}
 	}
 
@@ -173,11 +170,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_dcls; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterDcls(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterDcls(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitDcls(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitDcls(this);
 		}
 	}
 
@@ -219,7 +216,7 @@ public class ezuinoParser extends Parser {
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
 		public ListContext list() {
 			return getRuleContext(ListContext.class,0);
 		}
@@ -229,11 +226,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_dcl; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterDcl(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterDcl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitDcl(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitDcl(this);
 		}
 	}
 
@@ -291,11 +288,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_stmts; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterStmts(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterStmts(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitStmts(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitStmts(this);
 		}
 	}
 
@@ -334,8 +331,8 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class StmtContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
-		public TerminalNode ASSIGN() { return getToken(ezuinoParser.ASSIGN, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
+		public TerminalNode ASSIGN() { return getToken(EzuinoParser.ASSIGN, 0); }
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -348,12 +345,12 @@ public class ezuinoParser extends Parser {
 		public BooleantfContext booleantf() {
 			return getRuleContext(BooleantfContext.class,0);
 		}
-		public TerminalNode NOT() { return getToken(ezuinoParser.NOT, 0); }
+		public TerminalNode NOT() { return getToken(EzuinoParser.NOT, 0); }
 		public Print_lContext print_l() {
 			return getRuleContext(Print_lContext.class,0);
 		}
-		public TerminalNode LISTREMOVE() { return getToken(ezuinoParser.LISTREMOVE, 0); }
-		public TerminalNode LISTADD() { return getToken(ezuinoParser.LISTADD, 0); }
+		public TerminalNode LISTREMOVE() { return getToken(EzuinoParser.LISTREMOVE, 0); }
+		public TerminalNode LISTADD() { return getToken(EzuinoParser.LISTADD, 0); }
 		public If_elseContext if_else() {
 			return getRuleContext(If_elseContext.class,0);
 		}
@@ -378,11 +375,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_stmt; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterStmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitStmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitStmt(this);
 		}
 	}
 
@@ -529,8 +526,8 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class FuncContext extends ParserRuleContext {
-		public TerminalNode FUNCTION() { return getToken(ezuinoParser.FUNCTION, 0); }
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
+		public TerminalNode FUNCTION() { return getToken(EzuinoParser.FUNCTION, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
 		public ParametersContext parameters() {
 			return getRuleContext(ParametersContext.class,0);
 		}
@@ -546,11 +543,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_func; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterFunc(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterFunc(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitFunc(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitFunc(this);
 		}
 	}
 
@@ -593,7 +590,7 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class Func_callContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -606,11 +603,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_func_call; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterFunc_call(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterFunc_call(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitFunc_call(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitFunc_call(this);
 		}
 	}
 
@@ -693,21 +690,21 @@ public class ezuinoParser extends Parser {
 		public ExprContext expr(int i) {
 			return getRuleContext(ExprContext.class,i);
 		}
-		public TerminalNode PLUS() { return getToken(ezuinoParser.PLUS, 0); }
-		public TerminalNode MINUS() { return getToken(ezuinoParser.MINUS, 0); }
-		public TerminalNode MULTIPLE() { return getToken(ezuinoParser.MULTIPLE, 0); }
-		public TerminalNode DIVIDE() { return getToken(ezuinoParser.DIVIDE, 0); }
+		public TerminalNode PLUS() { return getToken(EzuinoParser.PLUS, 0); }
+		public TerminalNode MINUS() { return getToken(EzuinoParser.MINUS, 0); }
+		public TerminalNode MULTIPLE() { return getToken(EzuinoParser.MULTIPLE, 0); }
+		public TerminalNode DIVIDE() { return getToken(EzuinoParser.DIVIDE, 0); }
 		public ExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterExpr(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitExpr(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitExpr(this);
 		}
 	}
 
@@ -833,7 +830,7 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class Print_lContext extends ParserRuleContext {
-		public TerminalNode PRINTSTMT() { return getToken(ezuinoParser.PRINTSTMT, 0); }
+		public TerminalNode PRINTSTMT() { return getToken(EzuinoParser.PRINTSTMT, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -843,11 +840,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_print_l; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterPrint_l(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterPrint_l(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitPrint_l(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitPrint_l(this);
 		}
 	}
 
@@ -875,23 +872,23 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class Comparator_operatorContext extends ParserRuleContext {
-		public TerminalNode EQUAL() { return getToken(ezuinoParser.EQUAL, 0); }
-		public TerminalNode NOTEQUAL() { return getToken(ezuinoParser.NOTEQUAL, 0); }
-		public TerminalNode LESS() { return getToken(ezuinoParser.LESS, 0); }
-		public TerminalNode LESSTHANOREQUAL() { return getToken(ezuinoParser.LESSTHANOREQUAL, 0); }
-		public TerminalNode GREATER() { return getToken(ezuinoParser.GREATER, 0); }
-		public TerminalNode GREATERTHANOREQUAL() { return getToken(ezuinoParser.GREATERTHANOREQUAL, 0); }
+		public TerminalNode EQUAL() { return getToken(EzuinoParser.EQUAL, 0); }
+		public TerminalNode NOTEQUAL() { return getToken(EzuinoParser.NOTEQUAL, 0); }
+		public TerminalNode LESS() { return getToken(EzuinoParser.LESS, 0); }
+		public TerminalNode LESSTHANOREQUAL() { return getToken(EzuinoParser.LESSTHANOREQUAL, 0); }
+		public TerminalNode GREATER() { return getToken(EzuinoParser.GREATER, 0); }
+		public TerminalNode GREATERTHANOREQUAL() { return getToken(EzuinoParser.GREATERTHANOREQUAL, 0); }
 		public Comparator_operatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_comparator_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterComparator_operator(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterComparator_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitComparator_operator(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitComparator_operator(this);
 		}
 	}
 
@@ -926,19 +923,19 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class Logic_operatorContext extends ParserRuleContext {
-		public TerminalNode AND() { return getToken(ezuinoParser.AND, 0); }
-		public TerminalNode OR() { return getToken(ezuinoParser.OR, 0); }
+		public TerminalNode AND() { return getToken(EzuinoParser.AND, 0); }
+		public TerminalNode OR() { return getToken(EzuinoParser.OR, 0); }
 		public Logic_operatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_logic_operator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterLogic_operator(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterLogic_operator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitLogic_operator(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitLogic_operator(this);
 		}
 	}
 
@@ -994,11 +991,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_condition; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterCondition(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterCondition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitCondition(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitCondition(this);
 		}
 	}
 
@@ -1075,11 +1072,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_boolean_expr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterBoolean_expr(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterBoolean_expr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitBoolean_expr(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitBoolean_expr(this);
 		}
 	}
 
@@ -1109,21 +1106,21 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class ValContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
-		public TerminalNode INTEGER() { return getToken(ezuinoParser.INTEGER, 0); }
-		public TerminalNode DOUBLE() { return getToken(ezuinoParser.DOUBLE, 0); }
-		public TerminalNode STRING() { return getToken(ezuinoParser.STRING, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
+		public TerminalNode INTEGER() { return getToken(EzuinoParser.INTEGER, 0); }
+		public TerminalNode DOUBLE() { return getToken(EzuinoParser.DOUBLE, 0); }
+		public TerminalNode STRING() { return getToken(EzuinoParser.STRING, 0); }
 		public ValContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_val; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterVal(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterVal(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitVal(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitVal(this);
 		}
 	}
 
@@ -1158,21 +1155,21 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class TypeContext extends ParserRuleContext {
-		public TerminalNode INTDCL() { return getToken(ezuinoParser.INTDCL, 0); }
-		public TerminalNode DOUBLEDCL() { return getToken(ezuinoParser.DOUBLEDCL, 0); }
-		public TerminalNode BOOLDCL() { return getToken(ezuinoParser.BOOLDCL, 0); }
-		public TerminalNode STRINGDCL() { return getToken(ezuinoParser.STRINGDCL, 0); }
+		public TerminalNode INTDCL() { return getToken(EzuinoParser.INTDCL, 0); }
+		public TerminalNode DOUBLEDCL() { return getToken(EzuinoParser.DOUBLEDCL, 0); }
+		public TerminalNode BOOLDCL() { return getToken(EzuinoParser.BOOLDCL, 0); }
+		public TerminalNode STRINGDCL() { return getToken(EzuinoParser.STRINGDCL, 0); }
 		public TypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterType(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitType(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitType(this);
 		}
 	}
 
@@ -1207,19 +1204,19 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class BooleantfContext extends ParserRuleContext {
-		public TerminalNode TRUE() { return getToken(ezuinoParser.TRUE, 0); }
-		public TerminalNode FALSE() { return getToken(ezuinoParser.FALSE, 0); }
+		public TerminalNode TRUE() { return getToken(EzuinoParser.TRUE, 0); }
+		public TerminalNode FALSE() { return getToken(EzuinoParser.FALSE, 0); }
 		public BooleantfContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_booleantf; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterBooleantf(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterBooleantf(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitBooleantf(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitBooleantf(this);
 		}
 	}
 
@@ -1254,18 +1251,18 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class List_idContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
 		public List_idContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_list_id; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterList_id(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterList_id(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitList_id(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitList_id(this);
 		}
 	}
 
@@ -1291,18 +1288,18 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class List_sizeContext extends ParserRuleContext {
-		public TerminalNode INTEGER() { return getToken(ezuinoParser.INTEGER, 0); }
+		public TerminalNode INTEGER() { return getToken(EzuinoParser.INTEGER, 0); }
 		public List_sizeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_list_size; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterList_size(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterList_size(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitList_size(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitList_size(this);
 		}
 	}
 
@@ -1332,7 +1329,7 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class Switch_stmtContext extends ParserRuleContext {
-		public TerminalNode SWITCH() { return getToken(ezuinoParser.SWITCH, 0); }
+		public TerminalNode SWITCH() { return getToken(EzuinoParser.SWITCH, 0); }
 		public ValContext val() {
 			return getRuleContext(ValContext.class,0);
 		}
@@ -1345,11 +1342,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_switch_stmt; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterSwitch_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterSwitch_stmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitSwitch_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitSwitch_stmt(this);
 		}
 	}
 
@@ -1383,7 +1380,7 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class Return_stmtContext extends ParserRuleContext {
-		public TerminalNode RETURN() { return getToken(ezuinoParser.RETURN, 0); }
+		public TerminalNode RETURN() { return getToken(EzuinoParser.RETURN, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -1393,11 +1390,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_return_stmt; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterReturn_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterReturn_stmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitReturn_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitReturn_stmt(this);
 		}
 	}
 
@@ -1425,7 +1422,7 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class If_stmtContext extends ParserRuleContext {
-		public TerminalNode IF() { return getToken(ezuinoParser.IF, 0); }
+		public TerminalNode IF() { return getToken(EzuinoParser.IF, 0); }
 		public ConditionContext condition() {
 			return getRuleContext(ConditionContext.class,0);
 		}
@@ -1438,11 +1435,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_if_stmt; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterIf_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterIf_stmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitIf_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitIf_stmt(this);
 		}
 	}
 
@@ -1476,7 +1473,7 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class Else_stmtContext extends ParserRuleContext {
-		public TerminalNode ELSE() { return getToken(ezuinoParser.ELSE, 0); }
+		public TerminalNode ELSE() { return getToken(EzuinoParser.ELSE, 0); }
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
@@ -1486,11 +1483,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_else_stmt; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterElse_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterElse_stmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitElse_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitElse_stmt(this);
 		}
 	}
 
@@ -1533,11 +1530,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_if_else; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterIf_else(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterIf_else(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitIf_else(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitIf_else(this);
 		}
 	}
 
@@ -1593,7 +1590,7 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class While_stmtContext extends ParserRuleContext {
-		public TerminalNode WHILE() { return getToken(ezuinoParser.WHILE, 0); }
+		public TerminalNode WHILE() { return getToken(EzuinoParser.WHILE, 0); }
 		public ConditionContext condition() {
 			return getRuleContext(ConditionContext.class,0);
 		}
@@ -1606,11 +1603,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_while_stmt; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterWhile_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterWhile_stmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitWhile_stmt(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitWhile_stmt(this);
 		}
 	}
 
@@ -1656,11 +1653,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_parameters; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterParameters(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterParameters(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitParameters(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitParameters(this);
 		}
 	}
 
@@ -1718,18 +1715,18 @@ public class ezuinoParser extends Parser {
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
 		public ParamContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterParam(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterParam(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitParam(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitParam(this);
 		}
 	}
 
@@ -1757,14 +1754,14 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class BlockContext extends ParserRuleContext {
-		public TerminalNode SBRACE() { return getToken(ezuinoParser.SBRACE, 0); }
+		public TerminalNode SBRACE() { return getToken(EzuinoParser.SBRACE, 0); }
 		public DclsContext dcls() {
 			return getRuleContext(DclsContext.class,0);
 		}
 		public StmtsContext stmts() {
 			return getRuleContext(StmtsContext.class,0);
 		}
-		public TerminalNode EBRACE() { return getToken(ezuinoParser.EBRACE, 0); }
+		public TerminalNode EBRACE() { return getToken(EzuinoParser.EBRACE, 0); }
 		public Return_stmtContext return_stmt() {
 			return getRuleContext(Return_stmtContext.class,0);
 		}
@@ -1774,11 +1771,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_block; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterBlock(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterBlock(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitBlock(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitBlock(this);
 		}
 	}
 
@@ -1821,11 +1818,11 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class Block_switchContext extends ParserRuleContext {
-		public TerminalNode SBRACE() { return getToken(ezuinoParser.SBRACE, 0); }
-		public TerminalNode EBRACE() { return getToken(ezuinoParser.EBRACE, 0); }
-		public List<TerminalNode> CASE() { return getTokens(ezuinoParser.CASE); }
+		public TerminalNode SBRACE() { return getToken(EzuinoParser.SBRACE, 0); }
+		public TerminalNode EBRACE() { return getToken(EzuinoParser.EBRACE, 0); }
+		public List<TerminalNode> CASE() { return getTokens(EzuinoParser.CASE); }
 		public TerminalNode CASE(int i) {
-			return getToken(ezuinoParser.CASE, i);
+			return getToken(EzuinoParser.CASE, i);
 		}
 		public List<ValContext> val() {
 			return getRuleContexts(ValContext.class);
@@ -1839,18 +1836,18 @@ public class ezuinoParser extends Parser {
 		public BlockContext block(int i) {
 			return getRuleContext(BlockContext.class,i);
 		}
-		public TerminalNode DEFAULT() { return getToken(ezuinoParser.DEFAULT, 0); }
+		public TerminalNode DEFAULT() { return getToken(EzuinoParser.DEFAULT, 0); }
 		public Block_switchContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_block_switch; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterBlock_switch(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterBlock_switch(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitBlock_switch(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitBlock_switch(this);
 		}
 	}
 
@@ -1929,7 +1926,7 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class ListContext extends ParserRuleContext {
-		public TerminalNode LISTDCL() { return getToken(ezuinoParser.LISTDCL, 0); }
+		public TerminalNode LISTDCL() { return getToken(EzuinoParser.LISTDCL, 0); }
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
@@ -1939,7 +1936,7 @@ public class ezuinoParser extends Parser {
 		public List_sizeContext list_size() {
 			return getRuleContext(List_sizeContext.class,0);
 		}
-		public TerminalNode ASSIGN() { return getToken(ezuinoParser.ASSIGN, 0); }
+		public TerminalNode ASSIGN() { return getToken(EzuinoParser.ASSIGN, 0); }
 		public List<ValContext> val() {
 			return getRuleContexts(ValContext.class);
 		}
@@ -1952,11 +1949,11 @@ public class ezuinoParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_list; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterList(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitList(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitList(this);
 		}
 	}
 
@@ -2019,23 +2016,23 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class List_addContext extends ParserRuleContext {
-		public TerminalNode LISTADD() { return getToken(ezuinoParser.LISTADD, 0); }
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
+		public TerminalNode LISTADD() { return getToken(EzuinoParser.LISTADD, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
 		public ValContext val() {
 			return getRuleContext(ValContext.class,0);
 		}
-		public TerminalNode INTEGER() { return getToken(ezuinoParser.INTEGER, 0); }
+		public TerminalNode INTEGER() { return getToken(EzuinoParser.INTEGER, 0); }
 		public List_addContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_list_add; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterList_add(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterList_add(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitList_add(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitList_add(this);
 		}
 	}
 
@@ -2075,23 +2072,23 @@ public class ezuinoParser extends Parser {
 	}
 
 	public static class List_removeContext extends ParserRuleContext {
-		public TerminalNode LISTREMOVE() { return getToken(ezuinoParser.LISTREMOVE, 0); }
-		public TerminalNode ID() { return getToken(ezuinoParser.ID, 0); }
+		public TerminalNode LISTREMOVE() { return getToken(EzuinoParser.LISTREMOVE, 0); }
+		public TerminalNode ID() { return getToken(EzuinoParser.ID, 0); }
 		public ValContext val() {
 			return getRuleContext(ValContext.class,0);
 		}
-		public TerminalNode INTEGER() { return getToken(ezuinoParser.INTEGER, 0); }
+		public TerminalNode INTEGER() { return getToken(EzuinoParser.INTEGER, 0); }
 		public List_removeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_list_remove; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).enterList_remove(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).enterList_remove(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ezuinoListener ) ((ezuinoListener)listener).exitList_remove(this);
+			if ( listener instanceof EzuinoListener) ((EzuinoListener)listener).exitList_remove(this);
 		}
 	}
 

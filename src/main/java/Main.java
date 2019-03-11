@@ -17,30 +17,38 @@ public class Main
                         "int b " +
                         "a := 5 " +
                         "b := a + 3.2 " +
-                        "priant(b)");
+                        "print(b)");
 
-        ezuinoLexer lLexer = new ezuinoLexer(cs);
+        EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
 
-        ezuinoParser parser = new ezuinoParser(tokens);
+        EzuinoParser parser = new EzuinoParser(tokens);
 
         ParseTree parseTree = parser.start();
-        ezuinoBaseListener baseListener = new ezuinoBaseListener();
+        EzuinoBaseListener baseListener = new EzuinoBaseListener();
 
         ParseTreeWalker walker = new ParseTreeWalker();
 
         walker.walk(baseListener, parseTree);
 
         System.out.println(parseTree.toStringTree(parser));
-        JFrame frame = new JFrame("Antlr AST");
+        showCST(parseTree, parser);
+
+    }
+
+    private static void showCST(ParseTree parseTree, EzuinoParser parser)
+    {
+        JFrame frame = new JFrame("CST Generated");
         JPanel panel = new JPanel();
-        TreeViewer viewr = new TreeViewer(Arrays.asList(
+        TreeViewer viewer = new TreeViewer(Arrays.asList(
                 parser.getRuleNames()),parseTree);
-        viewr.setScale(1.5);//scale a little
-        panel.add(viewr);
+        viewer.setScale(1.5);//scale a little
+        panel.add(viewer);
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(200,200);
         frame.setVisible(true);
     }
 }
+
+
