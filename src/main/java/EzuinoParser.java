@@ -46,10 +46,10 @@ public class EzuinoParser extends Parser {
                 "'string'", "'boolean'", "'list'", "'print'", "':='", "'list_add'", "'list_remove'",
                 "'+'", "'-'", "'/'", "'*'", "'AND'", "'OR'", "'<'", "'>'", "'='", "'!='",
                 "'!'", "'<='", "'>='", "'else'", "'if'", "'while'", "'TRUE'", "'FALSE'",
-                "'switch'", "'case'", "'return'", "'func'", "'default'", null, "'{'",
-                "'}'"
-        };
+                "'switch'", "'case'", "'return'", "'func'", "'default'", null, "'__'" ,
+                "'__'"};
     }
+
     private static final String[] _LITERAL_NAMES = makeLiteralNames();
     private static String[] makeSymbolicNames() {
         return new String[] {
@@ -62,6 +62,7 @@ public class EzuinoParser extends Parser {
                 "COMMENT"
         };
     }
+
     private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
     public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 

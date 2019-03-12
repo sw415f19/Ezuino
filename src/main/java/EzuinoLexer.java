@@ -101,8 +101,8 @@ public class EzuinoLexer extends Lexer {
     }
 
 
-    public EzuinoLexer(CharStream input) {
-        super(input);
+    public EzuinoLexer(CharStream cs) {
+        super(cs);
         _interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
     }
 

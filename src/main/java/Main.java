@@ -13,7 +13,7 @@ public class Main
     public static void main(String[] args)
     {
         CharStream cs = CharStreams.fromString(
-                "int a " +
+                        "int a " +
                         "int b " +
                         "a := 5 " +
                         "b := a + 3.2" +
