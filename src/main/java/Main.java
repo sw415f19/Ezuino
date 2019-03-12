@@ -16,7 +16,8 @@ public class Main
                 "int a " +
                         "int b " +
                         "a := 5 " +
-                        "b := a + 3.2 " +
+                        "b := a + 3.2" +
+                        "prints(a)" +
                         "print(b)");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
