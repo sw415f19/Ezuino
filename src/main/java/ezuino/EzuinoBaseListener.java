@@ -1,8 +1,11 @@
+package ezuino;
 // Generated from ezuino.g4 by ANTLR 4.7.2
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+
+import parser.EzuinoParser;
 
 /**
  * This class provides an empty implementation of {@link EzuinoListener},
