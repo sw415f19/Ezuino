@@ -1,13 +1,16 @@
+import org.antlr.runtime.tree.TreeWizard.Visitor;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import javax.swing.*;
 import java.util.Arrays;
+import java.util.Vector;
 
 public class Main
 {
@@ -27,41 +30,16 @@ public class Main
 
         ParseTree parseTree = parser.start();
         EzuinoBaseListener baseListener = new EzuinoBaseListener();
+        EzuinoBaseVisitor baseVisitor = new EzuinoBaseVisitor();
+
+        baseVisitor.visit(parseTree);
 
         ParseTreeWalker walker = new ParseTreeWalker();
 
         walker.walk(baseListener, parseTree);
-        
-        System.out.println("Has this many children : " + parseTree.getChildCount());
 
-        // Starts at leaf
-        if (parseTree.getChildCount() == 0) {
-           System.out.println("has 0 children");             
-        } // Parent before leaf
-         else if (parseTree.getChildCount() == 2) {
-            System.out.println("has 1 children");
-            parseTree = parseTree.getChild(0);
-            System.out.println("Has this many children : " + parseTree.getChildCount());
-            System.out.println(parseTree.setParent(RuleContext );
-            //System.out.println(parseTree.getChild(0).getChild(0));  
-        }
-        // multiple parents before leaf
-         else if (parseTree.getChildCount() > 1) {
-            System.out.println("more than 1 ");
-        }
+        System.out.println(parseTree.toStringTree(parser));
 
-        //System.out.println(parseTree.toStringTree(parser));
-
-
-       showCST(parseTree, parser);
-
-    }
-
-    public void traverse(ParseTree child){ // post order traversal
-        for(ParseTree each : child.getChild()){
-            traverse(each);
-        }
-        this.printData();
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser)
@@ -76,6 +54,23 @@ public class Main
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(200,200);
         frame.setVisible(true);
+    }
+
+    private static void PostOrderTraverse(ParseTree parseTree)
+    {
+       for (int i = 0; i < parseTree.getChildCount(); i++) {
+         PostOrderTraverse(parseTree.getChild(i));  
+       }
+       getTokenFromNode(parseTree);
+    }
+
+    private static void getTokenFromNode(ParseTree parseTree){
+        if (parseTree.getPayload() instanceof Token) {
+            Token token = (Token) parseTree.getPayload();
+            String caption = String.format("Token id : %s with value : %s", token.getType(),
+            token.getText().replace("\n", "\\n"));
+            System.out.println(caption);
+          }
     }
 }
 
