@@ -1,3 +1,4 @@
+package ezuino;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -6,6 +7,8 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import lexer.EzuinoLexer;
+import parser.EzuinoParser;
 import javax.swing.*;
 import java.util.Arrays;
 

@@ -1,5 +1,8 @@
+package ezuino;
 // Generated from ezuino.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
+
+import parser.EzuinoParser;
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
