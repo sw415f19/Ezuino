@@ -146,21 +146,22 @@ public class AST {
 
                 if (ast.payload instanceof Token) {
                     Token token = (Token) ast.payload;
-                    caption = String.format("TOKEN[type: %s, text: %s]", token.getType(),
+                   // caption = String.format("TOKEN[type: %s, text: %s]", token.getType(),
+                   caption = String.format("%s;%s \n", token.getType(),
                             token.getText().replace("\n", "\\n"));
                 } else {
-                    caption = String.valueOf(ast.payload);
+                    caption = "";
                 }
 
                 String indent = "";
-
+/** 
                 for (int i = 0; i < childListStack.size() - 1; i++) {
                     indent += (childListStack.get(i).size() > 0) ? "|  " : "   ";
                 }
-
-                builder.append(indent).append(childStack.isEmpty() ? "'- " : "|- ").append(caption).append("\n");
-
-                if (ast.children.size() > 0) {
+**/
+               // builder.append(indent).append(childStack.isEmpty() ? "'- " : "|- ").append(caption).append("\n");
+               builder.append(caption);
+               if (ast.children.size() > 0) {
                     List<AST> children = new ArrayList<AST>();
                     for (int i = 0; i < ast.children.size(); i++) {
                         children.add(ast.children.get(i));
@@ -177,7 +178,8 @@ public class AST {
 
         // Generate the parser and lexer classes below using the grammar available here:
         // https://github.com/bkiers/python3-parser
-        CharStream cs = CharStreams
+       
+       /** CharStream cs = CharStreams
                 .fromString("int a " 
                 + "int b " 
                 + "a := 1 " 
@@ -185,6 +187,15 @@ public class AST {
                 + "print(a)" 
                 + "return 42"
                 + "}");
+        */
+
+        CharStream cs = CharStreams
+                .fromString("int a " 
+                + "string b " 
+                + "a := 12124 + 123 "
+                + "b := \"Hello worls\"" 
+                + "print a+b"
+                );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
@@ -195,22 +206,13 @@ public class AST {
         EzuinoBaseListener baseListener = new EzuinoBaseListener();
 
         AST ast = new AST(parseTree);
+        System.out.println(ast);
+
         List<AST> arrayList = ast.getChildren();
 
-       // System.out.println("INDEX 1" + ast.getChildren().get(0));
-        //System.out.println("INDEX 2 " + ast.getChildren().get(1));
-
-        String[] qwe = ast.getChildren().get(0).getChildren().get(0).getChildren().get(0).getChildren().get(0).toString().split(" ");
-        System.out.println(ast.getChildren().get(0).getChildren().get(0).getChildren().get(0).getChildren().get(0).toString());
-        System.out.println(qwe[2]);
-        System.out.println(qwe[4]);
-       // System.out.println(ast);
-  
-       // showCST(parseTree, parser);
+      //   showCST(parseTree, parser);
 
         System.out.println("ran");
-
-
 
     }
 
