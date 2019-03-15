@@ -9,18 +9,23 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import javax.swing.*;
+
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
 public class Main
 {
+    public static ArrayList<String> numbers = new ArrayList<String>();
     public static void main(String[] args)
     {
         CharStream cs = CharStreams.fromString(
                         "int a " +
                         "int b " +
-                        "a := 5 " +
-                        "b := a + 3.2" +
+                        "a := 1" +
+                        "b := 5" +
+                        "c := 3" +
                         "print(b)");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
@@ -39,6 +44,20 @@ public class Main
         walker.walk(baseListener, parseTree);
 
         System.out.println(parseTree.toStringTree(parser));
+
+       // PostOrderTraverse(parseTree);
+
+       // showCST(parseTree, parser);
+
+       SymbolTable symbolTable = new SymbolTable();
+       symbolTable.addSymbol(1, "x", "5");
+       symbolTable.addSymbol(2, "y", "3");
+       symbolTable.addSymbol(10, "qwe", "fuck mig");
+
+       symbolTable.removeSymbol(10, "qwe", "fuck mig");
+       symbolTable.removeSymbol(1, "x", "5");
+       symbolTable.removeSymbol(2, "y", "3");
+       
 
     }
 
@@ -60,7 +79,7 @@ public class Main
     {
        for (int i = 0; i < parseTree.getChildCount(); i++) {
          PostOrderTraverse(parseTree.getChild(i));  
-       }
+       }    
        getTokenFromNode(parseTree);
     }
 
@@ -69,7 +88,18 @@ public class Main
             Token token = (Token) parseTree.getPayload();
             String caption = String.format("Token id : %s with value : %s", token.getType(),
             token.getText().replace("\n", "\\n"));
-            System.out.println(caption);
+           // System.out.println(caption);
+            
+            if (token.getType() == 42){
+                numbers.add(token.getText());
+                System.out.println(token.getCharPositionInLine());
+                System.out.println("Source" + token.getTokenSource().getCharPositionInLine());
+            }
+           // System.out.println(numbers.size());
+            if (numbers.size()==2) {
+            AddictiveNode addictiveNode = new AddictiveNode(Integer.parseInt(numbers.get(0)), Integer.parseInt(numbers.get(1)));
+            System.out.println(addictiveNode.toString());
+         }
           }
     }
 }
