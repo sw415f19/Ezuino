@@ -7,6 +7,13 @@
     <groupId>Ezuino</groupId>
     <artifactId>Ezuino</artifactId>
     <version>1.0-BETA</version>
+    
+    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<antlr4.visitor>true</antlr4.visitor>
+    	<antlr4.listener>false</antlr4.listener>
+    </properties>
+    
     <build>
         <plugins>
             <plugin>
@@ -18,6 +25,22 @@
                     <target>6</target>
                 </configuration>
             </plugin>
+            <plugin>
+            	<groupId>org.antlr</groupId>
+            	<artifactId>antlr4-maven-plugin</artifactId>
+            	<version>4.7.2</version>
+            	<configuration> 
+            		<sourceDirectory>src/main/java/ezuino</sourceDirectory>
+            		<outputDirectory>src/main/java/generated</outputDirectory>
+            	</configuration>	
+            	<executions>
+	            	<execution>
+	            		<goals>
+							<goal>antlr4</goal>            		
+	            		</goals>
+            		</execution>
+            	</executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -28,7 +51,4 @@
             <version>4.7.2</version>
         </dependency>
     </dependencies>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 </project>

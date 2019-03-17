@@ -1,4 +1,7 @@
-grammar ezuino;
+grammar Ezuino;
+@header {
+package generated;
+}
 start:             dcls stmts
                 ;
 dcls:               dcl*

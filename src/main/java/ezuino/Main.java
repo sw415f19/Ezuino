@@ -45,7 +45,6 @@ public class Main
             System.out.println("has 1 children");
             parseTree = parseTree.getChild(0);
             System.out.println("Has this many children : " + parseTree.getChildCount());
-            System.out.println(parseTree.setParent(RuleContext );
             //System.out.println(parseTree.getChild(0).getChild(0));  
         }
         // multiple parents before leaf
@@ -60,12 +59,6 @@ public class Main
 
     }
 
-    public void traverse(ParseTree child){ // post order traversal
-        for(ParseTree each : child.getChild()){
-            traverse(each);
-        }
-        this.printData();
-    }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser)
     {

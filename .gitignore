@@ -44,3 +44,5 @@ local.properties
 
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+src/main/java/generated/
