@@ -1,3 +1,4 @@
+package ezuino;
 import org.antlr.runtime.tree.TreeWizard.Visitor;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
@@ -8,6 +9,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import lexer.EzuinoLexer;
+import parser.EzuinoParser;
 import javax.swing.*;
 
 import java.awt.List;
@@ -23,9 +26,8 @@ public class Main
         CharStream cs = CharStreams.fromString(
                         "int a " +
                         "int b " +
-                        "a := 1" +
-                        "b := 5" +
-                        "c := 3" +
+                        "a := 5 " +
+                        "b := a + 3.2" +
                         "print(b)");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
@@ -45,9 +47,7 @@ public class Main
 
         System.out.println(parseTree.toStringTree(parser));
 
-       // PostOrderTraverse(parseTree);
 
-       // showCST(parseTree, parser);
 
        SymbolTable symbolTable = new SymbolTable();
        symbolTable.addSymbol(1, "x", "5");
