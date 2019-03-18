@@ -1,4 +1,4 @@
-package ezuino;
+package nodes;
 
 public class AddictiveNode
 {

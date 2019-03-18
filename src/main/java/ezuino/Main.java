@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import lexer.EzuinoLexer;
+import nodes.AddictiveNode;
 import parser.EzuinoParser;
 import javax.swing.*;
 

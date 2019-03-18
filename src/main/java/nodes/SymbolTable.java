@@ -1,3 +1,4 @@
+package nodes;
 import java.util.ArrayList;
 
 public class SymbolTable {
