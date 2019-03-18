@@ -47,8 +47,6 @@ public class Main
 
         System.out.println(parseTree.toStringTree(parser));
 
-
-
        SymbolTable symbolTable = new SymbolTable();
        symbolTable.addSymbol(1, "x", "5");
        symbolTable.addSymbol(2, "y", "3");
@@ -57,6 +55,7 @@ public class Main
        symbolTable.removeSymbol(10, "qwe", "fuck mig");
        symbolTable.removeSymbol(1, "x", "5");
        symbolTable.removeSymbol(2, "y", "3");
+       symbolTable.removeSymbol(3, "y", "3");
        
 
     }

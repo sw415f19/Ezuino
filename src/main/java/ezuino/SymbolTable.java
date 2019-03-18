@@ -1,6 +1,7 @@
 package ezuino;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SymbolTable {
     private ArrayList<Integer> levelList = new ArrayList<Integer>();
@@ -19,7 +20,6 @@ public class SymbolTable {
 
     public void removeSymbol(int level, String ident, String attr) {
         int placement = getPlacement(level, ident, attr);
-        System.out.println(placement);
         if (placement != -1) {
             levelList.remove(placement);
             identList.remove(placement);
@@ -31,39 +31,54 @@ public class SymbolTable {
     }
 
     private int getPlacement(int level, String ident, String attr) {
-        if (getIndexOfLevel(level) == getIndexOfAttr(attr) && getIndexOfAttr(attr) == getIndexOfIdent(ident)
-        && getIndexOfLevel(level) == getIndexOfIdent(ident))return getIndexOfIdent(ident);
+        List<Integer> llist = getIndexOfLevel(level);
+        List<Integer> ilist = getIndexOfIdent(ident);
+        List<Integer> alist = getIndexOfAttr(attr);
+
+        List<Integer> result = new ArrayList<Integer>();
+
+        // Null check, if not found.
+        if (llist.isEmpty() || ilist.isEmpty()|| alist.isEmpty()) return -1;
+
+        for (int a : alist) {
+            if (ilist.contains(a) && llist.contains(a)) result.add(a);
+        }
+
+        if (result.size() == 1) return result.get(0);
         return -1;
     }
 
-    private int getIndexOfLevel(int item) {
+    private List getIndexOfLevel(int item) {
+        List<Integer> list = new ArrayList<Integer>();
         for (int i = 0; i < levelList.size(); i++) {
             int a = levelList.get(i);
             if (a == item) {
-                return i;
+                list.add(i);
             }
         }
-        return 0;
+        return list;
     }
 
-    private int getIndexOfIdent(String item) {
+    private List getIndexOfIdent(String item) {
+        List<Integer> list = new ArrayList<Integer>();
         for (int i = 0; i < identList.size(); i++) {
             String a = identList.get(i);
             if (a.equals(item)) {
-                return i;
+                list.add(i);
             }
         }
-        return 0;
+        return list;
     }
 
-    private int getIndexOfAttr(String item) {
+    private List getIndexOfAttr(String item) {
+        List<Integer> list = new ArrayList<Integer>();
         for (int i = 0; i < attrList.size(); i++) {
             String a = attrList.get(i);
             if (a.equals(item)) {
-                return i;
+                list.add(i);
             }
         }
-        return 0;
+        return list;
     }
 
 }
