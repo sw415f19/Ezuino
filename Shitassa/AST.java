@@ -1,4 +1,3 @@
-package ezuino;
 
 /*
  * Copyright (c) 2014 by Bart Kiers
@@ -31,9 +30,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-
-import lexer.EzuinoLexer;
-import parser.EzuinoParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -150,21 +146,22 @@ public class AST {
 
                 if (ast.payload instanceof Token) {
                     Token token = (Token) ast.payload;
-                    caption = String.format("TOKEN[type: %s, text: %s]", token.getType(),
+                   // caption = String.format("TOKEN[type: %s, text: %s]", token.getType(),
+                   caption = String.format("%s;%s \n", token.getType(),
                             token.getText().replace("\n", "\\n"));
                 } else {
-                    caption = String.valueOf(ast.payload);
+                    caption = "";
                 }
 
                 String indent = "";
-
+/** 
                 for (int i = 0; i < childListStack.size() - 1; i++) {
                     indent += (childListStack.get(i).size() > 0) ? "|  " : "   ";
                 }
-
-                builder.append(indent).append(childStack.isEmpty() ? "'- " : "|- ").append(caption).append("\n");
-
-                if (ast.children.size() > 0) {
+**/
+               // builder.append(indent).append(childStack.isEmpty() ? "'- " : "|- ").append(caption).append("\n");
+               builder.append(caption);
+               if (ast.children.size() > 0) {
                     List<AST> children = new ArrayList<AST>();
                     for (int i = 0; i < ast.children.size(); i++) {
                         children.add(ast.children.get(i));
@@ -176,7 +173,6 @@ public class AST {
 
         return builder.toString();
     }
-
 
     public static void main(String[] args) {
 
