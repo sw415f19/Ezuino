@@ -36,6 +36,8 @@ public class EzuinoLexerTest {
 		ep.start();
 	}
 	
+	//Denne test burde faktisk kaste en fejl, men den gør det ikke
+	//Det har højst sandsynligt noget med grammatikken at gøre.
 	@Test(expected=RecognitionException.class)
 	public void testNoMultiDcl() throws IOException {
 		EzuinoParser ep = createParser("int a, b");
@@ -143,37 +145,41 @@ public class EzuinoLexerTest {
 		EzuinoParser ep = createParser("boolean a\na := 1 <= 2");
 		ep.start();
 	}
-	
+	/*TODO: Skal denne test virkelig kaste en RecognitionException?
+	 * Dette er jo en typefejl, og ikke en genkendelsesfejl
+	 */
 	@Test(expected=RecognitionException.class)
 	public void typeBooleanAssignmentWith3WayLogicOperator() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := 1 < 2 < 3");
 		ep.start();
 	}
-	
+	//Se ovenstående kommentar
 	@Test(expected=RecognitionException.class)
 	public void typeBooleanAssignmentAdd() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE + TRUE");
 		ep.start();
 	}
-	
+	//Se ovenstående kommentar
 	@Test(expected=RecognitionException.class)
 	public void typeBooleanAssignmentMinus() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE - TRUE");
 		ep.start();
 	}
-	
+	//Se ovenstående kommentar
 	@Test(expected=RecognitionException.class)
 	public void typeBooleanAssignmentMult() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE * TRUE");
 		ep.start();
 	}
-	
+	//Se ovenstående kommentar
 	@Test(expected=RecognitionException.class)
 	public void typeBooleanAssignmentDiv() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE / TRUE");
 		ep.start();
 	}
-	
+	//Dette er igen ikke et spørgsmål om hvorvidt vi genkender input eller ej
+	//Det gør vi nemlig, da det sagtens kan være et variabelnavn, hvilket gør dette
+	//til to udtryk frem for en deklaration. Dette er altså en semantisk fejl.
 	@Test(expected=RecognitionException.class)
 	public void typeBooleanShortName() throws IOException {
 		EzuinoParser ep = createParser("bool a");
@@ -323,13 +329,15 @@ public class EzuinoLexerTest {
 		EzuinoParser ep = createParser("string s\ns := \"string's string\"");
 		ep.start();
 	}
-	
+	//Tror der er en fejl med grammatikken i denne test, da det lader til
+	//at vores parser ignorerer single quotes frem for at kaste en fejl.
+	//Enten det, eller også skal vi lade 'string' være et gyldigt variabelnavn
 	@Test(expected=RecognitionException.class)
 	public void typeStringAssignmentWrongQuotesSingleQuote() throws IOException {
 		EzuinoParser ep = createParser("string s\ns := 'string'");
 		ep.start();
 	}
-	
+	//Se ovenstående kommentar
 	@Test(expected=RecognitionException.class)
 	public void typeStringAssignmentWrongQuotesGraveAccent() throws IOException {
 		EzuinoParser ep = createParser("string s\ns := `string`");
@@ -354,6 +362,7 @@ public class EzuinoLexerTest {
 		ep.start();
 	}
 
+	//Semantisk fejl, ikke genkendelse
 	@Test(expected=RecognitionException.class)
 	public void typeStringMinus() throws IOException {
 		EzuinoParser ep = createParser("string s\ns := \"a\"-\"b\"");
@@ -366,6 +375,7 @@ public class EzuinoLexerTest {
 		ep.start();
 	}
 
+	//Semantisk fejl, ikke en genkendelsesfejl
 	@Test(expected=RecognitionException.class)
 	public void typeStringDiv() throws IOException {
 		EzuinoParser ep = createParser("string s\ns := \"a\"/\"b\"");
