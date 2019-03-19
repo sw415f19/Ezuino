@@ -1,4 +1,5 @@
 package ezuino;
+import ast.*;
 import org.antlr.runtime.tree.TreeWizard.Visitor;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
@@ -60,6 +61,10 @@ public class Main
        symbolTable.removeSymbol(2, "y", "3");
        symbolTable.removeSymbol(3, "y", "3");
 
+
+
+       BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+       AstNode astNode = buildAstVisitor.visit(parseTree);
        
     }
 
