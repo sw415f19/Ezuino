@@ -9,8 +9,9 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import lexer.EzuinoLexer;
-import parser.EzuinoParser;
+import generated.EzuinoBaseVisitor;
+import generated.EzuinoLexer;
+import generated.EzuinoParser;
 import javax.swing.*;
 
 import java.awt.List;
