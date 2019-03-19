@@ -52,13 +52,15 @@ public class Main
        symbolTable.addSymbol(1, "x", "5");
        symbolTable.addSymbol(2, "y", "3");
        symbolTable.addSymbol(10, "qwe", "fuck mig");
-
-       symbolTable.removeSymbol(10, "qwe", "fuck mig");
+       symbolTable.addSymbol(10, "qwe", "fuck me 2");
+       symbolTable.getSymbolTable();
+       
+       symbolTable.removeSymbol(10, "qwe", "fuck me 2");
        symbolTable.removeSymbol(1, "x", "5");
        symbolTable.removeSymbol(2, "y", "3");
        symbolTable.removeSymbol(3, "y", "3");
-       
 
+       
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser)

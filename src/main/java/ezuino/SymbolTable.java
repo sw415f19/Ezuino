@@ -8,14 +8,19 @@ public class SymbolTable {
     private ArrayList<String> identList = new ArrayList<String>();
     private ArrayList<String> attrList = new ArrayList<String>();
 
-    public SymbolTable() {
-    }
-
     public void addSymbol(int level, String ident, String attr) {
-        levelList.add(level);
-        identList.add(ident);
-        attrList.add(attr);
-        System.out.println("Added to Symbol Table : (" + level + ", " + ident + ", " + attr + ")");
+
+        int index = alreadyInTable(level, ident);
+        if (index!=-1){
+            attrList.set(index, attr);
+            System.out.println("Updated Symbol Table : (" + level + ", " + ident + ", " + attr + ")");
+        }
+        else {
+            levelList.add(level);
+            identList.add(ident);
+            attrList.add(attr);
+            System.out.println("Added to Symbol Table : (" + level + ", " + ident + ", " + attr + ")");
+        }
     }
 
     public void removeSymbol(int level, String ident, String attr) {
@@ -28,6 +33,28 @@ public class SymbolTable {
             return;
         }
         System.out.println("Not in Symbol Table");
+    }
+
+    public void getSymbolTable(){
+        System.out.println("Priting Symbol Table....");
+        for (int i = 0; i < identList.size(); i++) {
+            System.out.println("Entry : " + i + 
+            " Level : " + levelList.get(i) + 
+            " Identity : " + identList.get(i) + 
+            " Attribute : " + attrList.get(i) 
+            );
+        }
+    }
+
+    private int alreadyInTable(int level, String ident){
+
+        for (int i = 0; i < levelList.size(); i++) {
+            if (levelList.get(i).equals(level) 
+            && identList.get(i).equals(ident)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     private int getPlacement(int level, String ident, String attr) {
