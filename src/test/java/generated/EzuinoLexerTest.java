@@ -359,21 +359,20 @@ public class EzuinoLexerTest {
 		ep.start();
 	}
 
-	//Semantisk fejl, ikke genkendelse
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeStringMinus() throws IOException {
 		EzuinoParser ep = createParser("string s\ns := \"a\"-\"b\"");
 		ep.start();
 	}
 
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeStringMult() throws IOException {
 		EzuinoParser ep = createParser("string s\ns := \"a\"*\"b\"");
 		ep.start();
 	}
 
-	//Semantisk fejl, ikke en genkendelsesfejl
-	@Test(expected=RecognitionException.class)
+	
+	@Test
 	public void typeStringDiv() throws IOException {
 		EzuinoParser ep = createParser("string s\ns := \"a\"/\"b\"");
 		ep.start();
@@ -430,6 +429,200 @@ public class EzuinoLexerTest {
 	@Test
 	public void whilestmt() throws IOException {
 		EzuinoParser ep = createParser("int a\na := 1\nwhile(a < 4){print(a)\na := a + 1}");
+		ep.start();
+	}
+	
+	@Test(expected=RecognitionException.class)
+	public void returnkeyword() throws IOException {
+		EzuinoParser ep = createParser("return");
+		ep.start();
+	}
+	
+	@Test
+	public void voidFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func f(){}");
+		ep.start();
+	}
+	
+	@Test
+	public void intFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func int f(){}");
+		ep.start();
+	}
+	
+	@Test
+	public void doubleFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func double f(){}");
+		ep.start();
+	}
+	
+	@Test
+	public void stringFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func string f(){}");
+		ep.start();
+	}
+	
+	@Test
+	public void listFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func list f(){}");
+		ep.start();
+	}
+	
+	@Test
+	public void unknownFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func money f(){}");
+		ep.start();
+	}
+	
+	@Test
+	public void singleParamFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func f(int a){}");
+		ep.start();
+	}
+	
+	@Test
+	public void multiParamFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func f(int a, int b){}");
+		ep.start();
+	}
+	
+	@Test
+	public void multiParamDiffTypesFunctionTest() throws IOException {
+		EzuinoParser ep = createParser("func f(int a, double b){}");
+		ep.start();
+	}
+	
+	@Test(expected=RecognitionException.class)
+	public void voidReturnFunction() throws IOException {
+		EzuinoParser ep = createParser("func f(){return 42}");
+		ep.start();
+	}
+	
+	@Test
+	public void returnFunction() throws IOException {
+		EzuinoParser ep = createParser("func int f(){return 42}");
+		ep.start();
+	}
+	
+	@Test
+	public void functionInvokation() throws IOException {
+		EzuinoParser ep = createParser("f()");
+		ep.start();
+	}
+	
+	@Test
+	public void assignFunctionInvokation() throws IOException {
+		EzuinoParser ep = createParser("int a\na := f()");
+		ep.start();
+	}
+	
+	@Test
+	public void functionInvokationParam() throws IOException {
+		EzuinoParser ep = createParser("f(b)");
+		ep.start();
+	}
+	
+	@Test
+	public void assignFunctionInvokationParam() throws IOException {
+		EzuinoParser ep = createParser("int a\na := f(b)");
+		ep.start();
+	}
+	
+	@Test
+	public void functionInvokationMultiParam() throws IOException {
+		EzuinoParser ep = createParser("f(b, c, d, e)");
+		ep.start();
+	}
+	
+	@Test
+	public void assignFunctionInvokationMultiParam() throws IOException {
+		EzuinoParser ep = createParser("int a\na := f(b, c, d, e)");
+		ep.start();
+	}
+	
+	@Test
+	public void list_add() throws IOException {
+		EzuinoParser ep = createParser("list_add()");
+		ep.start();
+	}
+	
+	@Test
+	public void list_addParam() throws IOException {
+		EzuinoParser ep = createParser("list_add(a)");
+		ep.start();
+	}
+	
+	@Test
+	public void list_addParams() throws IOException {
+		EzuinoParser ep = createParser("list_add(a, b, c)");
+		ep.start();
+	}
+	
+	@Test
+	public void list_remove() throws IOException {
+		EzuinoParser ep = createParser("list_remove()");
+		ep.start();
+	}
+	
+	@Test
+	public void list_removeParam() throws IOException {
+		EzuinoParser ep = createParser("list_remove(a)");
+		ep.start();
+	}
+	
+	@Test
+	public void list_removeParams() throws IOException {
+		EzuinoParser ep = createParser("list_remove(a, b, c)");
+		ep.start();
+	}
+	
+	@Test
+	public void intListDcl() throws IOException {
+		EzuinoParser ep = createParser("list int myList 4 := (1, 2, 3)");
+		ep.start();
+	}
+	
+	@Test
+	public void doubleListDcl() throws IOException {
+		EzuinoParser ep = createParser("list double myList 4 := (1.0, 2.5, 3.3)");
+		ep.start();
+	}
+	
+	@Test
+	public void stringListDcl() throws IOException {
+		EzuinoParser ep = createParser("list string myList 4 := (\"aa\", \"bb\", \"cc\")");
+		ep.start();
+	}
+	
+	@Test
+	public void booleanListDcl() throws IOException {
+		EzuinoParser ep = createParser("list boolean myList 4 := (TRUE, FALSE, TRUE)");
+		ep.start();
+	}
+	
+	@Test(expected=RecognitionException.class)
+	public void emptyBraches() throws IOException {
+		EzuinoParser ep = createParser("{}");
+		ep.start();
+	}
+	
+	@Test
+	public void switchStmt() throws IOException {
+		String program = 
+				"switch(a)\n" + 
+				"  {case 1: return 1}" + 
+				"  {case 2: return 2}";
+		EzuinoParser ep = createParser(program);
+		ep.start();
+	}
+	
+	@Test
+	public void switchMultiStmt() throws IOException {
+		String program = 
+				"switch(a)\n" + 
+				"  {case 1,3: return 1}" + 
+				"  {case 2: return 2}";
+		EzuinoParser ep = createParser(program);
 		ep.start();
 	}
 	
