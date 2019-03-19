@@ -1,4 +1,4 @@
-package parser;
+package generated;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.Token;
 import org.junit.Before;
 import org.junit.Test;
 
-import lexer.EzuinoLexer;
+import generated.EzuinoLexer;
 
 public class EzuinoParserTest {
 	static PrintStream originalOut = System.out;

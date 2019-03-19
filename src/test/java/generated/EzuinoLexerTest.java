@@ -1,4 +1,4 @@
-package lexer;
+package generated;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.Test;
 
-import parser.EzuinoParser;
+import generated.EzuinoParser;
 
 public class EzuinoLexerTest {
 
