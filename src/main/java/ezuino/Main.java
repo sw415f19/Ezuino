@@ -1,24 +1,17 @@
 package ezuino;
-import ast.*;
-import org.antlr.runtime.tree.TreeWizard.Visitor;
+import ast.StartNode;
+import generated.EzuinoLexer;
+import generated.EzuinoParser;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import generated.EzuinoBaseVisitor;
-import generated.EzuinoLexer;
-import generated.EzuinoParser;
 import javax.swing.*;
-
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
 
 public class Main
 {
@@ -34,38 +27,26 @@ public class Main
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
-
         EzuinoParser parser = new EzuinoParser(tokens);
-
         ParseTree parseTree = parser.start();
-        EzuinoBaseListener baseListener = new EzuinoBaseListener();
-        EzuinoBaseVisitor baseVisitor = new EzuinoBaseVisitor();
+        //showCST(parseTree, parser);
 
-        baseVisitor.visit(parseTree);
+        SymbolTable symbolTable = new SymbolTable();
+        symbolTable.addSymbol(1, "x", "5");
+        symbolTable.addSymbol(2, "y", "3");
+        symbolTable.addSymbol(10, "qwe", "fuck mig");
+        symbolTable.addSymbol(10, "qwe", "fuck me 2");
+        symbolTable.getSymbolTable();
 
-        ParseTreeWalker walker = new ParseTreeWalker();
-
-        walker.walk(baseListener, parseTree);
-
-        System.out.println(parseTree.toStringTree(parser));
-
-       SymbolTable symbolTable = new SymbolTable();
-       symbolTable.addSymbol(1, "x", "5");
-       symbolTable.addSymbol(2, "y", "3");
-       symbolTable.addSymbol(10, "qwe", "fuck mig");
-       symbolTable.addSymbol(10, "qwe", "fuck me 2");
-       symbolTable.getSymbolTable();
-       
-       symbolTable.removeSymbol(10, "qwe", "fuck me 2");
-       symbolTable.removeSymbol(1, "x", "5");
-       symbolTable.removeSymbol(2, "y", "3");
-       symbolTable.removeSymbol(3, "y", "3");
+        symbolTable.removeSymbol(10, "qwe", "fuck me 2");
+        symbolTable.removeSymbol(1, "x", "5");
+        symbolTable.removeSymbol(2, "y", "3");
+        symbolTable.removeSymbol(3, "y", "3");
 
 
-
-       BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-       AstNode astNode = buildAstVisitor.visit(parseTree);
-       
+        BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+        StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
+        System.out.println(astNode.getDcls().getChildList().get(0).toString());
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser)
@@ -82,14 +63,9 @@ public class Main
         frame.setVisible(true);
     }
 
-    private static void PostOrderTraverse(ParseTree parseTree)
-    {
-       for (int i = 0; i < parseTree.getChildCount(); i++) {
-         PostOrderTraverse(parseTree.getChild(i));  
-       }    
-       getTokenFromNode(parseTree);
-    }
-
+    /*
+    Legacy code that splits all lines given to the parser into tokens
+     */
     private static void getTokenFromNode(ParseTree parseTree){
         if (parseTree.getPayload() instanceof Token) {
             Token token = (Token) parseTree.getPayload();
@@ -106,8 +82,8 @@ public class Main
             if (numbers.size()==2) {
             AddictiveNode addictiveNode = new AddictiveNode(Integer.parseInt(numbers.get(0)), Integer.parseInt(numbers.get(1)));
             System.out.println(addictiveNode.toString());
-         }
-          }
+            }
+        }
     }
 }
 
