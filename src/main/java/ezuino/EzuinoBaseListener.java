@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import parser.EzuinoParser;
+import generated.EzuinoParser;
 
 /**
  * This class provides an empty implementation of {@link EzuinoListener},

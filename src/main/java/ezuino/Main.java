@@ -1,4 +1,5 @@
 package ezuino;
+import ast.*;
 import org.antlr.runtime.tree.TreeWizard.Visitor;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
@@ -9,9 +10,9 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import lexer.EzuinoLexer;
-import nodes.AddictiveNode;
-import parser.EzuinoParser;
+import generated.EzuinoBaseVisitor;
+import generated.EzuinoLexer;
+import generated.EzuinoParser;
 import javax.swing.*;
 
 import java.awt.List;
@@ -52,13 +53,19 @@ public class Main
        symbolTable.addSymbol(1, "x", "5");
        symbolTable.addSymbol(2, "y", "3");
        symbolTable.addSymbol(10, "qwe", "fuck mig");
-
-       symbolTable.removeSymbol(10, "qwe", "fuck mig");
+       symbolTable.addSymbol(10, "qwe", "fuck me 2");
+       symbolTable.getSymbolTable();
+       
+       symbolTable.removeSymbol(10, "qwe", "fuck me 2");
        symbolTable.removeSymbol(1, "x", "5");
        symbolTable.removeSymbol(2, "y", "3");
        symbolTable.removeSymbol(3, "y", "3");
-       
 
+
+
+       BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+       AstNode astNode = buildAstVisitor.visit(parseTree);
+       
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser)

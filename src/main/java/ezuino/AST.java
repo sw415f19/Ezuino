@@ -1,5 +1,12 @@
 package ezuino;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 /*
  * Copyright (c) 2014 by Bart Kiers
  *
@@ -25,22 +32,14 @@ package ezuino;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import lexer.EzuinoLexer;
-import parser.EzuinoParser;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import generated.EzuinoLexer;
+import generated.EzuinoParser;
 
 public class AST {
 
