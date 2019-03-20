@@ -1,6 +1,9 @@
 package ezuino;
 
-import ast.*;
+import ast.AstNode;
+import ast.DclsNode;
+import ast.StartNode;
+import ast.StmtsNode;
 
 public abstract class AstVisitor<T> {
 
