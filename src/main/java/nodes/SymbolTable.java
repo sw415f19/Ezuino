@@ -6,9 +6,6 @@ public class SymbolTable {
     private ArrayList<String> identList = new ArrayList<String>();
     private ArrayList<String> attrList = new ArrayList<String>();
 
-    public SymbolTable() {
-    }
-
     public void addSymbol(int level, String ident, String attr) {
         levelList.add(level);
         identList.add(ident);

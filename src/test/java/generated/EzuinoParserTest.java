@@ -14,8 +14,6 @@ import org.antlr.v4.runtime.Token;
 import org.junit.Before;
 import org.junit.Test;
 
-import generated.EzuinoLexer;
-
 public class EzuinoParserTest {
 	static PrintStream originalOut = System.out;
 	static PrintStream originalErr = System.err;

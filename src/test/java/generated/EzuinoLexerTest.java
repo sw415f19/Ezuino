@@ -8,8 +8,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.Test;
 
-import generated.EzuinoParser;
-
 public class EzuinoLexerTest {
 
 	@Test
