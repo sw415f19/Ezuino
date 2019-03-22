@@ -3,7 +3,6 @@ package ezuino;
 import ast.StartNode;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
-import nodes.AddictiveNode;
 
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
@@ -82,9 +81,6 @@ public class Main
                 System.out.println("Source" + token.getTokenSource().getCharPositionInLine());
             }
            // System.out.println(numbers.size());
-            if (numbers.size()==2) {
-            AddictiveNode addictiveNode = new AddictiveNode(Integer.parseInt(numbers.get(0)), Integer.parseInt(numbers.get(1)));
-            System.out.println(addictiveNode.toString());
             }
         }
     }
