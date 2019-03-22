@@ -2,18 +2,20 @@ package ezuino;
 
 import org.antlr.v4.runtime.RuleContext;
 
+import ast.Assign_stmtNode;
 import ast.AstNode;
 import ast.BlockNode;
 import ast.Block_switchNode;
 import ast.Boolean_exprNode;
 import ast.BooleantfNode;
+import ast.Built_in_funcNode;
 import ast.Comparator_operatorNode;
 import ast.ConditionNode;
 import ast.DclNode;
 import ast.DclsNode;
 import ast.Else_stmtNode;
 import ast.ExprNode;
-import ast.FuncNode;
+import ast.Func_defNode;
 import ast.Func_callNode;
 import ast.If_elseNode;
 import ast.If_stmtNode;

@@ -7,7 +7,7 @@ public abstract class AstVisitor {
 	public abstract void visit(Func_callNode node);
 	public abstract void visit(ParamNode node);
 	public abstract void visit(BlockNode node);
-	public abstract void visit(FuncNode node);
+	public abstract void visit(Func_defNode node);
 	public abstract void visit(Print_lNode node);
 	public abstract void visit(Block_switchNode node);
 	public abstract void visit(If_elseNode node);
