@@ -1,3 +1,4 @@
+package nodes;
 public abstract class InfixExpressionNode extends ExpressionNode
 {
     public ExpressionNode Left;

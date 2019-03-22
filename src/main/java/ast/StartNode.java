@@ -1,5 +1,7 @@
 package ast;
 
+import ezuino.AstVisitor;
+
 public class StartNode extends AstNode {
     private DclsNode dcls;
     private StmtsNode stmts;
@@ -19,4 +21,10 @@ public class StartNode extends AstNode {
     public void setStmts(StmtsNode stmts) {
         this.stmts = stmts;
     }
+
+	@Override
+	public void accept(AstVisitor v) {
+		v.visit(this);
+		
+	}
 }

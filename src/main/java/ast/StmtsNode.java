@@ -2,6 +2,8 @@ package ast;
 
 import java.util.ArrayList;
 
+import ezuino.AstVisitor;
+
 public class StmtsNode extends AstNode {
     private ArrayList<StmtNode> childList = new ArrayList<StmtNode>();
 
@@ -12,4 +14,10 @@ public class StmtsNode extends AstNode {
     public void addChild(StmtNode node) {
         childList.add(node);
     }
+
+	@Override
+	public void accept(AstVisitor v) {
+		v.visit(this);
+		
+	}
 }

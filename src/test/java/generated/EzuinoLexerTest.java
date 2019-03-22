@@ -8,8 +8,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.Test;
 
-import generated.EzuinoParser;
-
 public class EzuinoLexerTest {
 
 	@Test
@@ -174,6 +172,17 @@ public class EzuinoLexerTest {
 		EzuinoParser ep = createParser("boolean a\na := TRUE / TRUE");
 		ep.start();
 	}
+	
+	public void typeBooleanAssignExpression() throws IOException {
+		EzuinoParser ep = createParser("boolean a\na := (1 < 2)");
+		ep.start();
+	}
+	
+	public void typeBooleanAssignMultiExpression() throws IOException {
+		EzuinoParser ep = createParser("boolean a\na := (1 < 2) OR (func AND 3 < 4)");
+		ep.start();
+	}
+	
 	//Dette er igen ikke et spørgsmål om hvorvidt vi genkender input eller ej
 	//Det gør vi nemlig, da det sagtens kan være et variabelnavn, hvilket gør dette
 	//til to udtryk frem for en deklaration. Dette er altså en semantisk fejl.
@@ -214,6 +223,12 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
+	public void typeIntAssignment2Add() throws IOException {
+		EzuinoParser ep = createParser("int a\na := 12 + 10 + 10");
+		ep.start();
+	}
+
+	@Test
 	public void typeIntAssignmentAddOne() throws IOException {
 		EzuinoParser ep = createParser("int a\na := 0\na := a + 1");
 		ep.start();
@@ -250,14 +265,32 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
+	public void typeIntAssignment2Minus() throws IOException {
+		EzuinoParser ep = createParser("int a\na := 12 - 10 - 10");
+		ep.start();
+	}
+
+	@Test
 	public void typeIntAssignmentMult() throws IOException {
 		EzuinoParser ep = createParser("int a\na := 12 * 10");
 		ep.start();
 	}
 
 	@Test
+	public void typeIntAssignment2Mult() throws IOException {
+		EzuinoParser ep = createParser("int a\na := 12 * 10 * 5");
+		ep.start();
+	}
+
+	@Test
 	public void typeIntAssignmentDiv() throws IOException {
 		EzuinoParser ep = createParser("int a\na := 20 / 10");
+		ep.start();
+	}
+
+	@Test
+	public void typeIntAssignment2Div() throws IOException {
+		EzuinoParser ep = createParser("int a\na := 20 / 10 / 1");
 		ep.start();
 	}
 
