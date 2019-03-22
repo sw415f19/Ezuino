@@ -78,12 +78,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitStmt(EzuinoParser.StmtContext ctx) {
         System.out.println("Made stmt node");
-        return new StmtsNode();
+        return new StmtNode();
     }
 
     @Override
-    public AstNode visitFunc(EzuinoParser.FuncContext ctx) {
-        return new FuncNode();
+    public AstNode visitFunc_def(EzuinoParser.Func_defContext ctx) {
+        return new Func_defNode();
     }
 
     @Override
@@ -209,5 +209,15 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitList_remove(EzuinoParser.List_removeContext ctx) {
         return new List_removeNode();
+    }
+
+    @Override
+    public AstNode visitAssign_stmt(EzuinoParser.Assign_stmtContext ctx) {
+        return new Assign_stmtNode();
+    }
+
+    @Override
+    public AstNode visitBuilt_in_func(EzuinoParser.Built_in_funcContext ctx) {
+        return new Built_in_funcNode();
     }
 }
