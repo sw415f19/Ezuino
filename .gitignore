@@ -50,3 +50,6 @@ src/main/java/generated/*
 
 ### IntelliJ Idea ###
 .idea
+
+### VSCode ###
+.vscode
