@@ -15,23 +15,17 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Main
-{
+public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
-    public static void main(String[] args)
-    {
-        CharStream cs = CharStreams.fromString(
-                        "int a " +
-                        "int b " +
-                        "a := 5 " +
-                        "b := a + 3.2" +
-                        "print(b)");
+
+    public static void main(String[] args) {
+        CharStream cs = CharStreams.fromString("int a " + "int b " + "a := 5 " + "b := a + 3.2" + "print(b)");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
-        //showCST(parseTree, parser);
+        // showCST(parseTree, parser);
 
         SymbolTable symbolTable = new SymbolTable();
         symbolTable.addSymbol(1, "x", "5");
@@ -45,43 +39,39 @@ public class Main
         symbolTable.removeSymbol(2, "y", "3");
         symbolTable.removeSymbol(3, "y", "3");
 
-
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
         System.out.println(astNode.getDcls().getChildList().get(0).toString());
     }
 
-    private static void showCST(ParseTree parseTree, EzuinoParser parser)
-    {
+    private static void showCST(ParseTree parseTree, EzuinoParser parser) {
         JFrame frame = new JFrame("CST Generated");
         JPanel panel = new JPanel();
-        TreeViewer viewer = new TreeViewer(Arrays.asList(
-                parser.getRuleNames()),parseTree);
-        viewer.setScale(1.5);//scale a little
+        TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), parseTree);
+        viewer.setScale(1.5);// scale a little
         panel.add(viewer);
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(200,200);
+        frame.setSize(200, 200);
         frame.setVisible(true);
     }
 
     /*
-    Legacy code that splits all lines given to the parser into tokens
+     * Legacy code that splits all lines given to the parser into tokens
      */
-    private static void getTokenFromNode(ParseTree parseTree){
+    private static void getTokenFromNode(ParseTree parseTree) {
         if (parseTree.getPayload() instanceof Token) {
             Token token = (Token) parseTree.getPayload();
             String caption = String.format("Token id : %s with value : %s", token.getType(),
-            token.getText().replace("\n", "\\n"));
-           // System.out.println(caption);
-            
-            if (token.getType() == 42){
+                    token.getText().replace("\n", "\\n"));
+            // System.out.println(caption);
+
+            if (token.getType() == 42) {
                 numbers.add(token.getText());
                 System.out.println(token.getCharPositionInLine());
                 System.out.println("Source" + token.getTokenSource().getCharPositionInLine());
             }
-           // System.out.println(numbers.size());
-            }
+            // System.out.println(numbers.size());
         }
     }
 }
