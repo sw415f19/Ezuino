@@ -26,6 +26,8 @@ public class Main {
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
         // showCST(parseTree, parser);
+        CSTPrinter cstp = new CSTPrinter();
+        cstp.visit(parseTree);
 
         SymbolTable symbolTable = new SymbolTable();
         symbolTable.addSymbol(1, "x", "5");
