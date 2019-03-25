@@ -19,14 +19,14 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString("int a " + "int b " + "a := 5 " + "b := a + 3.2" + "print(b)");
+        CharStream cs = CharStreams.fromString("int a "+ "a := TRUE + TRUE ");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
-        // showCST(parseTree, parser);
-
+        showCST(parseTree, parser);
+        /*
         SymbolTable symbolTable = new SymbolTable();
         symbolTable.addSymbol(1, "x", "5");
         symbolTable.addSymbol(2, "y", "3");
@@ -38,6 +38,7 @@ public class Main {
         symbolTable.removeSymbol(1, "x", "5");
         symbolTable.removeSymbol(2, "y", "3");
         symbolTable.removeSymbol(3, "y", "3");
+        */
 
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);

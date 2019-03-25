@@ -2,7 +2,7 @@ package ast;
 
 import ezuino.AstVisitor;
 
-public class Func_callNode extends AstNode {
+public class Func_callNode extends StmtNode {
 
 	@Override
 	public void accept(AstVisitor v) {

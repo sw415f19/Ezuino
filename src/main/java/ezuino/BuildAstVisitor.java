@@ -1,41 +1,9 @@
 package ezuino;
 
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 
-import ast.Assign_stmtNode;
-import ast.AstNode;
-import ast.BlockNode;
-import ast.Block_switchNode;
-import ast.Boolean_exprNode;
-import ast.BooleantfNode;
-import ast.Built_in_funcNode;
-import ast.Comparator_operatorNode;
-import ast.ConditionNode;
-import ast.DclNode;
-import ast.DclsNode;
-import ast.Else_stmtNode;
-import ast.ExprNode;
-import ast.Func_defNode;
-import ast.Func_callNode;
-import ast.If_elseNode;
-import ast.If_stmtNode;
-import ast.ListNode;
-import ast.List_addNode;
-import ast.List_idNode;
-import ast.List_removeNode;
-import ast.List_sizeNode;
-import ast.Logic_operatorNode;
-import ast.ParamNode;
-import ast.ParametersNode;
-import ast.Print_lNode;
-import ast.Return_stmtNode;
-import ast.StartNode;
-import ast.StmtNode;
-import ast.StmtsNode;
-import ast.Switch_stmtNode;
-import ast.TypeNode;
-import ast.ValNode;
-import ast.While_stmtNode;
+import ast.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
 
@@ -79,10 +47,9 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitStmt(EzuinoParser.StmtContext ctx) {
-        System.out.println("Made stmt node");
-        return new StmtNode();
+        return visit(ctx.getChild(0));
     }
-
+    
     @Override
     public AstNode visitFunc_def(EzuinoParser.Func_defContext ctx) {
         return new Func_defNode();
@@ -215,7 +182,15 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitAssign_stmt(EzuinoParser.Assign_stmtContext ctx) {
-        return new Assign_stmtNode();
+        System.out.println("IN ASSIGN");
+
+        System.out.println(ctx.children.get(2));
+
+        if (ctx.children.get(2) instanceof EzuinoParser.ExprContext){
+            System.out.println(ctx.children.get(2));
+        }
+         
+        return new Assign_stmtNode(ctx.ID().getText());
     }
 
     @Override

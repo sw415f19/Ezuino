@@ -54,3 +54,4 @@ src/main/java/generated/*
 
 ### VSCode ###
 .vscode
+*.iml

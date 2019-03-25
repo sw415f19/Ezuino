@@ -2,7 +2,7 @@ package ast;
 
 import ezuino.AstVisitor;
 
-public class If_elseNode extends AstNode {
+public class If_elseNode extends StmtNode {
 
 	@Override
 	public void accept(AstVisitor v) {
