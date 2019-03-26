@@ -4,13 +4,15 @@ package generated;
 }
 start:             dcls stmts
                 ;
-dcls:               dcl*
+dcls:               dcl dcls
+				|	/* lambda */
                 ;
 dcl:                type ID
                 |   list
                 ;
 
-stmts:              stmt*
+stmts:              stmt stmts
+				|	/* lambda */
                 ;
 
 stmt:               assign_stmt
@@ -21,8 +23,6 @@ stmt:               assign_stmt
                 |   switch_stmt
                 ;
 assign_stmt:        ID ASSIGN expr
-                |   ID ASSIGN NOT? booleantf
-				|   ID ASSIGN condition
                 ;
 
 func_def:           FUNCTION type? ID parameters block
@@ -37,38 +37,36 @@ built_in_func:      print_l
                 |   list_remove
 				;
 
-expr:               val
+expr:             	'(' expr ')'
+				|	unOp expr
+                |   expr binOp expr
                 |   func_call
-                |   expr PLUS expr
-                |   expr MINUS expr
-                |   expr MULTIPLE expr
-                |   expr DIVIDE expr
-                |   '(' expr ')'
-                |   expr logic_operator expr
-                |   expr comparator_operator expr
+                |	val
                 ;
+                
+                
+binOp:			
+					MULTIPLE
+				|	DIVIDE
+				|	PLUS
+				|	MINUS
+				|	AND
+				|	OR
+				|	EQUAL
+				|	NOTEQUAL
+				|	LESS
+				|	LESSTHANOREQUAL
+				|	GREATER
+				|	GREATERTHANOREQUAL
+                ;
+unOp:				NOT
+				|	MINUS
+				;
 
 print_l:            PRINTSTMT expr
                 ;
 
-comparator_operator:   EQUAL
-                   |   NOTEQUAL
-                   |   LESS
-                   |   LESSTHANOREQUAL
-                   |   GREATER
-                   |   GREATERTHANOREQUAL
-                   ;
 
-logic_operator:     AND
-                |   OR
-                ;
-
-
-condition:          boolean_expr (logic_operator boolean_expr)*
-                ;
-boolean_expr:       val comparator_operator val
-				|   booleantf
-                ;
 val:                ID
                 |   INTEGER
                 |   DOUBLE
@@ -93,7 +91,7 @@ switch_stmt:        SWITCH '(' val ')' block_switch
 return_stmt:        RETURN expr
                 ;
 
-if_stmt:            IF'(' condition ')' block
+if_stmt:            IF'(' expr ')' block
                 ;
 
 else_stmt:          ELSE block
@@ -102,19 +100,17 @@ else_stmt:          ELSE block
 if_else:            if_stmt+ else_stmt?
                 ;
 
-while_stmt:         WHILE'(' condition ')' block
+while_stmt:         WHILE'(' expr ')' block
                 ;
 
-parameters:         '(' param?(',' param)* ')'
-                ;
-param:              type ID
+parameters:         '(' dcls ')'
                 ;
 
 block:              SBRACE dcls stmts return_stmt? EBRACE
                 ;
 block_switch:       SBRACE (CASE val(',' val)*':' block)* (DEFAULT':' block)? EBRACE
                 ;
-list:               LISTDCL type list_id list_size ASSIGN '('(val','?)*')'
+list:               LISTDCL type ID list_size
                 ;
 
 list_add:           LISTADD'('ID ',' val ',' INTEGER')'
