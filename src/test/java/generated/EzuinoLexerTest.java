@@ -658,6 +658,109 @@ public class EzuinoLexerTest {
 		EzuinoParser ep = createParser(program);
 		ep.start();
 	}
+
+	@Test
+	public void MissingParamInFuncCall() throws IOException {
+		EzuinoParser ep = createParser("a(");
+		ep.start();
+	}
+
+	@Test
+	public void EmptyVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void()");
+		ep.start();
+	}
+
+	@Test
+	public void ValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55)");
+		ep.start();
+	}
+	@Test
+	public void ManyValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55, 55, 55, 55)");
+		ep.start();
+	}
+
+	@Test
+	public void PlusValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 + 55)");
+		ep.start();
+	}
+
+	@Test
+	public void MinusValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 - 55)");
+		ep.start();
+	}
+
+	@Test
+	public void MultipleValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 * 55)");
+		ep.start();
+	}
+
+	@Test
+	public void DivideValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 / 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void ANDInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 AND 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void ORInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 OR 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void EqualInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 = 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void NotEqualInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 != 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void LessInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 < 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void LessThanOrEqualInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 <= 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void GreaterInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 > 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void GreaterThanOrEqualInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 >= 55)");
+		ep.start();
+	}
 	
 	@Test
 	public void empty() throws IOException {

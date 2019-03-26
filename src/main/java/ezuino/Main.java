@@ -19,7 +19,7 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString("int a " + "int b " + "a := 5 " + "b := a + 3.2" + "print(b)");
+        CharStream cs = CharStreams.fromString("int a " + "int b " + "a := 5 " + "b := a + (3.2 * 3) + 5" + "print(b)");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
@@ -41,7 +41,7 @@ public class Main {
 
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
-        System.out.println(astNode.getDcls().getChildList().get(0).toString());
+        showCST(parseTree, parser);
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
