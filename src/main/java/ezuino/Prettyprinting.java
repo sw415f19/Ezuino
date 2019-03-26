@@ -58,10 +58,7 @@ public class Prettyprinting extends AstVisitor {
 
     @Override
     public void visit(StartNode node) {
-        BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-        ArrayList<AstNode> ast =  buildAstVisitor.getAst();
-        System.out.println("Size of ast: " + ast.size());
-        for(AstNode thisNode : ast){
+        for(AstNode thisNode : node.getAst()){
             System.out.println("It loops");
             thisNode.accept(this);
         }
@@ -189,6 +186,26 @@ public class Prettyprinting extends AstVisitor {
 
     @Override
     public void visit(Assign_conditionNode node) {
+
+    }
+
+    @Override
+    public void visit(Int_dclNode node) {
+
+    }
+
+    @Override
+    public void visit(Double_dclNode node) {
+
+    }
+
+    @Override
+    public void visit(Bool_dclNode node) {
+
+    }
+
+    @Override
+    public void visit(String_dclNode node) {
 
     }
 }

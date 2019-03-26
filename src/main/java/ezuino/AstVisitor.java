@@ -42,6 +42,11 @@ public abstract class AstVisitor {
 	public abstract void visit(Assign_exprNode node);
 	public abstract void visit(Assign_conditionNode node);
 
+	//"New" Declarations
+	public abstract void visit(Int_dclNode node);
+	public abstract void visit(Double_dclNode node);
+	public abstract void visit(Bool_dclNode node);
+	public abstract void visit(String_dclNode node);
 
 
     public void visit(AstNode astNode) {

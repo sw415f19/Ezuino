@@ -9,8 +9,8 @@ public class StartNode extends AstNode {
     private DclsNode dcls;
     private StmtsNode stmts;
 
-    public StartNode(ArrayList<AstNode> ast) {
-        this.ast = ast;
+    public StartNode(ArrayList<AstNode> astArray) {
+        this.ast = astArray;
     }
 
     public DclsNode getDcls() {

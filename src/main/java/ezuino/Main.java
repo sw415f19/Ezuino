@@ -20,14 +20,14 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString("int a int b "+ "a := TRUE b:=4");
+        CharStream cs = CharStreams.fromString("int a int b "+ "a := TRUE b:=4 helloworld()");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
         EzuinoParser parser = new EzuinoParser(tokens);
         //AstNode ast = new StartNode();
         ParseTree parseTree = parser.start();
-        showCST(parseTree, parser);
+
         /*
         SymbolTable symbolTable = new SymbolTable();
         symbolTable.addSymbol(1, "x", "5");
@@ -43,10 +43,18 @@ public class Main {
         */
 
         //Parses
-        BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-        AstNode ast = new StartNode(buildAstVisitor.getAst());
+        EzuinoVisitor ezuinoVisitor = new EzuinoVisitor();
+        ezuinoVisitor.visit(parseTree);
+        System.out.println("this size is now: " + ezuinoVisitor.getAst().size());
+        AstNode ast = new StartNode(ezuinoVisitor.getAst());
+        //AstNode ast = new StartNode(ezuinoVisitor.getAst());
         ast.accept(new Prettyprinting());
-        StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
+        showCST(parseTree, parser);
+
+
+        AstNode astNode =  (StartNode) ezuinoVisitor.visit(parseTree);
+        //astNode.accept(new Prettyprinting());
+        //System.out.println("Look here: " + astNode.getAst().size());
 
         //System.out.println(astNode.getDcls().getChildList().get(0).toString());
     }
