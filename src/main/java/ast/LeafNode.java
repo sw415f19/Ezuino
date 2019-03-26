@@ -2,11 +2,11 @@ package ast;
 
 import ezuino.AstVisitor;
 
-public class DclsNode extends BranchNode<DclNode> {
+public abstract class LeafNode extends AstNode {
 
 	@Override
 	public void accept(AstVisitor v) {
-		v.visit(this);
-		
+		System.err.println("Not implemented.");
 	}
+
 }
