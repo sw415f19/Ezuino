@@ -1,5 +1,6 @@
 package ezuino;
 
+import ast.AstNode;
 import ast.StartNode;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
@@ -19,11 +20,12 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString("int a "+ "a := TRUE + TRUE ");
+        CharStream cs = CharStreams.fromString("int a int b "+ "a := TRUE b:=4");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
         EzuinoParser parser = new EzuinoParser(tokens);
+        //AstNode ast = new StartNode();
         ParseTree parseTree = parser.start();
         showCST(parseTree, parser);
         /*
@@ -40,9 +42,13 @@ public class Main {
         symbolTable.removeSymbol(3, "y", "3");
         */
 
+        //Parses
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+        AstNode ast = new StartNode(buildAstVisitor.getAst());
+        ast.accept(new Prettyprinting());
         StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
-        System.out.println(astNode.getDcls().getChildList().get(0).toString());
+
+        //System.out.println(astNode.getDcls().getChildList().get(0).toString());
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {

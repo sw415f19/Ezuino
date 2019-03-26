@@ -7,12 +7,16 @@ import ast.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
 
+import java.util.ArrayList;
+
 public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
+    private ArrayList<AstNode> ast = new ArrayList<AstNode>();
 
     @Override
     public AstNode visitStart(EzuinoParser.StartContext ctx) {
-
-        StartNode StartNode = new StartNode();
+        // Placeholder design is stupid AF, temporary for testing as close to the ac design as possible
+        ArrayList<AstNode> placeholderAst = new ArrayList<AstNode>();
+        StartNode StartNode = new StartNode(placeholderAst);
         System.out.println("Made Start node");
         StartNode.setDcls((DclsNode) visit(ctx.dcls()));
         StartNode.setStmts((StmtsNode) visit(ctx.stmts()));
@@ -23,8 +27,10 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitDcls(EzuinoParser.DclsContext ctx) {
         System.out.println("Made Dcls node");
         DclsNode dclsNode = new DclsNode();
+
         for(RuleContext child : ctx.dcl()) {
-           dclsNode.addChild((DclNode) visit(child));
+            visit(child);
+            //ast.add((AstNode)visit(child));
         }
         return dclsNode;
     }
@@ -40,7 +46,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         System.out.println("Made Stmts node");
         StmtsNode stmtsNode = new StmtsNode();
         for(RuleContext child : ctx.stmt()) {
-            stmtsNode.addChild((StmtNode) visit(child));
+            visit(child);
+            //ast.add((AstNode)visit(child));
         }
         return stmtsNode;
     }
@@ -184,17 +191,42 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitAssign_stmt(EzuinoParser.Assign_stmtContext ctx) {
         System.out.println("IN ASSIGN");
 
-        System.out.println(ctx.children.get(2));
+        return visit(ctx.getChild(0));
+    }
 
-        if (ctx.children.get(2) instanceof EzuinoParser.ExprContext){
-            System.out.println(ctx.children.get(2));
-        }
-         
-        return new Assign_stmtNode(ctx.ID().getText());
+    @Override
+    public AstNode visitAssign_boolean(EzuinoParser.Assign_booleanContext ctx) {
+        System.out.println("Boolean assign");
+        System.out.println("the id is: " + ctx.getText()); // hele assign_boolean stringen, den sidste node før de deles op.
+        Assign_booleanNode booleanNode = new Assign_booleanNode(ctx.getChild(0).getText(), ctx.getChild(2));
+
+
+
+        //return super.visitAssign_boolean(ctx);
+        return super.visitAssign_boolean(ctx);
+    }
+
+    @Override
+    public AstNode visitAssign_expr(EzuinoParser.Assign_exprContext ctx) {
+        System.out.println("Expression assign");
+        return super.visitAssign_expr(ctx);
+    }
+
+    @Override
+    public AstNode visitAssign_condition(EzuinoParser.Assign_conditionContext ctx) {
+        return super.visitAssign_condition(ctx);
     }
 
     @Override
     public AstNode visitBuilt_in_func(EzuinoParser.Built_in_funcContext ctx) {
         return new Built_in_funcNode();
+    }
+
+    public ArrayList<AstNode> getAst() {
+        return ast;
+    }
+
+    public void setAst(ArrayList<AstNode> ast) {
+        this.ast = ast;
     }
 }

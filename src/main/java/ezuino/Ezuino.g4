@@ -6,8 +6,22 @@ start:             dcls stmts
                 ;
 dcls:               dcl*
                 ;
-dcl:                type ID
+dcl:                int_dcl
+                |   double_dcl
+                |   bool_dcl
+                |   string_dcl
                 |   list
+                ;
+
+
+int_dcl:            INTDCL ID
+                ;
+double_dcl:         DOUBLEDCL ID
+                ;
+bool_dcl:           BOOLDCL ID
+                ;
+
+string_dcl:         STRINGDCL ID
                 ;
 
 stmts:              stmt*
@@ -20,10 +34,19 @@ stmt:               assign_stmt
                 |   if_else
                 |   switch_stmt
                 ;
-assign_stmt:        ID ASSIGN expr
-                |   ID ASSIGN NOT? booleantf
-				|   ID ASSIGN condition
+assign_stmt:        assign_expr
+                |   assign_boolean
+				|   assign_expr
                 ;
+
+assign_boolean:    ID ASSIGN NOT? booleantf
+                ;
+
+assign_expr:    ID ASSIGN expr
+                ;
+
+assign_condition:   ID ASSIGN condition
+                    ;
 
 func_def:           FUNCTION type? ID parameters block
                 ;
