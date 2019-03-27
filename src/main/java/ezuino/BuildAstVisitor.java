@@ -139,16 +139,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitList_id(EzuinoParser.List_idContext ctx) {
-        return new List_idNode();
-    }
-
-    @Override
-    public AstNode visitList_size(EzuinoParser.List_sizeContext ctx) {
-        return new List_sizeNode();
-    }
-
-    @Override
     public AstNode visitSwitch_stmt(EzuinoParser.Switch_stmtContext ctx) {
         return new Switch_stmtNode();
     }
@@ -161,16 +151,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitIf_stmt(EzuinoParser.If_stmtContext ctx) {
         return new If_stmtNode();
-    }
-
-    @Override
-    public AstNode visitElse_stmt(EzuinoParser.Else_stmtContext ctx) {
-        return new Else_stmtNode();
-    }
-
-    @Override
-    public AstNode visitIf_else(EzuinoParser.If_elseContext ctx) {
-        return new If_elseNode();
     }
 
     @Override
@@ -191,11 +171,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitBlock(EzuinoParser.BlockContext ctx) {
         return new BlockNode();
-    }
-
-    @Override
-    public AstNode visitBlock_switch(EzuinoParser.Block_switchContext ctx) {
-        return new Block_switchNode();
     }
 
     @Override

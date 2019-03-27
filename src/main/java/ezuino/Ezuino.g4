@@ -21,7 +21,7 @@ stmt
     | while_stmt
     | func_call
     | func_def
-    | if_else
+    | if_stmt
     | switch_stmt
     ;
 assign_stmt
@@ -38,19 +38,47 @@ assign_booleantf
 assign_condition
     : ID ASSIGN condition
     ;
-expr
+primaryExpr
     : val
     | func_call
-    | expr_brace
-    | expr PLUS expr
-    | expr MINUS expr
-    | expr MULTIPLE expr
-    | expr DIVIDE expr
-    | expr logic_operator expr
-    | expr comparator_operator expr
     ;
-expr_brace
-    : '('expr')'
+parenthesisExpr
+    : primaryExpr
+    | '(' expr ')'
+    ;
+unaryExpr
+    : parenthesisExpr
+    | unaryOperator parenthesisExpr
+    ;
+unaryOperator
+    : '-'
+    ;
+multiplicativeExpr
+    : unaryExpr
+    | multiplicativeExpr operator=('*'|'/') unaryExpr
+    ;
+additiveExpr
+    : multiplicativeExpr
+    | additiveExpr operator=('+'|'-') multiplicativeExpr
+    ;
+relationalExpr
+    : additiveExpr
+    | relationalExpr operator=('<'|'>'|'<='|'>=') additiveExpr
+    ;
+equalityExpr
+    : relationalExpr
+    | equalityExpr operator=('='|'!=') relationalExpr
+    ;
+logicalAndExpr
+    : equalityExpr
+    | logicalAndExpr 'AND' equalityExpr
+    ;
+logicalOrExpr
+    : logicalAndExpr
+    | logicalOrExpr 'OR' logicalAndExpr
+    ;
+expr
+    : logicalOrExpr
     ;
 func_def
     : FUNCTION type? ID parameters block;
@@ -105,19 +133,14 @@ booleantf
     | FALSE
     ;
 switch_stmt
-    : SWITCH '('val')' block_switch
+    : SWITCH '('val')' switch_block
     ;
 return_stmt
     : RETURN expr
     ;
 if_stmt
     : IF '('condition')' block
-    ;
-else_stmt
-    : ELSE block
-    ;
-if_else
-    : if_stmt+ else_stmt?
+    | IF '('condition')' block ELSE block
     ;
 while_stmt
     : WHILE '('condition')' block
@@ -131,7 +154,7 @@ param
 block
     : '{'dcls stmts return_stmt?'}'
     ;
-block_switch
+switch_block
     : '{'(CASE val(','val)*':'block)* (DEFAULT':' block)?'}'
     ;
 list
