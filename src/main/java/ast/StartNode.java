@@ -3,15 +3,16 @@ package ast;
 import ezuino.AstVisitor;
 
 public class StartNode extends AstNode {
-    private DclsNode dcls;
-    private StmtsNode stmts;
+	
+	private DclsNode dcls;
+	private StmtsNode stmts;
 
     public DclsNode getDcls() {
         return dcls;
     }
 
     public void setDcls(DclsNode dcls) {
-        this.dcls = dcls;
+    	this.dcls = dcls;
     }
 
     public StmtsNode getStmts() {

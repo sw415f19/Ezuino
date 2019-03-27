@@ -43,7 +43,10 @@ public class Main {
 
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
-        System.out.println(astNode.getDcls().getChildList().get(0).toString());
+        //System.out.println(astNode.getDcls().getChildList().get(0).toString());
+        
+        IndentedPrintVisitor ipv = new IndentedPrintVisitor();
+        ipv.visit(astNode);
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
