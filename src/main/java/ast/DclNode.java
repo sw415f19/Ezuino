@@ -3,10 +3,20 @@ package ast;
 import ezuino.AstVisitor;
 
 public class DclNode extends AstNode {
+	
+	private String id;
+	
+	public DclNode(String id) {
+		this.id = id;
+	}
+	
+	public String getId() {
+		return this.id;
+	}
 
     @Override
     public String toString() {
-        return "DclNode{}";
+        return "DclNode{ id: " + id + " }";
     }
 
 	@Override

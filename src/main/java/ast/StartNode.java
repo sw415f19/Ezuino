@@ -3,8 +3,9 @@ package ast;
 import ezuino.AstVisitor;
 
 public class StartNode extends AstNode {
-    private DclsNode dcls;
-    private StmtsNode stmts;
+	
+	private DclsNode dcls;
+	private StmtsNode stmts;
 
     
     public StartNode(DclsNode dcls, StmtsNode stmts) {
@@ -15,7 +16,7 @@ public class StartNode extends AstNode {
     public DclsNode getDcls() {
         return dcls;
     }
-    
+
     public StmtsNode getStmts() {
         return stmts;
     }

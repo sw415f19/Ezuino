@@ -63,7 +63,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
         System.out.println("Made dcl node");
-        return new DclNode();
+        return new DclNode(ctx.ID().getText());
     }
 
     @Override
