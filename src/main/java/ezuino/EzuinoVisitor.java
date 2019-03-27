@@ -10,6 +10,7 @@ import generated.EzuinoParser;
 import java.util.ArrayList;
 
 public class EzuinoVisitor extends EzuinoBaseVisitor<AstNode> {
+
     private ArrayList<AstNode> ast = new ArrayList<AstNode>();
 
     @Override
@@ -127,7 +128,9 @@ public class EzuinoVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitBoolean_expr(EzuinoParser.Boolean_exprContext ctx) {
+    public AstNode visitBoolean_expr(EzuinoParser.Boolean_exprContext ctx)
+    {
+        System.out.println("");
         return super.visitBoolean_expr(ctx);
     }
 
