@@ -2,122 +2,154 @@ grammar Ezuino;
 @header {
 package generated;
 }
-start:             dcls stmts
-                ;
-dcls:               dcl dcls
-				|	/* lambda */
-                ;
-dcl:                type ID
-                |   list
-                ;
+start
+    : dcls stmts EOF
+    |
+    ;
+dcls
+    : dcl*
+    ;
+dcl
+    : type ID
+    | list_dcl
+    ;
+stmts
+    : stmt*
+    |
+    ;
+stmt
+    : assign_stmt
+    | while_stmt
+    | func_call
+    | func_def
+    | if_stmt
+    | switch_stmt
+    ;
+assign_stmt
+    : ID ASSIGN expr
+    ;
+primaryExpr
+    : val
+    | func_call
+    ;
+parenthesisExpr
+    : primaryExpr
+    | '(' expr ')'
+    ;
+unaryExpr
+    : parenthesisExpr
+    | unaryOperator parenthesisExpr
+    ;
+unaryOperator
+    : '-'
+    ;
+multiplicativeExpr
+    : unaryExpr
+    | multiplicativeExpr operator=('*'|'/') unaryExpr
+    ;
+additiveExpr
+    : multiplicativeExpr
+    | additiveExpr operator=('+'|'-') multiplicativeExpr
+    ;
+relationalExpr
+    : additiveExpr
+    | relationalExpr operator=('<'|'>'|'<='|'>=') additiveExpr
+    ;
+equalityExpr
+    : relationalExpr
+    | equalityExpr operator=('='|'!=') relationalExpr
+    ;
+logicalAndExpr
+    : equalityExpr
+    | logicalAndExpr 'AND' equalityExpr
+    ;
+logicalOrExpr
+    : logicalAndExpr
+    | logicalOrExpr 'OR' logicalAndExpr
+    ;
+expr
+    : logicalOrExpr
+    ;
+func_def
+    : FUNCTION type? ID parameters block;
+func_call
+    : ID '('func_call_param')'
+    | built_in_func
+    ;
+func_call_param
+    : expr? | expr(','expr)+
+	;
+built_in_func
+    : print_l
+    | list_add
+    | list_remove
+    ;
+print_l
+    : PRINTSTMT expr
+    ;
+comparator_operator
+    : EQUAL
+    | NOTEQUAL
+    | LESS
+    | LESSTHANOREQUAL
+    | GREATER
+    | GREATERTHANOREQUAL
+    ;
+logic_operator
+    : AND
+    | OR
+    ;
+val
+    : ID
+    | INTEGER
+    | DOUBLE
+    | STRING
+    ;
+type
+    : INTDCL
+    | DOUBLEDCL
+    | BOOLDCL
+    | STRINGDCL
+    ;
+booleantf
+    : TRUE
+    | FALSE
+    ;
+switch_stmt
+    : SWITCH '('val')' switch_block
+    ;
+return_stmt
+    : RETURN expr
+    ;
+if_stmt
+    : IF '('expr')' block
+    | IF '('expr')' block ELSE block
+    ;
+while_stmt
+    : WHILE '('expr')' block
+    ;
+parameters
+    : '('param?(','param)*')'
+    ;
+param
+    : type ID
+    ;
+block
+    : '{'dcls stmts return_stmt?'}'
+    ;
+switch_block
+    : '{'(CASE val(','val)*':'block)* (DEFAULT':' block)?'}'
+    ;
+list_dcl
+    : LISTDCL type ID '['INTEGER']'
+    ;
+list_add
+    : LISTADD '('ID','val','INTEGER')'
+    ;
+list_remove
+    : LISTREMOVE '('ID','val','INTEGER')'
+    ;
 
-stmts:              stmt stmts
-				|	/* lambda */
-                ;
-
-stmt:               assign_stmt
-				|   while_stmt
-                |   func_call
-				|   func_def
-                |   if_else
-                |   switch_stmt
-                ;
-assign_stmt:        ID ASSIGN expr
-                ;
-
-func_def:           FUNCTION type? ID parameters block
-                ;
-
-func_call:          ID'('(expr? | expr(',' expr)+)')'
-				|   built_in_func
-                ;
-
-built_in_func:      print_l
-                |   list_add
-                |   list_remove
-				;
-
-expr:             	'(' expr ')'
-				|	unOp expr
-                |   expr binOp expr
-                |   func_call
-                |	val
-                ;
-                
-                
-binOp:			
-					MULTIPLE
-				|	DIVIDE
-				|	PLUS
-				|	MINUS
-				|	AND
-				|	OR
-				|	EQUAL
-				|	NOTEQUAL
-				|	LESS
-				|	LESSTHANOREQUAL
-				|	GREATER
-				|	GREATERTHANOREQUAL
-                ;
-unOp:				NOT
-				|	MINUS
-				;
-
-print_l:            PRINTSTMT expr
-                ;
-
-
-val:                ID
-                |   INTEGER
-                |   DOUBLE
-                |   STRING
-                ;
-type:               INTDCL
-                |   DOUBLEDCL
-                |   BOOLDCL
-                |   STRINGDCL
-                ;
-booleantf:          TRUE
-                |   FALSE
-                ;
-list_id:             ID
-                ;
-list_size:           '['INTEGER']'
-                ;
-
-switch_stmt:        SWITCH '(' val ')' block_switch
-                ;
-
-return_stmt:        RETURN expr
-                ;
-
-if_stmt:            IF'(' expr ')' block
-                ;
-
-else_stmt:          ELSE block
-                ;
-
-if_else:            if_stmt+ else_stmt?
-                ;
-
-while_stmt:         WHILE'(' expr ')' block
-                ;
-
-parameters:         '(' dcls ')'
-                ;
-
-block:              SBRACE dcls stmts return_stmt? EBRACE
-                ;
-block_switch:       SBRACE (CASE val(',' val)*':' block)* (DEFAULT':' block)? EBRACE
-                ;
-list:               LISTDCL type ID list_size
-                ;
-
-list_add:           LISTADD'('ID ',' val ',' INTEGER')'
-                ;
-
-list_remove:        LISTREMOVE'('ID ',' val ',' INTEGER')'
-                ;
 // DECLARATIONS
 INTDCL              : 'int' ;
 DOUBLEDCL           : 'double' ;
@@ -135,14 +167,14 @@ MINUS               : '-' ;
 DIVIDE              : '/' ;
 MULTIPLE            : '*' ;
 // LOGICS
+NOT                 : '!';
 AND                 : 'AND' ;
 OR                  : 'OR' ;
-LESS                : '<' ;
-GREATER             : '>' ;
 EQUAL               : '=' ;
 NOTEQUAL            : '!=' ;
-NOT                 : '!';
+LESS                : '<' ;
 LESSTHANOREQUAL     : '<=' ;
+GREATER             : '>' ;
 GREATERTHANOREQUAL  : '>=' ;
 // CONDITIONALS
 ELSE                : 'else' ;
@@ -157,8 +189,6 @@ FUNCTION            : 'func' ;
 DEFAULT             : 'default' ;
 // IDENTIFIERS
 ID                  : [a-zA-Z]+[a-zA-Z0-9]* ;
-SBRACE              : '{' ;
-EBRACE              : '}' ;
 // DATA TYPES
 INTEGER             : [0-9]+ ;
 DOUBLE              : [0-9]+'.'[0-9]+ ;

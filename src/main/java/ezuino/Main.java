@@ -19,7 +19,7 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString("int a " + "int b " + "a := 5 " + "b := a + 3.2" + "print(b)");
+        CharStream cs = CharStreams.fromString( "int a " + "a := -(-5 * 3) + -5");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
@@ -43,6 +43,7 @@ public class Main {
 
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
+        showCST(parseTree, parser);
         //System.out.println(astNode.getDcls().getChildList().get(0).toString());
         
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
@@ -53,11 +54,11 @@ public class Main {
         JFrame frame = new JFrame("CST Generated");
         JPanel panel = new JPanel();
         TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), parseTree);
-        viewer.setScale(1.5);// scale a little
+        viewer.setScale(1.0);// scale a little
         panel.add(viewer);
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(200, 200);
+        frame.setSize(1000, 1000);
         frame.setVisible(true);
     }
 

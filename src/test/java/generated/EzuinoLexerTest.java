@@ -143,31 +143,31 @@ public class EzuinoLexerTest {
 	/*TODO: Skal denne test virkelig kaste en RecognitionException?
 	 * Dette er jo en typefejl, og ikke en genkendelsesfejl
 	 */
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentWith3WayLogicOperator() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := 1 < 2 < 3");
 		ep.start();
 	}
 	//Se ovenstående kommentar
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentAdd() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE + TRUE");
 		ep.start();
 	}
 	//Se ovenstående kommentar
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentMinus() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE - TRUE");
 		ep.start();
 	}
 	//Se ovenstående kommentar
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentMult() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE * TRUE");
 		ep.start();
 	}
 	//Se ovenstående kommentar
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentDiv() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE / TRUE");
 		ep.start();
@@ -656,6 +656,109 @@ public class EzuinoLexerTest {
 				"  {case 1,3: return 1}" + 
 				"  {case 2: return 2}";
 		EzuinoParser ep = createParser(program);
+		ep.start();
+	}
+
+	@Test
+	public void MissingParamInFuncCall() throws IOException {
+		EzuinoParser ep = createParser("a(");
+		ep.start();
+	}
+
+	@Test
+	public void EmptyVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void()");
+		ep.start();
+	}
+
+	@Test
+	public void ValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55)");
+		ep.start();
+	}
+	@Test
+	public void ManyValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55, 55, 55, 55)");
+		ep.start();
+	}
+
+	@Test
+	public void PlusValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 + 55)");
+		ep.start();
+	}
+
+	@Test
+	public void MinusValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 - 55)");
+		ep.start();
+	}
+
+	@Test
+	public void MultipleValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 * 55)");
+		ep.start();
+	}
+
+	@Test
+	public void DivideValInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 / 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void ANDInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 AND 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void ORInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 OR 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void EqualInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 = 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void NotEqualInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 != 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void LessInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 < 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void LessThanOrEqualInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 <= 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void GreaterInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 > 55)");
+		ep.start();
+	}
+
+	//Should be caught in type checking
+	@Test
+	public void GreaterThanOrEqualInVoidFuncCall() throws IOException {
+		EzuinoParser ep = createParser("void(55 >= 55)");
 		ep.start();
 	}
 	
