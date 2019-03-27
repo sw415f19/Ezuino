@@ -26,6 +26,8 @@ public class Main {
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
         // showCST(parseTree, parser);
+        CSTPrinter cstp = new CSTPrinter();
+        cstp.visit(parseTree);
 
         SymbolTable symbolTable = new SymbolTable();
         symbolTable.addSymbol(1, "x", "5");
@@ -42,6 +44,10 @@ public class Main {
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
         showCST(parseTree, parser);
+        //System.out.println(astNode.getDcls().getChildList().get(0).toString());
+        
+        IndentedPrintVisitor ipv = new IndentedPrintVisitor();
+        ipv.visit(astNode);
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {

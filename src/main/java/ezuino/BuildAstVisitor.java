@@ -43,11 +43,10 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitStart(EzuinoParser.StartContext ctx) {
-
-        StartNode StartNode = new StartNode();
+    	DclsNode dcls = (DclsNode)visit(ctx.dcls());
+    	StmtsNode stmts = (StmtsNode)visit(ctx.stmts());
+        StartNode StartNode = new StartNode(dcls, stmts);
         System.out.println("Made Start node");
-        StartNode.setDcls((DclsNode) visit(ctx.dcls()));
-        StartNode.setStmts((StmtsNode) visit(ctx.stmts()));
         return StartNode;
     }
 
@@ -64,7 +63,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
         System.out.println("Made dcl node");
-        return new DclNode();
+        return new DclNode(ctx.ID().getText());
     }
 
     @Override
