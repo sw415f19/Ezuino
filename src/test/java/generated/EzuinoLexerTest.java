@@ -143,31 +143,31 @@ public class EzuinoLexerTest {
 	/*TODO: Skal denne test virkelig kaste en RecognitionException?
 	 * Dette er jo en typefejl, og ikke en genkendelsesfejl
 	 */
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentWith3WayLogicOperator() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := 1 < 2 < 3");
 		ep.start();
 	}
 	//Se ovenstående kommentar
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentAdd() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE + TRUE");
 		ep.start();
 	}
 	//Se ovenstående kommentar
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentMinus() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE - TRUE");
 		ep.start();
 	}
 	//Se ovenstående kommentar
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentMult() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE * TRUE");
 		ep.start();
 	}
 	//Se ovenstående kommentar
-	@Test(expected=RecognitionException.class)
+	@Test
 	public void typeBooleanAssignmentDiv() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := TRUE / TRUE");
 		ep.start();

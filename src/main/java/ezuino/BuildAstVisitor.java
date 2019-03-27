@@ -113,16 +113,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitCondition(EzuinoParser.ConditionContext ctx) {
-        return new ConditionNode();
-    }
-
-    @Override
-    public AstNode visitBoolean_expr(EzuinoParser.Boolean_exprContext ctx) {
-        return new Boolean_exprNode();
-    }
-
-    @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
         return new ValNode();
     }
@@ -170,11 +160,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitBlock(EzuinoParser.BlockContext ctx) {
         return new BlockNode();
-    }
-
-    @Override
-    public AstNode visitList(EzuinoParser.ListContext ctx) {
-        return new ListNode();
     }
 
     @Override

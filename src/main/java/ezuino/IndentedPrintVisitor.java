@@ -6,7 +6,7 @@ public class IndentedPrintVisitor {
 	
 	public void print(AstNode node, int level) {
 		String resultString = "";
-		resultString += level > 0 ? "   ".repeat(level) : "";
+		resultString += level > 0 ? new String(new char[level]).replace("\0", "   ") : "";
 		resultString += "+- " + node.toString();
 		System.out.println(resultString);
 	}

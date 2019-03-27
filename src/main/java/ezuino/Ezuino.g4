@@ -3,18 +3,19 @@ grammar Ezuino;
 package generated;
 }
 start
-    : dcls stmts
+    : dcls stmts EOF
+    |
     ;
 dcls
     : dcl*
     ;
 dcl
     : type ID
-    | list
     | list_dcl
     ;
 stmts
     : stmt*
+    |
     ;
 stmt
     : assign_stmt
@@ -25,18 +26,7 @@ stmt
     | switch_stmt
     ;
 assign_stmt
-    : assign_expr
-    | assign_booleantf
-    | assign_condition
-    ;
-assign_expr
     : ID ASSIGN expr
-    ;
-assign_booleantf
-    : ID ASSIGN NOT? booleantf
-    ;
-assign_condition
-    : ID ASSIGN condition
     ;
 primaryExpr
     : val
@@ -109,13 +99,6 @@ logic_operator
     : AND
     | OR
     ;
-condition
-    : boolean_expr (logic_operator boolean_expr)*
-    ;
-boolean_expr
-    : val comparator_operator val
-    | booleantf
-    ;
 val
     : ID
     | INTEGER
@@ -139,11 +122,11 @@ return_stmt
     : RETURN expr
     ;
 if_stmt
-    : IF '('condition')' block
-    | IF '('condition')' block ELSE block
+    : IF '('expr')' block
+    | IF '('expr')' block ELSE block
     ;
 while_stmt
-    : WHILE '('condition')' block
+    : WHILE '('expr')' block
     ;
 parameters
     : '('param?(','param)*')'
@@ -157,11 +140,8 @@ block
 switch_block
     : '{'(CASE val(','val)*':'block)* (DEFAULT':' block)?'}'
     ;
-list
-    : LISTDCL type ID '['INTEGER']'
-    ;
 list_dcl
-    : LISTDCL type ID '['INTEGER']' ASSIGN '('(val','?)*')'
+    : LISTDCL type ID '['INTEGER']'
     ;
 list_add
     : LISTADD '('ID','val','INTEGER')'
