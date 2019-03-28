@@ -30,6 +30,7 @@ assign_stmt
     ;
 primaryExpr
     : val
+    | booleantf
     | func_call
     ;
 parenthesisExpr
@@ -105,15 +106,27 @@ val
     | DOUBLE
     | STRING
     ;
-type
-    : INTDCL
-    | DOUBLEDCL
-    | BOOLDCL
-    | STRINGDCL
-    ;
 booleantf
     : TRUE
     | FALSE
+    ;
+type
+    : int_dcl
+    | double_dcl
+    | boolean_dcl
+    | string_dcl
+    ;
+int_dcl
+    : INTDCL
+    ;
+double_dcl
+    : DOUBLEDCL
+    ;
+boolean_dcl
+    : BOOLEANDCL
+    ;
+string_dcl
+    : STRINGDCL
     ;
 switch_stmt
     : SWITCH '('val')' switch_block
@@ -154,7 +167,7 @@ list_remove
 INTDCL              : 'int' ;
 DOUBLEDCL           : 'double' ;
 STRINGDCL           : 'string' ;
-BOOLDCL             : 'boolean' ;
+BOOLEANDCL          : 'boolean' ;
 LISTDCL             : 'list' ;
 // STATEMENTS
 PRINTSTMT           : 'print' ;
