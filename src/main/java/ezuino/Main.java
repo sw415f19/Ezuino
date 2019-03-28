@@ -1,5 +1,6 @@
 package ezuino;
 
+import ast.AstNode;
 import ast.StartNode;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
@@ -25,29 +26,29 @@ public class Main {
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
-        // showCST(parseTree, parser);
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 
-        SymbolTable symbolTable = new SymbolTable();
-        symbolTable.addSymbol(1, "x", "5");
-        symbolTable.addSymbol(2, "y", "3");
-        symbolTable.addSymbol(10, "qwe", "fuck mig");
-        symbolTable.addSymbol(10, "qwe", "fuck me 2");
-        symbolTable.getSymbolTable();
 
-        symbolTable.removeSymbol(10, "qwe", "fuck me 2");
-        symbolTable.removeSymbol(1, "x", "5");
-        symbolTable.removeSymbol(2, "y", "3");
-        symbolTable.removeSymbol(3, "y", "3");
-
-        BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-        StartNode astNode = (StartNode) buildAstVisitor.visit(parseTree);
-        showCST(parseTree, parser);
-        //System.out.println(astNode.getDcls().getChildList().get(0).toString());
-        
+        //Initializes the Ezuiono Vistor
+        EzuinoVisitor ezuinoVisitorForPrinting = new EzuinoVisitor();
+        StartNode astNode = (StartNode) ezuinoVisitorForPrinting.visit(parseTree);
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         ipv.visit(astNode);
+
+        //Initializes the Ezuiono Vistor
+        EzuinoVisitor ezuinoVisitor = new EzuinoVisitor();
+        //Runs the three, filling up the AST array list attribute
+        ezuinoVisitor.visit(parseTree);
+        System.out.println("Number of nodes in AST: " + ezuinoVisitor.getAst().size());
+        // Creates a AST startNode object that contains the AST Array
+        AstNode ast = new StartNode(ezuinoVisitor.getAst());
+        //Use accept on the startNode. startNode iterates through the AST array using accept on each entry.
+        //accept() does what is defined in the input class (ex. Prettyprinting), on each object depending on the object type.
+        ast.accept(new Prettyprinting());
+        showCST(parseTree, parser);
+
+
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {

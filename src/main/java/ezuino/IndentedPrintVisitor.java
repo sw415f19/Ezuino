@@ -13,7 +13,7 @@ public class IndentedPrintVisitor {
 	
 	public void visit(StartNode s) {
 		System.out.println("Printing AST:");
-		print(s, 0);
+		//print(s, 0);
 		visit(s.getDcls(), 1);
 		visit(s.getStmts(), 1);
 	}

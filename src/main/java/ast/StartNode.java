@@ -2,17 +2,17 @@ package ast;
 
 import ezuino.AstVisitor;
 
+import java.util.ArrayList;
+
 public class StartNode extends AstNode {
-	
+    private ArrayList<AstNode> ast;
 	private DclsNode dcls;
 	private StmtsNode stmts;
 
-    
-    public StartNode(DclsNode dcls, StmtsNode stmts) {
-    	this.dcls = dcls;
-    	this.stmts = stmts;
+    public StartNode(ArrayList<AstNode> ast) {
+        this.ast = ast;
     }
-    
+
     public DclsNode getDcls() {
         return dcls;
     }
@@ -21,7 +21,11 @@ public class StartNode extends AstNode {
         return stmts;
     }
 
-	@Override
+    public ArrayList<AstNode> getAst() {
+        return ast;
+    }
+
+    @Override
 	public void accept(AstVisitor v) {
 		v.visit(this);
 		

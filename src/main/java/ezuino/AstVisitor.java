@@ -36,10 +36,22 @@ public abstract class AstVisitor {
 	public abstract void visit(ExprNode node);
 	public abstract void visit(ParametersNode node);
 
+	//Four added assignment nodes.
+	public abstract void visit(Assign_booleanNode node);
+	public abstract void visit(Assign_stmtNode node);
+	public abstract void visit(Assign_exprNode node);
+	public abstract void visit(Assign_conditionNode node);
 
-    public void visit(AstNode astNode) {
-    	System.out.println("In ASTNode visit:\t" + astNode);
-    	astNode.accept(this);
-    }
+	//"New" Declarations
+	public abstract void visit(Int_dclNode node);
+	public abstract void visit(Double_dclNode node);
+	public abstract void visit(Boolean_dclNode node);
+	public abstract void visit(String_dclNode node);
+
+
+	public void visit(AstNode astNode) {
+		System.out.println("In ASTNode visit:\t" + astNode);
+		astNode.accept(this);
+	}
 
 }
