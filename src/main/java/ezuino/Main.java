@@ -30,19 +30,20 @@ public class Main {
         cstp.visit(parseTree);
 
 
-        //Initializes the Ezuiono Vistor
-        EzuinoVisitor ezuinoVisitorForPrinting = new EzuinoVisitor();
+        /* Call of IndentedPrintVisitor
+        BuildAstVisitor ezuinoVisitorForPrinting = new BuildAstVisitor();
         StartNode astNode = (StartNode) ezuinoVisitorForPrinting.visit(parseTree);
-        //IndentedPrintVisitor ipv = new IndentedPrintVisitor(); // Gives nullPointerException atm.
-        //ipv.visit(astNode);
+        IndentedPrintVisitor ipv = new IndentedPrintVisitor(); // Gives nullPointerException atm.
+        ipv.visit(astNode);
+        */
 
         //Initializes the Ezuiono Vistor
-        EzuinoVisitor ezuinoVisitor = new EzuinoVisitor();
+        BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         //Runs the three, filling up the AST array list attribute
-        ezuinoVisitor.visit(parseTree);
-        System.out.println("Number of nodes in AST: " + ezuinoVisitor.getAst().size());
+        buildAstVisitor.visit(parseTree);
+        System.out.println("Number of nodes in AST: " + buildAstVisitor.getAst().size());
         // Creates a AST startNode object that contains the AST Array
-        AstNode ast = new StartNode(ezuinoVisitor.getAst());
+        AstNode ast = new StartNode(buildAstVisitor.getAst());
         //Use accept on the startNode. startNode iterates through the AST array using accept on each entry.
         //accept() does what is defined in the input class (ex. Prettyprinting), on each object depending on the object type.
         ast.accept(new Prettyprinting());

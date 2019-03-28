@@ -6,7 +6,7 @@ import generated.EzuinoParser;
 
 import java.util.ArrayList;
 
-public class EzuinoVisitor extends EzuinoBaseVisitor<AstNode> {
+public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     private ArrayList<AstNode> ast = new ArrayList<AstNode>();
 
