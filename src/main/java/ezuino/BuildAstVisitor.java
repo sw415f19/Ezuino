@@ -4,12 +4,7 @@ import ast.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
 
-import java.util.ArrayList;
-
 public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
-
-    private ArrayList<AstNode> ast = new ArrayList<AstNode>();
-
     @Override
     public AstNode visitStart(EzuinoParser.StartContext ctx) {
         return super.visitStart(ctx);
@@ -26,26 +21,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitInt_dcl(EzuinoParser.Int_dclContext ctx) {
-        return super.visitInt_dcl(ctx);
-    }
-
-    @Override
-    public AstNode visitDouble_dcl(EzuinoParser.Double_dclContext ctx) {
-        return super.visitDouble_dcl(ctx);
-    }
-
-    @Override
-    public AstNode visitBool_dcl(EzuinoParser.Bool_dclContext ctx) {
-        return super.visitBool_dcl(ctx);
-    }
-
-    @Override
-    public AstNode visitString_dcl(EzuinoParser.String_dclContext ctx) {
-        return super.visitString_dcl(ctx);
-    }
-
-    @Override
     public AstNode visitStmts(EzuinoParser.StmtsContext ctx) {
         return super.visitStmts(ctx);
     }
@@ -57,30 +32,72 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitAssign_stmt(EzuinoParser.Assign_stmtContext ctx) {
-        return super.visitAssign_stmt(ctx);
+        //Casts the recieving node to an ExprNode
+        return new Assign_stmtNode(ctx.ID().getText(), (ExprNode) ctx.expr().accept(this));
     }
 
     @Override
-    public AstNode visitAssign_boolean(EzuinoParser.Assign_booleanContext ctx) {
-        String variableID = ctx.getChild(0).getText();
-        String booleanValue = ctx.getChild(2).getText();
-        Boolean_dclNode booleanValueAsASTNode = new Boolean_dclNode(booleanValue);
-
-        System.out.println("new AST node: " + variableID + " " + booleanValue);
-
-        Assign_booleanNode assign_booleanNode = new Assign_booleanNode(variableID, booleanValueAsASTNode);
-        ast.add(assign_booleanNode);
-        return super.visitAssign_boolean(ctx);
+    public AstNode visitPrimaryExpr(EzuinoParser.PrimaryExprContext ctx) {
+        return super.visitPrimaryExpr(ctx);
     }
 
     @Override
-    public AstNode visitAssign_expr(EzuinoParser.Assign_exprContext ctx) {
-        return super.visitAssign_expr(ctx);
+    public AstNode visitParenthesisExpr(EzuinoParser.ParenthesisExprContext ctx) {
+        return super.visitParenthesisExpr(ctx);
     }
 
     @Override
-    public AstNode visitAssign_condition(EzuinoParser.Assign_conditionContext ctx) {
-        return super.visitAssign_condition(ctx);
+    public AstNode visitUnaryExpr(EzuinoParser.UnaryExprContext ctx) {
+        return super.visitUnaryExpr(ctx);
+    }
+
+    @Override
+    public AstNode visitUnaryOperator(EzuinoParser.UnaryOperatorContext ctx) {
+        return super.visitUnaryOperator(ctx);
+    }
+
+    @Override
+    public AstNode visitMultiplicativeExpr(EzuinoParser.MultiplicativeExprContext ctx) {
+        return super.visitMultiplicativeExpr(ctx);
+    }
+
+    @Override
+    public AstNode visitAdditiveExpr(EzuinoParser.AdditiveExprContext ctx) {
+        return super.visitAdditiveExpr(ctx);
+    }
+
+    @Override
+    public AstNode visitRelationalExpr(EzuinoParser.RelationalExprContext ctx) {
+        return super.visitRelationalExpr(ctx);
+    }
+
+    @Override
+    public AstNode visitEqualityExpr(EzuinoParser.EqualityExprContext ctx) {
+        return super.visitEqualityExpr(ctx);
+    }
+
+    @Override
+    public AstNode visitLogicalAndExpr(EzuinoParser.LogicalAndExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.equalityExpr().accept(this);
+        }
+
+        return super.visitLogicalAndExpr(ctx);
+    }
+
+    @Override
+    public AstNode visitLogicalOrExpr(EzuinoParser.LogicalOrExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.logicalAndExpr().accept(this);
+        }
+
+        return super.visitLogicalOrExpr(ctx);
+    }
+
+    @Override
+    public AstNode visitExpr(EzuinoParser.ExprContext ctx) {
+        System.out.println("not empty");
+        return ctx.logicalOrExpr().accept(this);
     }
 
     @Override
@@ -94,14 +111,13 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitBuilt_in_func(EzuinoParser.Built_in_funcContext ctx) {
-        System.out.println("DO NOT VISIT");
-        return super.visitBuilt_in_func(ctx);
+    public AstNode visitFunc_call_param(EzuinoParser.Func_call_paramContext ctx) {
+        return super.visitFunc_call_param(ctx);
     }
 
     @Override
-    public AstNode visitExpr(EzuinoParser.ExprContext ctx) {
-        return super.visitExpr(ctx);
+    public AstNode visitBuilt_in_func(EzuinoParser.Built_in_funcContext ctx) {
+        return super.visitBuilt_in_func(ctx);
     }
 
     @Override
@@ -110,35 +126,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitComparator_operator(EzuinoParser.Comparator_operatorContext ctx) {
-        return super.visitComparator_operator(ctx);
-    }
-
-    @Override
-    public AstNode visitLogic_operator(EzuinoParser.Logic_operatorContext ctx) {
-        return super.visitLogic_operator(ctx);
-    }
-
-    @Override
-    public AstNode visitCondition(EzuinoParser.ConditionContext ctx) {
-        return super.visitCondition(ctx);
-    }
-
-    @Override
-    public AstNode visitBoolean_expr(EzuinoParser.Boolean_exprContext ctx)
-    {
-        System.out.println("");
-        return super.visitBoolean_expr(ctx);
-    }
-
-    @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
         return super.visitVal(ctx);
-    }
-
-    @Override
-    public AstNode visitType(EzuinoParser.TypeContext ctx) {
-        return super.visitType(ctx);
     }
 
     @Override
@@ -147,13 +136,28 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitList_id(EzuinoParser.List_idContext ctx) {
-        return super.visitList_id(ctx);
+    public AstNode visitType(EzuinoParser.TypeContext ctx) {
+        return super.visitType(ctx);
     }
 
     @Override
-    public AstNode visitList_size(EzuinoParser.List_sizeContext ctx) {
-        return super.visitList_size(ctx);
+    public AstNode visitInt_dcl(EzuinoParser.Int_dclContext ctx) {
+        return super.visitInt_dcl(ctx);
+    }
+
+    @Override
+    public AstNode visitDouble_dcl(EzuinoParser.Double_dclContext ctx) {
+        return super.visitDouble_dcl(ctx);
+    }
+
+    @Override
+    public AstNode visitBoolean_dcl(EzuinoParser.Boolean_dclContext ctx) {
+        return super.visitBoolean_dcl(ctx);
+    }
+
+    @Override
+    public AstNode visitString_dcl(EzuinoParser.String_dclContext ctx) {
+        return super.visitString_dcl(ctx);
     }
 
     @Override
@@ -169,16 +173,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitIf_stmt(EzuinoParser.If_stmtContext ctx) {
         return super.visitIf_stmt(ctx);
-    }
-
-    @Override
-    public AstNode visitElse_stmt(EzuinoParser.Else_stmtContext ctx) {
-        return super.visitElse_stmt(ctx);
-    }
-
-    @Override
-    public AstNode visitIf_else(EzuinoParser.If_elseContext ctx) {
-        return super.visitIf_else(ctx);
     }
 
     @Override
@@ -202,13 +196,13 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitBlock_switch(EzuinoParser.Block_switchContext ctx) {
-        return super.visitBlock_switch(ctx);
+    public AstNode visitSwitch_block(EzuinoParser.Switch_blockContext ctx) {
+        return super.visitSwitch_block(ctx);
     }
 
     @Override
-    public AstNode visitList(EzuinoParser.ListContext ctx) {
-        return super.visitList(ctx);
+    public AstNode visitList_dcl(EzuinoParser.List_dclContext ctx) {
+        return super.visitList_dcl(ctx);
     }
 
     @Override
@@ -219,38 +213,5 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitList_remove(EzuinoParser.List_removeContext ctx) {
         return super.visitList_remove(ctx);
-    }
-
-    public ArrayList<AstNode> getAst() {
-        return ast;
-    }
-
-    public void setAst(ArrayList<AstNode> ast) {
-        this.ast = ast;
-    }
-
-    public AstNode Val(String valToBeEvaluated) {
-        AstNode itsAst = null;
-
-        /* Bestem kriterier for hvornår det er hvilken data type */
-        if (true) {
-            itsAst = new Boolean_dclNode(valToBeEvaluated);
-        }
-        /*
-        if (ts.peek() == ID) {
-            Token tid = expect(ID);
-            itsAst = new SymReferencing(tid.val);
-        }
-        else if (ts.peek() == INUM) {
-            Token tid = expect(INUM);
-            itsAst = new IntConsting(tid.val);
-        }
-        else if (ts.peek() == FNUM) {
-            Token tid = expect(FNUM);
-            itsAst = new FloatConsting(tid.val);
-        }
-        else error("expected id, inum, or fnum");
-        */
-        return itsAst;
     }
 }

@@ -8,6 +8,4 @@ public class SymDeclaring extends AstNode {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
-
-
 }

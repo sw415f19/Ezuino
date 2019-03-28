@@ -20,7 +20,10 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString( "int a " + "a := TRUE AND TRUE");
+        CharStream cs = CharStreams.fromString( 
+            "int a " 
+            + "a := 5"
+            );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
@@ -41,13 +44,7 @@ public class Main {
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         //Runs the three, filling up the AST array list attribute
         buildAstVisitor.visit(parseTree);
-        System.out.println("Number of nodes in AST: " + buildAstVisitor.getAst().size());
-        // Creates a AST startNode object that contains the AST Array
-        AstNode ast = new StartNode(buildAstVisitor.getAst());
-        //Use accept on the startNode. startNode iterates through the AST array using accept on each entry.
-        //accept() does what is defined in the input class (ex. Prettyprinting), on each object depending on the object type.
-        ast.accept(new Prettyprinting());
-        showCST(parseTree, parser);
+        //showCST(parseTree, parser);
 
 
     }

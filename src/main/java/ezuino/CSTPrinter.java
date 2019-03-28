@@ -36,11 +36,5 @@ public class CSTPrinter extends EzuinoBaseVisitor<Void> {
 			PrintTree(tree.getChild(i), indent, i == tree.getChildCount() - 1);
 		}
 	}
-	
-	@Override
-	public Void visitVal(ValContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitVal(ctx);
-	}
 
 }

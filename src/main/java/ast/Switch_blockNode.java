@@ -2,7 +2,7 @@ package ast;
 
 import ezuino.AstVisitor;
 
-public class List_sizeNode extends AstNode {
+public class Switch_blockNode extends AstNode {
 
 	@Override
 	public void accept(AstVisitor v) {

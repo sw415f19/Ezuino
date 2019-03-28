@@ -30,22 +30,12 @@ public class Prettyprinting extends AstVisitor {
     }
 
     @Override
-    public void visit(Block_switchNode node) {
-
-    }
-
-    @Override
-    public void visit(If_elseNode node) {
+    public void visit(Switch_blockNode node) {
 
     }
 
     @Override
     public void visit(Return_stmtNode node) {
-
-    }
-
-    @Override
-    public void visit(Boolean_exprNode node) {
 
     }
 
@@ -78,29 +68,10 @@ public class Prettyprinting extends AstVisitor {
     }
 
     @Override
-    public void visit(Comparator_operatorNode node) {
-
-    }
-
-    @Override
-    public void visit(List_idNode node) {
-
-    }
-
-    @Override
     public void visit(StmtsNode node) {
 
     }
 
-    @Override
-    public void visit(ConditionNode node) {
-
-    }
-
-    @Override
-    public void visit(ListNode node) {
-
-    }
 
     @Override
     public void visit(Switch_stmtNode node) {
@@ -128,22 +99,7 @@ public class Prettyprinting extends AstVisitor {
     }
 
     @Override
-    public void visit(List_sizeNode node) {
-
-    }
-
-    @Override
     public void visit(ValNode node) {
-
-    }
-
-    @Override
-    public void visit(Else_stmtNode node) {
-
-    }
-
-    @Override
-    public void visit(Logic_operatorNode node) {
 
     }
 
@@ -167,25 +123,9 @@ public class Prettyprinting extends AstVisitor {
         super.visit(astNode);
     }
 
-    @Override
-    public void visit(Assign_booleanNode node) {
-        System.out.println("Hallo world---------------");
-        System.out.print(node.getId() + " := " );
-        node.getChild().accept(this);
-    }
 
     @Override
     public void visit(Assign_stmtNode node) {
-
-    }
-
-    @Override
-    public void visit(Assign_exprNode node) {
-
-    }
-
-    @Override
-    public void visit(Assign_conditionNode node) {
 
     }
 
@@ -201,7 +141,7 @@ public class Prettyprinting extends AstVisitor {
 
     @Override
     public void visit(Boolean_dclNode node) {
-        System.out.print(node.getId());
+
     }
 
     @Override
