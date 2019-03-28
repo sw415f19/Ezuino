@@ -39,10 +39,7 @@ parenthesisExpr
     ;
 unaryExpr
     : parenthesisExpr
-    | unaryOperator parenthesisExpr
-    ;
-unaryOperator
-    : '-'
+    | ('-') parenthesisExpr
     ;
 multiplicativeExpr
     : unaryExpr

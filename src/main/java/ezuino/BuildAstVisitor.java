@@ -38,10 +38,16 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitPrimaryExpr(EzuinoParser.PrimaryExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if(ctx.val() != null) {
             return ctx.val().accept(this);
         }
-        return super.visitPrimaryExpr(ctx);
+        if(ctx.booleantf() != null) {
+            return ctx.booleantf().accept(this);
+        }
+        if(ctx.func_call() != null) {
+            return ctx.func_call().accept(this);
+        }
+        return null;
     }
 
     @Override
@@ -49,7 +55,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if(ctx.getChildCount() == 1) {
             return ctx.primaryExpr().accept(this);
         }
-        return super.visitParenthesisExpr(ctx);
+        return new ParenthesisExprNode((ExprNode) ctx.expr().accept(this));
     }
 
     @Override
@@ -57,12 +63,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if(ctx.getChildCount() == 1) {
             return ctx.parenthesisExpr().accept(this);
         }
-        return super.visitUnaryExpr(ctx);
-    }
-
-    @Override
-    public AstNode visitUnaryOperator(EzuinoParser.UnaryOperatorContext ctx) {
-        return super.visitUnaryOperator(ctx);
+        return new UnaryExprNode(ctx.MINUS().getText(), (ParenthesisExprNode) ctx.parenthesisExpr().accept(this));
     }
 
     @Override
@@ -70,7 +71,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if(ctx.getChildCount() == 1) {
             return ctx.unaryExpr().accept(this);
         }
-        return super.visitMultiplicativeExpr(ctx);
+        return new MultiplicativeExprNode((MultiplicativeExprNode) ctx.multiplicativeExpr().accept(this), ctx.operator.getText(), (UnaryExprNode) ctx.unaryExpr().accept(this));
     }
 
     @Override
@@ -78,7 +79,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if(ctx.getChildCount() == 1) {
             return ctx.multiplicativeExpr().accept(this);
         }
-        return super.visitAdditiveExpr(ctx);
+        return new AdditiveExprNode((AdditiveExprNode) ctx.additiveExpr().accept(this), ctx.operator.getText(), (MultiplicativeExprNode) ctx.multiplicativeExpr().accept(this));
     }
 
     @Override
@@ -86,7 +87,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if(ctx.getChildCount() == 1) {
             return ctx.additiveExpr().accept(this);
         }
-        return super.visitRelationalExpr(ctx);
+        return new RelationalExprNode((RelationalExprNode) ctx.relationalExpr().accept(this), ctx.operator.getText(), (AdditiveExprNode) ctx.additiveExpr().accept(this));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if(ctx.getChildCount() == 1) {
             return ctx.relationalExpr().accept(this);
         }
-        return super.visitEqualityExpr(ctx);
+        return new EqualityExprNode((EqualityExprNode) ctx.equalityExpr().accept(this), ctx.operator.getText() , (RelationalExprNode) ctx.relationalExpr().accept(this));
     }
 
     @Override
@@ -102,8 +103,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if(ctx.getChildCount() == 1) {
             return ctx.equalityExpr().accept(this);
         }
-
-        return super.visitLogicalAndExpr(ctx);
+        return new LogicalAndExprNode((LogicalAndExprNode) ctx.logicalAndExpr().accept(this), (EqualityExprNode) ctx.equalityExpr().accept(this));
     }
 
     @Override
@@ -111,13 +111,11 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if(ctx.getChildCount() == 1) {
             return ctx.logicalAndExpr().accept(this);
         }
-
-        return super.visitLogicalOrExpr(ctx);
+        return new LogicalOrExprNode((LogicalOrExprNode) ctx.logicalOrExpr().accept(this), (LogicalAndExprNode) ctx.logicalAndExpr().accept(this));
     }
 
     @Override
     public AstNode visitExpr(EzuinoParser.ExprContext ctx) {
-        System.out.println("not empty");
         return ctx.logicalOrExpr().accept(this);
     }
 
