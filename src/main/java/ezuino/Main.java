@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString( 
             "int a " 
-            + "a := 5"
+            + "a := 5.5"
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);

@@ -38,16 +38,25 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitPrimaryExpr(EzuinoParser.PrimaryExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.val().accept(this);
+        }
         return super.visitPrimaryExpr(ctx);
     }
 
     @Override
     public AstNode visitParenthesisExpr(EzuinoParser.ParenthesisExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.primaryExpr().accept(this);
+        }
         return super.visitParenthesisExpr(ctx);
     }
 
     @Override
     public AstNode visitUnaryExpr(EzuinoParser.UnaryExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.parenthesisExpr().accept(this);
+        }
         return super.visitUnaryExpr(ctx);
     }
 
@@ -58,21 +67,33 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitMultiplicativeExpr(EzuinoParser.MultiplicativeExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.unaryExpr().accept(this);
+        }
         return super.visitMultiplicativeExpr(ctx);
     }
 
     @Override
     public AstNode visitAdditiveExpr(EzuinoParser.AdditiveExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.multiplicativeExpr().accept(this);
+        }
         return super.visitAdditiveExpr(ctx);
     }
 
     @Override
     public AstNode visitRelationalExpr(EzuinoParser.RelationalExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.additiveExpr().accept(this);
+        }
         return super.visitRelationalExpr(ctx);
     }
 
     @Override
     public AstNode visitEqualityExpr(EzuinoParser.EqualityExprContext ctx) {
+        if(ctx.getChildCount() == 1) {
+            return ctx.relationalExpr().accept(this);
+        }
         return super.visitEqualityExpr(ctx);
     }
 
@@ -127,6 +148,16 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
+        System.out.println("IN VAL");
+
+        if (ctx.getChild(0) == ctx.INTEGER())  {
+            System.out.println("IN INTEGER");
+        }
+
+        if (ctx.getChild(0) == ctx.DOUBLE())  {
+            System.out.println("IN DOUBLE");
+        }
+
         return super.visitVal(ctx);
     }
 
