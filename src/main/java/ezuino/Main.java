@@ -19,7 +19,7 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString( "int a " + "a := -(-5 * 3) + -5");
+        CharStream cs = CharStreams.fromString( "int a " + "a := TRUE AND TRUE");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
