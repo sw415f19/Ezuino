@@ -33,8 +33,8 @@ public class Main {
         //Initializes the Ezuiono Vistor
         EzuinoVisitor ezuinoVisitorForPrinting = new EzuinoVisitor();
         StartNode astNode = (StartNode) ezuinoVisitorForPrinting.visit(parseTree);
-        IndentedPrintVisitor ipv = new IndentedPrintVisitor();
-        ipv.visit(astNode);
+        //IndentedPrintVisitor ipv = new IndentedPrintVisitor(); // Gives nullPointerException atm.
+        //ipv.visit(astNode);
 
         //Initializes the Ezuiono Vistor
         EzuinoVisitor ezuinoVisitor = new EzuinoVisitor();
