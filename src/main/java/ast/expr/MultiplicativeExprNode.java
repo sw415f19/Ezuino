@@ -1,6 +1,6 @@
 package ast.expr;
 
-import ast.*;
+import ast.AstNode;
 import ast.expr.iexpr.IMultiplicativeExpr;
 import ast.expr.iexpr.IUnaryExpr;
 import ezuino.AstVisitor;

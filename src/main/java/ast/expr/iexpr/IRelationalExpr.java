@@ -1,5 +1,5 @@
 package ast.expr.iexpr;
-public interface IRelationalExpr extends IEqualityExpr
-{
+
+public interface IRelationalExpr extends IEqualityExpr {
 
 }

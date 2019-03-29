@@ -1,5 +1,5 @@
 package ast.expr.iexpr;
-public interface IExpr 
-{
+
+public interface IExpr {
 
 }

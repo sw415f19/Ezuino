@@ -1,10 +1,11 @@
 package ast.expr;
+
 import ast.*;
 import ast.expr.iexpr.IAddictiveExpr;
 import ast.expr.iexpr.IMultiplicativeExpr;
 import ezuino.AstVisitor;
 
-public class AdditiveExprNode extends AstNode implements IAddictiveExpr{
+public class AdditiveExprNode extends AstNode implements IAddictiveExpr {
     private IAddictiveExpr leftNode;
     private String operator;
     private IMultiplicativeExpr rightNode;

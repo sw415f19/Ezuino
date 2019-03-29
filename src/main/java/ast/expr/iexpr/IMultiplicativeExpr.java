@@ -1,5 +1,5 @@
 package ast.expr.iexpr;
-public interface IMultiplicativeExpr extends IAddictiveExpr
-{
+
+public interface IMultiplicativeExpr extends IAddictiveExpr {
 
 }

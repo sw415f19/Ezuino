@@ -1,10 +1,10 @@
 package ast.expr;
-import ast.*;
 
 import ezuino.AstVisitor;
+import ast.AstNode;
 import ast.expr.iexpr.*;
 
-public class RelationalExprNode extends AstNode implements IRelationalExpr{ 
+public class RelationalExprNode extends AstNode implements IRelationalExpr {
     private IRelationalExpr leftNode;
     private String operator;
     private IAddictiveExpr rightNode;

@@ -1,4 +1,5 @@
 package ast.type;
+
 import ezuino.AstVisitor;
 
 public class IdNode extends ValNode {
@@ -13,7 +14,7 @@ public class IdNode extends ValNode {
     public String getVal() {
         return this.val;
     }
-    
+
     @Override
     public void accept(AstVisitor v) {
         v.visit(this);

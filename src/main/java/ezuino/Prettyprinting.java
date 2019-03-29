@@ -1,6 +1,8 @@
 package ezuino;
 
 import ast.*;
+import ast.expr.ExprNode;
+import ast.type.ValNode;
 
 public class Prettyprinting extends AstVisitor {
 
@@ -46,7 +48,7 @@ public class Prettyprinting extends AstVisitor {
 
     @Override
     public void visit(StartNode node) {
-        for(AstNode thisNode : node.getAst()){
+        for (AstNode thisNode : node.getAst()) {
             System.out.println("It loops");
             thisNode.accept(this);
         }
@@ -71,7 +73,6 @@ public class Prettyprinting extends AstVisitor {
     public void visit(StmtsNode node) {
 
     }
-
 
     @Override
     public void visit(Switch_stmtNode node) {
@@ -122,7 +123,6 @@ public class Prettyprinting extends AstVisitor {
     public void visit(AstNode astNode) {
         super.visit(astNode);
     }
-
 
     @Override
     public void visit(Assign_stmtNode node) {

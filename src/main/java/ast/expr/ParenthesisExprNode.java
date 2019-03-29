@@ -1,6 +1,6 @@
 package ast.expr;
 
-import ast.*;
+import ast.AstNode;
 import ast.expr.iexpr.IExpr;
 import ast.expr.iexpr.IParenthesisExpr;
 import ezuino.AstVisitor;
@@ -12,7 +12,7 @@ public class ParenthesisExprNode extends AstNode implements IParenthesisExpr {
         this.node = iExpr;
     }
 
-	@Override
+    @Override
     public void accept(AstVisitor v) {
         v.visit(this);
     }

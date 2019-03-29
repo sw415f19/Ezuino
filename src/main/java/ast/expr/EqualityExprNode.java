@@ -1,10 +1,11 @@
 package ast.expr;
-import ast.*;
+
+import ast.AstNode;
 import ast.expr.iexpr.IEqualityExpr;
 import ast.expr.iexpr.IRelationalExpr;
 import ezuino.AstVisitor;
 
-public class EqualityExprNode extends AstNode implements IEqualityExpr{
+public class EqualityExprNode extends AstNode implements IEqualityExpr {
     private IEqualityExpr leftNode;
     private String operator;
     private IRelationalExpr relationalExprNode;

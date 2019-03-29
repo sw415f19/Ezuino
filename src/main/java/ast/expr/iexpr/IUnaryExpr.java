@@ -1,4 +1,4 @@
 package ast.expr.iexpr;
-public interface IUnaryExpr extends IMultiplicativeExpr
-{
+
+public interface IUnaryExpr extends IMultiplicativeExpr {
 }

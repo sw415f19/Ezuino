@@ -1,5 +1,5 @@
 package ast.expr.iexpr;
-public interface IParenthesisExpr extends IUnaryExpr
-{
+
+public interface IParenthesisExpr extends IUnaryExpr {
 
 }

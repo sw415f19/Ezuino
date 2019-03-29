@@ -1,5 +1,7 @@
 package ast.type;
+
 import ezuino.AstVisitor;
+
 public class IntegerNode extends ValNode {
 
     private String val;
