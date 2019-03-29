@@ -1,12 +1,14 @@
 package ast;
 
 import ezuino.AstVisitor;
+import ast.expr.ExprNode;
+import ast.expr.iexpr.*;
 
 public class Assign_stmtNode extends StmtNode {
 	private String id;
-	private ExprNode exprNode;
+	private IExpr exprNode;
 	
-	public Assign_stmtNode(String id, ExprNode exprNode) {
+	public Assign_stmtNode(String id, IExpr exprNode) {
 		this.id = id;
 		this.exprNode = exprNode;
 		System.out.println(this.id);
@@ -17,7 +19,7 @@ public class Assign_stmtNode extends StmtNode {
 		return this.id;
 	}
  
-	public ExprNode getExprNode(){
+	public IExpr getExprNode(){
 		return this.exprNode;
 	}
 

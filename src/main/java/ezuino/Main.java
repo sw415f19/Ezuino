@@ -1,7 +1,6 @@
 package ezuino;
 
-import ast.AstNode;
-import ast.StartNode;
+import ast.*;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 
@@ -22,7 +21,7 @@ public class Main {
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString( 
             "int a " 
-            + "a := 5.5"
+            + "a := -5.529"
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);

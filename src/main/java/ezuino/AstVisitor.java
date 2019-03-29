@@ -1,6 +1,8 @@
 package ezuino;
 
 import ast.*;
+import ast.expr.ExprNode;
+import ast.type.ValNode;
 
 public abstract class AstVisitor {
 
