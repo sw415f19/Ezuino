@@ -1,14 +1,16 @@
 package cstvisitors;
 
+import java.util.ArrayList;
+
 import ast.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
+import generated.EzuinoParser.ExprContext;
 import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.iexpr.*;
 import ast.type.*;
 import ast.expr.*;
-
 
 public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
@@ -38,19 +40,19 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitAssign_stmt(EzuinoParser.Assign_stmtContext ctx) {
-        //Casts the recieving node to an ExprNode
+        // Casts the recieving node to an ExprNode
         return new Assign_stmtNode(ctx.ID().getText(), (IExpr) ctx.expr().accept(this));
     }
 
     @Override
     public AstNode visitPrimaryExpr(EzuinoParser.PrimaryExprContext ctx) {
-        if(ctx.val() != null) {
+        if (ctx.val() != null) {
             return ctx.val().accept(this);
         }
-        if(ctx.booleantf() != null) {
+        if (ctx.booleantf() != null) {
             return ctx.booleantf().accept(this);
         }
-        if(ctx.func_call() != null) {
+        if (ctx.func_call() != null) {
             return ctx.func_call().accept(this);
         }
         return null;
@@ -58,7 +60,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitParenthesisExpr(EzuinoParser.ParenthesisExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if (ctx.getChildCount() == 1) {
             return ctx.primaryExpr().accept(this);
         }
         return new ParenthesisExprNode((IExpr) ctx.expr().accept(this));
@@ -66,7 +68,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitUnaryExpr(EzuinoParser.UnaryExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if (ctx.getChildCount() == 1) {
             return ctx.parenthesisExpr().accept(this);
         }
         return new UnaryExprNode(ctx.MINUS().getText(), (IParenthesisExpr) ctx.parenthesisExpr().accept(this));
@@ -74,50 +76,56 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitMultiplicativeExpr(EzuinoParser.MultiplicativeExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if (ctx.getChildCount() == 1) {
             return ctx.unaryExpr().accept(this);
         }
-        return new MultiplicativeExprNode((IMultiplicativeExpr) ctx.multiplicativeExpr().accept(this), ctx.operator.getText(), (IUnaryExpr) ctx.unaryExpr().accept(this));
+        return new MultiplicativeExprNode((IMultiplicativeExpr) ctx.multiplicativeExpr().accept(this),
+                ctx.operator.getText(), (IUnaryExpr) ctx.unaryExpr().accept(this));
     }
 
     @Override
     public AstNode visitAdditiveExpr(EzuinoParser.AdditiveExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if (ctx.getChildCount() == 1) {
             return ctx.multiplicativeExpr().accept(this);
         }
-        return new AdditiveExprNode((IAddictiveExpr) ctx.additiveExpr().accept(this), ctx.operator.getText(), (IMultiplicativeExpr) ctx.multiplicativeExpr().accept(this));
+        return new AdditiveExprNode((IAddictiveExpr) ctx.additiveExpr().accept(this), ctx.operator.getText(),
+                (IMultiplicativeExpr) ctx.multiplicativeExpr().accept(this));
     }
 
     @Override
     public AstNode visitRelationalExpr(EzuinoParser.RelationalExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if (ctx.getChildCount() == 1) {
             return ctx.additiveExpr().accept(this);
         }
-        return new RelationalExprNode((IRelationalExpr) ctx.relationalExpr().accept(this), ctx.operator.getText(), (IAddictiveExpr) ctx.additiveExpr().accept(this));
+        return new RelationalExprNode((IRelationalExpr) ctx.relationalExpr().accept(this), ctx.operator.getText(),
+                (IAddictiveExpr) ctx.additiveExpr().accept(this));
     }
 
     @Override
     public AstNode visitEqualityExpr(EzuinoParser.EqualityExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if (ctx.getChildCount() == 1) {
             return ctx.relationalExpr().accept(this);
         }
-        return new EqualityExprNode((IEqualityExpr) ctx.equalityExpr().accept(this), ctx.operator.getText() , (IRelationalExpr) ctx.relationalExpr().accept(this));
+        return new EqualityExprNode((IEqualityExpr) ctx.equalityExpr().accept(this), ctx.operator.getText(),
+                (IRelationalExpr) ctx.relationalExpr().accept(this));
     }
 
     @Override
     public AstNode visitLogicalAndExpr(EzuinoParser.LogicalAndExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if (ctx.getChildCount() == 1) {
             return ctx.equalityExpr().accept(this);
         }
-        return new LogicalAndExprNode((ILogicalAndExpr) ctx.logicalAndExpr().accept(this), (IEqualityExpr) ctx.equalityExpr().accept(this));
+        return new LogicalAndExprNode((ILogicalAndExpr) ctx.logicalAndExpr().accept(this),
+                (IEqualityExpr) ctx.equalityExpr().accept(this));
     }
 
     @Override
     public AstNode visitLogicalOrExpr(EzuinoParser.LogicalOrExprContext ctx) {
-        if(ctx.getChildCount() == 1) {
+        if (ctx.getChildCount() == 1) {
             return ctx.logicalAndExpr().accept(this);
         }
-        return new LogicalOrExprNode((IlogicalOrExpr)ctx.logicalOrExpr().accept(this), (ILogicalAndExpr) ctx.logicalAndExpr().accept(this));
+        return new LogicalOrExprNode((IlogicalOrExpr) ctx.logicalOrExpr().accept(this),
+                (ILogicalAndExpr) ctx.logicalAndExpr().accept(this));
     }
 
     @Override
@@ -132,12 +140,30 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunc_call(EzuinoParser.Func_callContext ctx) {
-        return super.visitFunc_call(ctx);
+        if (ctx.getChildCount() > 1){
+            return new Func_callNode(ctx.ID().getText(),
+                    (Func_Call_ParamNode) ctx.func_call_param().accept(this));
+        }
+
+        if (ctx.getChildCount() == 1){
+          
+        }
+
+        return null;
     }
 
     @Override
     public AstNode visitFunc_call_param(EzuinoParser.Func_call_paramContext ctx) {
-        return super.visitFunc_call_param(ctx);
+        if (ctx.getChildCount() == 0) {
+            return null;
+        }
+        ArrayList<IExpr> expr = new ArrayList<IExpr>();
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            if (ctx.expr(i) instanceof ExprContext) {
+                expr.add((IExpr) ctx.expr(i).accept(this));
+            }
+        }
+        return new Func_Call_ParamNode(expr);
     }
 
     @Override
@@ -159,14 +185,14 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         }
 
         if (ctx.DOUBLE() != null) {
-             return new DoubleNode(ctx.DOUBLE().getText());
+            return new DoubleNode(ctx.DOUBLE().getText());
         }
 
         if (ctx.STRING() != null) {
             return new StringNode(ctx.STRING().getText());
         }
 
-        if (ctx.ID() != null)  {
+        if (ctx.ID() != null) {
             return new IdNode(ctx.ID().getText());
         }
 
@@ -175,7 +201,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBooleantf(EzuinoParser.BooleantfContext ctx) {
-        return super.visitBooleantf(ctx);
+        return new BooleantfNode(ctx.getText());
     }
 
     @Override
