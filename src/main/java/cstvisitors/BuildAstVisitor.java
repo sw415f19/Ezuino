@@ -1,4 +1,4 @@
-package ezuino;
+package cstvisitors;
 
 import ast.*;
 import generated.EzuinoBaseVisitor;
