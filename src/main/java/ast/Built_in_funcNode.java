@@ -1,6 +1,6 @@
 package ast;
 
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class Built_in_funcNode extends AstNode {
     @Override

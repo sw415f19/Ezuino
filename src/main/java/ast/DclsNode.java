@@ -3,7 +3,7 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class DclsNode extends AstNode {
 	

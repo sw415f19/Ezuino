@@ -3,7 +3,7 @@ package ast.expr;
 import ast.AstNode;
 import ast.expr.iexpr.IMultiplicativeExpr;
 import ast.expr.iexpr.IUnaryExpr;
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class MultiplicativeExprNode extends AstNode implements IMultiplicativeExpr {
     private IMultiplicativeExpr leftNode;

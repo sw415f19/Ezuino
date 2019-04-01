@@ -1,7 +1,7 @@
 package ast.type;
 
 import ast.expr.PrimaryExprNode;
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public abstract class ValNode extends PrimaryExprNode {
 

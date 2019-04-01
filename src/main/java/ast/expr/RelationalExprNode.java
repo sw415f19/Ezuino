@@ -1,6 +1,6 @@
 package ast.expr;
 
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 import ast.AstNode;
 import ast.expr.iexpr.*;
 

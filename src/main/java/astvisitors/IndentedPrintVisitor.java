@@ -1,4 +1,4 @@
-package ezuino;
+package astvisitors;
 
 import ast.*;
 

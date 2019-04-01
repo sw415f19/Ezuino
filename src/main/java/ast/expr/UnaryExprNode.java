@@ -1,7 +1,7 @@
 package ast.expr;
 
 import ast.AstNode;
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 import ast.expr.iexpr.*;
 
 public class UnaryExprNode extends AstNode implements IMultiplicativeExpr {
