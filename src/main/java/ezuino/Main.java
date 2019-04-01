@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString( 
             "int a " 
-            + "asd()"
+            + "list_add(heyid, 13.2, 1)"
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
