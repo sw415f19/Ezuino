@@ -3,7 +3,7 @@ package ast.expr;
 import ast.AstNode;
 import ast.expr.iexpr.*;
 
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public abstract class PrimaryExprNode extends AstNode implements IPrimaryExpr {
 

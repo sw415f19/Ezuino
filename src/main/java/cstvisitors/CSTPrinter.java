@@ -1,4 +1,4 @@
-package ezuino;
+package cstvisitors;
 
 import org.antlr.v4.runtime.InterpreterRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;

@@ -1,6 +1,6 @@
 package ast;
 
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class String_dclNode extends AstNode {
 

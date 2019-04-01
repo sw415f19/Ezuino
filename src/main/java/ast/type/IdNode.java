@@ -1,6 +1,6 @@
 package ast.type;
 
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class IdNode extends ValNode {
 

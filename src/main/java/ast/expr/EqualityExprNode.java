@@ -3,7 +3,7 @@ package ast.expr;
 import ast.AstNode;
 import ast.expr.iexpr.IEqualityExpr;
 import ast.expr.iexpr.IRelationalExpr;
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class EqualityExprNode extends AstNode implements IEqualityExpr {
     private IEqualityExpr leftNode;

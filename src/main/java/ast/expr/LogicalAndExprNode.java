@@ -3,7 +3,7 @@ package ast.expr;
 import ast.AstNode;
 import ast.expr.iexpr.*;
 
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class LogicalAndExprNode extends AstNode implements ILogicalAndExpr {
     private ILogicalAndExpr leftNode;

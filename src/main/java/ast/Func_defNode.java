@@ -1,6 +1,6 @@
 package ast;
 
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class Func_defNode extends AstNode {
 

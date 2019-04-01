@@ -1,7 +1,7 @@
 package ast;
 
-import ezuino.AstVisitor;
-import ast.expr.iexpr.*;
+import astvisitors.AstVisitor;
+import ast.expr.iexpr.IExpr;
 
 public class Assign_stmtNode extends StmtNode {
 	private String id;

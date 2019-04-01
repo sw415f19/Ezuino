@@ -3,7 +3,7 @@ package ast.expr;
 import ast.AstNode;
 import ast.expr.iexpr.IExpr;
 import ast.expr.iexpr.IParenthesisExpr;
-import ezuino.AstVisitor;
+import astvisitors.AstVisitor;
 
 public class ParenthesisExprNode extends AstNode implements IParenthesisExpr {
     private IExpr node;
