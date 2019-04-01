@@ -1,5 +1,6 @@
 package ast;
 
+import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class BlockNode extends AstNode {
@@ -9,4 +10,10 @@ public class BlockNode extends AstNode {
 		v.visit(this);
 
 	}
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
+	}
+	
 }

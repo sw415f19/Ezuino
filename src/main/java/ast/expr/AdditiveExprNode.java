@@ -3,6 +3,7 @@ package ast.expr;
 import ast.*;
 import ast.expr.iexpr.IAddictiveExpr;
 import ast.expr.iexpr.IMultiplicativeExpr;
+import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class AdditiveExprNode extends AstNode implements IAddictiveExpr {
@@ -20,6 +21,11 @@ public class AdditiveExprNode extends AstNode implements IAddictiveExpr {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
+	}
 
     public IAddictiveExpr getLeftNode() {
         return leftNode;

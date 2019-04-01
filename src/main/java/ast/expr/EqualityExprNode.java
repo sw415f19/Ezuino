@@ -3,6 +3,7 @@ package ast.expr;
 import ast.AstNode;
 import ast.expr.iexpr.IEqualityExpr;
 import ast.expr.iexpr.IRelationalExpr;
+import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class EqualityExprNode extends AstNode implements IEqualityExpr {
@@ -20,6 +21,11 @@ public class EqualityExprNode extends AstNode implements IEqualityExpr {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
+	}
 
     public IEqualityExpr getLeftNode() {
         return leftNode;
