@@ -146,7 +146,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         }
 
         if (ctx.getChildCount() == 1){
-          
+            return new Func_callNode((Built_in_funcNode) ctx.built_in_func().accept(this));
         }
 
         return null;
@@ -173,7 +173,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitPrint_l(EzuinoParser.Print_lContext ctx) {
-        return super.visitPrint_l(ctx);
+        return new Print_lNode((IExpr) ctx.expr().accept(this));
     }
 
     @Override
