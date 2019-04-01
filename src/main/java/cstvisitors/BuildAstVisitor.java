@@ -293,6 +293,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitList_remove(EzuinoParser.List_removeContext ctx) {
-        return super.visitList_remove(ctx);
+        // Casts the recieving node to an ExprNode
+        return new List_removeNode(ctx.ID().getText(), new IntegerNode(ctx.INTEGER().getText()), (ValNode)(ctx.val().accept(this)));
     }
 }
