@@ -22,9 +22,9 @@ public class Main {
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString( 
             "int a " 
-            + "list_add(heyid, 13.2, 1)"
-                    + "list_remove(heyid, 13.2, 1)"
-                    + "print \"heyid\""
+            + "list_add(heyid, 13.2, 1) "
+                    + "if(3){} "
+                    + "if(TRUE){}"
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);

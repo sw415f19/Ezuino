@@ -1,6 +1,10 @@
 package astvisitors;
 
 import ast.*;
+import ast.declarations.Boolean_dclNode;
+import ast.declarations.Double_dclNode;
+import ast.declarations.Int_dclNode;
+import ast.declarations.String_dclNode;
 import ast.expr.ExprNode;
 import ast.type.ValNode;
 
