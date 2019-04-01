@@ -140,11 +140,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunc_call(EzuinoParser.Func_callContext ctx) {
+        //If there is more than one children ie. ID '('func_call_param')'
         if (ctx.getChildCount() > 1){
             return new Func_callNode(ctx.ID().getText(),
                     (Func_Call_ParamNode) ctx.func_call_param().accept(this));
         }
-
+        // If there are only one child, built_in_func
         if (ctx.getChildCount() == 1){
             return new Func_callNode((Built_in_funcNode) ctx.built_in_func().accept(this));
         }
@@ -294,6 +295,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitList_remove(EzuinoParser.List_removeContext ctx) {
         // Casts the recieving node to an ExprNode
-        return new List_removeNode(ctx.ID().getText(), new IntegerNode(ctx.INTEGER().getText()), (ValNode)(ctx.val().accept(this)));
+        return new List_removeNode(ctx.ID().getText(), (ValNode)(ctx.val().accept(this)), new IntegerNode(ctx.INTEGER().getText()));
     }
 }

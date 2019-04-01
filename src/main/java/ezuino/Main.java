@@ -23,6 +23,8 @@ public class Main {
         CharStream cs = CharStreams.fromString( 
             "int a " 
             + "list_add(heyid, 13.2, 1)"
+                    + "list_remove(heyid, 13.2, 1)"
+                    + "print \"heyid\""
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);

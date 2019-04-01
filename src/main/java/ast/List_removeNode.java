@@ -9,10 +9,11 @@ import generated.EzuinoParser;
 public class List_removeNode extends AstNode {
 
 	private String id;
-	private IntegerNode interger;
 	private ValNode val;
+	private IntegerNode interger;
 
-	public List_removeNode(String id, IntegerNode interger, ValNode val) {
+
+	public List_removeNode(String id, ValNode val, IntegerNode interger) {
 		this.id = id;
 		this.interger = interger;
 		this.val = val;
