@@ -2,7 +2,7 @@ package ast.expr;
 
 import ast.AstNode;
 import ast.expr.iexpr.*;
-
+import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class LogicalOrExprNode extends AstNode implements IlogicalOrExpr {
@@ -18,6 +18,11 @@ public class LogicalOrExprNode extends AstNode implements IlogicalOrExpr {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
+	}
 
     public IlogicalOrExpr getLeftNode() {
         return leftNode;
