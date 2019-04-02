@@ -6,19 +6,13 @@ import astvisitors.AstVisitor;
 
 public class DclNode extends AstNode {
 	private DclTypeNode dclTypeNode;
-	private String id;
 
-	public DclNode(DclTypeNode dclTypeNode, String id) {
+	public DclNode(DclTypeNode dclTypeNode) {
 		this.dclTypeNode = dclTypeNode;
-		this.id = id;
 	}
 
 	public DclTypeNode getDclTypeNode() {
 		return dclTypeNode;
-	}
-	
-	public String getId() {
-		return this.id;
 	}
 
 	@Override
