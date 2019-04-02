@@ -25,9 +25,8 @@ public class Main {
             "int a "
                     + "list int hello[4] "
             + "list_add(heyid, 13.2, 1) "
-                    + "if(3){} "
-                    + "if(TRUE){} "
-
+                    + "if(3){ return a} "
+                    + "if(TRUE){return true} "
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);

@@ -15,6 +15,11 @@ public class BlockNode extends AstNode {
 		this.return_stmtNode = return_stmtNode;
 	}
 
+	public BlockNode(DclsNode dclsNode, StmtsNode stmsNode) {
+		this.dclsNode = dclsNode;
+		this.stmsNode = stmsNode;
+	}
+
 	public DclsNode getDclsNode() {
 		return dclsNode;
 	}
@@ -30,7 +35,6 @@ public class BlockNode extends AstNode {
 	@Override
 	public void accept(AstVisitor v) {
 		v.visit(this);
-
 	}
 	
 	@Override

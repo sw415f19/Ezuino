@@ -275,7 +275,9 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitIf_stmt(EzuinoParser.If_stmtContext ctx) {
-        return super.visitIf_stmt(ctx);
+        
+        /** TO BE UPDATED return new If_stmtNode((IExpr) ctx.expr().accept(this), (BlockNode)ctx.block(). */
+        return null;
     }
 
     @Override
@@ -295,7 +297,10 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBlock(EzuinoParser.BlockContext ctx) {
-        return new BlockNode( (DclsNode) ctx.dcls().accept(this), (StmtsNode) ctx.stmts().accept(this), (Return_stmtNode) ctx.return_stmt().accept(this));
+        if (ctx.getChildCount()>2){
+            return new BlockNode((DclsNode) ctx.dcls().accept(this), (StmtsNode) ctx.stmts().accept(this), (Return_stmtNode) ctx.return_stmt().accept(this));
+        }
+        return new BlockNode((DclsNode) ctx.dcls().accept(this), (StmtsNode) ctx.stmts().accept(this));
     }
 
 
