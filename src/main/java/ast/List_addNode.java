@@ -8,13 +8,13 @@ import astvisitors.AstVisitor;
 public class List_addNode extends AstNode {
 	private String listID;
 	private ValNode valNode;
-	private IntegerNode integerNode;
+	private int index;
 
 
-	public List_addNode(String listID, ValNode valNode, IntegerNode integerNode) {
+	public List_addNode(String listID, ValNode valNode, int index) {
 		this.listID = listID;
 		this.valNode = valNode;
-		this.integerNode = integerNode;
+		this.index = index;
 		System.out.println(listID + " " + valNode + " " + integerNode);
 	}
 
@@ -26,8 +26,8 @@ public class List_addNode extends AstNode {
 		return valNode;
 	}
 
-	public IntegerNode getIntegerNode() {
-		return integerNode;
+	public int getIndex() {
+		return this.index;
 	}
 
 	@Override

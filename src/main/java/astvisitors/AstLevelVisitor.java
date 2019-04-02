@@ -27,6 +27,7 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(While_stmtNode node, int level);
 	public abstract void visitLevel(ExprNode node, int level);
 	public abstract void visitLevel(ParametersNode node, int level);
+	public abstract void visitLevel(Built_in_funcNode node, int level);
 	
 	//One added assignment nodes.
 	public abstract void visitLevel(Assign_stmtNode node, int level);

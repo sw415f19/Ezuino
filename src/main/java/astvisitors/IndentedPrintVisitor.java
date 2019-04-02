@@ -34,8 +34,13 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 
   @Override
   public void visitLevel(Func_callNode node, int level) {
-  System.out.println("In Func_callNode");
-    
+	  print(node, level);
+	  Built_in_funcNode bfnode = node.getbNode();
+	  if (bfnode != null) {
+		  bfnode.acceptLevel(this, level + 1);
+	  } else {
+		  node.getfNode().acceptLevel(this, level + 1);
+	  }    
   }
 
   @Override
@@ -76,7 +81,13 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 
   @Override
   public void visitLevel(If_stmtNode node, int level) {
-  System.out.println("In If_stmtNode");
+	  print(node, level);
+	  ((AstNode) node.getExpr()).acceptLevel(this, level + 1);
+	  node.getTrueBlock().acceptLevel(this, level + 1);
+	  BlockNode falseBlock = node.getFalseBlock();
+	  if(falseBlock != null) {
+		  falseBlock.acceptLevel(this, level + 1);
+	  }
     
   }
 
@@ -186,6 +197,12 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	@Override
 	public void visitLevel(IdNode node, int level) {
 		print(node, level);	
+	}
+
+	@Override
+	public void visitLevel(Built_in_funcNode node, int level) {
+		print(node, level);
+		
 	}
   
 

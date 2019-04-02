@@ -3,6 +3,8 @@ package cstvisitors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import ast.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
@@ -168,17 +170,18 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunc_call(EzuinoParser.Func_callContext ctx) {
-        //If there is more than one children ie. ID '('func_call_param')'
-        if (ctx.getChildCount() > 1){
-            return new Func_callNode(ctx.ID().getText(),
-                    (Func_Call_ParamNode) ctx.func_call_param().accept(this));
-        }
-        // If there are only one child, built_in_func
-        if (ctx.getChildCount() == 1){
-            return new Func_callNode((Built_in_funcNode) ctx.built_in_func().accept(this));
-        }
 
-        return null;
+    	Func_callNode result = null;
+    	
+        if (ctx.built_in_func() == null){
+        	String id = ctx.ID().getText();
+        	Func_Call_ParamNode funcCall = (Func_Call_ParamNode) ctx.func_call_param().accept(this);
+            result =  new Func_callNode(id, funcCall);
+        } else {
+            result =  new Func_callNode((Built_in_funcNode) ctx.built_in_func().accept(this));
+        	
+        }
+        return result;
     }
 
     @Override
@@ -282,9 +285,13 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitIf_stmt(EzuinoParser.If_stmtContext ctx) {
-        
-        /** TO BE UPDATED return new If_stmtNode((IExpr) ctx.expr().accept(this), (BlockNode)ctx.block(). */
-        return null;
+    	IExpr expr = (IExpr) ctx.expr().accept(this);
+    	BlockNode trueBlock = (BlockNode) ctx.block(0).accept(this);
+    	BlockNode falseBlock = null;
+    	if (ctx.block().size() > 1) {
+    		falseBlock = (BlockNode) ctx.block(1).accept(this);
+    	}
+        return new If_stmtNode(expr, trueBlock, falseBlock);
     }
 
     @Override
@@ -306,10 +313,13 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBlock(EzuinoParser.BlockContext ctx) {
-        if (ctx.getChildCount()>2){
-            return new BlockNode((DclsNode) ctx.dcls().accept(this), (StmtsNode) ctx.stmts().accept(this), (Return_stmtNode) ctx.return_stmt().accept(this));
+    	DclsNode dcls = (DclsNode) ctx.dcls().accept(this);
+    	StmtsNode stmts = (StmtsNode) ctx.stmts().accept(this);
+    	Return_stmtNode returnstmts = null;
+        if (ctx.return_stmt() != null){
+        	returnstmts = (Return_stmtNode) ctx.return_stmt().accept(this);
         }
-        return new BlockNode((DclsNode) ctx.dcls().accept(this), (StmtsNode) ctx.stmts().accept(this));
+        return new BlockNode(dcls, stmts, returnstmts);
     }
 
 
