@@ -1,6 +1,7 @@
 package cstvisitors;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ast.*;
 import generated.EzuinoBaseVisitor;
@@ -8,6 +9,7 @@ import generated.EzuinoParser;
 import generated.EzuinoParser.DclContext;
 import generated.EzuinoParser.StmtContext;
 import generated.EzuinoParser.ExprContext;
+import generated.EzuinoParser.ParamContext;
 import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.iexpr.*;
@@ -156,7 +158,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunc_def(EzuinoParser.Func_defContext ctx) {
-        return super.visitFunc_def(ctx);
+    	List<ParamNode> parameters = new ArrayList<ParamNode>();
+    	BlockNode blockNode = (BlockNode)ctx.block().accept(this);
+    	for(ParamContext child : ctx.parameters().param()) {
+    		parameters.add((ParamNode)child.accept(this));
+    	}
+        return new Func_defNode(parameters, blockNode);
     }
 
     @Override
@@ -270,7 +277,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitReturn_stmt(EzuinoParser.Return_stmtContext ctx) {
-        return super.visitReturn_stmt(ctx);
+        return new Return_stmtNode((IExpr)ctx.expr().accept(this));
     }
 
     @Override
@@ -282,7 +289,9 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitWhile_stmt(EzuinoParser.While_stmtContext ctx) {
-        return super.visitWhile_stmt(ctx);
+    	IExpr expressionNode = (IExpr)ctx.expr().accept(this);
+    	BlockNode blockNode = (BlockNode)ctx.block().accept(this);
+        return new While_stmtNode(expressionNode, blockNode);
     }
 
     @Override
@@ -292,7 +301,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitParam(EzuinoParser.ParamContext ctx) {
-        return super.visitParam(ctx);
+        return new ParamNode(this.getType(ctx.type()), ctx.ID().getText());
     }
 
     @Override

@@ -5,10 +5,23 @@ import astvisitors.AstVisitor;
 
 public class ParamNode extends AstNode {
 
+	private Type type;
+	private String ID;
+	
+	public ParamNode(Type type, String ID){
+		this.type = type;
+		this.ID = ID;
+	}
+	public Type getType() {
+		return type;
+	}
+	public String getID() {
+		return ID;
+	}
+	
 	@Override
 	public void accept(AstVisitor v) {
-		v.visit(this);
-		
+		v.visit(this);	
 	}
 	
 	@Override

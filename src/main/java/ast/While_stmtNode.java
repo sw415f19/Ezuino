@@ -6,14 +6,19 @@ import astvisitors.AstVisitor;
 
 public class While_stmtNode extends AstNode {
     private IExpr exprNode;
-    public While_stmtNode(IExpr exprNode)
+    private BlockNode blockNode;
+    public While_stmtNode(IExpr exprNode, BlockNode blockNode)
     {
         this.exprNode = exprNode;
+        this.blockNode = blockNode;
     }
 
     public IExpr getExprNode()
     {
         return exprNode;
+    }
+    public BlockNode getBlockNode() {
+    	return blockNode;
     }
 
     @Override
