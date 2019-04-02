@@ -21,10 +21,12 @@ public class Main {
 
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString( 
-            "int a " 
+            "int a "
+                    + "list int hello[4] "
             + "list_add(heyid, 13.2, 1) "
                     + "if(3){} "
-                    + "if(TRUE){}"
+                    + "if(TRUE){} "
+
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);

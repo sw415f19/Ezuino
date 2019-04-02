@@ -1,10 +1,6 @@
 package astvisitors;
 
 import ast.*;
-import ast.declarations.Boolean_dclNode;
-import ast.declarations.Double_dclNode;
-import ast.declarations.Int_dclNode;
-import ast.declarations.String_dclNode;
 import ast.expr.ExprNode;
 import ast.type.ValNode;
 
@@ -35,12 +31,6 @@ public abstract class AstVisitor {
 
 	//One added assignment nodes.
 	public abstract void visit(Assign_stmtNode node);
-
-	//"New" Declarations
-	public abstract void visit(Int_dclNode node);
-	public abstract void visit(Double_dclNode node);
-	public abstract void visit(Boolean_dclNode node);
-	public abstract void visit(String_dclNode node);
 
 
 	public void visit(AstNode astNode) {

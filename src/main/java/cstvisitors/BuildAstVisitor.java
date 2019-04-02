@@ -25,16 +25,24 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
-        return super.visitDcl(ctx);
+        if(ctx.list_dcl() != null) {
+            return ctx.list_dcl().accept(this);
+        }
+        else {
+            Type type = getType(ctx.type());
+            return new DclNode(type, ctx.ID().getText());
+        }
     }
 
     @Override
     public AstNode visitStmts(EzuinoParser.StmtsContext ctx) {
+        System.out.println("I pass a statement");
         return super.visitStmts(ctx);
     }
 
     @Override
     public AstNode visitStmt(EzuinoParser.StmtContext ctx) {
+        System.out.println("YAY");
         return super.visitStmt(ctx);
     }
 
@@ -284,7 +292,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitList_dcl(EzuinoParser.List_dclContext ctx) {
-        return super.visitList_dcl(ctx);
+        Type type = getType(ctx.type());
+        return new List_dclNode(type, ctx.ID().getText(), ctx.INTEGER().getText());
     }
 
     @Override
@@ -296,5 +305,22 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitList_remove(EzuinoParser.List_removeContext ctx) {
         // Casts the recieving node to an ExprNode
         return new List_removeNode(ctx.ID().getText(), (ValNode)(ctx.val().accept(this)), new IntegerNode(ctx.INTEGER().getText()));
+    }
+
+    public Type getType(EzuinoParser.TypeContext ctx){
+        Type type = null;
+        if(ctx.int_dcl() != null) {
+            type = Type.INT;
+        }
+        if(ctx.double_dcl() != null) {
+            type = Type.DOUBLE;
+        }
+        if(ctx.string_dcl() != null) {
+            type = Type.STRING;
+        }
+        if(ctx.boolean_dcl() != null) {
+            type = Type.BOOL;
+        }
+        return type;
     }
 }

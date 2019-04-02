@@ -1,17 +1,22 @@
 package ast;
 
-import ast.declarations.*;
 import astvisitors.AstVisitor;
 
 public class DclNode extends AstNode {
-	private DclTypeNode dclTypeNode;
+	private Type type;
+	private String ID;
 
-	public DclNode(DclTypeNode dclTypeNode) {
-		this.dclTypeNode = dclTypeNode;
+	public DclNode(Type type, String ID) {
+		this.type = type;
+		this.ID = ID;
 	}
 
-	public DclTypeNode getDclTypeNode() {
-		return dclTypeNode;
+	public Type getType() {
+		return type;
+	}
+
+	public String getID() {
+		return ID;
 	}
 
 	@Override

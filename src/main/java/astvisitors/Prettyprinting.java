@@ -1,10 +1,6 @@
 package astvisitors;
 
 import ast.*;
-import ast.declarations.Boolean_dclNode;
-import ast.declarations.Double_dclNode;
-import ast.declarations.Int_dclNode;
-import ast.declarations.String_dclNode;
 import ast.expr.ExprNode;
 import ast.type.ValNode;
 
@@ -130,26 +126,6 @@ public class Prettyprinting extends AstVisitor {
 
     @Override
     public void visit(Assign_stmtNode node) {
-
-    }
-
-    @Override
-    public void visit(Int_dclNode node) {
-
-    }
-
-    @Override
-    public void visit(Double_dclNode node) {
-
-    }
-
-    @Override
-    public void visit(Boolean_dclNode node) {
-
-    }
-
-    @Override
-    public void visit(String_dclNode node) {
 
     }
 }
