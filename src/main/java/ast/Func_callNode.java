@@ -6,18 +6,18 @@ import astvisitors.AstVisitor;
 public class Func_callNode extends StmtNode {
 
 	private String ID;
-	private Func_Call_ParamNode fNode;
-	private Built_in_funcNode bNode;
+	private Func_Call_ParamNode paramNode;
+	private Built_in_funcNode builtinNode;
 
-	public Func_callNode(String ID, Func_Call_ParamNode fNode)
+	public Func_callNode(String ID, Func_Call_ParamNode paramNode)
 	{
 		this.ID = ID;
-		this.fNode = fNode;
+		this.paramNode = paramNode;
 	}
 
-	public Func_callNode(Built_in_funcNode bNode)
+	public Func_callNode(Built_in_funcNode builtinNode)
 	{
-		this.bNode = bNode;
+		this.builtinNode = builtinNode;
 	}
 
 	public String getID()
@@ -25,14 +25,14 @@ public class Func_callNode extends StmtNode {
 		return ID;
 	}
 
-	public Func_Call_ParamNode getfNode()
+	public Func_Call_ParamNode getParamNode()
 	{
-		return fNode;
+		return paramNode;
 	}
 
-	public Built_in_funcNode getbNode()
+	public Built_in_funcNode getBuiltinNode()
 	{
-		return bNode;
+		return builtinNode;
 	}
 
 	@Override
@@ -44,6 +44,12 @@ public class Func_callNode extends StmtNode {
 	@Override
 	public void acceptLevel(AstLevelVisitor v, int level) {
 		v.visitLevel(this, level);
+	}
+	
+	@Override
+	public String toString() {
+		String name = super.toString();
+		return this.builtinNode != null ? name : name + " { ID: " + this.ID + " }";
 	}
 
 }

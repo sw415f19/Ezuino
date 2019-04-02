@@ -30,4 +30,10 @@ public class DclNode extends AstNode {
 	public void acceptLevel(AstLevelVisitor v, int level) {
 		v.visitLevel(this, level);
 	}
+	
+	
+	@Override
+	public String toString() {
+		return super.toString() + "{ Type: " + type.name() + " ID: " + ID + " }";
+	}
 }
