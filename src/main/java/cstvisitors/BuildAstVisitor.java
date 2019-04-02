@@ -222,7 +222,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
-        System.out.println("IN VAL");
 
         if (ctx.INTEGER() != null) {
             return new IntegerNode(ctx.INTEGER().getText());

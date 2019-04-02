@@ -8,7 +8,6 @@ public class IntegerNode extends ValNode {
     private String val;
 
     public IntegerNode(String val) {
-        System.out.println("Created Integer Node");
         this.val = val;
     }
 
