@@ -1,6 +1,7 @@
 package ezuino;
 
 import ast.*;
+import astvisitors.IndentedPrintVisitor;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 
@@ -22,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString( 
             "int a " 
-            + "a := -5.529"
+            + "a := 5"
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
@@ -43,8 +44,10 @@ public class Main {
         //Initializes the Ezuiono Vistor
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         //Runs the three, filling up the AST array list attribute
-        buildAstVisitor.visit(parseTree);
+        AstNode astNode = parseTree.accept(buildAstVisitor);
         //showCST(parseTree, parser);
+        IndentedPrintVisitor ipv = new IndentedPrintVisitor();
+        astNode.acceptLevel(ipv, 0);
 
 
     }

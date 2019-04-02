@@ -48,10 +48,6 @@ public class Prettyprinting extends AstVisitor {
 
     @Override
     public void visit(StartNode node) {
-        for (AstNode thisNode : node.getAst()) {
-            System.out.println("It loops");
-            thisNode.accept(this);
-        }
     }
 
     @Override
