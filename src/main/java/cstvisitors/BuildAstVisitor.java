@@ -295,8 +295,9 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBlock(EzuinoParser.BlockContext ctx) {
-        return super.visitBlock(ctx);
+        return new BlockNode( (DclsNode) ctx.dcls().accept(this), (StmtsNode) ctx.stmts().accept(this), (Return_stmtNode) ctx.return_stmt().accept(this));
     }
+
 
     @Override
     public AstNode visitSwitch_block(EzuinoParser.Switch_blockContext ctx) {

@@ -1,7 +1,6 @@
 package astvisitors;
 
 import ast.*;
-import ast.declarations.*;
 import ast.expr.ExprNode;
 import ast.type.DoubleNode;
 import ast.type.IdNode;
@@ -169,27 +168,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	  ((AstNode) node.getExprNode()).acceptLevel(this, level + 1);
     
   }
-
-  @Override
-  public void visitLevel(Int_dclNode node, int level) {
-    print(node, level);    
-  }
-
-  @Override
-  public void visitLevel(Double_dclNode node, int level) {
-    print(node, level);    
-  }
-
-  @Override
-  public void visitLevel(Boolean_dclNode node, int level) {
-    print(node, level);    
-  }
-
-  @Override
-  public void visitLevel(String_dclNode node, int level) {
-    print(node, level);    
-  }
-
 	@Override
 	public void visitLevel(IntegerNode node, int level) {
 		print(node, level);

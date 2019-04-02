@@ -9,7 +9,8 @@ import astvisitors.AstVisitor;
 public class StmtsNode extends AstNode {
 	
 	private List<StmtNode> childList = new ArrayList<StmtNode>();
-	
+
+
 	public void addChild(StmtNode child) {
 		childList.add(child);
 	}

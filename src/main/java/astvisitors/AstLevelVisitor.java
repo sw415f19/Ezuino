@@ -2,7 +2,6 @@ package astvisitors;
 
 
 import ast.*;
-import ast.declarations.*;
 import ast.expr.ExprNode;
 import ast.type.*;
 
@@ -31,12 +30,7 @@ public abstract class AstLevelVisitor {
 	
 	//One added assignment nodes.
 	public abstract void visitLevel(Assign_stmtNode node, int level);
-	
-	//"New" Declarations
-	public abstract void visitLevel(Int_dclNode node, int level);
-	public abstract void visitLevel(Double_dclNode node, int level);
-	public abstract void visitLevel(Boolean_dclNode node, int level);
-	public abstract void visitLevel(String_dclNode node, int level);
+
 	
 	//"Type"
 	public abstract void visitLevel(IntegerNode node, int level);
