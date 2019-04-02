@@ -1,14 +1,9 @@
 package ast;
 
-<<<<<<< HEAD
 import astvisitors.AstLevelVisitor;
-=======
-import ast.expr.iexpr.IExpr;
 import ast.type.IntegerNode;
 import ast.type.ValNode;
->>>>>>> mergeMaster
 import astvisitors.AstVisitor;
-import generated.EzuinoParser;
 
 public class List_removeNode extends AstNode {
 

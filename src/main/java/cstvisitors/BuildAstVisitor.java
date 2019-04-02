@@ -35,8 +35,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
-        DclNode dcl = new DclNode(ctx.ID().getText());
-        return dcl;
+        return super.visitDcl(ctx);
     }
 
     @Override

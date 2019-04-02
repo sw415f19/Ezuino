@@ -2,6 +2,7 @@ package astvisitors;
 
 
 import ast.*;
+import ast.declarations.*;
 import ast.expr.ExprNode;
 import ast.type.*;
 

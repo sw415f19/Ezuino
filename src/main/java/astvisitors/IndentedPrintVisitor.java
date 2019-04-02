@@ -1,12 +1,12 @@
 package astvisitors;
 
 import ast.*;
+import ast.declarations.*;
 import ast.expr.ExprNode;
 import ast.type.DoubleNode;
 import ast.type.IdNode;
 import ast.type.IntegerNode;
 import ast.type.StringNode;
-import ast.type.ValNode;
 
 public class IndentedPrintVisitor extends AstLevelVisitor {
   
