@@ -1,5 +1,6 @@
 package ast;
 
+import astvisitors.AstLevelVisitor;
 import ast.type.IntegerNode;
 import ast.type.ValNode;
 import astvisitors.AstVisitor;
@@ -33,5 +34,10 @@ public class List_addNode extends AstNode {
 	public void accept(AstVisitor v) {
 		v.visit(this);
 		
+	}
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
 	}
 }

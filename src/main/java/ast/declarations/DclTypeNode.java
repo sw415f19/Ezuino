@@ -1,6 +1,7 @@
 package ast.declarations;
 
 import ast.AstNode;
+import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class DclTypeNode extends AstNode {
@@ -18,4 +19,10 @@ public class DclTypeNode extends AstNode {
     public void accept(AstVisitor v) {
 
     }
+
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
+		
+	}
 }

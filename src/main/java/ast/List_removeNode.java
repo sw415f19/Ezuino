@@ -1,10 +1,9 @@
 package ast;
 
-import ast.expr.iexpr.IExpr;
+import astvisitors.AstLevelVisitor;
 import ast.type.IntegerNode;
 import ast.type.ValNode;
 import astvisitors.AstVisitor;
-import generated.EzuinoParser;
 
 public class List_removeNode extends AstNode {
 
@@ -35,5 +34,10 @@ public class List_removeNode extends AstNode {
 	public void accept(AstVisitor v) {
 		v.visit(this);
 		
+	}
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
 	}
 }

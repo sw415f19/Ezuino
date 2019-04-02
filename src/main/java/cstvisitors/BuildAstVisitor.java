@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import ast.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
+import generated.EzuinoParser.DclContext;
+import generated.EzuinoParser.StmtContext;
 import generated.EzuinoParser.ExprContext;
 import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
@@ -15,12 +17,20 @@ import ast.expr.*;
 public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitStart(EzuinoParser.StartContext ctx) {
-        return super.visitStart(ctx);
+    	StmtsNode stmts = (StmtsNode) ctx.stmts().accept(this);
+    	DclsNode dcls = (DclsNode) ctx.dcls().accept(this);
+    	
+    	return new StartNode(dcls, stmts);
     }
 
     @Override
     public AstNode visitDcls(EzuinoParser.DclsContext ctx) {
-        return super.visitDcls(ctx);
+    	DclsNode dcls = new DclsNode();
+    	for(DclContext dcl : ctx.dcl()) {
+    		DclNode child = (DclNode) dcl.accept(this);
+    		dcls.addChild(child);
+    	}
+        return dcls;
     }
 
     @Override
@@ -30,12 +40,17 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitStmts(EzuinoParser.StmtsContext ctx) {
-        return super.visitStmts(ctx);
+    	StmtsNode stmts = new StmtsNode();
+    	for(StmtContext stmt : ctx.stmt()) {
+    		StmtNode child = (StmtNode) stmt.accept(this);
+    		stmts.addChild(child);
+    	}
+        return stmts;
     }
 
     @Override
     public AstNode visitStmt(EzuinoParser.StmtContext ctx) {
-        return super.visitStmt(ctx);
+    	return ctx.getChild(0).accept(this);
     }
 
     @Override

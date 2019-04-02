@@ -1,5 +1,6 @@
 package ast;
 
+import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 import ast.expr.iexpr.IExpr;
 
@@ -26,4 +27,10 @@ public class Assign_stmtNode extends StmtNode {
 	public void accept(AstVisitor v) {
 		v.visit(this);
 	}
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
+	}
+	
 }
