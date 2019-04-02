@@ -336,7 +336,10 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitList_add(EzuinoParser.List_addContext ctx) {
-        return new List_addNode(ctx.ID().getText(), (ValNode) ctx.val().accept(this), new IntegerNode(ctx.INTEGER().getText()));
+    	String id = ctx.ID().getText();
+    	String index = ctx.INTEGER().getText();
+    	ValNode val = (ValNode) ctx.val().accept(this);
+        return new List_addNode(id, val, index);
     }
 
     @Override

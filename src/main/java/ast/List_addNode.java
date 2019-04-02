@@ -1,21 +1,20 @@
 package ast;
 
 import astvisitors.AstLevelVisitor;
-import ast.type.IntegerNode;
+
 import ast.type.ValNode;
 import astvisitors.AstVisitor;
 
 public class List_addNode extends AstNode {
 	private String listID;
 	private ValNode valNode;
-	private int index;
+	private String index;
 
 
-	public List_addNode(String listID, ValNode valNode, int index) {
+	public List_addNode(String listID, ValNode valNode, String index) {
 		this.listID = listID;
 		this.valNode = valNode;
 		this.index = index;
-		System.out.println(listID + " " + valNode + " " + integerNode);
 	}
 
 	public String getListID() {
@@ -26,7 +25,7 @@ public class List_addNode extends AstNode {
 		return valNode;
 	}
 
-	public int getIndex() {
+	public String getIndex() {
 		return this.index;
 	}
 
@@ -40,4 +39,10 @@ public class List_addNode extends AstNode {
 	public void acceptLevel(AstLevelVisitor v, int level) {
 		v.visitLevel(this, level);
 	}
+	
+	@Override
+	public String toString() {
+		return "list_add { listID: " + listID + "index: " + index + "}";
+	}
+	
 }

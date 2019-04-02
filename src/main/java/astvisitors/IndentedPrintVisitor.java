@@ -51,7 +51,16 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 
   @Override
   public void visitLevel(BlockNode node, int level) {
-  System.out.println("In BlockNode");
+	  print(node, level);
+	  if(node.getDclsNode() != null) {
+		  node.getDclsNode().acceptLevel(this, level + 1);
+	  }
+	  if (node.getStmsNode() != null) {
+		  node.getStmsNode().acceptLevel(this, level + 1); 
+	  }
+	  if (node.getReturn_stmtNode() != null) {
+		  node.getReturn_stmtNode().acceptLevel(this, level + 1);		  
+	  }
     
   }
 
