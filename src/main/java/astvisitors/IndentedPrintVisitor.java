@@ -87,8 +87,8 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 
   @Override
   public void visitLevel(Return_stmtNode node, int level) {
-  System.out.println("In Return_stmtNode");
-    
+	  print(node, level);
+	  ((AstNode)node.getReturnExpr()).acceptLevel(this, level + 1);
   }
 
   @Override
