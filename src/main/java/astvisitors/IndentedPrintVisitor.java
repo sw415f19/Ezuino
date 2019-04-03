@@ -96,9 +96,9 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	  print(node, level);
 	  ((AstNode) node.getExpr()).acceptLevel(this, level + 1);
 	  node.getIfBlock().acceptLevel(this, level + 1);
-	  BlockNode falseBlock = node.getElseBlock();
-	  if(falseBlock != null) {
-		  falseBlock.acceptLevel(this, level + 1);
+	  BlockNode elseBlock = node.getElseBlock();
+	  if(elseBlock != null) {
+		  elseBlock.acceptLevel(this, level + 1);
 	  }
     
   }
