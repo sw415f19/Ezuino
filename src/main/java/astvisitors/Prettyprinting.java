@@ -11,10 +11,6 @@ public class Prettyprinting extends AstVisitor {
 
     }
 
-    @Override
-    public void visit(ParamNode node) {
-
-    }
 
     @Override
     public void visit(BlockNode node) {
@@ -31,10 +27,6 @@ public class Prettyprinting extends AstVisitor {
 
     }
 
-    @Override
-    public void visit(Switch_blockNode node) {
-
-    }
 
     @Override
     public void visit(Return_stmtNode node) {
@@ -55,10 +47,6 @@ public class Prettyprinting extends AstVisitor {
 
     }
 
-    @Override
-    public void visit(List_addNode node) {
-
-    }
 
     @Override
     public void visit(StmtNode node) {
@@ -70,20 +58,12 @@ public class Prettyprinting extends AstVisitor {
 
     }
 
-    @Override
-    public void visit(Switch_stmtNode node) {
-
-    }
 
     @Override
     public void visit(DclNode node) {
 
     }
 
-    @Override
-    public void visit(List_removeNode node) {
-
-    }
 
     @Override
     public void visit(TypeNode node) {

@@ -11,7 +11,6 @@ dcls
     ;
 dcl
     : type ID
-    | list_dcl
     ;
 stmts
     : stmt*
@@ -23,7 +22,6 @@ stmt
     | func_call
     | func_def
     | if_stmt
-    | switch_stmt
     ;
 assign_stmt
     : ID ASSIGN expr
@@ -79,8 +77,6 @@ func_call_param
 	;
 built_in_func
     : print_l
-    | list_add
-    | list_remove
     ;
 print_l
     : PRINTSTMT expr
@@ -113,9 +109,6 @@ boolean_dcl
 string_dcl
     : STRINGDCL
     ;
-switch_stmt
-    : SWITCH '('val')' switch_block
-    ;
 return_stmt
     : RETURN expr
     ;
@@ -127,25 +120,11 @@ while_stmt
     : WHILE '('expr')' block
     ;
 parameters
-    : '('param?(','param)*')'
+    : '('dcl?(','dcl)*')'
     ;
-param
-    : type ID
-    ;
+
 block
     : '{'dcls stmts return_stmt?'}'
-    ;
-switch_block
-    : '{'(CASE val(','val)*':'block)* (DEFAULT':' block)?'}'
-    ;
-list_dcl
-    : LISTDCL type ID '['INTEGER']'
-    ;
-list_add
-    : LISTADD '('ID','val','INTEGER')'
-    ;
-list_remove
-    : LISTREMOVE '('ID','val','INTEGER')'
     ;
 
 // DECLARATIONS

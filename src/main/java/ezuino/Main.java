@@ -22,9 +22,9 @@ public class Main {
 
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString( 
-            "int a "
-                    + "list int hello[4] "
-            + "list_add(heyid, 13.2, 1) "
+        			"int a "
+                    + "int hello "
+                    + "hello := 4 "
                     + "if(3){ return a} "
                     + "if(TRUE){return true} "
             );

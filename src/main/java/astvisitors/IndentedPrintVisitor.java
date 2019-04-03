@@ -47,12 +47,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
   }
 
   @Override
-  public void visitLevel(ParamNode node, int level) {
-  System.out.println("In ParamNode");
-    
-  }
-
-  @Override
   public void visitLevel(BlockNode node, int level) {
 	  print(node, level);
 	  if(node.getDclsNode() != null) {
@@ -79,11 +73,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     
   }
 
-  @Override
-  public void visitLevel(Switch_blockNode node, int level) {
-  System.out.println("In Switch_blockNode");
-    
-  }
 
   @Override
   public void visitLevel(Return_stmtNode node, int level) {
@@ -116,10 +105,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	  print(node, level);
   }
 
-  @Override
-  public void visitLevel(List_addNode node, int level) {
-	  print(node, level);
-  }
 
   @Override
   public void visitLevel(StmtsNode node, int level) {
@@ -131,11 +116,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     
   }
 
-  @Override
-  public void visitLevel(Switch_stmtNode node, int level) {
-  System.out.println("In Switch_stmtNode");
-    
-  }
 
   @Override
   public void visitLevel(DclNode node, int level) {
@@ -143,11 +123,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     
   }
 
-  @Override
-  public void visitLevel(List_removeNode node, int level) {
-  System.out.println("In List_removeNode");
-    
-  }
 
   @Override
   public void visitLevel(TypeNode node, int level) {
@@ -212,11 +187,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	@Override
 	public void visitLevel(Built_in_funcNode node, int level) {
 		print(node, level);
-		if(node.getList_addNode() != null) {
-			node.getList_addNode().acceptLevel(this, level + 1);
-		} else if (node.getList_removeNode() != null) {
-			node.getList_removeNode().acceptLevel(this, level + 1);
-		} else if (node.getPrint_lNode() != null) {
+		if (node.getPrint_lNode() != null) {
 			node.getPrint_lNode().acceptLevel(this, level + 1);
 		}
 		

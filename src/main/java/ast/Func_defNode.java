@@ -7,11 +7,11 @@ import astvisitors.AstVisitor;
 
 public class Func_defNode extends AstNode {
 
-	private List<ParamNode> parameters;
+	private List<DclNode> parameters;
 	private BlockNode blockNode;
 	private String ID;
 	
-	public Func_defNode(String ID, List<ParamNode> parameters, BlockNode blockNode){
+	public Func_defNode(String ID, List<DclNode> parameters, BlockNode blockNode){
 		this.ID = ID;
 		this.parameters = parameters;
 		this.blockNode = blockNode;
@@ -21,7 +21,7 @@ public class Func_defNode extends AstNode {
 		return ID;
 	}
 	
-	public List<ParamNode> getParameters() {
+	public List<DclNode> getParameters() {
 		return parameters;
 	}
 
