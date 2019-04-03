@@ -4,7 +4,7 @@ import ast.*;
 import ast.expr.AdditiveExprNode;
 import ast.expr.ExprNode;
 import ast.expr.MultiplicativeExprNode;
-import ast.expr.iexpr.IExpr;
+import ast.expr.aexpr.AExpr;
 import ast.type.DoubleNode;
 import ast.type.IdNode;
 import ast.type.IntegerNode;
@@ -70,8 +70,8 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     @Override
     public void visitLevel(Func_Call_ParamNode node, int level) {
         print(node, level);
-        for(IExpr child: node.getExpr()){
-            ((AstNode)child).acceptLevel(this, level+1);
+        for(AExpr child: node.getExpr()){
+            child.acceptLevel(this, level+1);
         }
     }
 
@@ -86,13 +86,13 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
   @Override
   public void visitLevel(Return_stmtNode node, int level) {
 	  print(node, level);
-	  ((AstNode)node.getReturnExpr()).acceptLevel(this, level + 1);
+	  node.getReturnExpr().acceptLevel(this, level + 1);
   }
 
   @Override
   public void visitLevel(If_stmtNode node, int level) {
 	  print(node, level);
-	  ((AstNode) node.getExpr()).acceptLevel(this, level + 1);
+	  node.getExpr().acceptLevel(this, level + 1);
 	  node.getIfBlock().acceptLevel(this, level + 1);
 	  BlockNode elseBlock = node.getElseBlock();
 	  if(elseBlock != null) {
@@ -170,7 +170,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
   @Override
   public void visitLevel(Assign_stmtNode node, int level) {
 	  print(node, level);
-	  ((AstNode) node.getExprNode()).acceptLevel(this, level + 1);
+	  node.getExprNode().acceptLevel(this, level + 1);
     
   }
 	@Override
@@ -205,16 +205,16 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	@Override
 	public void visitLevel(AdditiveExprNode node, int level) {
 		print(node, level);
-		((AstNode)node.getLeftNode()).acceptLevel(this, level + 1);
-		((AstNode)node.getRightNode()).acceptLevel(this, level + 1);
+		node.getLeftNode().acceptLevel(this, level + 1);
+		node.getRightNode().acceptLevel(this, level + 1);
 		
 	}
 
 	@Override
 	public void visitLevel(MultiplicativeExprNode node, int level) {
 		print(node, level);
-		((AstNode)node.getLeftNode()).acceptLevel(this, level + 1);
-		((AstNode)node.getRightNode()).acceptLevel(this, level + 1);
+		node.getLeftNode().acceptLevel(this, level + 1);
+		node.getRightNode().acceptLevel(this, level + 1);
 		
 	}
   

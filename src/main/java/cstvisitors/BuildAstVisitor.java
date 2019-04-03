@@ -11,7 +11,7 @@ import generated.EzuinoParser.StmtContext;
 import generated.EzuinoParser.ExprContext;
 import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
-import ast.expr.iexpr.*;
+import ast.expr.aexpr.*;
 import ast.type.*;
 import ast.expr.*;
 
@@ -58,8 +58,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitAssign_stmt(EzuinoParser.Assign_stmtContext ctx) {
-        // Casts the recieving node to an ExprNode
-        return new Assign_stmtNode(ctx.ID().getText(), (IExpr) ctx.expr().accept(this));
+        return new Assign_stmtNode(ctx.ID().getText(), (AExpr) ctx.expr().accept(this));
     }
 
     @Override
@@ -81,7 +80,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.primaryExpr().accept(this);
         }
-        return new ParenthesisExprNode((IExpr) ctx.expr().accept(this));
+        return new ParenthesisExprNode((AExpr) ctx.expr().accept(this));
     }
 
     @Override
@@ -89,7 +88,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.parenthesisExpr().accept(this);
         }
-        return new UnaryExprNode(ctx.MINUS().getText(), (IParenthesisExpr) ctx.parenthesisExpr().accept(this));
+        return new UnaryExprNode(ctx.MINUS().getText(), (AParenthesisExpr) ctx.parenthesisExpr().accept(this));
     }
 
     @Override
@@ -97,8 +96,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.unaryExpr().accept(this);
         }
-        return new MultiplicativeExprNode((IMultiplicativeExpr) ctx.multiplicativeExpr().accept(this),
-                ctx.operator.getText(), (IUnaryExpr) ctx.unaryExpr().accept(this));
+        return new MultiplicativeExprNode((AMultiplicativeExpr) ctx.multiplicativeExpr().accept(this),
+                ctx.operator.getText(), (AUnaryExpr) ctx.unaryExpr().accept(this));
     }
 
     @Override
@@ -106,8 +105,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.multiplicativeExpr().accept(this);
         }
-        return new AdditiveExprNode((IAddictiveExpr) ctx.additiveExpr().accept(this), ctx.operator.getText(),
-                (IMultiplicativeExpr) ctx.multiplicativeExpr().accept(this));
+        return new AdditiveExprNode((AAddictiveExpr) ctx.additiveExpr().accept(this), ctx.operator.getText(),
+                (AMultiplicativeExpr) ctx.multiplicativeExpr().accept(this));
     }
 
     @Override
@@ -115,8 +114,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.additiveExpr().accept(this);
         }
-        return new RelationalExprNode((IRelationalExpr) ctx.relationalExpr().accept(this), ctx.operator.getText(),
-                (IAddictiveExpr) ctx.additiveExpr().accept(this));
+        return new RelationalExprNode((ARelationalExpr) ctx.relationalExpr().accept(this), ctx.operator.getText(),
+                (AAddictiveExpr) ctx.additiveExpr().accept(this));
     }
 
     @Override
@@ -124,8 +123,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.relationalExpr().accept(this);
         }
-        return new EqualityExprNode((IEqualityExpr) ctx.equalityExpr().accept(this), ctx.operator.getText(),
-                (IRelationalExpr) ctx.relationalExpr().accept(this));
+        return new EqualityExprNode((AEqualityExpr) ctx.equalityExpr().accept(this), ctx.operator.getText(),
+                (ARelationalExpr) ctx.relationalExpr().accept(this));
     }
 
     @Override
@@ -133,8 +132,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.equalityExpr().accept(this);
         }
-        return new LogicalAndExprNode((ILogicalAndExpr) ctx.logicalAndExpr().accept(this),
-                (IEqualityExpr) ctx.equalityExpr().accept(this));
+        return new LogicalAndExprNode((ALogicalAndExpr) ctx.logicalAndExpr().accept(this),
+                (AEqualityExpr) ctx.equalityExpr().accept(this));
     }
 
     @Override
@@ -142,8 +141,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.logicalAndExpr().accept(this);
         }
-        return new LogicalOrExprNode((IlogicalOrExpr) ctx.logicalOrExpr().accept(this),
-                (ILogicalAndExpr) ctx.logicalAndExpr().accept(this));
+        return new LogicalOrExprNode((AlogicalOrExpr) ctx.logicalOrExpr().accept(this),
+                (ALogicalAndExpr) ctx.logicalAndExpr().accept(this));
     }
 
     @Override
@@ -175,10 +174,10 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 0) {
             return null;
         }
-        ArrayList<IExpr> expr = new ArrayList<IExpr>();
+        ArrayList<AExpr> expr = new ArrayList<AExpr>();
         for (int i = 0; i < ctx.getChildCount(); i++) {
             if (ctx.expr(i) instanceof ExprContext) {
-                expr.add((IExpr) ctx.expr(i).accept(this));
+                expr.add((AExpr) ctx.expr(i).accept(this));
             }
         }
         return new Func_Call_ParamNode(expr);
@@ -240,12 +239,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitReturn_stmt(EzuinoParser.Return_stmtContext ctx) {
-        return new Return_stmtNode((IExpr)ctx.expr().accept(this));
+        return new Return_stmtNode((AExpr)ctx.expr().accept(this));
     }
 
     @Override
     public AstNode visitIf_stmt(EzuinoParser.If_stmtContext ctx) {
-    	IExpr expr = (IExpr) ctx.expr().accept(this);
+    	AExpr expr = (AExpr) ctx.expr().accept(this);
     	BlockNode ifBlock = (BlockNode) ctx.block(0).accept(this);
     	BlockNode elseBlock = null;
     	if (ctx.block().size() > 1) {
@@ -256,7 +255,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitWhile_stmt(EzuinoParser.While_stmtContext ctx) {
-    	IExpr expressionNode = (IExpr)ctx.expr().accept(this);
+    	AExpr expressionNode = (AExpr)ctx.expr().accept(this);
     	BlockNode blockNode = (BlockNode)ctx.block().accept(this);
         return new While_stmtNode(expressionNode, blockNode);
     }

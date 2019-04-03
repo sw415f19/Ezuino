@@ -1,8 +1,7 @@
 package ast.expr;
 
-import ast.AstNode;
-import ast.expr.iexpr.IExpr;
+import ast.expr.aexpr.AExpr;
 
-public abstract class ExprNode extends AstNode implements IExpr {
+public abstract class ExprNode extends AExpr {
 
 }

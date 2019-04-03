@@ -1,22 +1,22 @@
 package ast;
 
-import ast.expr.iexpr.IExpr;
+import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class If_stmtNode extends StmtNode {
 
-	private IExpr expr;
+	private AExpr expr;
 	private BlockNode ifBlock;
 	private BlockNode elseBlock;
 
-	public If_stmtNode(IExpr expr, BlockNode ifBlock, BlockNode elseBlock) {
+	public If_stmtNode(AExpr expr, BlockNode ifBlock, BlockNode elseBlock) {
 		this.expr = expr;
 		this.ifBlock = ifBlock;
 		this.elseBlock = elseBlock;
 	}
 
-	public IExpr getExpr() {
+	public AExpr getExpr() {
 		return this.expr;
 	}
 

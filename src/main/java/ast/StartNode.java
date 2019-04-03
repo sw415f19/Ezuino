@@ -3,8 +3,6 @@ package ast;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-import java.util.ArrayList;
-
 public class StartNode extends AstNode {
 	private DclsNode dcls;
 	private StmtsNode stmts;

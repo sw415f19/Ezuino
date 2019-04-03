@@ -1,11 +1,9 @@
 package ast.expr;
 
-import ast.AstNode;
-import ast.expr.iexpr.*;
-
+import ast.expr.aexpr.*;
 import astvisitors.AstVisitor;
 
-public abstract class PrimaryExprNode extends AstNode implements IPrimaryExpr {
+public abstract class PrimaryExprNode extends APrimaryExpr {
 
 	@Override
 	public void accept(AstVisitor v) {

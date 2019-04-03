@@ -1,15 +1,14 @@
 package ast.expr;
 
-import ast.AstNode;
-import ast.expr.iexpr.IExpr;
-import ast.expr.iexpr.IParenthesisExpr;
+import ast.expr.aexpr.AExpr;
+import ast.expr.aexpr.AParenthesisExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class ParenthesisExprNode extends AstNode implements IParenthesisExpr {
-    private IExpr node;
+public class ParenthesisExprNode extends AParenthesisExpr {
+    private AExpr node;
 
-    public ParenthesisExprNode(IExpr iExpr) {
+    public ParenthesisExprNode(AExpr iExpr) {
         this.node = iExpr;
     }
 
@@ -23,7 +22,7 @@ public class ParenthesisExprNode extends AstNode implements IParenthesisExpr {
 		v.visitLevel(this, level);
 	}
 
-    public IExpr getNode() {
+    public AExpr getNode() {
         return this.node;
     }
 }

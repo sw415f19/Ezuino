@@ -1,18 +1,18 @@
 package ast;
 
-import ast.expr.iexpr.IExpr;
+import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class Return_stmtNode extends AstNode {
 
-	private IExpr returnExpr;
+	private AExpr returnExpr;
 	
-	public Return_stmtNode(IExpr returnExpr) {
+	public Return_stmtNode(AExpr returnExpr) {
 		this.returnExpr = returnExpr;
 	}
 	
-	public IExpr getReturnExpr() {
+	public AExpr getReturnExpr() {
 		return returnExpr;
 	}
 	

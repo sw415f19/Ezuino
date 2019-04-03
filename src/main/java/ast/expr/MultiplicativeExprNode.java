@@ -1,17 +1,16 @@
 package ast.expr;
 
-import ast.AstNode;
-import ast.expr.iexpr.IMultiplicativeExpr;
-import ast.expr.iexpr.IUnaryExpr;
+import ast.expr.aexpr.AMultiplicativeExpr;
+import ast.expr.aexpr.AUnaryExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class MultiplicativeExprNode extends AstNode implements IMultiplicativeExpr {
-    private IMultiplicativeExpr leftNode;
+public class MultiplicativeExprNode extends AMultiplicativeExpr {
+    private AMultiplicativeExpr leftNode;
     private String operator;
-    private IUnaryExpr rightNode;
+    private AUnaryExpr rightNode;
 
-    public MultiplicativeExprNode(IMultiplicativeExpr iMultiplicativeExpr, String operator, IUnaryExpr iUnaryExpr) {
+    public MultiplicativeExprNode(AMultiplicativeExpr iMultiplicativeExpr, String operator, AUnaryExpr iUnaryExpr) {
         this.leftNode = iMultiplicativeExpr;
         this.operator = operator;
         this.rightNode = iUnaryExpr;
@@ -27,7 +26,7 @@ public class MultiplicativeExprNode extends AstNode implements IMultiplicativeEx
 		v.visitLevel(this, level);
 	}
 
-    public IMultiplicativeExpr getLeftNode() {
+    public AMultiplicativeExpr getLeftNode() {
         return leftNode;
     }
 
@@ -35,7 +34,7 @@ public class MultiplicativeExprNode extends AstNode implements IMultiplicativeEx
         return operator;
     }
 
-    public IUnaryExpr getRightNode() {
+    public AUnaryExpr getRightNode() {
         return rightNode;
     }
     

@@ -1,19 +1,19 @@
 package ast;
 
-import ast.expr.iexpr.IExpr;
+import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class While_stmtNode extends AstNode {
-    private IExpr exprNode;
+    private AExpr exprNode;
     private BlockNode blockNode;
-    public While_stmtNode(IExpr exprNode, BlockNode blockNode)
+    public While_stmtNode(AExpr exprNode, BlockNode blockNode)
     {
         this.exprNode = exprNode;
         this.blockNode = blockNode;
     }
 
-    public IExpr getExprNode()
+    public AExpr getExprNode()
     {
         return exprNode;
     }

@@ -1,15 +1,14 @@
 package ast.expr;
 
-import ast.AstNode;
-import ast.expr.iexpr.*;
+import ast.expr.aexpr.*;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class LogicalOrExprNode extends AstNode implements IlogicalOrExpr {
-    private IlogicalOrExpr leftNode;
-    private ILogicalAndExpr rightNode;
+public class LogicalOrExprNode extends AlogicalOrExpr {
+    private AlogicalOrExpr leftNode;
+    private ALogicalAndExpr rightNode;
 
-    public LogicalOrExprNode(IlogicalOrExpr ilogicalOrExpr, ILogicalAndExpr iLogicalAndExpr) {
+    public LogicalOrExprNode(AlogicalOrExpr ilogicalOrExpr, ALogicalAndExpr iLogicalAndExpr) {
         this.leftNode = ilogicalOrExpr;
         this.rightNode = iLogicalAndExpr;
     }
@@ -24,11 +23,11 @@ public class LogicalOrExprNode extends AstNode implements IlogicalOrExpr {
 		v.visitLevel(this, level);
 	}
 
-    public IlogicalOrExpr getLeftNode() {
+    public AlogicalOrExpr getLeftNode() {
         return leftNode;
     }
 
-    public ILogicalAndExpr getRightNode() {
+    public ALogicalAndExpr getRightNode() {
         return rightNode;
     }
 }

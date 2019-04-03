@@ -2,19 +2,19 @@ package ast;
 
 import java.util.ArrayList;
 
-import ast.expr.iexpr.IExpr;
+import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class Func_Call_ParamNode extends AstNode {
 
-	private ArrayList<IExpr> expr = new ArrayList<IExpr>();
+	private ArrayList<AExpr> expr = new ArrayList<AExpr>();
 
-	public Func_Call_ParamNode(ArrayList<IExpr> expr) {
+	public Func_Call_ParamNode(ArrayList<AExpr> expr) {
 		this.expr = expr;
 	}
 
-	public ArrayList<IExpr> getExpr() {
+	public ArrayList<AExpr> getExpr() {
 		return expr;
 	}
 

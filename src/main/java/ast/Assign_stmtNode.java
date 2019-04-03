@@ -1,14 +1,14 @@
 package ast;
 
+import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
-import ast.expr.iexpr.IExpr;
 
 public class Assign_stmtNode extends StmtNode {
 	private String id;
-	private IExpr exprNode;
+	private AExpr exprNode;
 
-	public Assign_stmtNode(String id, IExpr exprNode) {
+	public Assign_stmtNode(String id, AExpr exprNode) {
 		this.id = id;
 		this.exprNode = exprNode;
 		System.out.println(this.id);
@@ -19,7 +19,7 @@ public class Assign_stmtNode extends StmtNode {
 		return this.id;
 	}
 
-	public IExpr getExprNode() {
+	public AExpr getExprNode() {
 		return this.exprNode;
 	}
 

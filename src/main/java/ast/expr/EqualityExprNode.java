@@ -1,17 +1,16 @@
 package ast.expr;
 
-import ast.AstNode;
-import ast.expr.iexpr.IEqualityExpr;
-import ast.expr.iexpr.IRelationalExpr;
+import ast.expr.aexpr.AEqualityExpr;
+import ast.expr.aexpr.ARelationalExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class EqualityExprNode extends AstNode implements IEqualityExpr {
-    private IEqualityExpr leftNode;
+public class EqualityExprNode extends AEqualityExpr {
+    private AEqualityExpr leftNode;
     private String operator;
-    private IRelationalExpr relationalExprNode;
+    private ARelationalExpr relationalExprNode;
 
-    public EqualityExprNode(IEqualityExpr iEqualityExpr, String operator, IRelationalExpr iRelationalExpr) {
+    public EqualityExprNode(AEqualityExpr iEqualityExpr, String operator, ARelationalExpr iRelationalExpr) {
         this.leftNode = iEqualityExpr;
         this.operator = operator;
         this.relationalExprNode = iRelationalExpr;
@@ -27,7 +26,7 @@ public class EqualityExprNode extends AstNode implements IEqualityExpr {
 		v.visitLevel(this, level);
 	}
 
-    public IEqualityExpr getLeftNode() {
+    public AEqualityExpr getLeftNode() {
         return leftNode;
     }
 
@@ -35,7 +34,7 @@ public class EqualityExprNode extends AstNode implements IEqualityExpr {
         return operator;
     }
 
-    public IRelationalExpr getRelationalExprNode() {
+    public ARelationalExpr getRelationalExprNode() {
         return relationalExprNode;
     }
 }

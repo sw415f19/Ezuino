@@ -21,9 +21,13 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString(
-            "int a "
-                    + "print(5, 10) "
+    	String s = "int a " + 
+                "if(3){ return a } " +
+                "if(TRUE){ return 5 } ";
+    	//s = "a := 1 + 1 " ;
+    	//s = "a := 3+5*3+5";
+        CharStream cs = CharStreams.fromString( 
+            s
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);

@@ -1,15 +1,14 @@
 package ast.expr;
 
-import ast.AstNode;
-import ast.expr.iexpr.*;
+import ast.expr.aexpr.*;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class LogicalAndExprNode extends AstNode implements ILogicalAndExpr {
-    private ILogicalAndExpr leftNode;
-    private IEqualityExpr rightNode;
+public class LogicalAndExprNode extends ALogicalAndExpr {
+    private ALogicalAndExpr leftNode;
+    private AEqualityExpr rightNode;
 
-    public LogicalAndExprNode(ILogicalAndExpr iLogicalAndExpr, IEqualityExpr iEqualityExpr) {
+    public LogicalAndExprNode(ALogicalAndExpr iLogicalAndExpr, AEqualityExpr iEqualityExpr) {
         this.leftNode = iLogicalAndExpr;
         this.rightNode = iEqualityExpr;
     }
@@ -24,11 +23,11 @@ public class LogicalAndExprNode extends AstNode implements ILogicalAndExpr {
 		v.visitLevel(this, level);
 	}
 
-    public ILogicalAndExpr getLeftNode() {
+    public ALogicalAndExpr getLeftNode() {
         return leftNode;
     }
 
-    public IEqualityExpr getRightNode() {
+    public AEqualityExpr getRightNode() {
         return rightNode;
     }
 }

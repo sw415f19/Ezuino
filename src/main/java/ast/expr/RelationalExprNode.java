@@ -1,16 +1,15 @@
 package ast.expr;
 
+import ast.expr.aexpr.*;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
-import ast.AstNode;
-import ast.expr.iexpr.*;
 
-public class RelationalExprNode extends AstNode implements IRelationalExpr {
-    private IRelationalExpr leftNode;
+public class RelationalExprNode extends ARelationalExpr {
+    private ARelationalExpr leftNode;
     private String operator;
-    private IAddictiveExpr rightNode;
+    private AAddictiveExpr rightNode;
 
-    public RelationalExprNode(IRelationalExpr relationalExprNode, String operator, IAddictiveExpr additiveExprNode) {
+    public RelationalExprNode(ARelationalExpr relationalExprNode, String operator, AAddictiveExpr additiveExprNode) {
         this.leftNode = relationalExprNode;
         this.operator = operator;
         this.rightNode = additiveExprNode;
@@ -26,7 +25,7 @@ public class RelationalExprNode extends AstNode implements IRelationalExpr {
 		v.visitLevel(this, level);
 	}
 
-    public IRelationalExpr getLeftNode() {
+    public ARelationalExpr getLeftNode() {
         return leftNode;
     }
 
@@ -34,7 +33,7 @@ public class RelationalExprNode extends AstNode implements IRelationalExpr {
         return operator;
     }
 
-    public IAddictiveExpr getRightNode() {
+    public AAddictiveExpr getRightNode() {
         return rightNode;
     }
 }

@@ -1,15 +1,14 @@
 package ast.expr;
 
-import ast.AstNode;
+import ast.expr.aexpr.*;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
-import ast.expr.iexpr.*;
 
-public class UnaryExprNode extends AstNode implements IMultiplicativeExpr {
+public class UnaryExprNode extends AMultiplicativeExpr {
     private String operator;
-    private IParenthesisExpr node;
+    private AParenthesisExpr node;
 
-    public UnaryExprNode(String operator, IParenthesisExpr parenthesisExprNode) {
+    public UnaryExprNode(String operator, AParenthesisExpr parenthesisExprNode) {
         this.operator = operator;
         this.node = parenthesisExprNode;
     }
@@ -30,7 +29,7 @@ public class UnaryExprNode extends AstNode implements IMultiplicativeExpr {
         return operator;
     }
 
-    public IParenthesisExpr getNode() {
+    public AParenthesisExpr getNode() {
         return node;
     }
 

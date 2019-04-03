@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import generated.EzuinoBaseVisitor;
-import generated.EzuinoParser.ValContext;
 
 public class CSTPrinter extends EzuinoBaseVisitor<Void> {
 	

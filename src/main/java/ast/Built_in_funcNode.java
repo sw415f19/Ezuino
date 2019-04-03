@@ -2,7 +2,6 @@ package ast;
 
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
-import generated.EzuinoParser;
 
 public class Built_in_funcNode extends AstNode {
 

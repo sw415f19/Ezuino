@@ -1,19 +1,19 @@
 package ast;
 
+import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
-import ast.expr.iexpr.IExpr;
 import astvisitors.AstVisitor;
 
 public class Print_lNode extends AstNode {
 
-	private IExpr exprNode;
+	private AExpr exprNode;
 
-	public Print_lNode(IExpr exprNode)
+	public Print_lNode(AExpr exprNode)
 	{
 		this.exprNode = exprNode;
 	}
 
-	public IExpr getExprNode()
+	public AExpr getExprNode()
 	{
 		return exprNode;
 	}
