@@ -6,12 +6,12 @@ import astvisitors.AstVisitor;
 public class BlockNode extends AstNode {
 
 	private DclsNode dclsNode;
-	private StmtsNode stmsNode;
+	private StmtsNode stmtsNode;
 	private Return_stmtNode return_stmtNode;
 
-	public BlockNode(DclsNode dclsNode, StmtsNode stmsNode, Return_stmtNode return_stmtNode) {
+	public BlockNode(DclsNode dclsNode, StmtsNode stmtsNode, Return_stmtNode return_stmtNode) {
 		this.dclsNode = dclsNode;
-		this.stmsNode = stmsNode;
+		this.stmtsNode = stmtsNode;
 		this.return_stmtNode = return_stmtNode;
 	}
 
@@ -19,8 +19,8 @@ public class BlockNode extends AstNode {
 		return dclsNode;
 	}
 
-	public StmtsNode getStmsNode() {
-		return stmsNode;
+	public StmtsNode getStmtsNode() {
+		return stmtsNode;
 	}
 
 	public Return_stmtNode getReturn_stmtNode() {

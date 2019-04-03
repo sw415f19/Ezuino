@@ -55,8 +55,8 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	  if(node.getDclsNode() != null) {
 		  node.getDclsNode().acceptLevel(this, level + 1);
 	  }
-	  if (node.getStmsNode() != null) {
-		  node.getStmsNode().acceptLevel(this, level + 1); 
+	  if (node.getStmtsNode() != null) {
+		  node.getStmtsNode().acceptLevel(this, level + 1); 
 	  }
 	  if (node.getReturn_stmtNode() != null) {
 		  node.getReturn_stmtNode().acceptLevel(this, level + 1);		  

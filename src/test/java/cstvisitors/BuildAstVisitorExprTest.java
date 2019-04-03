@@ -19,11 +19,13 @@ public class BuildAstVisitorExprTest {
 	BuildAstVisitor visitor = new BuildAstVisitor();
 	@Test
 	public void simplePlusExprTest() throws IOException {
-		EzuinoParser ep = createParser("1 + 1");
+		EzuinoParser ep = createParser("1 + 2");
 		AdditiveExprNode topNode = (AdditiveExprNode)ep.expr().accept(visitor);
 		
+		assertTrue(topNode.getLeftNode() instanceof IntegerNode);
+		assertTrue(topNode.getRightNode() instanceof IntegerNode);
 		assertEquals("1", ((IntegerNode)topNode.getLeftNode()).getVal());
-		assertEquals("1", ((IntegerNode)topNode.getRightNode()).getVal());
+		assertEquals("2", ((IntegerNode)topNode.getRightNode()).getVal());
 		assertEquals("+", topNode.getOperator());
 	}
 	

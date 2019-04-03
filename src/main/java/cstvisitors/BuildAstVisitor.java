@@ -160,12 +160,13 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunc_def(EzuinoParser.Func_defContext ctx) {
+    	String ID = ctx.ID().getText();
     	List<ParamNode> parameters = new ArrayList<ParamNode>();
     	BlockNode blockNode = (BlockNode)ctx.block().accept(this);
     	for(ParamContext child : ctx.parameters().param()) {
     		parameters.add((ParamNode)child.accept(this));
     	}
-        return new Func_defNode(parameters, blockNode);
+        return new Func_defNode(ID, parameters, blockNode);
     }
 
     @Override
