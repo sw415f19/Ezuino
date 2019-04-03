@@ -14,6 +14,10 @@ public class Func_Call_ParamNode extends AstNode {
 		this.expr = expr;
 	}
 
+	public ArrayList<IExpr> getExpr() {
+		return expr;
+	}
+
 	@Override
 	public void accept(AstVisitor v) {
 		v.visit(this);

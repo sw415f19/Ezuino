@@ -164,18 +164,10 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunc_call(EzuinoParser.Func_callContext ctx) {
+        String id = ctx.ID().getText();
+        Func_Call_ParamNode funcCall = (Func_Call_ParamNode) ctx.func_call_param().accept(this);
 
-    	Func_callNode result = null;
-    	
-        if (ctx.built_in_func() == null){
-        	String id = ctx.ID().getText();
-        	Func_Call_ParamNode funcCall = (Func_Call_ParamNode) ctx.func_call_param().accept(this);
-            result =  new Func_callNode(id, funcCall);
-        } else {
-            result =  new Func_callNode((Built_in_funcNode) ctx.built_in_func().accept(this));
-        	
-        }
-        return result;
+        return new Func_callNode(id, funcCall);
     }
 
     @Override
@@ -192,23 +184,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         return new Func_Call_ParamNode(expr);
     }
 
-    @Override
-    public AstNode visitBuilt_in_func(EzuinoParser.Built_in_funcContext ctx) {
-        
-
-        
-
-        if(ctx.getChild(0) instanceof EzuinoParser.Print_lContext){
-            return new Built_in_funcNode((Print_lNode) ctx.print_l().accept(this));
-        }
-
-        return null;
-    }
-
-    @Override
-    public AstNode visitPrint_l(EzuinoParser.Print_lContext ctx) {
-        return new Print_lNode((IExpr) ctx.expr().accept(this));
-    }
 
     @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {

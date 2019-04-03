@@ -70,17 +70,10 @@ func_def
     : FUNCTION type? ID parameters block;
 func_call
     : ID '('func_call_param')'
-    | built_in_func
     ;
 func_call_param
     : expr? | expr(','expr)+
 	;
-built_in_func
-    : print_l
-    ;
-print_l
-    : PRINTSTMT expr
-    ;
 val
     : ID
     | INTEGER
@@ -134,10 +127,7 @@ STRINGDCL           : 'string' ;
 BOOLEANDCL          : 'boolean' ;
 LISTDCL             : 'list' ;
 // STATEMENTS
-PRINTSTMT           : 'print' ;
 ASSIGN              : ':=' ;
-LISTADD             : 'list_add' ;
-LISTREMOVE          : 'list_remove' ;
 // OPERATORS
 PLUS                : '+' ;
 MINUS               : '-' ;

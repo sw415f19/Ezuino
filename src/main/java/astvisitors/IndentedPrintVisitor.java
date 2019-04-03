@@ -4,6 +4,7 @@ import ast.*;
 import ast.expr.AdditiveExprNode;
 import ast.expr.ExprNode;
 import ast.expr.MultiplicativeExprNode;
+import ast.expr.iexpr.IExpr;
 import ast.type.DoubleNode;
 import ast.type.IdNode;
 import ast.type.IntegerNode;
@@ -34,14 +35,13 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
    * public void visit(StmtNode s, int level) { print(s, level); }
    */
 
+
+
   @Override
   public void visitLevel(Func_callNode node, int level) {
 	  print(node, level);
-	  Built_in_funcNode bfnode = node.getBuiltinNode();
 	  Func_Call_ParamNode parameters = node.getParamNode();
-	  if (bfnode != null) {
-		  bfnode.acceptLevel(this, level + 1);
-	  } else if (parameters != null) {
+	  if (parameters != null) {
 		  parameters.acceptLevel(this, level + 1);
 	  }    
   }
@@ -67,9 +67,18 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     
   }
 
-  @Override
+    @Override
+    public void visitLevel(Func_Call_ParamNode node, int level) {
+        print(node, level);
+        for(IExpr child: node.getExpr()){
+            ((AstNode)child).acceptLevel(this, level+1);
+        }
+    }
+
+    @Override
   public void visitLevel(Print_lNode node, int level) {
-  System.out.println("In Print_lNode");
+      print(node, level);
+      ((AstNode) node.getExprNode()).acceptLevel(this, level+1);
     
   }
 
