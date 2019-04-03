@@ -1,19 +1,20 @@
 package ast;
 
+import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
+
+import java.util.ArrayList;
 
 public class Func_callNode extends StmtNode {
 
 	private String ID;
-	private Func_Call_ParamNode paramNode;
+	private ArrayList<AExpr> parameters = new ArrayList<AExpr>();
 
 
-
-	public Func_callNode(String ID, Func_Call_ParamNode paramNode)
-	{
+	public Func_callNode(String ID, ArrayList<AExpr> parameters) {
 		this.ID = ID;
-		this.paramNode = paramNode;
+		this.parameters = parameters;
 	}
 
 	public String getID()
@@ -21,11 +22,9 @@ public class Func_callNode extends StmtNode {
 		return ID;
 	}
 
-	public Func_Call_ParamNode getParamNode()
-	{
-		return paramNode;
+	public ArrayList<AExpr> getParameters() {
+		return parameters;
 	}
-
 
 	@Override
 	public void accept(AstVisitor v) {

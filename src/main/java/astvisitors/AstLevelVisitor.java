@@ -12,7 +12,6 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(Func_callNode node, int level);
 	public abstract void visitLevel(BlockNode node, int level);
 	public abstract void visitLevel(Func_defNode node, int level);
-	public abstract void visitLevel(Func_Call_ParamNode node, int level);
 	public abstract void visitLevel(Print_lNode node, int level);
 	public abstract void visitLevel(Return_stmtNode node, int level);
 	public abstract void visitLevel(If_stmtNode node, int level);

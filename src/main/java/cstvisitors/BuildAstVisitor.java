@@ -164,23 +164,13 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitFunc_call(EzuinoParser.Func_callContext ctx) {
         String id = ctx.ID().getText();
-        Func_Call_ParamNode funcCall = (Func_Call_ParamNode) ctx.func_call_param().accept(this);
+        ArrayList<AExpr> parameters = new ArrayList<AExpr>();
 
-        return new Func_callNode(id, funcCall);
-    }
+        for (ExprContext param : ctx.func_call_param().expr()) {
+                parameters.add((AExpr) param.accept(this));
+        }
 
-    @Override
-    public AstNode visitFunc_call_param(EzuinoParser.Func_call_paramContext ctx) {
-        if (ctx.getChildCount() == 0) {
-            return null;
-        }
-        ArrayList<AExpr> expr = new ArrayList<AExpr>();
-        for (int i = 0; i < ctx.getChildCount(); i++) {
-            if (ctx.expr(i) instanceof ExprContext) {
-                expr.add((AExpr) ctx.expr(i).accept(this));
-            }
-        }
-        return new Func_Call_ParamNode(expr);
+        return new Func_callNode(id, parameters);
     }
 
 

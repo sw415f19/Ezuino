@@ -10,6 +10,8 @@ import ast.type.IdNode;
 import ast.type.IntegerNode;
 import ast.type.StringNode;
 
+import java.util.ArrayList;
+
 public class IndentedPrintVisitor extends AstLevelVisitor {
   
   public void print(AstNode node, int level) {
@@ -40,10 +42,9 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
   @Override
   public void visitLevel(Func_callNode node, int level) {
 	  print(node, level);
-	  Func_Call_ParamNode parameters = node.getParamNode();
-	  if (parameters != null) {
-		  parameters.acceptLevel(this, level + 1);
-	  }    
+      for(AExpr child: node.getParameters()){
+          child.acceptLevel(this, level+1);
+      }
   }
 
   @Override
@@ -66,14 +67,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
   System.out.println("In Func_defNode");
     
   }
-
-    @Override
-    public void visitLevel(Func_Call_ParamNode node, int level) {
-        print(node, level);
-        for(AExpr child: node.getExpr()){
-            child.acceptLevel(this, level+1);
-        }
-    }
 
     @Override
   public void visitLevel(Print_lNode node, int level) {
