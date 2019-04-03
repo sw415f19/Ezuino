@@ -42,7 +42,7 @@ public class List_addNode extends AstNode {
 	
 	@Override
 	public String toString() {
-		return "list_add { listID: " + listID + "index: " + index + "}";
+		return super.toString() + " { listID: " + listID + " index: " + index + "}";
 	}
 	
 }

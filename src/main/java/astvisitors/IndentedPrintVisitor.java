@@ -1,7 +1,9 @@
 package astvisitors;
 
 import ast.*;
+import ast.expr.AdditiveExprNode;
 import ast.expr.ExprNode;
+import ast.expr.MultiplicativeExprNode;
 import ast.type.DoubleNode;
 import ast.type.IdNode;
 import ast.type.IntegerNode;
@@ -35,11 +37,12 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
   @Override
   public void visitLevel(Func_callNode node, int level) {
 	  print(node, level);
-	  Built_in_funcNode bfnode = node.getbNode();
+	  Built_in_funcNode bfnode = node.getBuiltinNode();
+	  Func_Call_ParamNode parameters = node.getParamNode();
 	  if (bfnode != null) {
 		  bfnode.acceptLevel(this, level + 1);
-	  } else {
-		  node.getfNode().acceptLevel(this, level + 1);
+	  } else if (parameters != null) {
+		  parameters.acceptLevel(this, level + 1);
 	  }    
   }
 
@@ -110,14 +113,12 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 
   @Override
   public void visitLevel(BooleantfNode node, int level) {
-  System.out.println("In BooleantfNode");
-    
+	  print(node, level);
   }
 
   @Override
   public void visitLevel(List_addNode node, int level) {
-  System.out.println("In List_addNode");
-    
+	  print(node, level);
   }
 
   @Override
@@ -211,6 +212,29 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	@Override
 	public void visitLevel(Built_in_funcNode node, int level) {
 		print(node, level);
+		if(node.getList_addNode() != null) {
+			node.getList_addNode().acceptLevel(this, level + 1);
+		} else if (node.getList_removeNode() != null) {
+			node.getList_removeNode().acceptLevel(this, level + 1);
+		} else if (node.getPrint_lNode() != null) {
+			node.getPrint_lNode().acceptLevel(this, level + 1);
+		}
+		
+	}
+
+	@Override
+	public void visitLevel(AdditiveExprNode node, int level) {
+		print(node, level);
+		((AstNode)node.getLeftNode()).acceptLevel(this, level + 1);
+		((AstNode)node.getRightNode()).acceptLevel(this, level + 1);
+		
+	}
+
+	@Override
+	public void visitLevel(MultiplicativeExprNode node, int level) {
+		print(node, level);
+		((AstNode)node.getLeftNode()).acceptLevel(this, level + 1);
+		((AstNode)node.getRightNode()).acceptLevel(this, level + 1);
 		
 	}
   

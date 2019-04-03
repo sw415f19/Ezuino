@@ -2,7 +2,9 @@ package astvisitors;
 
 
 import ast.*;
+import ast.expr.AdditiveExprNode;
 import ast.expr.ExprNode;
+import ast.expr.MultiplicativeExprNode;
 import ast.type.*;
 
 public abstract class AstLevelVisitor {
@@ -28,6 +30,8 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(ExprNode node, int level);
 	public abstract void visitLevel(ParametersNode node, int level);
 	public abstract void visitLevel(Built_in_funcNode node, int level);
+	public abstract void visitLevel(AdditiveExprNode node, int level);
+	public abstract void visitLevel(MultiplicativeExprNode node, int level);
 	
 	//One added assignment nodes.
 	public abstract void visitLevel(Assign_stmtNode node, int level);

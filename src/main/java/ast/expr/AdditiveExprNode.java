@@ -38,4 +38,9 @@ public class AdditiveExprNode extends AstNode implements IAddictiveExpr {
     public IMultiplicativeExpr getRightNode() {
         return rightNode;
     }
+    
+    @Override
+    public String toString() {
+    	return super.toString() + "{ operator: "+ operator + " }";
+    }
 }
