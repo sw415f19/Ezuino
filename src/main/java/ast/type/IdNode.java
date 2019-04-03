@@ -25,4 +25,9 @@ public class IdNode extends ValNode {
 	public void acceptLevel(AstLevelVisitor v, int level) {
 		v.visitLevel(this, level);
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " { val: " + val + " }";
+	}
 }
