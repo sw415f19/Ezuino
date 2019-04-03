@@ -7,25 +7,25 @@ import astvisitors.AstVisitor;
 public class If_stmtNode extends StmtNode {
 
 	private IExpr expr;
-	private BlockNode trueBlock;
-	private BlockNode falseBlock;
+	private BlockNode ifBlock;
+	private BlockNode elseBlock;
 
-	public If_stmtNode(IExpr expr, BlockNode trueBlock, BlockNode falseBlock) {
+	public If_stmtNode(IExpr expr, BlockNode ifBlock, BlockNode elseBlock) {
 		this.expr = expr;
-		this.trueBlock = trueBlock;
-		this.falseBlock = falseBlock;
+		this.ifBlock = ifBlock;
+		this.elseBlock = elseBlock;
 	}
 
 	public IExpr getExpr() {
 		return this.expr;
 	}
 
-	public BlockNode getTrueBlock() {
-		return this.trueBlock;
+	public BlockNode getIfBlock() {
+		return this.ifBlock;
 	}
 	
-	public BlockNode getFalseBlock() {
-		return this.falseBlock;
+	public BlockNode getElseBlock() {
+		return this.elseBlock;
 	}
 
 

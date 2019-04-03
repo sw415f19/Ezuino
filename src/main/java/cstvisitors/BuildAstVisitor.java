@@ -3,8 +3,6 @@ package cstvisitors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-
 import ast.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
@@ -286,12 +284,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitIf_stmt(EzuinoParser.If_stmtContext ctx) {
     	IExpr expr = (IExpr) ctx.expr().accept(this);
-    	BlockNode trueBlock = (BlockNode) ctx.block(0).accept(this);
-    	BlockNode falseBlock = null;
+    	BlockNode ifBlock = (BlockNode) ctx.block(0).accept(this);
+    	BlockNode elseBlock = null;
     	if (ctx.block().size() > 1) {
-    		falseBlock = (BlockNode) ctx.block(1).accept(this);
+    		elseBlock = (BlockNode) ctx.block(1).accept(this);
     	}
-        return new If_stmtNode(expr, trueBlock, falseBlock);
+        return new If_stmtNode(expr, ifBlock, elseBlock);
     }
 
     @Override
