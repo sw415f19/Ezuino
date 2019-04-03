@@ -21,12 +21,9 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString( 
+        CharStream cs = CharStreams.fromString(
             "int a "
-                    + "list int hello[4] "
-            + "list_add(heyid, 13.2, 1) "
-                    + "if(3){ return a} "
-                    + "if(TRUE){return true} "
+                    + "print(5, 10) "
             );
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);

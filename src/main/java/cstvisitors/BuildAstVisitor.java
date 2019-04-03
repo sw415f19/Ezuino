@@ -3,15 +3,12 @@ package cstvisitors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-
 import ast.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
 import generated.EzuinoParser.DclContext;
 import generated.EzuinoParser.StmtContext;
 import generated.EzuinoParser.ExprContext;
-import generated.EzuinoParser.ParamContext;
 import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.iexpr.*;
@@ -39,13 +36,9 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
-        if(ctx.list_dcl() != null) {
-            return ctx.list_dcl().accept(this);
-        }
-        else {
+    	
             Type type = getType(ctx.type());
             return new DclNode(type, ctx.ID().getText());
-        }
     }
 
     @Override
@@ -161,28 +154,20 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitFunc_def(EzuinoParser.Func_defContext ctx) {
     	String ID = ctx.ID().getText();
-    	List<ParamNode> parameters = new ArrayList<ParamNode>();
+    	List<DclNode> parameters = new ArrayList<DclNode>();
     	BlockNode blockNode = (BlockNode)ctx.block().accept(this);
-    	for(ParamContext child : ctx.parameters().param()) {
-    		parameters.add((ParamNode)child.accept(this));
+    	for(DclContext child : ctx.parameters().dcl()) {
+    		parameters.add((DclNode)child.accept(this));
     	}
         return new Func_defNode(ID, parameters, blockNode);
     }
 
     @Override
     public AstNode visitFunc_call(EzuinoParser.Func_callContext ctx) {
+        String id = ctx.ID().getText();
+        Func_Call_ParamNode funcCall = (Func_Call_ParamNode) ctx.func_call_param().accept(this);
 
-    	Func_callNode result = null;
-    	
-        if (ctx.built_in_func() == null){
-        	String id = ctx.ID().getText();
-        	Func_Call_ParamNode funcCall = (Func_Call_ParamNode) ctx.func_call_param().accept(this);
-            result =  new Func_callNode(id, funcCall);
-        } else {
-            result =  new Func_callNode((Built_in_funcNode) ctx.built_in_func().accept(this));
-        	
-        }
-        return result;
+        return new Func_callNode(id, funcCall);
     }
 
     @Override
@@ -199,27 +184,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         return new Func_Call_ParamNode(expr);
     }
 
-    @Override
-    public AstNode visitBuilt_in_func(EzuinoParser.Built_in_funcContext ctx) {
-        if(ctx.getChild(0) instanceof EzuinoParser.List_addContext){
-            return new Built_in_funcNode((List_addNode) ctx.list_add().accept(this));
-        }
-
-        if(ctx.getChild(0) instanceof EzuinoParser.List_removeContext){
-            return new Built_in_funcNode((List_removeNode) ctx.list_remove().accept(this));
-        }
-
-        if(ctx.getChild(0) instanceof EzuinoParser.Print_lContext){
-            return new Built_in_funcNode((Print_lNode) ctx.print_l().accept(this));
-        }
-
-        return null;
-    }
-
-    @Override
-    public AstNode visitPrint_l(EzuinoParser.Print_lContext ctx) {
-        return new Print_lNode((IExpr) ctx.expr().accept(this));
-    }
 
     @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
@@ -273,10 +237,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         return super.visitString_dcl(ctx);
     }
 
-    @Override
-    public AstNode visitSwitch_stmt(EzuinoParser.Switch_stmtContext ctx) {
-        return super.visitSwitch_stmt(ctx);
-    }
 
     @Override
     public AstNode visitReturn_stmt(EzuinoParser.Return_stmtContext ctx) {
@@ -286,12 +246,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitIf_stmt(EzuinoParser.If_stmtContext ctx) {
     	IExpr expr = (IExpr) ctx.expr().accept(this);
-    	BlockNode trueBlock = (BlockNode) ctx.block(0).accept(this);
-    	BlockNode falseBlock = null;
+    	BlockNode ifBlock = (BlockNode) ctx.block(0).accept(this);
+    	BlockNode elseBlock = null;
     	if (ctx.block().size() > 1) {
-    		falseBlock = (BlockNode) ctx.block(1).accept(this);
+    		elseBlock = (BlockNode) ctx.block(1).accept(this);
     	}
-        return new If_stmtNode(expr, trueBlock, falseBlock);
+        return new If_stmtNode(expr, ifBlock, elseBlock);
     }
 
     @Override
@@ -306,10 +266,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         return super.visitParameters(ctx);
     }
 
-    @Override
-    public AstNode visitParam(EzuinoParser.ParamContext ctx) {
-        return new ParamNode(this.getType(ctx.type()), ctx.ID().getText());
-    }
 
     @Override
     public AstNode visitBlock(EzuinoParser.BlockContext ctx) {
@@ -323,30 +279,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
 
-    @Override
-    public AstNode visitSwitch_block(EzuinoParser.Switch_blockContext ctx) {
-        return super.visitSwitch_block(ctx);
-    }
 
-    @Override
-    public AstNode visitList_dcl(EzuinoParser.List_dclContext ctx) {
-        Type type = getType(ctx.type());
-        return new List_dclNode(type, ctx.ID().getText(), ctx.INTEGER().getText());
-    }
-
-    @Override
-    public AstNode visitList_add(EzuinoParser.List_addContext ctx) {
-    	String id = ctx.ID().getText();
-    	String index = ctx.INTEGER().getText();
-    	ValNode val = (ValNode) ctx.val().accept(this);
-        return new List_addNode(id, val, index);
-    }
-
-    @Override
-    public AstNode visitList_remove(EzuinoParser.List_removeContext ctx) {
-        // Casts the recieving node to an ExprNode
-        return new List_removeNode(ctx.ID().getText(), (ValNode)(ctx.val().accept(this)), new IntegerNode(ctx.INTEGER().getText()));
-    }
 
     public Type getType(EzuinoParser.TypeContext ctx){
         Type type = null;
