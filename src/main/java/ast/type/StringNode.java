@@ -8,7 +8,6 @@ public class StringNode extends ValNode {
     private String val;
 
     public StringNode(String val) {
-        System.out.println("Created String Node");
         this.val = val;
     }
 

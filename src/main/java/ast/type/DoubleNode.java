@@ -8,7 +8,6 @@ public class DoubleNode extends ValNode {
     private String val;
 
     public DoubleNode(String val) {
-        System.out.println("Created Double Node " + val);
         this.val = val;
     }
 

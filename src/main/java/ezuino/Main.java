@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import cstvisitors.*;
@@ -20,11 +21,14 @@ import cstvisitors.*;
 public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
-    public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString(
+    public static void main(String[] args) throws IOException {
+        CharStream cs = CharStreams.fromFileName("C:\\Users\\d3adl\\OneDrive\\Dokumenter\\example.txt");
+        /*
+        fromString(
             "int a "
-                    + "print(5, 10, 5+5) "
+                    + "func int print(int a, double b, int a) {int a}"
             );
+         */
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
@@ -33,6 +37,7 @@ public class Main {
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 
+        //showCST(parseTree, parser);
 
         /* Call of IndentedPrintVisitor
         BuildAstVisitor ezuinoVisitorForPrinting = new BuildAstVisitor();
@@ -45,7 +50,7 @@ public class Main {
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         //Runs the three, filling up the AST array list attribute
         AstNode astNode = parseTree.accept(buildAstVisitor);
-        //showCST(parseTree, parser);
+
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
 
@@ -56,7 +61,7 @@ public class Main {
         JFrame frame = new JFrame("CST Generated");
         JPanel panel = new JPanel();
         TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), parseTree);
-        viewer.setScale(1.0);// scale a little
+        viewer.setScale(0.6);// scale a little
         panel.add(viewer);
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

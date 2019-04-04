@@ -11,8 +11,6 @@ public class Assign_stmtNode extends StmtNode {
 	public Assign_stmtNode(String id, AExpr exprNode) {
 		this.id = id;
 		this.exprNode = exprNode;
-		System.out.println(this.id);
-		// System.out.println(this.exprNode.getClass().getSimpleName());
 	}
 
 	public String getId() {

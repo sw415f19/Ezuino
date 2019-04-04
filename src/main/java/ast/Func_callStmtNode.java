@@ -6,13 +6,13 @@ import astvisitors.AstVisitor;
 
 import java.util.ArrayList;
 
-public class Func_callNode extends StmtNode {
+public class Func_callStmtNode extends StmtNode {
 
 	private String ID;
 	private ArrayList<AExpr> parameters = new ArrayList<AExpr>();
 
 
-	public Func_callNode(String ID, ArrayList<AExpr> parameters) {
+	public Func_callStmtNode(String ID, ArrayList<AExpr> parameters) {
 		this.ID = ID;
 		this.parameters = parameters;
 	}
@@ -29,7 +29,6 @@ public class Func_callNode extends StmtNode {
 	@Override
 	public void accept(AstVisitor v) {
 		v.visit(this);
-
 	}
 	
 	@Override

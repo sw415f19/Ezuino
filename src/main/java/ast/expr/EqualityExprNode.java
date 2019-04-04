@@ -37,4 +37,9 @@ public class EqualityExprNode extends AEqualityExpr {
     public ARelationalExpr getRelationalExprNode() {
         return relationalExprNode;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "{ operator: "+ operator + " }";
+    }
 }

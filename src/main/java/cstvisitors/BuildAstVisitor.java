@@ -170,7 +170,10 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
                 parameters.add((AExpr) param.accept(this));
         }
 
-        return new Func_callNode(id, parameters);
+        if(ctx.parent instanceof EzuinoParser.PrimaryExprContext){
+            return new Func_callExprNode(id, parameters);
+        }
+        return new Func_callStmtNode(id, parameters);
     }
 
 
@@ -201,31 +204,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         return new BooleantfNode(ctx.getText());
     }
 
-    @Override
-    public AstNode visitType(EzuinoParser.TypeContext ctx) {
-        return super.visitType(ctx);
-    }
-
-    @Override
-    public AstNode visitInt_dcl(EzuinoParser.Int_dclContext ctx) {
-        return super.visitInt_dcl(ctx);
-    }
-
-    @Override
-    public AstNode visitDouble_dcl(EzuinoParser.Double_dclContext ctx) {
-        return super.visitDouble_dcl(ctx);
-    }
-
-    @Override
-    public AstNode visitBoolean_dcl(EzuinoParser.Boolean_dclContext ctx) {
-        return super.visitBoolean_dcl(ctx);
-    }
-
-    @Override
-    public AstNode visitString_dcl(EzuinoParser.String_dclContext ctx) {
-        return super.visitString_dcl(ctx);
-    }
-
 
     @Override
     public AstNode visitReturn_stmt(EzuinoParser.Return_stmtContext ctx) {
@@ -250,11 +228,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         return new While_stmtNode(expressionNode, blockNode);
     }
 
-    @Override
-    public AstNode visitParameters(EzuinoParser.ParametersContext ctx) {
-        return super.visitParameters(ctx);
-    }
-
 
     @Override
     public AstNode visitBlock(EzuinoParser.BlockContext ctx) {
@@ -272,16 +245,16 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     public Type getType(EzuinoParser.TypeContext ctx){
         Type type = null;
-        if(ctx.int_dcl() != null) {
+        if(ctx.INTDCL() != null) {
             type = Type.INT;
         }
-        if(ctx.double_dcl() != null) {
+        if(ctx.DOUBLEDCL() != null) {
             type = Type.DOUBLE;
         }
-        if(ctx.string_dcl() != null) {
+        if(ctx.STRINGDCL() != null) {
             type = Type.STRING;
         }
-        if(ctx.boolean_dcl() != null) {
+        if(ctx.BOOLEANDCL() != null) {
             type = Type.BOOL;
         }
         return type;

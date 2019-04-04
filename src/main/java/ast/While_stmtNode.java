@@ -4,7 +4,7 @@ import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class While_stmtNode extends AstNode {
+public class While_stmtNode extends StmtNode {
     private AExpr exprNode;
     private BlockNode blockNode;
     public While_stmtNode(AExpr exprNode, BlockNode blockNode)

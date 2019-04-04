@@ -5,7 +5,7 @@ import java.util.List;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class Func_defNode extends AstNode {
+public class Func_defNode extends StmtNode {
 
 	private List<DclNode> parameters;
 	private BlockNode blockNode;
@@ -40,4 +40,10 @@ public class Func_defNode extends AstNode {
 		v.visitLevel(this, level);
 	}
 
+	@Override
+	public String toString() {
+		return "Func_defNode{" +
+				"ID='" + ID + '\'' +
+				'}';
+	}
 }

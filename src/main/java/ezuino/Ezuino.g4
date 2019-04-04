@@ -14,7 +14,6 @@ dcl
     ;
 stmts
     : stmt*
-    |
     ;
 stmt
     : assign_stmt
@@ -85,22 +84,10 @@ booleantf
     | FALSE
     ;
 type
-    : int_dcl
-    | double_dcl
-    | boolean_dcl
-    | string_dcl
-    ;
-int_dcl
     : INTDCL
-    ;
-double_dcl
-    : DOUBLEDCL
-    ;
-boolean_dcl
-    : BOOLEANDCL
-    ;
-string_dcl
-    : STRINGDCL
+    | DOUBLEDCL
+    | BOOLEANDCL
+    | STRINGDCL
     ;
 return_stmt
     : RETURN expr
@@ -115,7 +102,6 @@ while_stmt
 parameters
     : '('dcl?(','dcl)*')'
     ;
-
 block
     : '{'dcls stmts return_stmt?'}'
     ;

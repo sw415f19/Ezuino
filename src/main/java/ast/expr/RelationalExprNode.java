@@ -36,4 +36,9 @@ public class RelationalExprNode extends ARelationalExpr {
     public AAddictiveExpr getRightNode() {
         return rightNode;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "{ operator: "+ operator + " }";
+    }
 }

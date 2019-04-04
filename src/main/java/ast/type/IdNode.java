@@ -8,7 +8,6 @@ public class IdNode extends ValNode {
     private String val;
 
     public IdNode(String val) {
-        System.out.println("Created ID Node");
         this.val = val;
     }
 

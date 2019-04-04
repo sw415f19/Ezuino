@@ -6,7 +6,7 @@ import ast.type.ValNode;
 
 public abstract class AstVisitor {
 
-	public abstract void visit(Func_callNode node);
+	public abstract void visit(Func_callStmtNode node);
 	public abstract void visit(BlockNode node);
 	public abstract void visit(Func_defNode node);
 	public abstract void visit(Print_lNode node);
