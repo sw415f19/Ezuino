@@ -111,7 +111,6 @@ INTDCL              : 'int' ;
 DOUBLEDCL           : 'double' ;
 STRINGDCL           : 'string' ;
 BOOLEANDCL          : 'boolean' ;
-LISTDCL             : 'list' ;
 // STATEMENTS
 ASSIGN              : ':=' ;
 // OPERATORS
@@ -135,8 +134,6 @@ IF                  : 'if' ;
 WHILE               : 'while' ;
 TRUE                : 'TRUE' ;
 FALSE               : 'FALSE' ;
-SWITCH              : 'switch' ;
-CASE                : 'case' ;
 RETURN              : 'return' ;
 FUNCTION            : 'func' ;
 DEFAULT             : 'default' ;
@@ -146,6 +143,7 @@ ID                  : [a-zA-Z]+[a-zA-Z0-9]* ;
 INTEGER             : [0-9]+ ;
 DOUBLE              : [0-9]+'.'[0-9]+ ;
 STRING              : '"' (~["\r\n] | '""')* '"' ;
+BOOL				: 'TRUE' | 'FALSE' ;
 // EXTRA
 BLANK               : [ \t\r\n]+ -> skip ;
 COMMENT             : '#' ~[\r\n]*-> skip ;
