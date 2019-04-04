@@ -1,0 +1,15 @@
+int number
+ 
+func main() {
+    if (number < 100) {
+        print("Number is less than 100")
+    }
+ 
+    if (number = 100) {
+        print("Number is 100")
+    }
+ 
+    else {
+        print("Number is greater than 100")
+    }
+}

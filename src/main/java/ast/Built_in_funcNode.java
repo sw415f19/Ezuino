@@ -13,7 +13,7 @@ public class Built_in_funcNode extends AstNode {
 	}
 
 
-	public Print_lNode getPrint_lNode() {
+	public Print_lNode getPrintlNode() {
 		return print_lNode;
 	}
 

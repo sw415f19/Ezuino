@@ -18,42 +18,42 @@ import ast.expr.*;
 public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitStart(EzuinoParser.StartContext ctx) {
-    	StmtsNode stmts = (StmtsNode) ctx.stmts().accept(this);
-    	DclsNode dcls = (DclsNode) ctx.dcls().accept(this);
-    	
-    	return new StartNode(dcls, stmts);
+        StmtsNode stmts = (StmtsNode) ctx.stmts().accept(this);
+        DclsNode dcls = (DclsNode) ctx.dcls().accept(this);
+
+        return new StartNode(dcls, stmts);
     }
 
     @Override
     public AstNode visitDcls(EzuinoParser.DclsContext ctx) {
-    	DclsNode dcls = new DclsNode();
-    	for(DclContext dcl : ctx.dcl()) {
-    		DclNode child = (DclNode) dcl.accept(this);
-    		dcls.addChild(child);
-    	}
+        DclsNode dcls = new DclsNode();
+        for (DclContext dcl : ctx.dcl()) {
+            DclNode child = (DclNode) dcl.accept(this);
+            dcls.addChild(child);
+        }
         return dcls;
     }
 
     @Override
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
-    	
-            Type type = getType(ctx.type());
-            return new DclNode(type, ctx.ID().getText());
+
+        Type type = getType(ctx.type());
+        return new DclNode(type, ctx.ID().getText());
     }
 
     @Override
     public AstNode visitStmts(EzuinoParser.StmtsContext ctx) {
-    	StmtsNode stmts = new StmtsNode();
-    	for(StmtContext stmt : ctx.stmt()) {
-    		StmtNode child = (StmtNode) stmt.accept(this);
-    		stmts.addChild(child);
-    	}
+        StmtsNode stmts = new StmtsNode();
+        for (StmtContext stmt : ctx.stmt()) {
+            StmtNode child = (StmtNode) stmt.accept(this);
+            stmts.addChild(child);
+        }
         return stmts;
     }
 
     @Override
     public AstNode visitStmt(EzuinoParser.StmtContext ctx) {
-    	return ctx.getChild(0).accept(this);
+        return ctx.getChild(0).accept(this);
     }
 
     @Override
@@ -152,12 +152,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunc_def(EzuinoParser.Func_defContext ctx) {
-    	String ID = ctx.ID().getText();
-    	List<DclNode> parameters = new ArrayList<DclNode>();
-    	BlockNode blockNode = (BlockNode)ctx.block().accept(this);
-    	for(DclContext child : ctx.parameters().dcl()) {
-    		parameters.add((DclNode)child.accept(this));
-    	}
+        String ID = ctx.ID().getText();
+        List<DclNode> parameters = new ArrayList<DclNode>();
+        BlockNode blockNode = (BlockNode) ctx.block().accept(this);
+        for (DclContext child : ctx.parameters().dcl()) {
+            parameters.add((DclNode) child.accept(this));
+        }
         return new Func_defNode(ID, parameters, blockNode);
     }
 
@@ -167,15 +167,14 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         ArrayList<AExpr> parameters = new ArrayList<AExpr>();
 
         for (ExprContext param : ctx.func_call_param().expr()) {
-                parameters.add((AExpr) param.accept(this));
+            parameters.add((AExpr) param.accept(this));
         }
 
-        if(ctx.parent instanceof EzuinoParser.PrimaryExprContext){
+        if (ctx.parent instanceof EzuinoParser.PrimaryExprContext) {
             return new Func_callExprNode(id, parameters);
         }
         return new Func_callStmtNode(id, parameters);
     }
-
 
     @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
@@ -204,57 +203,52 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         return new BooleantfNode(ctx.getText());
     }
 
-
     @Override
     public AstNode visitReturn_stmt(EzuinoParser.Return_stmtContext ctx) {
-        return new Return_stmtNode((AExpr)ctx.expr().accept(this));
+        return new Return_stmtNode((AExpr) ctx.expr().accept(this));
     }
 
     @Override
     public AstNode visitIf_stmt(EzuinoParser.If_stmtContext ctx) {
-    	AExpr expr = (AExpr) ctx.expr().accept(this);
-    	BlockNode ifBlock = (BlockNode) ctx.block(0).accept(this);
-    	BlockNode elseBlock = null;
-    	if (ctx.block().size() > 1) {
-    		elseBlock = (BlockNode) ctx.block(1).accept(this);
-    	}
+        AExpr expr = (AExpr) ctx.expr().accept(this);
+        BlockNode ifBlock = (BlockNode) ctx.block(0).accept(this);
+        BlockNode elseBlock = null;
+        if (ctx.block().size() > 1) {
+            elseBlock = (BlockNode) ctx.block(1).accept(this);
+        }
         return new If_stmtNode(expr, ifBlock, elseBlock);
     }
 
     @Override
     public AstNode visitWhile_stmt(EzuinoParser.While_stmtContext ctx) {
-    	AExpr expressionNode = (AExpr)ctx.expr().accept(this);
-    	BlockNode blockNode = (BlockNode)ctx.block().accept(this);
+        AExpr expressionNode = (AExpr) ctx.expr().accept(this);
+        BlockNode blockNode = (BlockNode) ctx.block().accept(this);
         return new While_stmtNode(expressionNode, blockNode);
     }
 
-
     @Override
     public AstNode visitBlock(EzuinoParser.BlockContext ctx) {
-    	DclsNode dcls = (DclsNode) ctx.dcls().accept(this);
-    	StmtsNode stmts = (StmtsNode) ctx.stmts().accept(this);
-    	Return_stmtNode returnstmts = null;
-        if (ctx.return_stmt() != null){
-        	returnstmts = (Return_stmtNode) ctx.return_stmt().accept(this);
+        DclsNode dcls = (DclsNode) ctx.dcls().accept(this);
+        StmtsNode stmts = (StmtsNode) ctx.stmts().accept(this);
+        Return_stmtNode returnstmts = null;
+        if (ctx.return_stmt() != null) {
+            returnstmts = (Return_stmtNode) ctx.return_stmt().accept(this);
         }
         return new BlockNode(dcls, stmts, returnstmts);
     }
 
-
-
-
-    public Type getType(EzuinoParser.TypeContext ctx){
+    public Type getType(EzuinoParser.TypeContext ctx) {
         Type type = null;
-        if(ctx.INTDCL() != null) {
+        if (ctx.INTDCL() != null) {
             type = Type.INT;
         }
-        if(ctx.DOUBLEDCL() != null) {
+        if (ctx.DOUBLEDCL() != null) {
             type = Type.DOUBLE;
         }
-        if(ctx.STRINGDCL() != null) {
+        if (ctx.STRINGDCL() != null) {
             type = Type.STRING;
         }
-        if(ctx.BOOLEANDCL() != null) {
+        if (ctx.BOOLEANDCL() != null) {
             type = Type.BOOL;
         }
         return type;

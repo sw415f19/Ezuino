@@ -8,7 +8,7 @@ import astvisitors.AstVisitor;
 
 public class DclsNode extends AstNode {
 	
-	List<DclNode> childList = new ArrayList<DclNode>();
+	private List<DclNode> childList = new ArrayList<DclNode>();
 	
 	
 	public void addChild(DclNode child) {

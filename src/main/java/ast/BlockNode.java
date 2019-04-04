@@ -23,7 +23,7 @@ public class BlockNode extends AstNode {
 		return stmtsNode;
 	}
 
-	public Return_stmtNode getReturn_stmtNode() {
+	public Return_stmtNode getReturnstmtNode() {
 		return return_stmtNode;
 	}
 
@@ -31,10 +31,10 @@ public class BlockNode extends AstNode {
 	public void accept(AstVisitor v) {
 		v.visit(this);
 	}
-	
+
 	@Override
 	public void acceptLevel(AstLevelVisitor v, int level) {
 		v.visitLevel(this, level);
 	}
-	
+
 }
