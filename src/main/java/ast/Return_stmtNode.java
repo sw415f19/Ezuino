@@ -7,19 +7,13 @@ import astvisitors.AstVisitor;
 public class Return_stmtNode extends AstNode {
 
 	private AExpr returnExpr;
-	private Type type;
+	
 	public Return_stmtNode(AExpr returnExpr) {
 		this.returnExpr = returnExpr;
 	}
 	
 	public AExpr getReturnExpr() {
 		return returnExpr;
-	}
-	public Type getType() {
-		return type;
-	}
-	public void setType(Type type) {
-		this.type = type;
 	}
 	
 	@Override

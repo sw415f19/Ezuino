@@ -14,7 +14,6 @@ import ast.Return_stmtNode;
 import ast.StartNode;
 import ast.StmtNode;
 import ast.StmtsNode;
-import ast.Type;
 import ast.TypeNode;
 import ast.While_stmtNode;
 import ast.expr.ExprNode;
@@ -25,27 +24,10 @@ public class Typechecker extends AstVisitor{
 		
 	}
 	public void visit(BlockNode node) {
-		if(node.getDclsNode() != null) {
-			node.getDclsNode().accept(this);
-		}
 		
-		if(node.getStmtsNode() != null) {
-			node.getStmtsNode().accept(this);
-		}
-		
-		if(node.getReturnstmtNode() != null) {
-			node.getReturnstmtNode().accept(this);
-		}
 	}
 	public void visit(Func_defNode node) {
-		node.getBlockNode().accept(this);
-		Return_stmtNode returnNode = node.getBlockNode().getReturnstmtNode();
-		String funcType = node.getType();
 		
-		/* Okay, jeg kom ikke videre end hertil, da vi skal have en måde at tjekke på, om retur har samme type som
-		 * funktionsdefinitionen. At tjekke på enum er en mulighed, men det bliver nok også træls, hvis vi vil
-		 * have sammensatte typer med i vores sprog.
-		 */
 	}
 	public void visit(Print_lNode node) {
 		

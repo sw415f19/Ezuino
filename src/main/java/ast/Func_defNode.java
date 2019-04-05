@@ -7,20 +7,14 @@ import astvisitors.AstVisitor;
 
 public class Func_defNode extends StmtNode {
 
-	private String readType;
 	private List<DclNode> parameters;
 	private BlockNode blockNode;
 	private String ID;
 	
-	public Func_defNode(String readType, String ID, List<DclNode> parameters, BlockNode blockNode){
-		this.readType = readType;
+	public Func_defNode(String ID, List<DclNode> parameters, BlockNode blockNode){
 		this.ID = ID;
 		this.parameters = parameters;
 		this.blockNode = blockNode;
-	}
-	
-	public String getType() {
-		return readType;
 	}
 	
 	public String getId() {
