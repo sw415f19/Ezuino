@@ -1,23 +1,8 @@
 package astvisitors;
 
-import ast.Assign_stmtNode;
-import ast.BlockNode;
-import ast.BooleantfNode;
-import ast.DclNode;
-import ast.DclsNode;
-import ast.Func_callStmtNode;
-import ast.Func_defNode;
-import ast.If_stmtNode;
-import ast.ParametersNode;
-import ast.Print_lNode;
-import ast.Return_stmtNode;
-import ast.StartNode;
-import ast.StmtNode;
-import ast.StmtsNode;
-import ast.TypeNode;
-import ast.While_stmtNode;
-import ast.expr.ExprNode;
-import ast.type.ValNode;
+import ast.*;
+import ast.expr.*;
+import ast.type.*;
 
 public class Typechecker extends AstVisitor{
 	public void visit(Func_callStmtNode node) {
@@ -75,5 +60,70 @@ public class Typechecker extends AstVisitor{
 	//One added assignment nodes.
 	public void visit(Assign_stmtNode node) {
 		
+	}
+
+	@Override
+	public void visit(Func_callExprNode node) {
+		
+	}
+
+	@Override
+	public void visit(Built_in_funcNode node) {
+
+	}
+
+	@Override
+	public void visit(AdditiveExprNode node) {
+
+	}
+
+	@Override
+	public void visit(MultiplicativeExprNode node) {
+
+	}
+
+	@Override
+	public void visit(LogicalAndExprNode node) {
+
+	}
+
+	@Override
+	public void visit(RelationalExprNode node) {
+
+	}
+
+	@Override
+	public void visit(EqualityExprNode node) {
+
+	}
+
+	@Override
+	public void visit(ParenthesisExprNode node) {
+
+	}
+
+	@Override
+	public void visit(IntegerNode node) {
+
+	}
+
+	@Override
+	public void visit(DoubleNode node) {
+
+	}
+
+	@Override
+	public void visit(StringNode node) {
+
+	}
+
+	@Override
+	public void visit(IdNode node) {
+
+	}
+
+	@Override
+	public void visit(AstNode astNode) {
+		super.visit(astNode);
 	}
 }
