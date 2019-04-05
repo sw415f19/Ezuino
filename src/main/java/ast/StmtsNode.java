@@ -3,12 +3,14 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ezuino.AstVisitor;
+import astvisitors.AstLevelVisitor;
+import astvisitors.AstVisitor;
 
 public class StmtsNode extends AstNode {
 	
 	private List<StmtNode> childList = new ArrayList<StmtNode>();
-	
+
+
 	public void addChild(StmtNode child) {
 		childList.add(child);
 	}
@@ -25,5 +27,10 @@ public class StmtsNode extends AstNode {
 	public void accept(AstVisitor v) {
 		v.visit(this);
 		
+	}
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
 	}
 }

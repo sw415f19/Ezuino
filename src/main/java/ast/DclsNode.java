@@ -3,11 +3,12 @@ package ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ezuino.AstVisitor;
+import astvisitors.AstLevelVisitor;
+import astvisitors.AstVisitor;
 
 public class DclsNode extends AstNode {
 	
-	List<DclNode> childList = new ArrayList<DclNode>();
+	private List<DclNode> childList = new ArrayList<DclNode>();
 	
 	
 	public void addChild(DclNode child) {
@@ -27,5 +28,10 @@ public class DclsNode extends AstNode {
 	public void accept(AstVisitor v) {
 		v.visit(this);
 		
+	}
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
 	}
 }

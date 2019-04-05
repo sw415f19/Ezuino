@@ -11,11 +11,9 @@ dcls
     ;
 dcl
     : type ID
-    | list_dcl
     ;
 stmts
     : stmt*
-    |
     ;
 stmt
     : assign_stmt
@@ -23,7 +21,6 @@ stmt
     | func_call
     | func_def
     | if_stmt
-    | switch_stmt
     ;
 assign_stmt
     : ID ASSIGN expr
@@ -39,10 +36,7 @@ parenthesisExpr
     ;
 unaryExpr
     : parenthesisExpr
-    | unaryOperator parenthesisExpr
-    ;
-unaryOperator
-    : '-'
+    | ('-') parenthesisExpr
     ;
 multiplicativeExpr
     : unaryExpr
@@ -75,31 +69,10 @@ func_def
     : FUNCTION type? ID parameters block;
 func_call
     : ID '('func_call_param')'
-    | built_in_func
     ;
 func_call_param
     : expr? | expr(','expr)+
 	;
-built_in_func
-    : print_l
-    | list_add
-    | list_remove
-    ;
-print_l
-    : PRINTSTMT expr
-    ;
-comparator_operator
-    : EQUAL
-    | NOTEQUAL
-    | LESS
-    | LESSTHANOREQUAL
-    | GREATER
-    | GREATERTHANOREQUAL
-    ;
-logic_operator
-    : AND
-    | OR
-    ;
 val
     : ID
     | INTEGER
@@ -111,25 +84,10 @@ booleantf
     | FALSE
     ;
 type
-    : int_dcl
-    | double_dcl
-    | boolean_dcl
-    | string_dcl
-    ;
-int_dcl
     : INTDCL
-    ;
-double_dcl
-    : DOUBLEDCL
-    ;
-boolean_dcl
-    : BOOLEANDCL
-    ;
-string_dcl
-    : STRINGDCL
-    ;
-switch_stmt
-    : SWITCH '('val')' switch_block
+    | DOUBLEDCL
+    | BOOLEANDCL
+    | STRINGDCL
     ;
 return_stmt
     : RETURN expr
@@ -142,25 +100,10 @@ while_stmt
     : WHILE '('expr')' block
     ;
 parameters
-    : '('param?(','param)*')'
-    ;
-param
-    : type ID
+    : '('dcl?(','dcl)*')'
     ;
 block
     : '{'dcls stmts return_stmt?'}'
-    ;
-switch_block
-    : '{'(CASE val(','val)*':'block)* (DEFAULT':' block)?'}'
-    ;
-list_dcl
-    : LISTDCL type ID '['INTEGER']'
-    ;
-list_add
-    : LISTADD '('ID','val','INTEGER')'
-    ;
-list_remove
-    : LISTREMOVE '('ID','val','INTEGER')'
     ;
 
 // DECLARATIONS
@@ -168,12 +111,8 @@ INTDCL              : 'int' ;
 DOUBLEDCL           : 'double' ;
 STRINGDCL           : 'string' ;
 BOOLEANDCL          : 'boolean' ;
-LISTDCL             : 'list' ;
 // STATEMENTS
-PRINTSTMT           : 'print' ;
 ASSIGN              : ':=' ;
-LISTADD             : 'list_add' ;
-LISTREMOVE          : 'list_remove' ;
 // OPERATORS
 PLUS                : '+' ;
 MINUS               : '-' ;
@@ -195,8 +134,6 @@ IF                  : 'if' ;
 WHILE               : 'while' ;
 TRUE                : 'TRUE' ;
 FALSE               : 'FALSE' ;
-SWITCH              : 'switch' ;
-CASE                : 'case' ;
 RETURN              : 'return' ;
 FUNCTION            : 'func' ;
 DEFAULT             : 'default' ;
@@ -206,6 +143,7 @@ ID                  : [a-zA-Z]+[a-zA-Z0-9]* ;
 INTEGER             : [0-9]+ ;
 DOUBLE              : [0-9]+'.'[0-9]+ ;
 STRING              : '"' (~["\r\n] | '""')* '"' ;
+BOOL				: 'TRUE' | 'FALSE' ;
 // EXTRA
 BLANK               : [ \t\r\n]+ -> skip ;
 COMMENT             : '#' ~[\r\n]*-> skip ;

@@ -36,19 +36,7 @@ public class EzuinoParserTest {
 		Token resultToken = (Token)ep.type().getChild(0).getPayload();
 		assertEquals(EzuinoParser.DOUBLEDCL, resultToken.getType());
 	}
-	@Test
-	public void boolParseTest() throws IOException{
-		EzuinoParser ep = createParser("boolean");
-		Token resultToken = (Token)ep.type().getChild(0).getPayload();
-		assertEquals(EzuinoParser.BOOLEANDCL, resultToken.getType());
-	}
-	@Test
-	public void badBoolParseTest() throws IOException{
-		redirectOutputsToNothing();
-		EzuinoParser ep = createParser("bool");
-		Token resultToken = (Token)ep.type().getChild(0).getPayload();
-		assertNotEquals(EzuinoParser.BOOLEANDCL, resultToken.getType());
-	}
+
 	@Test
 	public void stringParseTest() throws IOException{
 		EzuinoParser ep = createParser("string");

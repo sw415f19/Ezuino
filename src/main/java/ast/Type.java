@@ -2,7 +2,8 @@ package ast;
 
 public enum Type {
 	INT,
-	FLOAT,
+	DOUBLE,
 	BOOL,
 	STRING,
+	VOID,
 }

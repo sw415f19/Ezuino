@@ -1,27 +1,39 @@
 package ast;
 
-import ezuino.AstVisitor;
+import astvisitors.AstLevelVisitor;
+import astvisitors.AstVisitor;
 
 public class DclNode extends AstNode {
-	
-	private String id;
-	
-	public DclNode(String id) {
-		this.id = id;
-	}
-	
-	public String getId() {
-		return this.id;
+	private Type type;
+	private String ID;
+
+	public DclNode(Type type, String ID) {
+		this.type = type;
+		this.ID = ID;
 	}
 
-    @Override
-    public String toString() {
-        return "DclNode{ id: " + id + " }";
-    }
+	public Type getType() {
+		return type;
+	}
+
+	public String getID() {
+		return ID;
+	}
 
 	@Override
 	public void accept(AstVisitor v) {
 		v.visit(this);
 		
+	}
+	
+	@Override
+	public void acceptLevel(AstLevelVisitor v, int level) {
+		v.visitLevel(this, level);
+	}
+	
+	
+	@Override
+	public String toString() {
+		return super.toString() + "{ Type: " + type.name() + " ID: " + ID + " }";
 	}
 }
