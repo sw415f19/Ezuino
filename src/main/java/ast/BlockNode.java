@@ -2,12 +2,14 @@ package ast;
 
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
+import symbolTable.SymbolTable;
 
 public class BlockNode extends AstNode {
 
 	private DclsNode dclsNode;
 	private StmtsNode stmtsNode;
 	private Return_stmtNode return_stmtNode;
+	private SymbolTable symbolTable;
 
 	public BlockNode(DclsNode dclsNode, StmtsNode stmtsNode, Return_stmtNode return_stmtNode) {
 		this.dclsNode = dclsNode;

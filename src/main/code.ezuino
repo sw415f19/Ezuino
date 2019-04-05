@@ -1,15 +1,14 @@
 int number
  
 func main() {
+    int a
+    a := 1
     if (number < 100) {
-        print("Number is less than 100")
+        int a
+        a := 2
     }
- 
     if (number = 100) {
-        print("Number is 100")
-    }
- 
-    else {
-        print("Number is greater than 100")
+       int b
+       b := 2
     }
 }

@@ -1,21 +1,23 @@
 package ezuino;
 
-import ast.*;
+import ast.AstNode;
 import astvisitors.IndentedPrintVisitor;
+import astvisitors.SymbolTableFillingVisitor;
+import cstvisitors.BuildAstVisitor;
+import cstvisitors.CSTPrinter;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
-
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import symbolTable.SymbolTableManager;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import cstvisitors.*;
 
 public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
@@ -30,7 +32,7 @@ public class Main {
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 
-        // showCST(parseTree, parser);
+        showCST(parseTree, parser);
 
         /*
          * Call of IndentedPrintVisitor BuildAstVisitor ezuinoVisitorForPrinting = new
@@ -45,8 +47,12 @@ public class Main {
         // Runs the three, filling up the AST array list attribute
         AstNode astNode = parseTree.accept(buildAstVisitor);
 
-        IndentedPrintVisitor ipv = new IndentedPrintVisitor();
-        astNode.acceptLevel(ipv, 0);
+        //IndentedPrintVisitor ipv = new IndentedPrintVisitor();
+        //astNode.acceptLevel(ipv, 0);
+
+        SymbolTableFillingVisitor symbolTableFillingVisitor = new SymbolTableFillingVisitor();
+        astNode.accept(symbolTableFillingVisitor);
+        System.out.println( SymbolTableFillingVisitor.symbolTableManager.getSymbolTableSize());
 
     }
 
@@ -54,7 +60,7 @@ public class Main {
         JFrame frame = new JFrame("CST Generated");
         JPanel panel = new JPanel();
         TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), parseTree);
-        viewer.setScale(0.6);// scale a little
+        viewer.setScale(1);// scale a little
         panel.add(viewer);
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

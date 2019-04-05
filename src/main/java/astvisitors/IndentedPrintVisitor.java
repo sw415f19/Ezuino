@@ -61,7 +61,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().acceptLevel(this, level + 1);
         }
-
     }
 
     @Override
