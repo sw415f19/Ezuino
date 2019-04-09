@@ -2,7 +2,7 @@ package ezuino;
 
 import ast.AstNode;
 import astvisitors.IndentedPrintVisitor;
-import astvisitors.SymbolTableFillingVisitor;
+import astvisitors.SymbolTableVisitor;
 import cstvisitors.BuildAstVisitor;
 import cstvisitors.CSTPrinter;
 import generated.EzuinoLexer;
@@ -50,9 +50,9 @@ public class Main {
         //IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         //astNode.acceptLevel(ipv, 0);
 
-        SymbolTableFillingVisitor symbolTableFillingVisitor = new SymbolTableFillingVisitor();
+        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor();
         astNode.accept(symbolTableFillingVisitor);
-        System.out.println( SymbolTableFillingVisitor.symbolTableManager.getSymbolTableSize());
+        System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
 
     }
 

@@ -6,9 +6,10 @@ import ast.type.DoubleNode;
 import ast.type.IdNode;
 import ast.type.IntegerNode;
 import ast.type.StringNode;
+import exceptions.AlreadyInTableException;
 import symbolTable.*;
 
-public class SymbolTableFillingVisitor extends AstVisitor {
+public class SymbolTableVisitor extends AstVisitor {
     public static SymbolTableManager symbolTableManager = new SymbolTableManager();
 
     @Override
@@ -40,10 +41,6 @@ public class SymbolTableFillingVisitor extends AstVisitor {
 
     @Override
     public void visit(BlockNode node) {
-
-        //System.out.println("Block Node");
-      //  SymbolTable symbolTable = new SymbolTable();
-        //symbolTableManager.addSymbolTable(symbolTable);
         symbolTableManager.openScope();
         System.out.println("Open Level " + symbolTableManager.getLevel());
         if (node.getDclsNode() != null) {
@@ -56,7 +53,6 @@ public class SymbolTableFillingVisitor extends AstVisitor {
             node.getReturnstmtNode().accept(this);
         }
         symbolTableManager.closeScope();
-        //System.out.println("Closed level " + symbolTableManager.getLevel());
     }
 
     @Override
@@ -112,8 +108,14 @@ public class SymbolTableFillingVisitor extends AstVisitor {
     @Override
     public void visit(DclNode node) {
         Symbol symbol = new Symbol(node.getID(), node);
-        SymbolTable s = SymbolTableFillingVisitor.symbolTableManager.getLatestSymbolTable();
-        s.insert(symbol);
+        SymbolTable s = SymbolTableVisitor.symbolTableManager.getLatestSymbolTable();
+        try
+        {
+            s.insert(symbol);
+        } catch (AlreadyInTableException e)
+        {
+            System.out.println(e);
+        }
     }
 
     @Override
@@ -152,7 +154,9 @@ public class SymbolTableFillingVisitor extends AstVisitor {
 
     @Override
     public void visit(Assign_stmtNode node) {
+        Symbol symbol = new Symbol(node.getId(), node);
 
+        symbolTableManager.getLatestSymbolTable().IfDeclaredUpdate(symbol, node);
         node.getExprNode().accept(this);
 
     }
