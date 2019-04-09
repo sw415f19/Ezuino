@@ -1,6 +1,6 @@
 package exceptions;
 
-public class AlreadyInTableException extends Exception
+public class AlreadyInTableException extends RuntimeException
 {
     public AlreadyInTableException(String symbol)
     {

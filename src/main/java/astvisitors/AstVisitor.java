@@ -3,7 +3,7 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.type.*;
-import symbolTable.SymbolTableManager;
+import symbolTable.SymbolTableCasper;
 
 public abstract class AstVisitor {
 

@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import symbolTable.SymbolTableManager;
+import symbolTable.SymbolTableCasper;
 
 import javax.swing.*;
 import java.io.IOException;

@@ -2,45 +2,61 @@ package symbolTable;
 
 import ast.AstNode;
 import exceptions.AlreadyInTableException;
+import exceptions.NotInTableException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SymbolTable {
-    public ArrayList<Symbol> symbolList = new ArrayList<Symbol>();
+    private Map<String, AstNode> symbolMap = new HashMap<String, AstNode>();
+    private int level;
+    private SymbolTable previousTable;
 
-    public SymbolTable() {
-        this.symbolList = symbolList;
-    }
-
-    public Symbol retrieveFirstSymbol() {
-        return symbolList.get(0);
-    }
-
-    public void insert(Symbol symbol) throws AlreadyInTableException
-    {
-        if (!isAlreadyInTable(symbol)) {
-            System.out.println("Added to Symbol Table : " + symbol.getIdentity());
-            symbolList.add(symbol);
-        } else
-            throw new AlreadyInTableException(symbol.getIdentity());
-    }
-
-    /* If the symbol has been declared, set the node it has been assigned */
-    public void IfDeclaredUpdate(Symbol symbol, AstNode assignedNode) {
-        if (symbolList.contains(symbol)) {
-            symbol.setNode(assignedNode);
-            System.out.println("Updated Node" + assignedNode);
+    public SymbolTable(SymbolTable previousTable) {
+        this.previousTable = previousTable;
+        // If previous table is null, current table is global scope
+        if(previousTable == null)
+        {
+        	level = 0;
+        }
+        else // otherwise use reference to previous table to determine level
+        {
+        	level = previousTable.level + 1;
         }
     }
 
-
-    private boolean isAlreadyInTable(Symbol symbol) {
-        return symbolList.contains(symbol);
+    public int getLevel() {
+    	return level;
+    }
+    
+    public void insert(String key, AstNode node) throws AlreadyInTableException  {
+    	if(!symbolMap.containsKey(key)) {
+    		symbolMap.put(key, node);
+    	}
+    	else {
+    		throw new AlreadyInTableException(key + " is already in table: " + this);
+    	}
+    }
+    public Boolean contains(String key) {
+    	return symbolMap.containsKey(key);
+    }
+    
+    public AstNode getValue(String key) throws NotInTableException{
+    	if(this.contains(key)) {
+    		return symbolMap.get(key);
+    	}
+    	else {
+    		if(this.previousTable == null) {
+    			throw new NotInTableException();
+    		}
+    		return this.previousTable.getValue(key);
+    	}
     }
 
     @Override
     public String toString() {
-        return "## Symboltable List ##" +
-                symbolList;
+        return "## Symboltable map ##" +
+                symbolMap;
     }
 }

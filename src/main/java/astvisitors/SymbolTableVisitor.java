@@ -10,7 +10,7 @@ import exceptions.AlreadyInTableException;
 import symbolTable.*;
 
 public class SymbolTableVisitor extends AstVisitor {
-    public static SymbolTableManager symbolTableManager = new SymbolTableManager();
+    public static SymbolTableCasper symbolTableManager = new SymbolTableCasper();
 
     @Override
     public void visit(StartNode node) {
