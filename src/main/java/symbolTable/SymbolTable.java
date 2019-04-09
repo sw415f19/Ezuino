@@ -8,10 +8,6 @@ import java.util.ArrayList;
 public class SymbolTable {
     public ArrayList<Symbol> symbolList = new ArrayList<Symbol>();
 
-    public SymbolTable() {
-        this.symbolList = symbolList;
-    }
-
     public Symbol retrieveFirstSymbol() {
         return symbolList.get(0);
     }

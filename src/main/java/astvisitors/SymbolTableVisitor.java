@@ -2,10 +2,7 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
-import ast.type.DoubleNode;
-import ast.type.IdNode;
-import ast.type.IntegerNode;
-import ast.type.StringNode;
+import ast.type.*;
 import exceptions.AlreadyInTableException;
 import symbolTable.*;
 
