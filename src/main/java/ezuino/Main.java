@@ -1,7 +1,9 @@
 package ezuino;
 
 import ast.AstNode;
+import astvisitors.IndentedPrintVisitor;
 import astvisitors.SymbolTableVisitor;
+import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
 import cstvisitors.CSTPrinter;
 import generated.EzuinoLexer;
@@ -30,7 +32,7 @@ public class Main {
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 
-        showCST(parseTree, parser);
+        //showCST(parseTree, parser);
 
         /*
          * Call of IndentedPrintVisitor BuildAstVisitor ezuinoVisitorForPrinting = new
@@ -45,11 +47,13 @@ public class Main {
         // Runs the three, filling up the AST array list attribute
         AstNode astNode = parseTree.accept(buildAstVisitor);
 
-        //IndentedPrintVisitor ipv = new IndentedPrintVisitor();
-        //astNode.acceptLevel(ipv, 0);
+        IndentedPrintVisitor ipv = new IndentedPrintVisitor();
+        astNode.acceptLevel(ipv, 0);
 
         SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor();
         astNode.accept(symbolTableFillingVisitor);
+        Typechecker tc = new Typechecker();
+        astNode.accept(tc);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
 
     }

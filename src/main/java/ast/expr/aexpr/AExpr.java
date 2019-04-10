@@ -1,7 +1,7 @@
 package ast.expr.aexpr;
 
-import ast.AstNode;
+import ast.TypeNode;
 
-public abstract class AExpr extends AstNode {
+public abstract class AExpr extends TypeNode {
 
 }
