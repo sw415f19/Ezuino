@@ -20,6 +20,9 @@ public class SymbolTableStack {
     }
 
     public void closeScope() {
+    	if(symbolTableStack.isEmpty()) {
+    		System.err.println("Stack is empty! There is nothing to close! - Programming error");
+    	}
         symbolTableStack.pop();
     }
 
