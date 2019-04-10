@@ -1,7 +1,6 @@
 package ezuino;
 
 import ast.AstNode;
-import astvisitors.IndentedPrintVisitor;
 import astvisitors.SymbolTableVisitor;
 import cstvisitors.BuildAstVisitor;
 import cstvisitors.CSTPrinter;
@@ -12,7 +11,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import symbolTable.SymbolTableCasper;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -52,7 +50,7 @@ public class Main {
 
         SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor();
         astNode.accept(symbolTableFillingVisitor);
-        System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
+        //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
 
     }
 
