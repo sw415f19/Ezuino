@@ -6,6 +6,7 @@ import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
 import cstvisitors.CSTPrinter;
+import exceptions.ErrorHandler;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 import org.antlr.v4.gui.TreeViewer;
@@ -56,6 +57,7 @@ public class Main {
         astNode.accept(tc);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
 
+        ErrorHandler.printErrorList();
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {

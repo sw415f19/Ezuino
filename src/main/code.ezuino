@@ -5,6 +5,8 @@ func main() {
     a := 1
     if (number < 100) {
         int a
+        int a
+        int a
         a := 2
     }
     if (number = 100) {

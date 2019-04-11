@@ -3,8 +3,7 @@ package symbolTable;
 
 import ast.ITypeNode;
 import ast.Type;
-import exceptions.AlreadyInTableException;
-import exceptions.NotInTableException;
+import exceptions.ErrorHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,12 +16,12 @@ public class SymbolTable {
         this.parentTable = previousTable;
     }
 
-    public void enterSymbol(String key, ITypeNode node) throws AlreadyInTableException {
+    public void enterSymbol(String key, ITypeNode node) {
     	System.out.println("Setting " + key + " to " + node.toString());
         if (!symbolMap.containsKey(key)) {
             symbolMap.put(key, node);
         } else {
-        	System.err.println("Double declared var: " + key);
+        	ErrorHandler.alreadyDeclared(key);
         }
     }
 
@@ -30,13 +29,13 @@ public class SymbolTable {
         return symbolMap.containsKey(key);
     }
 
-    public Type retrieveSymbol(String key) throws NotInTableException {
+    public Type retrieveSymbol(String key) {
         if (this.contains(key)) {
             return symbolMap.get(key).getType();
         }
         else {
             if (this.parentTable == null) {
-            	System.err.println("Undeclared var: " + key );
+            	ErrorHandler.notDeclaredVar(key);
             }
             return this.parentTable.retrieveSymbol(key);
         }
