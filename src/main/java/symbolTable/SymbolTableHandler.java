@@ -8,15 +8,16 @@ import ast.Type;
 public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
 
-    public SymbolTableHandler() {
-        SymbolTable firstTable = new SymbolTable(null);
-        symbolTableStack.push(firstTable);
-    }
-
     public void openScope() {
-        //Finds the previous table relative to the newly opened scope
-        SymbolTable symbolTable = new SymbolTable(symbolTableStack.peek());
-        symbolTableStack.push(symbolTable);
+        if(symbolTableStack.empty()) {
+            SymbolTable firstTable = new SymbolTable(null);
+            symbolTableStack.push(firstTable);
+        }
+        else {
+            //Finds the previous table relative to the newly opened scope
+            SymbolTable symbolTable = new SymbolTable(symbolTableStack.peek());
+            symbolTableStack.push(symbolTable);
+        }
     }
 
     public void closeScope() {
