@@ -13,6 +13,17 @@ func main() {
     }
     if(TRUE)
     {
-    	return BIG;
+    	return a
+    }
+    if(TRUE) {
+    	string a
+    	a := "123321"
+    }
+    if(TRUE) {
+    	boolean a
+    	a := TRUE
+    }
+    if(1+1) {
+    
     }
 }

@@ -2,7 +2,6 @@ package ast;
 
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
-import symbolTable.SymbolTableCasper;
 
 public abstract class AstNode {
 	public abstract void accept(AstVisitor v);
