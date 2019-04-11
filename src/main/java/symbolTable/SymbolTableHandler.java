@@ -5,10 +5,10 @@ import java.util.Stack;
 import ast.ITypeNode;
 import ast.Type;
 
-public class SymbolTableStack {
+public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
 
-    public SymbolTableStack() {
+    public SymbolTableHandler() {
         SymbolTable firstTable = new SymbolTable(null);
         symbolTableStack.push(firstTable);
     }

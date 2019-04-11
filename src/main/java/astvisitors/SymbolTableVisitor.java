@@ -5,22 +5,22 @@ import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
-import symbolTable.SymbolTableStack;
+import symbolTable.SymbolTableHandler;
 
 public class SymbolTableVisitor extends AstVisitor {
-    private SymbolTableStack symbolTableStack = new SymbolTableStack();
+    private SymbolTableHandler symbolTableHandler = new SymbolTableHandler();
 
     @Override
     public void visit(StartNode node) {
-        symbolTableStack.openScope();
+        symbolTableHandler.openScope();
         node.getDcls().accept(this);
         node.getStmts().accept(this);
-        symbolTableStack.closeScope();
+        symbolTableHandler.closeScope();
     }
 
     @Override
     public void visit(BlockNode node) {
-        symbolTableStack.openScope();
+        symbolTableHandler.openScope();
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
         }
@@ -30,18 +30,18 @@ public class SymbolTableVisitor extends AstVisitor {
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().accept(this);
         }
-        symbolTableStack.closeScope();
+        symbolTableHandler.closeScope();
     }
 
     @Override
     public void visit(DclNode node) {
-    	symbolTableStack.enterSymbol(node.getID(), node);
+    	symbolTableHandler.enterSymbol(node.getID(), node);
     }
 
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
-        node.setType(symbolTableStack.retrieveSymbol(node.getId()));
+        node.setType(symbolTableHandler.retrieveSymbol(node.getId()));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-    	node.setType(symbolTableStack.retrieveSymbol(node.getID()));
+    	node.setType(symbolTableHandler.retrieveSymbol(node.getID()));
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -81,7 +81,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
-    	symbolTableStack.enterSymbol(node.getId(), node);
+    	symbolTableHandler.enterSymbol(node.getId(), node);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
@@ -147,7 +147,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-    	node.setType(symbolTableStack.retrieveSymbol(node.getVal()));
+    	node.setType(symbolTableHandler.retrieveSymbol(node.getVal()));
     }
 
     @Override
