@@ -185,6 +185,7 @@ public class Typechecker extends AstVisitor{
 	}
 	@Override
 	public void visit(ParenthesisExprNode node) {
+		node.getNode().accept(this);
 		node.setType(node.getNode().getType());
 		System.out.println("Checked ParenthesisExprNode type!!");
 	}
