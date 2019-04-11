@@ -153,12 +153,13 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitFunc_def(EzuinoParser.Func_defContext ctx) {
         String ID = ctx.ID().getText();
+        Type type = getType(ctx.type());
         List<DclNode> parameters = new ArrayList<DclNode>();
         BlockNode blockNode = (BlockNode) ctx.block().accept(this);
         for (DclContext child : ctx.parameters().dcl()) {
             parameters.add((DclNode) child.accept(this));
         }
-        return new Func_defNode(ID, parameters, blockNode);
+        return new Func_defNode(ID, type, parameters, blockNode);
     }
 
     @Override
@@ -239,6 +240,9 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     public Type getType(EzuinoParser.TypeContext ctx) {
         Type type = null;
+        if (ctx == null) {
+        	return Type.VOID;
+        }
         if (ctx.INTDCL() != null) {
             type = Type.INT;
         }

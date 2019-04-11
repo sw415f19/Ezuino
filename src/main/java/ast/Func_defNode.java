@@ -13,8 +13,9 @@ public class Func_defNode extends StmtNode implements ITypeNode {
 	private Type type;
 	
 	
-	public Func_defNode(String ID, List<DclNode> parameters, BlockNode blockNode){
+	public Func_defNode(String ID, Type type, List<DclNode> parameters, BlockNode blockNode){
 		this.ID = ID;
+		this.type = type;
 		this.parameters = parameters;
 		this.blockNode = blockNode;
 	}
