@@ -2,6 +2,9 @@ package symbolTable;
 
 import java.util.Stack;
 
+import ast.ITypeNode;
+import ast.Type;
+
 public class SymbolTableStack {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
 
@@ -17,10 +20,17 @@ public class SymbolTableStack {
     }
 
     public void closeScope() {
+    	if(symbolTableStack.isEmpty()) {
+    		System.err.println("Stack is empty! There is nothing to close! - Programming error");
+    	}
         symbolTableStack.pop();
     }
 
-    public SymbolTable getSymbolTable() {
-        return symbolTableStack.peek();
-    }
+	public void enterSymbol(String name, ITypeNode node) {
+		symbolTableStack.peek().enterSymbol(name, node);
+	}
+	
+	public Type retrieveSymbol(String name) {
+		return symbolTableStack.peek().retrieveSymbol(name);
+	}
 }

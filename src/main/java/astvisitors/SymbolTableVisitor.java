@@ -1,14 +1,10 @@
 package astvisitors;
 
+
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
-import ast.type.DoubleNode;
-import ast.type.IdNode;
-import ast.type.IntegerNode;
-import ast.type.StringNode;
-import exceptions.AlreadyInTableException;
-import symbolTable.SymbolTable;
+import ast.type.*;
 import symbolTable.SymbolTableStack;
 
 public class SymbolTableVisitor extends AstVisitor {
@@ -39,17 +35,13 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        SymbolTable symbolTable = symbolTableStack.getSymbolTable();
-        try {
-            symbolTable.insertNode(node.getID(), node);
-        } catch (AlreadyInTableException e) {
-            System.err.println(e);
-        }
+    	symbolTableStack.enterSymbol(node.getID(), node);
     }
 
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
+        node.setType(symbolTableStack.retrieveSymbol(node.getId()));
     }
 
     @Override
@@ -61,6 +53,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
+    	node.setType(symbolTableStack.retrieveSymbol(node.getID()));
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -88,6 +81,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
+    	symbolTableStack.enterSymbol(node.getId(), node);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
@@ -153,10 +147,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        SymbolTable symbolTable = symbolTableStack.getSymbolTable();
-        if (symbolTable.contains(node.getVal())) {
-            // Type checking to be added
-        }
+    	node.setType(symbolTableStack.retrieveSymbol(node.getVal()));
     }
 
     @Override
