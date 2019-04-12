@@ -31,10 +31,7 @@ public class Typechecker extends AstVisitor{
 		}
 		
 	}
-	public void visit(Print_lNode node) {
-		node.getExprNode().accept(this);
-		
-	}
+	
 	public void visit(Return_stmtNode node) {
 		node.getReturnExpr().accept(this);
 		node.setType(node.getReturnExpr().getType());
@@ -105,11 +102,6 @@ public class Typechecker extends AstVisitor{
 	@Override
 	public void visit(Func_callExprNode node) {
 		
-	}
-
-	@Override
-	public void visit(Built_in_funcNode node) {
-
 	}
 
 	@Override

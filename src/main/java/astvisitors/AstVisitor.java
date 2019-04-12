@@ -10,7 +10,6 @@ public abstract class AstVisitor {
     public abstract void visit(Func_callExprNode node);
     public abstract void visit(BlockNode node);
     public abstract void visit(Func_defNode node);
-    public abstract void visit(Print_lNode node);
     public abstract void visit(Return_stmtNode node);
     public abstract void visit(If_stmtNode node);
     public abstract void visit(StartNode node);
@@ -22,7 +21,6 @@ public abstract class AstVisitor {
     public abstract void visit(While_stmtNode node);
     public abstract void visit(ExprNode node);
     public abstract void visit(ParametersNode node);
-    public abstract void visit(Built_in_funcNode node);
     public abstract void visit(AdditiveExprNode node);
     public abstract void visit(MultiplicativeExprNode node);
     public abstract void visit(LogicalAndExprNode node);
