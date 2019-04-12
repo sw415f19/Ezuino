@@ -4,7 +4,7 @@ import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class Return_stmtNode extends AstNode {
+public class Return_stmtNode extends TypeNode {
 
 	private AExpr returnExpr;
 	

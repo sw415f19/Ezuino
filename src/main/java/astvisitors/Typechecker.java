@@ -25,6 +25,10 @@ public class Typechecker extends AstVisitor{
 		for(DclNode parameter: node.getParameters()) {
 			parameter.accept(this);
 		}
+		if(node.getType() != Type.VOID) {
+			checkType(node, node.getBlockNode().getReturnstmtNode());
+			System.out.println("Checked return of func def!!");
+		}
 		
 	}
 	public void visit(Print_lNode node) {
@@ -33,6 +37,7 @@ public class Typechecker extends AstVisitor{
 	}
 	public void visit(Return_stmtNode node) {
 		node.getReturnExpr().accept(this);
+		node.setType(node.getReturnExpr().getType());
 		
 	}
 	public void visit(If_stmtNode node) {
@@ -180,6 +185,7 @@ public class Typechecker extends AstVisitor{
 	}
 	@Override
 	public void visit(ParenthesisExprNode node) {
+		node.getNode().accept(this);
 		node.setType(node.getNode().getType());
 		System.out.println("Checked ParenthesisExprNode type!!");
 	}

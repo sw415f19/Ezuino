@@ -25,7 +25,11 @@ func main() {
     	boolean a
     	a := TRUE
     }
-    if(1+1) {
+    if(TRUE) {
     
     }
+}
+
+func int meaningOfLife() {
+	return 42
 }
