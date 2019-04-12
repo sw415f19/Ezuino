@@ -25,4 +25,10 @@ public class ParenthesisExprNode extends AParenthesisExpr {
     public AExpr getNode() {
         return this.node;
     }
+    
+    @Override
+    public String toString() {
+    	// TODO Auto-generated method stub
+    	return super.toString() + " { type: "+ type + " }";
+    }
 }
