@@ -25,4 +25,9 @@ public class ParenthesisExprNode extends AParenthesisExpr {
     public AExpr getNode() {
         return this.node;
     }
+    
+    @Override
+    public String toString() {
+    	return super.toString() + " { type: "+ type + " }";
+    }
 }

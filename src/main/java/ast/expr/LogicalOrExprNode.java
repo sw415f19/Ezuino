@@ -30,4 +30,9 @@ public class LogicalOrExprNode extends AlogicalOrExpr {
     public ALogicalAndExpr getRightNode() {
         return rightNode;
     }
+    
+    @Override
+    public String toString() {
+    	return super.toString() + " { type: " + type + " }";
+    }
 }

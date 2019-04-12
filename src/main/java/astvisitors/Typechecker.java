@@ -1,10 +1,15 @@
 package astvisitors;
 
+import java.util.Arrays;
+
 import ast.*;
 import ast.expr.*;
 import ast.type.*;
+import exceptions.ErrorHandler;
 
 public class Typechecker extends AstVisitor{
+
+	private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH"};
 	public void visit(Func_callStmtNode node) {
 		
 	}
@@ -29,7 +34,8 @@ public class Typechecker extends AstVisitor{
 			checkType(node, node.getBlockNode().getReturnstmtNode());
 			System.out.println("Checked return of func def!!");
 		}
-		
+
+		if (isReservedKeyword(node.getId())) ErrorHandler.reservedKeyword(node.getId());
 	}
 	
 	public void visit(Return_stmtNode node) {
@@ -65,7 +71,7 @@ public class Typechecker extends AstVisitor{
 		
 	}
 	public void visit(DclNode node) {
-		
+		if (isReservedKeyword(node.getID())) ErrorHandler.reservedKeyword(node.getID());
 	}
 	public void visit(TypeNode node) {
 		
@@ -96,7 +102,7 @@ public class Typechecker extends AstVisitor{
 	public void visit(Assign_stmtNode node) {
 		node.getExprNode().accept(this);
 		checkType(node, node.getExprNode());
-		
+	
 	}
 
 	@Override
@@ -204,5 +210,9 @@ public class Typechecker extends AstVisitor{
 	@Override
 	public void visit(AstNode astNode) {
 		super.visit(astNode);
+	}
+
+	private boolean isReservedKeyword(String word){
+		return (Arrays.binarySearch(keywords, word.toUpperCase()) >= 0);
 	}
 }

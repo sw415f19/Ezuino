@@ -21,6 +21,11 @@ public class Assign_stmtNode extends StmtNode implements ITypeNode{
 	public AExpr getExprNode() {
 		return this.exprNode;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " { id: " + id + " type: " + type + " }";
+	}
 
 	@Override
 	public void accept(AstVisitor v) {
