@@ -127,12 +127,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     }
 
     @Override
-    public void visitLevel(TypeNode node, int level) {
-        System.out.println("In TypeNode");
-
-    }
-
-    @Override
     public void visitLevel(DclsNode node, int level) {
         print(node, level);
         int childCount = node.getChildCount();
@@ -147,12 +141,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         print(node, level);
         node.getExprNode().acceptLevel(this, level + 1);
         node.getBlockNode().acceptLevel(this, level + 1);
-    }
-
-    @Override
-    public void visitLevel(ExprNode node, int level) {
-        System.out.println("In ExprNode");
-
     }
 
     @Override
