@@ -7,6 +7,7 @@ import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
 import cstvisitors.CSTPrinter;
 import exceptions.ErrorHandler;
+import exceptions.ErrorListener;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 import org.antlr.v4.gui.TreeViewer;
@@ -25,13 +26,21 @@ public class Main {
     public static void main(String[] args) throws IOException {
         CharStream cs = CharStreams.fromFileName("src/main/code.ezuino");
 
-        EzuinoLexer lLexer = new EzuinoLexer(cs);
-    
-        CommonTokenStream tokens = new CommonTokenStream(lLexer);
-   
-        EzuinoParser parser = new EzuinoParser(tokens);
-        ParseTree parseTree = parser.start();
+        ErrorListener errorListener = new ErrorListener();
 
+        EzuinoLexer lLexer = new EzuinoLexer(cs);
+        lLexer.removeErrorListeners();
+        lLexer.addErrorListener(errorListener);
+
+        CommonTokenStream tokens = new CommonTokenStream(lLexer);
+
+        EzuinoParser parser = new EzuinoParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(errorListener);
+
+        ParseTree parseTree = parser.start();
+        if (errorListener.hasError()) return;
+        
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 
