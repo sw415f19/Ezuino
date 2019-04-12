@@ -30,6 +30,6 @@ public class DclNode extends TypeNode {
 	
 	@Override
 	public String toString() {
-		return super.toString() + "{ Type: " + type.name() + " ID: " + ID + " }";
+		return super.toString() + "{ ID: " + ID + " type: " + type + " }";
 	}
 }

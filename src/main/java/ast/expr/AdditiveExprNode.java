@@ -40,6 +40,6 @@ public class AdditiveExprNode extends AAddictiveExpr {
     
     @Override
     public String toString() {
-    	return super.toString() + "{ operator: "+ operator + " }";
+    	return super.toString() + "{ operator: "+ operator + " type: " + type +  " }";
     }
 }

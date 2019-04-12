@@ -55,8 +55,10 @@ public class Main {
 
         SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor();
         astNode.accept(symbolTableFillingVisitor);
+        astNode.acceptLevel(ipv, 0);
         Typechecker tc = new Typechecker();
         astNode.accept(tc);
+        astNode.acceptLevel(ipv, 0);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
 
         ErrorHandler.printErrorList();

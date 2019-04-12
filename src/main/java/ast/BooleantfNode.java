@@ -30,6 +30,6 @@ public class BooleantfNode extends PrimaryExprNode {
 	
 	@Override
 	public String toString() {
-		return super.toString() + " { boolval: " + boolval + "}";
+		return super.toString() + " { boolval: " + boolval + " type: " + type + " }";
 	}
 }
