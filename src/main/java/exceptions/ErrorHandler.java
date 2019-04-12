@@ -32,4 +32,9 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, character + " has not been declared."));
     }
 
+    public static void reservedKeyword(String character)
+    {
+        messageList.add(new GeneralError(ErrorType.ERROR,"\" " +  character + " \"" + " is a reserved keyword and can not be used."));
+    }
+
 }

@@ -15,9 +15,9 @@ public class ErrorMessage {
         switch (getType())
         {
             case ERROR:
-                return "ERROR - ";
+                return "ERROR : ";
             case WARNING:
-                return "WARNING - ";
+                return "WARNING : ";
             default:
                 return "UNKNOWN ERROR";
         }
