@@ -5,22 +5,19 @@ import java.util.List;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class Func_defNode extends StmtNode {
+public class Func_defNode extends StmtNode implements ITypeNode {
 
-	private String readType;
 	private List<DclNode> parameters;
 	private BlockNode blockNode;
 	private String ID;
+	private Type type;
 	
-	public Func_defNode(String readType, String ID, List<DclNode> parameters, BlockNode blockNode){
-		this.readType = readType;
+	
+	public Func_defNode(String ID, Type type, List<DclNode> parameters, BlockNode blockNode){
 		this.ID = ID;
+		this.type = type;
 		this.parameters = parameters;
 		this.blockNode = blockNode;
-	}
-	
-	public String getType() {
-		return readType;
 	}
 	
 	public String getId() {
@@ -49,7 +46,19 @@ public class Func_defNode extends StmtNode {
 	@Override
 	public String toString() {
 		return "Func_defNode{" +
-				"ID='" + ID + '\'' +
+				"ID: \"" + ID + "\" " +
+				"type: " + type + " " +
 				'}';
+	}
+
+	@Override
+	public void setType(Type type) {
+		this.type = type;
+		
+	}
+
+	@Override
+	public Type getType() {
+		return this.type;
 	}
 }

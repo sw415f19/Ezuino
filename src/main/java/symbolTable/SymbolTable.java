@@ -1,28 +1,43 @@
 package symbolTable;
 
-import java.util.ArrayList;
+
+import ast.ITypeNode;
+import ast.Type;
+import exceptions.ErrorHandler;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SymbolTable {
-    public ArrayList<Symbol> symbolList = new ArrayList<Symbol>();
+    private Map<String, ITypeNode> symbolMap = new HashMap<String, ITypeNode>();
+    private SymbolTable parentTable;
 
-    public SymbolTable()
-    {
-        this.symbolList = symbolList;
+    public SymbolTable(SymbolTable previousTable) {
+        this.parentTable = previousTable;
     }
 
-    public Symbol retrieveFirstSymbol(){
-        return symbolList.get(0);
+    public void enterSymbol(String key, ITypeNode node) {
+    	System.out.println("Setting " + key + " to " + node.toString());
+        if (!symbolMap.containsKey(key)) {
+            symbolMap.put(key, node);
+        } else {
+        	ErrorHandler.alreadyDeclared(key);
+        }
     }
 
-    public void insert(Symbol symbol){
-        symbolList.add(symbol);
+    public Boolean contains(String key) {
+        return symbolMap.containsKey(key);
     }
 
-
-    @Override
-    public String toString()
-    {
-        return "## Symboltable List ##" +
-                 symbolList;
+    public Type retrieveSymbol(String key) {
+        if (this.contains(key)) {
+            return symbolMap.get(key).getType();
+        }
+        else {
+            if (this.parentTable == null) {
+            	ErrorHandler.notDeclaredVar(key);
+            }
+            return this.parentTable.retrieveSymbol(key);
+        }
     }
 }

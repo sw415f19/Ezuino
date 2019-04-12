@@ -2,9 +2,11 @@ package ezuino;
 
 import ast.AstNode;
 import astvisitors.IndentedPrintVisitor;
-import astvisitors.SymbolTableFillingVisitor;
+import astvisitors.SymbolTableVisitor;
+import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
 import cstvisitors.CSTPrinter;
+import exceptions.ErrorHandler;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 import org.antlr.v4.gui.TreeViewer;
@@ -12,7 +14,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import symbolTable.SymbolTableManager;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -21,18 +22,20 @@ import java.util.Arrays;
 
 public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
-
     public static void main(String[] args) throws IOException {
         CharStream cs = CharStreams.fromFileName("src/main/code.ezuino");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
+    
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
+   
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
+
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 
-        showCST(parseTree, parser);
+        //showCST(parseTree, parser);
 
         /*
          * Call of IndentedPrintVisitor BuildAstVisitor ezuinoVisitorForPrinting = new
@@ -47,13 +50,18 @@ public class Main {
         // Runs the three, filling up the AST array list attribute
         AstNode astNode = parseTree.accept(buildAstVisitor);
 
-        //IndentedPrintVisitor ipv = new IndentedPrintVisitor();
-        //astNode.acceptLevel(ipv, 0);
+        IndentedPrintVisitor ipv = new IndentedPrintVisitor();
+        astNode.acceptLevel(ipv, 0);
 
-        SymbolTableFillingVisitor symbolTableFillingVisitor = new SymbolTableFillingVisitor();
+        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor();
         astNode.accept(symbolTableFillingVisitor);
-        System.out.println( SymbolTableFillingVisitor.symbolTableManager.getSymbolTableSize());
+        astNode.acceptLevel(ipv, 0);
+        Typechecker tc = new Typechecker();
+        astNode.accept(tc);
+        astNode.acceptLevel(ipv, 0);
+        //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
 
+        ErrorHandler.printErrorList();
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {

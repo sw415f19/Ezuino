@@ -5,6 +5,8 @@ func main() {
     a := 1
     if (number < 100) {
         int a
+        int a
+        int a
         a := 2
     }
     if (number = 100) {
@@ -13,6 +15,21 @@ func main() {
     }
     if(TRUE)
     {
-    	return BIG;
+    	return a
     }
+    if(TRUE) {
+    	string a
+    	a := "123321"
+    }
+    if(TRUE) {
+    	boolean a
+    	a := TRUE
+    }
+    if(TRUE) {
+    
+    }
+}
+
+func int meaningOfLife() {
+	return 42
 }

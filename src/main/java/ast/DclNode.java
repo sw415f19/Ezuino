@@ -3,8 +3,7 @@ package ast;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class DclNode extends AstNode {
-	private Type type;
+public class DclNode extends TypeNode {
 	private String ID;
 
 	public DclNode(Type type, String ID) {
@@ -12,9 +11,6 @@ public class DclNode extends AstNode {
 		this.ID = ID;
 	}
 
-	public Type getType() {
-		return type;
-	}
 
 	public String getID() {
 		return ID;
@@ -34,6 +30,6 @@ public class DclNode extends AstNode {
 	
 	@Override
 	public String toString() {
-		return super.toString() + "{ Type: " + type.name() + " ID: " + ID + " }";
+		return super.toString() + "{ ID: " + ID + " type: " + type + " }";
 	}
 }
