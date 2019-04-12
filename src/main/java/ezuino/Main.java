@@ -22,14 +22,16 @@ import java.util.Arrays;
 
 public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
-
     public static void main(String[] args) throws IOException {
         CharStream cs = CharStreams.fromFileName("src/main/code.ezuino");
 
         EzuinoLexer lLexer = new EzuinoLexer(cs);
+    
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
+   
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
+
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 

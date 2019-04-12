@@ -147,7 +147,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-    	node.setType(symbolTableHandler.retrieveSymbol(node.getVal()));
+        node.setType(symbolTableHandler.retrieveSymbol(node.getVal()));
     }
 
     @Override
