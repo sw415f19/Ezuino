@@ -39,7 +39,12 @@ public class Main {
         parser.addErrorListener(errorListener);
 
         ParseTree parseTree = parser.start();
-        if (errorListener.hasError()) return;
+        
+        if (errorListener.hasError())
+        {
+            System.err.println("## Scanner/Paser Error - Please correct the following errors and try again. ##");
+            return;
+        }
         
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);

@@ -12,13 +12,13 @@ import org.antlr.v4.runtime.dfa.DFA;
 
 public class ErrorListener implements ANTLRErrorListener {
 
-    private boolean hasError = false;
+    private int errorCount = 0;
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
             String msg, RecognitionException e) {
-                this.hasError = true;
-                System.out.println((String.format(Locale.ROOT, "Exception parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine)));
+                this.errorCount++;
+                System.out.println((String.format(Locale.ROOT, "#" + errorCount + " - "+ "Error parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine)));
     }
 
     @Override
@@ -40,8 +40,7 @@ public class ErrorListener implements ANTLRErrorListener {
     }
 
     public boolean hasError(){
-        return this.hasError;
+        return errorCount > 0;
     }
-
     
 }
