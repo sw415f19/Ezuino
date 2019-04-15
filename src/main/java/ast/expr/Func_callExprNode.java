@@ -39,7 +39,7 @@ public class Func_callExprNode extends APrimaryExpr {
 
     @Override
     public String toString() {
-        return super.toString() + " { ID: " + this.ID + " }";
+        return super.toString() + " { ID: " + this.ID + " type: " + type +  " }";
     }
 
 }

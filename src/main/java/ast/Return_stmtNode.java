@@ -26,4 +26,9 @@ public class Return_stmtNode extends TypeNode {
 	public void acceptLevel(AstLevelVisitor v, int level) {
 		v.visitLevel(this, level);
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " { type: " + type + " }";
+	}
 }
