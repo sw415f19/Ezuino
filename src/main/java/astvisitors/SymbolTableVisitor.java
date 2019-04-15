@@ -97,11 +97,6 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(Print_lNode node) {
-        node.getExprNode().accept(this);
-    }
-
-    @Override
     public void visit(Return_stmtNode node) {
         node.getReturnExpr().accept(this);
     }
@@ -146,13 +141,6 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(IdNode node) {
         node.setType(symbolTableHandler.retrieveSymbol(node.getVal()));
-    }
-
-    @Override
-    public void visit(Built_in_funcNode node) {
-        if (node.getPrintlNode() != null) {
-            node.getPrintlNode().accept(this);
-        }
     }
 
     @Override
