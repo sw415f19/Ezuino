@@ -16,7 +16,6 @@ public class SymbolTable {
     }
 
     public void enterSymbol(String key, ITypeNode node) {
-        System.out.println("Setting " + key + " to " + node.toString());
         if (!symbolMap.containsKey(key) && notEmpty(key)) {
             symbolMap.put(key, node);
         }
@@ -26,20 +25,22 @@ public class SymbolTable {
         }
         ErrorHandler.alreadyDeclared(key);
     }
-
-    public Boolean contains(String key) {
-        return symbolMap.containsKey(key);
+    
+    private boolean isGlobalScope() {
+    	return this.parentTable == null;
     }
 
     public Type retrieveSymbol(String key) {
-        if (this.contains(key)) {
+        if (symbolMap.containsKey(key)) {
             return symbolMap.get(key).getType();
-        } else {
-            if (this.parentTable == null) {
-                ErrorHandler.notDeclaredVar(key);
-            }
-            return this.parentTable.retrieveSymbol(key);
         }
+        
+        if (isGlobalScope()) {
+        	ErrorHandler.notDeclaredVar(key);
+            return null;
+        }
+        
+        return this.parentTable.retrieveSymbol(key);
     }
 
     private boolean notEmpty(String key) {
