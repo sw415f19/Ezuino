@@ -1,6 +1,8 @@
 package exceptions;
 
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 import java.util.Locale;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -13,12 +15,13 @@ import org.antlr.v4.runtime.dfa.DFA;
 public class ErrorListener implements ANTLRErrorListener {
 
     private int errorCount = 0;
+    List<String> errorList = new ArrayList<>();
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
             String msg, RecognitionException e) {
                 this.errorCount++;
-                System.out.println((String.format(Locale.ROOT, "#" + errorCount + " - "+ "Error parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine)));
+                errorList.add((String.format(Locale.ROOT, "#" + errorCount + " - "+ "Error parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine)));
     }
 
     @Override
@@ -41,6 +44,12 @@ public class ErrorListener implements ANTLRErrorListener {
 
     public boolean hasError(){
         return errorCount > 0;
+    }
+
+    public void printErrors(){
+            for (int i = 0; i < errorList.size(); i++) {
+                    System.out.println(errorList.get(i));
+            }
     }
     
 }

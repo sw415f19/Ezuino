@@ -43,6 +43,7 @@ public class Main {
         if (errorListener.hasError())
         {
             System.err.println("## Scanner/Paser Error - Please correct the following errors and try again. ##");
+            errorListener.printErrors();
             return;
         }
         
