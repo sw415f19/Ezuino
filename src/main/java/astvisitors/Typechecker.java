@@ -21,17 +21,17 @@ public class Typechecker extends AstVisitor {
         }
 
         /* Checks type if returnStmt exists and ifStmt have an type, typechecks and sets type.
-        *  If only either returnStmt or ifStmt have an type blocknode is set to that type.  */
+         *  If only either returnStmt or ifStmt have an type blocknode is set to that type.  */
 
-        boolean ifStmtsReturnValue = node.getStmtsNode().getType()!= null;
+        boolean ifStmtsReturnValue = node.getStmtsNode().getType() != null;
         boolean returnStmtReturnValue = node.getReturnstmtNode() != null;
 
-        if(ifStmtsReturnValue && returnStmtReturnValue){
+        if (ifStmtsReturnValue && returnStmtReturnValue) {
             checkType(node.getStmtsNode(), node.getReturnstmtNode());
             node.setType(node.getReturnstmtNode().getType());
-        } else if(ifStmtsReturnValue){
+        } else if (ifStmtsReturnValue) {
             node.setType(node.getStmtsNode().getType());
-        } else if(returnStmtReturnValue) {
+        } else if (returnStmtReturnValue) {
             node.setType(node.getReturnstmtNode().getType());
         }
 
@@ -117,7 +117,7 @@ public class Typechecker extends AstVisitor {
                 }
             }
         }
-        if(ifStmtExist){
+        if (ifStmtExist) {
             node.setType(firstIfStament.getType());
         }
     }
