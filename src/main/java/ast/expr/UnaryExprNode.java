@@ -35,6 +35,6 @@ public class UnaryExprNode extends AMultiplicativeExpr {
 
     @Override
     public String toString() {
-        return super.toString() + "{ operator: "+ operator + " }";
+        return super.toString() + "{ operator: "+ operator + " type: " + type +  " }";
     }
 }
