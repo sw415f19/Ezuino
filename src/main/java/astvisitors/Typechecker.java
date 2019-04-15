@@ -68,12 +68,25 @@ public class Typechecker extends AstVisitor {
         }
         checkSpecificType(node.getExpr(), Type.BOOL);
 
-        boolean ifAndElseBothReturnValue = node.getIfBlock().getReturnstmtNode() != null &&
-                node.getElseBlock().getReturnstmtNode() != null;
+        boolean ifAndElseBothReturnValue = false;
+        boolean ifReturnValue = false;
+        boolean elseReturnValue = false;
 
-        boolean ifReturnValue = node.getIfBlock().getReturnstmtNode() != null;
+        boolean ifStmtExist = node.getIfBlock() != null;
+        if(ifStmtExist){
+            ifReturnValue = node.getIfBlock().getReturnstmtNode() != null;
+        }
 
-        boolean elseReturnValue = node.getElseBlock().getReturnstmtNode() != null;
+        boolean elseStmtExist = node.getElseBlock() != null;
+        if(elseStmtExist) {
+            elseReturnValue = node.getElseBlock().getReturnstmtNode() != null;
+        }
+
+        if(ifStmtExist && elseStmtExist) {
+           ifAndElseBothReturnValue  = node.getIfBlock().getReturnstmtNode() != null &&
+                    node.getElseBlock().getReturnstmtNode() != null;
+        }
+
 
         if (ifAndElseBothReturnValue) {
             checkType(node.getIfBlock().getReturnstmtNode(), node.getElseBlock().getReturnstmtNode());

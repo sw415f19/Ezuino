@@ -1,9 +1,6 @@
 #Den typechecker ikke stringen hello
 func int hello(){
   if(TRUE){
-    return 3
-  }
-  else {
-    return 4
+    return 1
   }
 }
