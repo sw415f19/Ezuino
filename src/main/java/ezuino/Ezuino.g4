@@ -36,7 +36,7 @@ parenthesisExpr
     ;
 unaryExpr
     : parenthesisExpr
-    | ('-') parenthesisExpr
+    | op=('-'|'!') parenthesisExpr
     ;
 multiplicativeExpr
     : unaryExpr

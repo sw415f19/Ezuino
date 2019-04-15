@@ -21,7 +21,7 @@ public class SymbolTable {
             symbolMap.put(key, node);
         }
 
-        if (!notEmpty(key)) {
+        if (notEmpty(key)) {
             return;
         }
         ErrorHandler.alreadyDeclared(key);
