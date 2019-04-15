@@ -1,6 +1,5 @@
 package symbolTable;
 
-
 import ast.ITypeNode;
 import ast.Type;
 import exceptions.ErrorHandler;
@@ -17,12 +16,15 @@ public class SymbolTable {
     }
 
     public void enterSymbol(String key, ITypeNode node) {
-    	System.out.println("Setting " + key + " to " + node.toString());
-        if (!symbolMap.containsKey(key)) {
+        System.out.println("Setting " + key + " to " + node.toString());
+        if (!symbolMap.containsKey(key) && notEmpty(key)) {
             symbolMap.put(key, node);
-        } else {
-        	ErrorHandler.alreadyDeclared(key);
         }
+
+        if (!notEmpty(key)) {
+            return;
+        }
+        ErrorHandler.alreadyDeclared(key);
     }
 
     public Boolean contains(String key) {
@@ -32,12 +34,15 @@ public class SymbolTable {
     public Type retrieveSymbol(String key) {
         if (this.contains(key)) {
             return symbolMap.get(key).getType();
-        }
-        else {
+        } else {
             if (this.parentTable == null) {
-            	ErrorHandler.notDeclaredVar(key);
+                ErrorHandler.notDeclaredVar(key);
             }
             return this.parentTable.retrieveSymbol(key);
         }
+    }
+
+    private boolean notEmpty(String key) {
+        return ("<missing ID>" != key.intern());
     }
 }

@@ -112,11 +112,6 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(TypeNode node) {
-
-    }
-
-    @Override
     public void visit(DclsNode node) {
         int childCount = node.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -128,11 +123,6 @@ public class SymbolTableVisitor extends AstVisitor {
     public void visit(While_stmtNode node) {
         node.getExprNode().accept(this);
         node.getBlockNode().accept(this);
-    }
-
-    @Override
-    public void visit(ExprNode node) {
-
     }
 
     @Override

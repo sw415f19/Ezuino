@@ -16,10 +16,8 @@ public abstract class AstVisitor {
     public abstract void visit(BooleantfNode node);
     public abstract void visit(StmtsNode node);
     public abstract void visit(DclNode node);
-    public abstract void visit(TypeNode node);
     public abstract void visit(DclsNode node);
     public abstract void visit(While_stmtNode node);
-    public abstract void visit(ExprNode node);
     public abstract void visit(ParametersNode node);
     public abstract void visit(AdditiveExprNode node);
     public abstract void visit(MultiplicativeExprNode node);

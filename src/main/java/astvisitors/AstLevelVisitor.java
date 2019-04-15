@@ -17,10 +17,8 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(BooleantfNode node, int level);
 	public abstract void visitLevel(StmtsNode node, int level);
 	public abstract void visitLevel(DclNode node, int level);
-	public abstract void visitLevel(TypeNode node, int level);
 	public abstract void visitLevel(DclsNode node, int level);
 	public abstract void visitLevel(While_stmtNode node, int level);
-	public abstract void visitLevel(ExprNode node, int level);
 	public abstract void visitLevel(ParametersNode node, int level);
 	public abstract void visitLevel(AdditiveExprNode node, int level);
 	public abstract void visitLevel(MultiplicativeExprNode node, int level);
