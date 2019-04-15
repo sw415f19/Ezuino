@@ -7,6 +7,12 @@ import ast.Type;
 
 public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
+   
+    private boolean printDcl;
+    
+    public SymbolTableHandler(boolean printDcl) {
+    	this.printDcl = printDcl;
+    }
 
     public void openScope() {
         if(symbolTableStack.empty()) {
@@ -28,6 +34,9 @@ public class SymbolTableHandler {
     }
 
 	public void enterSymbol(String name, ITypeNode node) {
+		if(printDcl) {
+			System.out.println("Setting " + name + " to " + node.toString());			
+		}
 		symbolTableStack.peek().enterSymbol(name, node);
 	}
 	

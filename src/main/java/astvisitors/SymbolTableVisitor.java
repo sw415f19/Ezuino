@@ -8,7 +8,15 @@ import ast.type.*;
 import symbolTable.SymbolTableHandler;
 
 public class SymbolTableVisitor extends AstVisitor {
-    private SymbolTableHandler symbolTableHandler = new SymbolTableHandler();
+    private SymbolTableHandler symbolTableHandler;
+    
+    public SymbolTableVisitor(boolean printDcl) {
+    	this.symbolTableHandler = new SymbolTableHandler(printDcl);
+	}
+    
+    public SymbolTableVisitor() {
+    	this.symbolTableHandler = new SymbolTableHandler(false);
+	}
 
     @Override
     public void visit(StartNode node) {

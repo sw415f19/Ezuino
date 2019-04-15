@@ -67,7 +67,7 @@ public class Main {
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
 
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor();
+        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true);
         astNode.accept(symbolTableFillingVisitor);
         astNode.acceptLevel(ipv, 0);
         Typechecker tc = new Typechecker();
