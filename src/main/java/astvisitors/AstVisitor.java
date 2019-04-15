@@ -27,6 +27,7 @@ public abstract class AstVisitor {
     public abstract void visit(RelationalExprNode node);
     public abstract void visit(EqualityExprNode node);
     public abstract void visit(ParenthesisExprNode node);
+    public abstract void visit(UnaryExprNode node);
 
 
     //One added assignment nodes.

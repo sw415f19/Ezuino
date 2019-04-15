@@ -28,6 +28,7 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(RelationalExprNode node, int level);
 	public abstract void visitLevel(EqualityExprNode node, int level);
 	public abstract void visitLevel(ParenthesisExprNode node, int level);
+    public abstract void visitLevel(UnaryExprNode node, int level);
 
 	
 	//One added assignment nodes.

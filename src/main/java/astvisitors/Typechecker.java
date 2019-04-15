@@ -241,4 +241,11 @@ public class Typechecker extends AstVisitor {
     private boolean isReservedKeyword(String word) {
         return (Arrays.binarySearch(keywords, word.toUpperCase()) >= 0);
     }
+
+	@Override
+	public void visit(UnaryExprNode node) {
+		node.getNode().accept(this);
+		node.setType(node.getNode().getType());
+		
+	}
 }

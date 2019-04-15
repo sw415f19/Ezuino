@@ -225,4 +225,11 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         node.getRightNode().acceptLevel(this, level + 1);
 
     }
+
+	@Override
+	public void visitLevel(UnaryExprNode node, int level) {
+		print(node, level);
+		node.getNode().acceptLevel(this, level + 1);
+		
+	}
 }
