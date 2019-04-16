@@ -3,10 +3,10 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
-import ast.type.DoubleNode;
+import ast.type.DoubleLiteral;
 import ast.type.IdNode;
-import ast.type.IntegerNode;
-import ast.type.StringNode;
+import ast.type.IntegerLiteral;
+import ast.type.StringLiteral;
 
 public class IndentedPrintVisitor extends AstLevelVisitor {
 
@@ -73,13 +73,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     }
 
     @Override
-    public void visitLevel(Print_lNode node, int level) {
-        print(node, level);
-        node.getExprNode().acceptLevel(this, level + 1);
-
-    }
-
-    @Override
     public void visitLevel(Return_stmtNode node, int level) {
         print(node, level);
         /* If the return stmt is not null ie. a void return */
@@ -109,7 +102,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     }
 
     @Override
-    public void visitLevel(BooleantfNode node, int level) {
+    public void visitLevel(BooleanLiteral node, int level) {
         print(node, level);
     }
 
@@ -126,12 +119,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     @Override
     public void visitLevel(DclNode node, int level) {
         print(node, level);
-
-    }
-
-    @Override
-    public void visitLevel(TypeNode node, int level) {
-        System.out.println("In TypeNode");
 
     }
 
@@ -153,12 +140,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     }
 
     @Override
-    public void visitLevel(ExprNode node, int level) {
-        System.out.println("In ExprNode");
-
-    }
-
-    @Override
     public void visitLevel(ParametersNode node, int level) {
         System.out.println("In ParametersNode");
 
@@ -171,31 +152,23 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     }
 
     @Override
-    public void visitLevel(IntegerNode node, int level) {
+    public void visitLevel(IntegerLiteral node, int level) {
         print(node, level);
     }
 
     @Override
-    public void visitLevel(DoubleNode node, int level) {
+    public void visitLevel(DoubleLiteral node, int level) {
         print(node, level);
     }
 
     @Override
-    public void visitLevel(StringNode node, int level) {
+    public void visitLevel(StringLiteral node, int level) {
         print(node, level);
     }
 
     @Override
     public void visitLevel(IdNode node, int level) {
         print(node, level);
-    }
-
-    @Override
-    public void visitLevel(Built_in_funcNode node, int level) {
-        print(node, level);
-        if (node.getPrintlNode() != null) {
-            node.getPrintlNode().acceptLevel(this, level + 1);
-        }
     }
 
     @Override
@@ -240,4 +213,11 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         node.getRightNode().acceptLevel(this, level + 1);
 
     }
+
+	@Override
+	public void visitLevel(UnaryExprNode node, int level) {
+		print(node, level);
+		node.getNode().acceptLevel(this, level + 1);
+		
+	}
 }

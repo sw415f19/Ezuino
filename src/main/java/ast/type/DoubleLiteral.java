@@ -3,12 +3,12 @@ package ast.type;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class IntegerNode extends ValNode {
+public class DoubleLiteral extends ValNode {
 
-    public IntegerNode(String val) {
+    public DoubleLiteral(String val) {
         this.val = val;
     }
-
+    
     @Override
     public void accept(AstVisitor v) {
         v.visit(this);

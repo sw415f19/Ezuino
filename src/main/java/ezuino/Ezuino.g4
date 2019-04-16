@@ -27,7 +27,7 @@ assign_stmt
     ;
 primaryExpr
     : val
-    | booleantf
+    | BOOL
     | func_call
     ;
 parenthesisExpr
@@ -36,7 +36,7 @@ parenthesisExpr
     ;
 unaryExpr
     : parenthesisExpr
-    | ('-') parenthesisExpr
+    | op=('-'|'!') parenthesisExpr
     ;
 multiplicativeExpr
     : unaryExpr
@@ -78,10 +78,6 @@ val
     | INTEGER
     | DOUBLE
     | STRING
-    ;
-booleantf
-    : TRUE
-    | FALSE
     ;
 type
     : INTDCL
@@ -132,18 +128,16 @@ GREATERTHANOREQUAL  : '>=' ;
 ELSE                : 'else' ;
 IF                  : 'if' ;
 WHILE               : 'while' ;
-TRUE                : 'TRUE' ;
-FALSE               : 'FALSE' ;
 RETURN              : 'return' ;
 FUNCTION            : 'func' ;
 DEFAULT             : 'default' ;
 // IDENTIFIERS
+BOOL                : 'true' | 'false' ;
 ID                  : [a-zA-Z]+[a-zA-Z0-9]* ;
 // DATA TYPES
 INTEGER             : [0-9]+ ;
 DOUBLE              : [0-9]+'.'[0-9]+ ;
 STRING              : '"' (~["\r\n] | '""')* '"' ;
-BOOL				: 'TRUE' | 'FALSE' ;
 // EXTRA
 BLANK               : [ \t\r\n]+ -> skip ;
 COMMENT             : '#' ~[\r\n]*-> skip ;

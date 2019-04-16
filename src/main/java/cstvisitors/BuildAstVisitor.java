@@ -66,8 +66,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.val() != null) {
             return ctx.val().accept(this);
         }
-        if (ctx.booleantf() != null) {
-            return ctx.booleantf().accept(this);
+        if (ctx.BOOL() != null) {
+            return new BooleanLiteral(ctx.BOOL().getText());
         }
         if (ctx.func_call() != null) {
             return ctx.func_call().accept(this);
@@ -88,7 +88,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.parenthesisExpr().accept(this);
         }
-        return new UnaryExprNode(ctx.MINUS().getText(), (AParenthesisExpr) ctx.parenthesisExpr().accept(this));
+        return new UnaryExprNode(ctx.op.getText(), (AParenthesisExpr) ctx.parenthesisExpr().accept(this));
     }
 
     @Override
@@ -181,15 +181,15 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
 
         if (ctx.INTEGER() != null) {
-            return new IntegerNode(ctx.INTEGER().getText());
+            return new IntegerLiteral(ctx.INTEGER().getText());
         }
 
         if (ctx.DOUBLE() != null) {
-            return new DoubleNode(ctx.DOUBLE().getText());
+            return new DoubleLiteral(ctx.DOUBLE().getText());
         }
 
         if (ctx.STRING() != null) {
-            return new StringNode(ctx.STRING().getText());
+            return new StringLiteral(ctx.STRING().getText());
         }
 
         if (ctx.ID() != null) {
@@ -197,11 +197,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         }
 
         return null;
-    }
-
-    @Override
-    public AstNode visitBooleantf(EzuinoParser.BooleantfContext ctx) {
-        return new BooleantfNode(ctx.getText());
     }
 
     @Override

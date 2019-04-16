@@ -1,12 +1,19 @@
-package symbolTable;
+package symboltable;
 
 import java.util.Stack;
 
 import ast.ITypeNode;
 import ast.Type;
+import exceptions.ErrorHandler;
 
 public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
+   
+    private boolean printDcl;
+    
+    public SymbolTableHandler(boolean printDcl) {
+    	this.printDcl = printDcl;
+    }
 
     public void openScope() {
         if(symbolTableStack.empty()) {
@@ -22,12 +29,15 @@ public class SymbolTableHandler {
 
     public void closeScope() {
     	if(symbolTableStack.isEmpty()) {
-    		System.err.println("Stack is empty! There is nothing to close! - Programming error");
+    		ErrorHandler.emptyStack();
     	}
         symbolTableStack.pop();
     }
 
 	public void enterSymbol(String name, ITypeNode node) {
+		if(printDcl) {
+			System.out.println("Setting " + name + " to " + node.toString());			
+		}
 		symbolTableStack.peek().enterSymbol(name, node);
 	}
 	

@@ -3,6 +3,9 @@ package exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import ast.ITypeNode;
+import ast.Type;
+
 public class ErrorHandler {
 
     private static final List<ErrorMessage> messageList = new ArrayList<>();
@@ -15,7 +18,7 @@ public class ErrorHandler {
     public static void printErrorList()
     {
         if (hasErrors()){
-            System.out.println(" -- ## ERROR OUTPUT CONSOLE ## -- ");
+            System.err.println(" -- ## ERROR OUTPUT CONSOLE ## -- ");
             for (ErrorMessage message : messageList) {
                 System.out.println(message);
             }
@@ -36,5 +39,28 @@ public class ErrorHandler {
     {
         messageList.add(new GeneralError(ErrorType.ERROR,"\" " +  character + " \"" + " is a reserved keyword and can not be used."));
     }
+
+    public static void unexpectedType(ITypeNode node, Type type)
+    {
+        messageList.add(new GeneralError(ErrorType.ERROR,"\" " + "Unexpeced type! Expected: " + type.name() + ", was " + node.getType().name() + " - Node: " + node));
+    }
+
+    public static void emptyStack()
+    {
+        messageList.add(new GeneralError(ErrorType.WARNING, "Tried to close a scope and pop a symbol table, however, the symbol table stack was empty!"));
+    }
+
+    public static void typeMismatch(ITypeNode leftNode, ITypeNode rightNode)
+    {
+        Type leftType = leftNode.getType();
+        Type rightType = rightNode.getType();
+        messageList.add(new GeneralError(ErrorType.ERROR, "Type mismatch! \n -- Left type: " + leftType.name() + " Right type: " + rightType.name() + " \n -- Left node: " + leftNode + " Right node: " + rightNode));
+    }
+
+    public static void invalidTF()
+    {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid spelling of TRUE / FALSE - mistype?"));
+    }
+
 
 }
