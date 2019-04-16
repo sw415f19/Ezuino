@@ -132,7 +132,7 @@ RETURN              : 'return' ;
 FUNCTION            : 'func' ;
 DEFAULT             : 'default' ;
 // IDENTIFIERS
-BOOL				: 'true' | 'false' ;
+BOOL                : 'true' | 'false' ;
 ID                  : [a-zA-Z]+[a-zA-Z0-9]* ;
 // DATA TYPES
 INTEGER             : [0-9]+ ;
