@@ -9,7 +9,7 @@ import exceptions.ErrorHandler;
 
 public class Typechecker extends AstVisitor {
 
-    private boolean elseStmtExist = false;
+    private boolean elseStmtWithReturnExist = false;
 
     private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
 
@@ -29,7 +29,7 @@ public class Typechecker extends AstVisitor {
         }
 
 
-        if (!elseStmtExist && node.getReturnstmtNode() == null) {
+        if (!elseStmtWithReturnExist && node.getReturnstmtNode() == null) {
             System.err.println("Return is not guaranteed, since there are no else block with return or an return outside nested scopes");
         }
 
@@ -139,15 +139,20 @@ public class Typechecker extends AstVisitor {
     public void visit(StmtsNode node) {
         StmtNode firstIfStament = null;
         boolean ifStmtNodeExists = false;
-        elseStmtExist = false;
+        elseStmtWithReturnExist = false;
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
             if (node.getChild(i) instanceof If_stmtNode) {
                 /* Checks whether there exist any else stmts. If there is none, it must chech that there are an return stmt in the main scope (blockNode). */
                 If_stmtNode if_stmtNode = (If_stmtNode) node.getChild(i);
-                if (if_stmtNode.getElseBlock() != null) {
-                    elseStmtExist = true;
+                boolean elseStmtExist = if_stmtNode.getElseBlock() != null;
+                if(elseStmtExist) {
+                    boolean elseStmtReturnValue = if_stmtNode.getElseBlock().getReturnstmtNode() != null;
+                    if (elseStmtReturnValue) {
+                        elseStmtWithReturnExist = true;
+                    }
                 }
+
                 ifStmtNodeExists = true;
                 if (i == 0) {
                     firstIfStament = node.getChild(i);
