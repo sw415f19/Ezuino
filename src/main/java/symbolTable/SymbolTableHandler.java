@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import ast.ITypeNode;
 import ast.Type;
+import exceptions.ErrorHandler;
 
 public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
@@ -28,7 +29,7 @@ public class SymbolTableHandler {
 
     public void closeScope() {
     	if(symbolTableStack.isEmpty()) {
-    		System.err.println("Stack is empty! There is nothing to close! - Programming error");
+    		ErrorHandler.emptyStack();
     	}
         symbolTableStack.pop();
     }
