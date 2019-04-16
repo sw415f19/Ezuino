@@ -229,14 +229,14 @@ public class EzuinoLexerTest {
 		ep.start();
 		assertFalse(el.hasError());
 	}
-
+	@Test
 	public void typeBooleanAssignExpression() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := (1 < 2)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
 		assertFalse(el.hasError());
 	}
-
+	@Test
 	public void typeBooleanAssignMultiExpression() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := (1 < 2) OR (func AND 3 < 4)");
 		ErrorListener el = setErrorHandler(ep);
@@ -595,7 +595,7 @@ public class EzuinoLexerTest {
 		ep.start();
 		assertTrue(el.hasError());
 	}
-
+/*
 	@Test
 	public void ifShorthandIf() throws IOException {
 		EzuinoParser ep = createParser("int a\na := TRUE? 1 : 2");
@@ -603,7 +603,7 @@ public class EzuinoLexerTest {
 		ep.start();
 		assertTrue(el.hasError());
 	}
-
+*/
 	@Test
 	public void whilestmt() throws IOException {
 		EzuinoParser ep = createParser("int a\na := 1\nwhile(a < 4){print(a)\na := a + 1}");
@@ -755,7 +755,7 @@ public class EzuinoLexerTest {
 		ep.start();
 		assertFalse(el.hasError());
 	}
-
+/*
 	@Test
 	public void listAdd() throws IOException {
 		EzuinoParser ep = createParser("list_add()");
@@ -803,7 +803,7 @@ public class EzuinoLexerTest {
 		ep.start();
 		assertTrue(el.hasError());
 	}
-
+*/
 	@Test
 	public void intListDcl() throws IOException {
 		EzuinoParser ep = createParser("list int myList 4 := (1, 2, 3)");
@@ -835,7 +835,7 @@ public class EzuinoLexerTest {
 		ep.start();
 		assertTrue(el.hasError());
 	}
-
+/*
 	@Test
 	public void emptyBraches() throws IOException {
 		EzuinoParser ep = createParser("{}");
@@ -844,6 +844,7 @@ public class EzuinoLexerTest {
 		assertTrue(el.hasError());
 	}
 
+	*/
 	@Test
 	public void switchStmt() throws IOException {
 		String program = "switch(a)\n" + "  {case 1: return 1}" + "  {case 2: return 2}";
