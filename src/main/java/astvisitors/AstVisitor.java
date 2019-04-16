@@ -13,7 +13,7 @@ public abstract class AstVisitor {
     public abstract void visit(Return_stmtNode node);
     public abstract void visit(If_stmtNode node);
     public abstract void visit(StartNode node);
-    public abstract void visit(BooleantfNode node);
+    public abstract void visit(BooleanLiteral node);
     public abstract void visit(StmtsNode node);
     public abstract void visit(DclNode node);
     public abstract void visit(DclsNode node);
@@ -33,9 +33,9 @@ public abstract class AstVisitor {
 
 
     //"Type"
-    public abstract void visit(IntegerNode node);
-    public abstract void visit(DoubleNode node);
-    public abstract void visit(StringNode node);
+    public abstract void visit(IntegerLiteral node);
+    public abstract void visit(DoubleLiteral node);
+    public abstract void visit(StringLiteral node);
     public abstract void visit(IdNode node);
 
 
