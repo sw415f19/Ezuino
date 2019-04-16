@@ -95,7 +95,6 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(ValNode node) {
-
     }
 
     public void visit(While_stmtNode node) {
@@ -216,6 +215,9 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
+        if (node.getVal().toUpperCase().equals("TRUE") ||
+            node.getVal().toUpperCase().equals("FALSE"))
+            ErrorHandler.invalidTF();
     }
 
     @Override

@@ -57,5 +57,10 @@ public class ErrorHandler {
         messageList.add(new GeneralError(ErrorType.ERROR, "Type mismatch! \n -- Left type: " + leftType.name() + " Right type: " + rightType.name() + " \n -- Left node: " + leftNode + " Right node: " + rightNode));
     }
 
+    public static void invalidTF()
+    {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid spelling of TRUE / FALSE - mistype?"));
+    }
+
 
 }
