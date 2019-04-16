@@ -9,7 +9,6 @@ public class BooleanLiteral extends PrimaryExprNode {
 	private String boolval;
 
 	public BooleanLiteral(String boolval) {
-		System.out.println("Created Boolean Value");
 		this.boolval = boolval;
 	}
 
