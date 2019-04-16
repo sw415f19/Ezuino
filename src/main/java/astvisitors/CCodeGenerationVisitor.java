@@ -48,13 +48,19 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(BlockNode node) {
-        out.print("{");
-        node.getDclsNode().accept(this);
-        out.print(";\n");
-        node.getStmtsNode().accept(this);
-        out.print(";\n");
-        node.getReturnstmtNode().accept(this);
-        out.print(";\n}");
+        out.print("{\n");
+        // Checks for declarations
+        if (node.getDclsNode().getChildCount() != 0) {
+            node.getDclsNode().accept(this);
+            out.print("\n");
+        }
+        // Checks for statement calls
+        if (node.getStmtsNode().getChildCount() != 0) {
+            node.getStmtsNode().accept(this);
+            out.print("\n");
+        }
+        node.getReturnstmtNode().accept(this);  // Might need implementation for exiting block without return
+        out.print(";\n}\n");  // Formatting
     }
 
     @Override
@@ -75,6 +81,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(Return_stmtNode node) {
+        out.print("return ");
         node.getReturnExpr().accept(this);
     }
 
@@ -82,11 +89,10 @@ public class CCodeGenerationVisitor extends AstVisitor {
     public void visit(If_stmtNode node) {
         out.print("if (");
         node.getExpr().accept(this);
-        out.print(")\n");
+        out.print(") ");
         node.getIfBlock().accept(this);
-        out.print("else (");
+        out.print("else ");
         node.getElseBlock().accept(this);
-        out.print(")");
     }
 
     @Override
@@ -110,15 +116,34 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        // Void types might be able to be declared, which would give an error in C
-        out.print(node.getType() + " " + node.getID() + ";\n");
+        // Formats the antlr defined type to C types
+        if (node.getType().equals(Type.INT)) {
+            out.print("int " + node.getID() + ";");
+        }
+        if (node.getType().equals(Type.DOUBLE)) {
+            out.print("double " + node.getID() + ";");
+        }
+        // Converts the java string into a C char array of size 255
+        if (node.getType().equals(Type.STRING)) {
+            out.print("char array[255] " + node.getID() + ";");
+        }
+        if (node.getType().equals(Type.BOOL)) {
+            out.print("bool " + node.getID() + ";");
+        }
     }
 
     @Override
     public void visit(DclsNode node) {
-        for (Iterator<DclNode> iterator = node.getChildIterator(); iterator.hasNext(); ) {
-            DclNode dclNode = iterator.next();
-            dclNode.accept(this);
+        if (node.getChildCount() == 1) {
+            node.getChild(0).accept(this);
+            out.print("\n");
+        }
+        else {
+            for (Iterator<DclNode> iterator = node.getChildIterator(); iterator.hasNext(); ) {
+                DclNode dclNode = iterator.next();
+                dclNode.accept(this);
+                out.print("\n");
+            }
         }
     }
 
@@ -132,50 +157,63 @@ public class CCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
+    public void visit(Assign_stmtNode node) {
+        out.print(node.getId() + " = " );
+        node.getExprNode().accept(this);
+        out.print(";\n");
+    }
+
+    @Override
     public void visit(ParametersNode node) {
         // ParametersNode does currently not have an implementation
     }
 
     @Override
-    public void visit(AdditiveExprNode node) {
-
-    }
-
-    @Override
-    public void visit(MultiplicativeExprNode node) {
-
-    }
-
-    @Override
-    public void visit(LogicalAndExprNode node) {
-
-    }
-
-    @Override
-    public void visit(RelationalExprNode node) {
-
-    }
-
-    @Override
-    public void visit(EqualityExprNode node) {
-
+    public void visit(ParenthesisExprNode node) {
+        out.print("(");
+        node.getNode().accept(this);
+        out.print(")");
     }
 
     @Override
     public void visit(UnaryExprNode node) {
-
+        out.print(node.getOperator());
+        node.getNode().accept(this);
     }
 
     @Override
-    public void visit(ParenthesisExprNode node) {
-
+    public void visit(MultiplicativeExprNode node) {
+        node.getLeftNode().accept(this);
+        out.print(node.getOperator());
+        node.getRightNode().accept(this);
     }
 
     @Override
-    public void visit(Assign_stmtNode node) {
-        out.print(node.getType() + " " + node.getId() + " = " );
-        node.getExprNode().accept(this);
-        out.print(";\n");
+    public void visit(AdditiveExprNode node) {
+        node.getLeftNode().accept(this);
+        out.print(node.getOperator());
+        node.getRightNode().accept(this);
+    }
+
+    @Override
+    public void visit(RelationalExprNode node) {
+        node.getLeftNode().accept(this);
+        out.print(node.getOperator());
+        node.getRightNode().accept(this);
+    }
+
+    @Override
+    public void visit(EqualityExprNode node) {
+        node.getLeftNode().accept(this);
+        out.print(node.getOperator());
+        node.getRightNode().accept(this);
+    }
+
+    @Override
+    public void visit(LogicalAndExprNode node) {
+        node.getLeftNode().accept(this);
+        out.print("&&");
+        node.getRightNode().accept(this);
     }
 
     @Override
