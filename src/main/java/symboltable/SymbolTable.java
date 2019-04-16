@@ -49,5 +49,4 @@ public class SymbolTable {
     private boolean notEmpty(String key) {
         return ("<missing ID>" != key.intern());
     }
-
 }
