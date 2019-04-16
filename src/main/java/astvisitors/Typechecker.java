@@ -9,8 +9,6 @@ import exceptions.ErrorHandler;
 
 public class Typechecker extends AstVisitor {
 
-    private boolean elseStmtWithReturnExist = false;
-
     private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
 
     public void visit(Func_callStmtNode node) {
@@ -29,20 +27,21 @@ public class Typechecker extends AstVisitor {
         }
 
 
+
+        /*
         if (!elseStmtWithReturnExist && node.getReturnstmtNode() == null) {
             System.err.println("Return is not guaranteed, since there are no else block with return or an return outside nested scopes");
         }
+        */
+
 
         /* Checks type if returnStmt exists and ifStmt have an type, typechecks and sets type.
          *  If only either returnStmt or ifStmt have an type blocknode is set to that type.  */
 
         boolean ifStmtsReturnValue = node.getStmtsNode().getType() != null;
         boolean returnStmtReturnValue = node.getReturnstmtNode() != null;
-        boolean ifElseStmtsReturnVoid = node.getStmtsNode().getType() == Type.VOID;
 
-        if (returnStmtReturnValue && ifElseStmtsReturnVoid) {
-            node.setType(Type.VOID);
-        } else if (ifStmtsReturnValue && returnStmtReturnValue) {
+        if (ifStmtsReturnValue && returnStmtReturnValue) {
             checkType(node.getStmtsNode(), node.getReturnstmtNode());
             node.setType(node.getReturnstmtNode().getType());
         } else if (ifStmtsReturnValue) {
@@ -50,7 +49,6 @@ public class Typechecker extends AstVisitor {
         } else if (returnStmtReturnValue) {
             node.setType(node.getReturnstmtNode().getType());
         }
-
     }
 
     public void visit(Func_defNode node) {
@@ -58,8 +56,29 @@ public class Typechecker extends AstVisitor {
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
-        System.out.println(node.getType());
+
+        /* Gets the if statements of the outermost block, and checks if there is an else with an return stmt */
+        boolean elseStmtWithReturnExist = false;
+        StmtsNode stmtsOfOutermostBlock = node.getBlockNode().getStmtsNode();
+        for(int i = 0; i < stmtsOfOutermostBlock.getChildCount(); i++){
+            if(stmtsOfOutermostBlock.getChild(i) instanceof If_stmtNode) {
+                If_stmtNode if_stmtNode = (If_stmtNode) stmtsOfOutermostBlock.getChild(i);
+                if(if_stmtNode.getElseBlock() != null){
+                    if(if_stmtNode.getElseBlock().getReturnstmtNode() != null) {
+                        elseStmtWithReturnExist = true;
+                    }
+                }
+            }
+        }
+
+        /* If there are no else stmt in the outer most scope of the func def block and no other return stmt, the func def is not guaranteed to reach an return stmt */
+        if (!elseStmtWithReturnExist && node.getBlockNode().getReturnstmtNode() == null) {
+            System.err.println("Return is not guaranteed, since there are no return or an else block in the outer scope with return");
+        }
+
+
         checkType(node, node.getBlockNode());
+
         if (isReservedKeyword(node.getId())) ErrorHandler.reservedKeyword(node.getId());
         System.out.println("Checked return of func def!!");
 
@@ -117,7 +136,8 @@ public class Typechecker extends AstVisitor {
         } else if (elseReturnValue) {
             node.setType(node.getElseBlock().getReturnstmtNode().getType());
         } else {
-            node.setType(Type.VOID);
+            /* If it doesn't have a return, let the type be null */
+            node.setType(null);
         }
     }
 
@@ -139,20 +159,10 @@ public class Typechecker extends AstVisitor {
     public void visit(StmtsNode node) {
         StmtNode firstIfStament = null;
         boolean ifStmtNodeExists = false;
-        elseStmtWithReturnExist = false;
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
             if (node.getChild(i) instanceof If_stmtNode) {
                 /* Checks whether there exist any else stmts. If there is none, it must chech that there are an return stmt in the main scope (blockNode). */
-                If_stmtNode if_stmtNode = (If_stmtNode) node.getChild(i);
-                boolean elseStmtExist = if_stmtNode.getElseBlock() != null;
-                if(elseStmtExist) {
-                    boolean elseStmtReturnValue = if_stmtNode.getElseBlock().getReturnstmtNode() != null;
-                    if (elseStmtReturnValue) {
-                        elseStmtWithReturnExist = true;
-                    }
-                }
-
                 ifStmtNodeExists = true;
                 if (i == 0) {
                     firstIfStament = node.getChild(i);

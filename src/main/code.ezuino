@@ -1,10 +1,22 @@
 func int hello(){
-  if(TRUE){
-    if(TRUE){
-        if(TRUE){
-            return 1
-        }
+    if(TRUE) {
+        int a
+        return a
     }
-  }
-  return 1
+    if(TRUE){
+        int b
+        return b
+    }
+    if(TRUE) {
+        int c
+        return c
+    }
+}
+
+
+func int hello(){
+    if(TRUE) {
+
+    }
+    return 1
 }

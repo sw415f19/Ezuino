@@ -20,7 +20,7 @@ public class TypecheckerTest {
 
 
     @Test
-    public void nestedIfStmts() throws IOException {
+    public void nestedIfStmtsOuterScopeElseReturnValue() throws IOException {
         String testProgram = "func int hello(){\n" +
                 "  if(TRUE){\n" +
                 "    if(TRUE){\n" +
@@ -29,7 +29,95 @@ public class TypecheckerTest {
                 "        }\n" +
                 "    }\n" +
                 "  }\n" +
-                "  return 1\n" +
+                " else{" +
+                "   return 1" +
+                "} " +
+                "  \n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void nestedIfStmtsOuterScopeElseDoNotReturnValue() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  if(TRUE){\n" +
+                "    if(TRUE){\n" +
+                "        if(TRUE){\n" +
+                "            return 1\n" +
+                "        }\n" +
+                "    }\n" +
+                "  }\n" +
+                " else{" +
+                "  " +
+                "} " +
+                "  \n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void nestedIfStmtsOuterScopeElseDoNotExist() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  if(TRUE){\n" +
+                "    if(TRUE){\n" +
+                "        if(TRUE){\n" +
+                "            return 1\n" +
+                "        }\n" +
+                "    }\n" +
+                "  }\n" +
+                "  \n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void emptyIfStmtAndReturnValue() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "    if(TRUE) {\n" +
+                "\n" +
+                "    }\n" +
+                "    return 1\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void multipleIfsSameLevel() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "    if(TRUE) {\n" +
+                "        int a\n" +
+                "        return a\n" +
+                "    }\n" +
+                "    if(TRUE){\n" +
+                "        int b\n" +
+                "        return b\n" +
+                "    }\n" +
+                "    if(TRUE) {\n" +
+                "        int c\n" +
+                "        return c\n" +
+                "    }\n" +
+                "    else{" +
+                "       return 1" +
+                "    }" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void multipleIfsSameLevelNoElseOuterScopeGivesError() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "    if(TRUE) {\n" +
+                "        int a\n" +
+                "        return a\n" +
+                "    }\n" +
+                "    if(TRUE){\n" +
+                "        int b\n" +
+                "        return b\n" +
+                "    }\n" +
+                "    if(TRUE) {\n" +
+                "        int c\n" +
+                "        return c\n" +
+                "    }\n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
     }
