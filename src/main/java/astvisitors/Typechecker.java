@@ -63,7 +63,7 @@ public class Typechecker extends AstVisitor {
 
     }
 
-    public void visit(BooleantfNode node) {
+    public void visit(BooleanLiteral node) {
         node.setType(Type.BOOL);
     }
 
@@ -205,17 +205,17 @@ public class Typechecker extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerNode node) {
+    public void visit(IntegerLiteral node) {
         node.setType(Type.INT);
     }
 
     @Override
-    public void visit(DoubleNode node) {
+    public void visit(DoubleLiteral node) {
         node.setType(Type.DOUBLE);
     }
 
     @Override
-    public void visit(StringNode node) {
+    public void visit(StringLiteral node) {
         node.setType(Type.STRING);
     }
 

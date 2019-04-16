@@ -3,10 +3,10 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
-import ast.type.DoubleNode;
+import ast.type.DoubleLiteral;
 import ast.type.IdNode;
-import ast.type.IntegerNode;
-import ast.type.StringNode;
+import ast.type.IntegerLiteral;
+import ast.type.StringLiteral;
 
 public class IndentedPrintVisitor extends AstLevelVisitor {
 
@@ -99,7 +99,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     }
 
     @Override
-    public void visitLevel(BooleantfNode node, int level) {
+    public void visitLevel(BooleanLiteral node, int level) {
         print(node, level);
     }
 
@@ -149,17 +149,17 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     }
 
     @Override
-    public void visitLevel(IntegerNode node, int level) {
+    public void visitLevel(IntegerLiteral node, int level) {
         print(node, level);
     }
 
     @Override
-    public void visitLevel(DoubleNode node, int level) {
+    public void visitLevel(DoubleLiteral node, int level) {
         print(node, level);
     }
 
     @Override
-    public void visitLevel(StringNode node, int level) {
+    public void visitLevel(StringLiteral node, int level) {
         print(node, level);
     }
 

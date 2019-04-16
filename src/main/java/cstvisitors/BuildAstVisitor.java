@@ -181,15 +181,15 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
 
         if (ctx.INTEGER() != null) {
-            return new IntegerNode(ctx.INTEGER().getText());
+            return new IntegerLiteral(ctx.INTEGER().getText());
         }
 
         if (ctx.DOUBLE() != null) {
-            return new DoubleNode(ctx.DOUBLE().getText());
+            return new DoubleLiteral(ctx.DOUBLE().getText());
         }
 
         if (ctx.STRING() != null) {
-            return new StringNode(ctx.STRING().getText());
+            return new StringLiteral(ctx.STRING().getText());
         }
 
         if (ctx.ID() != null) {
@@ -201,7 +201,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBooleantf(EzuinoParser.BooleantfContext ctx) {
-        return new BooleantfNode(ctx.getText());
+        return new BooleanLiteral(ctx.getText());
     }
 
     @Override

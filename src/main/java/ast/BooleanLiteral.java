@@ -4,11 +4,11 @@ import astvisitors.AstLevelVisitor;
 import ast.expr.PrimaryExprNode;
 import astvisitors.AstVisitor;
 
-public class BooleantfNode extends PrimaryExprNode {
+public class BooleanLiteral extends PrimaryExprNode {
 
 	private String boolval;
 
-	public BooleantfNode(String boolval) {
+	public BooleanLiteral(String boolval) {
 		System.out.println("Created Boolean Value");
 		this.boolval = boolval;
 	}

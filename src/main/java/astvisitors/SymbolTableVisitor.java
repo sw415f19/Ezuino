@@ -68,22 +68,22 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerNode node) {
+    public void visit(IntegerLiteral node) {
 
     }
 
     @Override
-    public void visit(DoubleNode node) {
+    public void visit(DoubleLiteral node) {
 
     }
 
     @Override
-    public void visit(BooleantfNode node) {
+    public void visit(BooleanLiteral node) {
 
     }
 
     @Override
-    public void visit(StringNode node) {
+    public void visit(StringLiteral node) {
 
     }
 
