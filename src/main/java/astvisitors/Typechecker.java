@@ -165,8 +165,8 @@ public class Typechecker extends AstVisitor {
     @Override
     public void visit(EqualityExprNode node) {
         node.getLeftNode().accept(this);
-        node.getRelationalExprNode().accept(this);
-        checkType(node.getLeftNode(), node.getRelationalExprNode());
+        node.getRightNode().accept(this);
+        checkType(node.getLeftNode(), node.getRightNode());
         node.setType(Type.BOOL);
         System.out.println("Checked EqualityExprNode type!!");
     }

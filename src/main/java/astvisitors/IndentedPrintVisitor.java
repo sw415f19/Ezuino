@@ -179,7 +179,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     public void visitLevel(EqualityExprNode node, int level) {
         print(node, level);
         node.getLeftNode().acceptLevel(this, level + 1);
-        node.getRelationalExprNode().acceptLevel(this, level + 1);
+        node.getRightNode().acceptLevel(this, level + 1);
     }
 
     @Override

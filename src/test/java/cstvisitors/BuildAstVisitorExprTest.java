@@ -59,9 +59,9 @@ public class BuildAstVisitorExprTest {
 		EqualityExprNode topNode = (EqualityExprNode) ep.expr().accept(visitor);
 
 		assertTrue(topNode.getLeftNode() instanceof IntegerNode);
-		assertTrue(topNode.getRelationalExprNode() instanceof IntegerNode);
+		assertTrue(topNode.getRightNode() instanceof IntegerNode);
 		assertEquals("1", ((IntegerNode)topNode.getLeftNode()).getVal());
-		assertEquals("1", ((IntegerNode)topNode.getRelationalExprNode()).getVal());
+		assertEquals("1", ((IntegerNode)topNode.getRightNode()).getVal());
 		assertEquals("=", topNode.getOperator());
 	}
 	@Test
