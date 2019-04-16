@@ -49,18 +49,4 @@ public class EzuinoParserTest {
         EzuinoParser parser = new EzuinoParser(tokens);
         return parser;
 	}
-	
-	/*
-	private void redirectOutputsToNothing() {
-		PrintStream ps = new PrintStream(new OutputStream() {
-			
-			@Override
-			public void write(int b) throws IOException {
-				//DO NOTHING				
-			}
-		});
-		System.setOut(ps);
-		System.setErr(ps);
-	}
-	*/
 }
