@@ -9,7 +9,7 @@ import exceptions.ErrorHandler;
 
 public class Typechecker extends AstVisitor {
 
-    private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
+    private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
 
     public void visit(Func_callStmtNode node) {
 
@@ -35,10 +35,10 @@ public class Typechecker extends AstVisitor {
         }
         if (node.getType() != Type.VOID) {
             checkType(node, node.getBlockNode().getReturnstmtNode());
-            System.out.println("Checked return of func def!!");
         }
 
-        if (isReservedKeyword(node.getId())) ErrorHandler.reservedKeyword(node.getId());
+        if (isReservedKeyword(node.getId()))
+            ErrorHandler.reservedKeyword(node.getId());
     }
 
     public void visit(Return_stmtNode node) {
@@ -69,7 +69,6 @@ public class Typechecker extends AstVisitor {
 
     public void visit(StmtNode node) {
 
-
     }
 
     public void visit(StmtsNode node) {
@@ -80,7 +79,8 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(DclNode node) {
-        if (isReservedKeyword(node.getID())) ErrorHandler.reservedKeyword(node.getID());
+        if (isReservedKeyword(node.getID()))
+            ErrorHandler.reservedKeyword(node.getID());
     }
 
     public void visit(TypeNode node) {
@@ -113,7 +113,7 @@ public class Typechecker extends AstVisitor {
 
     }
 
-    //One added assignment nodes.
+    // One added assignment nodes.
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
@@ -131,7 +131,6 @@ public class Typechecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(node.getLeftNode().getType());
-        System.out.println("Checked AdditiveExprNode type!!");
     }
 
     @Override
@@ -140,7 +139,6 @@ public class Typechecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(node.getLeftNode().getType());
-        System.out.println("Checked LogicalAndExprNode type!!");
     }
 
     @Override
@@ -150,7 +148,6 @@ public class Typechecker extends AstVisitor {
         checkSpecificType(node.getLeftNode(), Type.BOOL);
         checkSpecificType(node.getRightNode(), Type.BOOL);
         node.setType(Type.BOOL);
-        System.out.println("Checked LogicalAndExprNode type!!");
     }
 
     @Override
@@ -159,7 +156,6 @@ public class Typechecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(Type.BOOL);
-        System.out.println("Checked RelationalExprNode type!!");
     }
 
     @Override
@@ -168,32 +164,32 @@ public class Typechecker extends AstVisitor {
         node.getRelationalExprNode().accept(this);
         checkType(node.getLeftNode(), node.getRelationalExprNode());
         node.setType(Type.BOOL);
-        System.out.println("Checked EqualityExprNode type!!");
     }
 
     private void checkType(ITypeNode leftNode, ITypeNode rightNode) {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();
         if (leftType == null) {
-            System.err.println("left type null!");
+            System.err.println("Left type null!");
             return;
         }
         if (rightType == null) {
-            System.err.println("right type null!");
+            System.err.println("Right type null!");
             return;
         }
         if (leftType != rightType) {
-            System.err.println("Type mismatch! Left type: " + leftType.name() + " Right type: " + rightType.name() + "\nLeft node: " + leftNode + " Right node: " + rightNode);
+            ErrorHandler.typeMismatch(leftNode, rightNode);
+
         }
     }
 
     private void checkSpecificType(ITypeNode node, Type expectedType) {
         Type nodeType = node.getType();
         if (nodeType == null) {
-            System.err.println("Null!! :( ");
+            System.err.println("node null in 184 :(");
         }
         if (nodeType != expectedType) {
-            System.err.println("Unexpeced type! Expected: " + expectedType.name() + ", was " + nodeType.name() + " - Node: " + node);
+            ErrorHandler.unexpectedType(node, nodeType);
         }
     }
 
@@ -201,7 +197,6 @@ public class Typechecker extends AstVisitor {
     public void visit(ParenthesisExprNode node) {
         node.getNode().accept(this);
         node.setType(node.getNode().getType());
-        System.out.println("Checked ParenthesisExprNode type!!");
     }
 
     @Override
@@ -232,10 +227,10 @@ public class Typechecker extends AstVisitor {
         return (Arrays.binarySearch(keywords, word.toUpperCase()) >= 0);
     }
 
-	@Override
-	public void visit(UnaryExprNode node) {
-		node.getNode().accept(this);
-		node.setType(node.getNode().getType());
-		
-	}
+    @Override
+    public void visit(UnaryExprNode node) {
+        node.getNode().accept(this);
+        node.setType(node.getNode().getType());
+
+    }
 }
