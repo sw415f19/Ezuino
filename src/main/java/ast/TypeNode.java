@@ -12,7 +12,7 @@ public abstract class TypeNode extends AstNode implements ITypeNode {
 	}
 	
 	public Type getType() {
-		return this.type;
+		return type;
 	}
 
 	@Override

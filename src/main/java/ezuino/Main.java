@@ -1,6 +1,7 @@
 package ezuino;
 
 import ast.AstNode;
+import astvisitors.CCodeGenerationVisitor;
 import astvisitors.IndentedPrintVisitor;
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
@@ -75,6 +76,9 @@ public class Main {
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
+
+        CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
+        astNode.accept(cCodeGenerationVisitor);
 
         ErrorHandler.printErrorList();
     }

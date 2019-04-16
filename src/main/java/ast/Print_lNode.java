@@ -4,21 +4,16 @@ import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class While_stmtNode extends StmtNode {
-    private AExpr exprNode;
-    private BlockNode blockNode;
+public class Print_lNode extends AstNode {
 
-    public While_stmtNode(AExpr exprNode, BlockNode blockNode) {
+    private AExpr exprNode;
+
+    public Print_lNode(AExpr exprNode) {
         this.exprNode = exprNode;
-        this.blockNode = blockNode;
     }
 
     public AExpr getExprNode() {
         return exprNode;
-    }
-
-    public BlockNode getBlockNode() {
-        return blockNode;
     }
 
     @Override
