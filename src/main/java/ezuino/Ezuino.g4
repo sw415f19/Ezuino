@@ -132,12 +132,12 @@ RETURN              : 'return' ;
 FUNCTION            : 'func' ;
 DEFAULT             : 'default' ;
 // IDENTIFIERS
+BOOL				: 'true' | 'false' ;
 ID                  : [a-zA-Z]+[a-zA-Z0-9]* ;
 // DATA TYPES
 INTEGER             : [0-9]+ ;
 DOUBLE              : [0-9]+'.'[0-9]+ ;
 STRING              : '"' (~["\r\n] | '""')* '"' ;
-BOOL				: 'true' | 'false' ;
 // EXTRA
 BLANK               : [ \t\r\n]+ -> skip ;
 COMMENT             : '#' ~[\r\n]*-> skip ;
