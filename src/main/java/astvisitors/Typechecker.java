@@ -8,8 +8,11 @@ import ast.type.*;
 import exceptions.ErrorHandler;
 
 public class Typechecker extends AstVisitor {
-  
-   private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
+
+    private boolean elseStmtExist = false;
+
+    private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
+
     public void visit(Func_callStmtNode node) {
 
     }
@@ -25,13 +28,21 @@ public class Typechecker extends AstVisitor {
             node.getReturnstmtNode().accept(this);
         }
 
+
+        if (!elseStmtExist && node.getReturnstmtNode() == null) {
+            System.err.println("Return is not guaranteed, since there are no else block with return or an return outside nested scopes");
+        }
+
         /* Checks type if returnStmt exists and ifStmt have an type, typechecks and sets type.
          *  If only either returnStmt or ifStmt have an type blocknode is set to that type.  */
 
         boolean ifStmtsReturnValue = node.getStmtsNode().getType() != null;
         boolean returnStmtReturnValue = node.getReturnstmtNode() != null;
+        boolean ifElseStmtsReturnVoid = node.getStmtsNode().getType() == Type.VOID;
 
-        if (ifStmtsReturnValue && returnStmtReturnValue) {
+        if (returnStmtReturnValue && ifElseStmtsReturnVoid) {
+            node.setType(Type.VOID);
+        } else if (ifStmtsReturnValue && returnStmtReturnValue) {
             checkType(node.getStmtsNode(), node.getReturnstmtNode());
             node.setType(node.getReturnstmtNode().getType());
         } else if (ifStmtsReturnValue) {
@@ -47,9 +58,9 @@ public class Typechecker extends AstVisitor {
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
-
+        System.out.println(node.getType());
         checkType(node, node.getBlockNode());
-       if (isReservedKeyword(node.getId())) ErrorHandler.reservedKeyword(node.getId());
+        if (isReservedKeyword(node.getId())) ErrorHandler.reservedKeyword(node.getId());
         System.out.println("Checked return of func def!!");
 
 
@@ -61,9 +72,13 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(Return_stmtNode node) {
-        node.getReturnExpr().accept(this);
-        node.setType(node.getReturnExpr().getType());
-
+        if(node.getReturnExpr() != null){
+            node.getReturnExpr().accept(this);
+            node.setType(node.getReturnExpr().getType());
+        }
+        else {
+            node.setType(Type.VOID);
+        }
     }
 
     public void visit(If_stmtNode node) {
@@ -79,17 +94,17 @@ public class Typechecker extends AstVisitor {
         boolean elseReturnValue = false;
 
         boolean ifStmtExist = node.getIfBlock() != null;
-        if(ifStmtExist){
+        if (ifStmtExist) {
             ifReturnValue = node.getIfBlock().getReturnstmtNode() != null;
         }
 
         boolean elseStmtExist = node.getElseBlock() != null;
-        if(elseStmtExist) {
+        if (elseStmtExist) {
             elseReturnValue = node.getElseBlock().getReturnstmtNode() != null;
         }
 
-        if(ifStmtExist && elseStmtExist) {
-           ifAndElseBothReturnValue  = node.getIfBlock().getReturnstmtNode() != null &&
+        if (ifStmtExist && elseStmtExist) {
+            ifAndElseBothReturnValue = node.getIfBlock().getReturnstmtNode() != null &&
                     node.getElseBlock().getReturnstmtNode() != null;
         }
 
@@ -123,26 +138,32 @@ public class Typechecker extends AstVisitor {
 
     public void visit(StmtsNode node) {
         StmtNode firstIfStament = null;
-        System.out.println(node.getChildCount());
-        boolean ifStmtExist = false;
+        boolean ifStmtNodeExists = false;
+        elseStmtExist = false;
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
             if (node.getChild(i) instanceof If_stmtNode) {
-                ifStmtExist = true;
+                /* Checks whether there exist any else stmts. If there is none, it must chech that there are an return stmt in the main scope (blockNode). */
+                If_stmtNode if_stmtNode = (If_stmtNode) node.getChild(i);
+                if (if_stmtNode.getElseBlock() != null) {
+                    elseStmtExist = true;
+                }
+                ifStmtNodeExists = true;
                 if (i == 0) {
                     firstIfStament = node.getChild(i);
                 } else {
                     checkType(firstIfStament, node.getChild(i));
                 }
             }
+
         }
-        if (ifStmtExist) {
+        if (ifStmtNodeExists) {
             node.setType(firstIfStament.getType());
         }
     }
 
     public void visit(DclNode node) {
-       if (isReservedKeyword(node.getID())) ErrorHandler.reservedKeyword(node.getID());
+        if (isReservedKeyword(node.getID())) ErrorHandler.reservedKeyword(node.getID());
 
     }
 
@@ -238,7 +259,7 @@ public class Typechecker extends AstVisitor {
         node.setType(Type.BOOL);
         System.out.println("Checked EqualityExprNode type!!");
     }
-  
+
     private void checkType(AstNode leftNode, AstNode rightNode) {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();

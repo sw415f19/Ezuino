@@ -95,7 +95,9 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Return_stmtNode node) {
-        node.getReturnExpr().accept(this);
+        if(node.getReturnExpr() != null){
+            node.getReturnExpr().accept(this);
+        }
     }
 
     @Override

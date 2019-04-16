@@ -14,27 +14,73 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class TypecheckerTest {
-    /* return skal kunne være tom
-den skal tjekke om der er en else stmt efter if, og hvis der ikke nogen else stmts skal der være en uden for nestede scopes ved func def.
-*/
-    SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
-    BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-    Typechecker typechecker = new Typechecker();
+    private SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
+    private BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+    private Typechecker typechecker = new Typechecker();
+
 
     @Test
-    public void missingElseStmt() throws IOException {
+    public void nestedIfStmts() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  if(TRUE){\n" +
+                "    if(TRUE){\n" +
+                "        if(TRUE){\n" +
+                "            return 1\n" +
+                "        }\n" +
+                "    }\n" +
+                "  }\n" +
+                "  return 1\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void missingElseStmtReturnError() throws IOException {
         String testProgram = "func int hello(){\n" +
                 "  int a\n" +
                 "  if(TRUE){\n" +
                 "        return a\n" +
+                "  } \n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void elseStmtHaveNoReturnGivesError() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  int a\n" +
+                "  if(TRUE){\n" +
+                "        return a\n" +
+                "  } else{} \n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void returnAsBreakReturnTypeError() throws IOException {
+        String testProgram = "func hello(){\n" +
+                "  if(TRUE){\n" +
+                "    return 1\n" +
                 "  }\n" +
+                "  return\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+    }
+
+    @Test
+    public void returnAsBreakReturn() throws IOException {
+        String testProgram = "func hello(){\n" +
+                "  if(TRUE){\n" +
+                "    return\n" +
+                "  }\n" +
+                "  return\n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
     }
 
     /* Gives error type mismatch, return statements are not the same type */
     @Test
-    public void returnTwoDifferentTypes() throws IOException {
+    public void returnTwoDifferentTypesError() throws IOException {
         String testProgram = "func int hello(){\n" +
                 "  if(TRUE){\n" +
                 "    return 3.4\n" +
