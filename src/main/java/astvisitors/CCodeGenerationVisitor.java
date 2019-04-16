@@ -74,13 +74,6 @@ public class CCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(Print_lNode node) {
-        out.print("print(");
-        node.getExprNode().accept(this);
-        out.print(");\n");
-    }
-
-    @Override
     public void visit(Return_stmtNode node) {
         node.getReturnExpr().accept(this);
     }
@@ -122,11 +115,6 @@ public class CCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(TypeNode node) {
-        out.print(node.getType());
-    }
-
-    @Override
     public void visit(DclsNode node) {
         for (Iterator<DclNode> iterator = node.getChildIterator(); iterator.hasNext(); ) {
             DclNode dclNode = iterator.next();
@@ -144,18 +132,8 @@ public class CCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(ExprNode node) {
-
-    }
-
-    @Override
     public void visit(ParametersNode node) {
         // ParametersNode does currently not have an implementation
-    }
-
-    @Override
-    public void visit(Built_in_funcNode node) {
-        node.getPrintlNode().accept(this);
     }
 
     @Override
@@ -180,6 +158,11 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(EqualityExprNode node) {
+
+    }
+
+    @Override
+    public void visit(UnaryExprNode node) {
 
     }
 
