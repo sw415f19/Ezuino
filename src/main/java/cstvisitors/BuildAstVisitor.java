@@ -66,8 +66,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.val() != null) {
             return ctx.val().accept(this);
         }
-        if (ctx.booleantf() != null) {
-            return ctx.booleantf().accept(this);
+        if (ctx.BOOL() != null) {
+            return new BooleanLiteral(ctx.BOOL().getText());
         }
         if (ctx.func_call() != null) {
             return ctx.func_call().accept(this);
@@ -197,11 +197,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         }
 
         return null;
-    }
-
-    @Override
-    public AstNode visitBooleantf(EzuinoParser.BooleantfContext ctx) {
-        return new BooleanLiteral(ctx.getText());
     }
 
     @Override
