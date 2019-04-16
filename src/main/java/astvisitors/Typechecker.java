@@ -65,8 +65,6 @@ public class Typechecker extends AstVisitor {
 
     public void visit(BooleanLiteral node) {
         node.setType(Type.BOOL);
-
-
     }
 
     public void visit(StmtNode node) {
