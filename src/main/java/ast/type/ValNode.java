@@ -1,7 +1,6 @@
 package ast.type;
 
 import ast.expr.PrimaryExprNode;
-import astvisitors.AstVisitor;
 
 public abstract class ValNode extends PrimaryExprNode {
 	protected String val;

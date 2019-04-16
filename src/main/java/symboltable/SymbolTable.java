@@ -1,4 +1,4 @@
-package symbolTable;
+package symboltable;
 
 import ast.ITypeNode;
 import ast.Type;

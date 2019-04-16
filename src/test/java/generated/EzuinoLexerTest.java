@@ -8,7 +8,6 @@ import java.io.IOException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
 import org.junit.Test;
 
 import exceptions.ErrorListener;
@@ -758,7 +757,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void list_add() throws IOException {
+	public void listAdd() throws IOException {
 		EzuinoParser ep = createParser("list_add()");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -766,7 +765,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void list_addParam() throws IOException {
+	public void listAddParam() throws IOException {
 		EzuinoParser ep = createParser("list_add(a)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -774,7 +773,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void list_addParams() throws IOException {
+	public void listAddParams() throws IOException {
 		EzuinoParser ep = createParser("list_add(a, b, c)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -782,7 +781,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void list_remove() throws IOException {
+	public void listRemove() throws IOException {
 		EzuinoParser ep = createParser("list_remove()");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -790,7 +789,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void list_removeParam() throws IOException {
+	public void listRemoveParam() throws IOException {
 		EzuinoParser ep = createParser("list_remove(a)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -798,7 +797,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void list_removeParams() throws IOException {
+	public void listRemoveParams() throws IOException {
 		EzuinoParser ep = createParser("list_remove(a, b, c)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -864,7 +863,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void MissingParamInFuncCall() throws IOException {
+	public void missingParamInFuncCall() throws IOException {
 		EzuinoParser ep = createParser("a(");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -872,7 +871,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void EmptyVoidFuncCall() throws IOException {
+	public void emptyVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void()");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -880,7 +879,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void ValInVoidFuncCall() throws IOException {
+	public void valInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -888,7 +887,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void ManyValInVoidFuncCall() throws IOException {
+	public void manyValInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55, 55, 55, 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -896,7 +895,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void PlusValInVoidFuncCall() throws IOException {
+	public void plusValInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 + 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -904,7 +903,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void MinusValInVoidFuncCall() throws IOException {
+	public void minusValInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 - 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -912,7 +911,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void MultipleValInVoidFuncCall() throws IOException {
+	public void multipleValInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 * 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -920,7 +919,7 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void DivideValInVoidFuncCall() throws IOException {
+	public void divideValInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 / 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -929,7 +928,7 @@ public class EzuinoLexerTest {
 
 	// Should be caught in type checking
 	@Test
-	public void ANDInVoidFuncCall() throws IOException {
+	public void andInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 AND 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -938,7 +937,7 @@ public class EzuinoLexerTest {
 
 	// Should be caught in type checking
 	@Test
-	public void ORInVoidFuncCall() throws IOException {
+	public void orInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 OR 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -947,7 +946,7 @@ public class EzuinoLexerTest {
 
 	// Should be caught in type checking
 	@Test
-	public void EqualInVoidFuncCall() throws IOException {
+	public void equalInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 = 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -956,7 +955,7 @@ public class EzuinoLexerTest {
 
 	// Should be caught in type checking
 	@Test
-	public void NotEqualInVoidFuncCall() throws IOException {
+	public void notEqualInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 != 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -965,7 +964,7 @@ public class EzuinoLexerTest {
 
 	// Should be caught in type checking
 	@Test
-	public void LessInVoidFuncCall() throws IOException {
+	public void lessInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 < 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -974,7 +973,7 @@ public class EzuinoLexerTest {
 
 	// Should be caught in type checking
 	@Test
-	public void LessThanOrEqualInVoidFuncCall() throws IOException {
+	public void lessThanOrEqualInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 <= 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -983,7 +982,7 @@ public class EzuinoLexerTest {
 
 	// Should be caught in type checking
 	@Test
-	public void GreaterInVoidFuncCall() throws IOException {
+	public void greaterInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 > 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
@@ -992,7 +991,7 @@ public class EzuinoLexerTest {
 
 	// Should be caught in type checking
 	@Test
-	public void GreaterThanOrEqualInVoidFuncCall() throws IOException {
+	public void greaterThanOrEqualInVoidFuncCall() throws IOException {
 		EzuinoParser ep = createParser("void(55 >= 55)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();

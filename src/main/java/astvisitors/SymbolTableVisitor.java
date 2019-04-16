@@ -5,18 +5,18 @@ import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
-import symbolTable.SymbolTableHandler;
+import symboltable.SymbolTableHandler;
 
 public class SymbolTableVisitor extends AstVisitor {
     private SymbolTableHandler symbolTableHandler;
-    
+
     public SymbolTableVisitor(boolean printDcl) {
-    	this.symbolTableHandler = new SymbolTableHandler(printDcl);
-	}
-    
+        this.symbolTableHandler = new SymbolTableHandler(printDcl);
+    }
+
     public SymbolTableVisitor() {
-    	this.symbolTableHandler = new SymbolTableHandler(false);
-	}
+        this.symbolTableHandler = new SymbolTableHandler(false);
+    }
 
     @Override
     public void visit(StartNode node) {
@@ -43,7 +43,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-    	symbolTableHandler.enterSymbol(node.getID(), node);
+        symbolTableHandler.enterSymbol(node.getID(), node);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-    	node.setType(symbolTableHandler.retrieveSymbol(node.getID()));
+        node.setType(symbolTableHandler.retrieveSymbol(node.getID()));
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -89,7 +89,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
-    	symbolTableHandler.enterSymbol(node.getId(), node);
+        symbolTableHandler.enterSymbol(node.getId(), node);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
