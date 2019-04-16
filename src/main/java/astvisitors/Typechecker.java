@@ -10,7 +10,6 @@ import exceptions.ErrorHandler;
 public class Typechecker extends AstVisitor {
 
     private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
-    static int max =  100;
 
     public void visit(Func_callStmtNode node) {
 
