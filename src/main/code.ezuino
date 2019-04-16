@@ -32,3 +32,4 @@ func main() {
 
 func int meaningOfLife() {
 	return 42
+}
