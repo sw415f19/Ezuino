@@ -1,8 +1,6 @@
-package astVisitors;
+package astvisitors;
 
 import ast.AstNode;
-import ast.DclNode;
-import ast.Type;
 import astvisitors.SymbolTableVisitor;
 import cstvisitors.BuildAstVisitor;
 import generated.EzuinoLexer;
@@ -14,11 +12,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
-
 public class SymbolTableVisitorTest {
-    SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
-    BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+    private SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
+    private BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
 
     /* Test with several scopes and one duplicate declaration (int a) */
     @Test

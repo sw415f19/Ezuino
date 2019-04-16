@@ -1,10 +1,8 @@
 package generated;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.antlr.v4.runtime.CharStream;
@@ -50,7 +48,9 @@ public class EzuinoParserTest {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         EzuinoParser parser = new EzuinoParser(tokens);
         return parser;
-    }
+	}
+	
+	/*
 	private void redirectOutputsToNothing() {
 		PrintStream ps = new PrintStream(new OutputStream() {
 			
@@ -62,4 +62,5 @@ public class EzuinoParserTest {
 		System.setOut(ps);
 		System.setErr(ps);
 	}
+	*/
 }
