@@ -10,6 +10,7 @@ import exceptions.ErrorHandler;
 public class Typechecker extends AstVisitor {
 
     private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
+    static int max =  100;
 
     public void visit(Func_callStmtNode node) {
 
@@ -65,6 +66,8 @@ public class Typechecker extends AstVisitor {
 
     public void visit(BooleanLiteral node) {
         node.setType(Type.BOOL);
+
+
     }
 
     public void visit(StmtNode node) {
@@ -95,7 +98,6 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(ValNode node) {
-
     }
 
     public void visit(While_stmtNode node) {
@@ -216,6 +218,9 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
+        if (node.getVal().toUpperCase().equals("TRUE") ||
+            node.getVal().toUpperCase().equals("FALSE"))
+            ErrorHandler.invalidTF();
     }
 
     @Override
