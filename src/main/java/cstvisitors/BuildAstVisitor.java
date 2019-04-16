@@ -88,7 +88,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.getChildCount() == 1) {
             return ctx.parenthesisExpr().accept(this);
         }
-        return new UnaryExprNode(ctx.op.getText(), (AParenthesisExpr) ctx.parenthesisExpr().accept(this));
+        return new UnaryExprNode(ctx.operator.getText(), (AParenthesisExpr) ctx.parenthesisExpr().accept(this));
     }
 
     @Override
