@@ -2,7 +2,7 @@ package ast;
 
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
-import symbolTable.SymbolTable;
+import symboltable.SymbolTable;
 
 public class BlockNode extends AstNode {
 
