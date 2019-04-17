@@ -185,4 +185,11 @@ public class SymbolTableVisitor extends AstVisitor {
 		node.getNode().accept(this);
 		
 	}
+
+	@Override
+	public void visit(LogicalOrExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        
+	}
 }

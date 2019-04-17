@@ -16,22 +16,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         resultString += "+- " + node.toString();
         System.out.println(resultString);
     }
-    /*
-     * public void visit(StartNode s) { System.out.println("Printing AST:");
-     * //print(s, 0); visit(s.getDcls(), 1); visit(s.getStmts(), 1); }
-     * 
-     * public void visit(DclsNode d, int level) { int childCount =
-     * d.getChildCount(); print(d, level); for(int i = 0;i < childCount;i++) {
-     * DclNode child = d.getChild(i); visit(child, level + 1); } }
-     * 
-     * public void visit(DclNode d, int level) { print(d, level); }
-     * 
-     * public void visit(StmtsNode s, int level) { int childCount =
-     * s.getChildCount(); print(s, level); for(int i = 0; i< childCount; i++) {
-     * visit(s.getChild(i), level + 1); } }
-     * 
-     * public void visit(StmtNode s, int level) { print(s, level); }
-     */
 
     @Override
     public void visitLevel(Func_callStmtNode node, int level) {
@@ -215,6 +199,14 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 	public void visitLevel(UnaryExprNode node, int level) {
 		print(node, level);
 		node.getNode().acceptLevel(this, level + 1);
+		
+	}
+
+	@Override
+	public void visitLevel(LogicalOrExprNode node, int level) {
+        print(node, level);
+        node.getLeftNode().acceptLevel(this, level + 1);
+        node.getRightNode().acceptLevel(this, level + 1);
 		
 	}
 }

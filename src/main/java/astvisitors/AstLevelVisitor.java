@@ -23,6 +23,7 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(AdditiveExprNode node, int level);
 	public abstract void visitLevel(MultiplicativeExprNode node, int level);
 	public abstract void visitLevel(LogicalAndExprNode node, int level);
+	public abstract void visitLevel(LogicalOrExprNode node, int level);
 	public abstract void visitLevel(RelationalExprNode node, int level);
 	public abstract void visitLevel(EqualityExprNode node, int level);
 	public abstract void visitLevel(ParenthesisExprNode node, int level);

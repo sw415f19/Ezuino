@@ -22,6 +22,7 @@ public abstract class AstVisitor {
     public abstract void visit(AdditiveExprNode node);
     public abstract void visit(MultiplicativeExprNode node);
     public abstract void visit(LogicalAndExprNode node);
+    public abstract void visit(LogicalOrExprNode node);
     public abstract void visit(RelationalExprNode node);
     public abstract void visit(EqualityExprNode node);
     public abstract void visit(ParenthesisExprNode node);
