@@ -233,6 +233,10 @@ public class Typechecker extends AstVisitor {
     public void visit(UnaryExprNode node) {
         node.getNode().accept(this);
         node.setType(node.getNode().getType());
+    }
+
+    @Override
+    public void visit(LogicalOrExprNode node) {
 
     }
 }
