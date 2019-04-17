@@ -8,6 +8,7 @@ import generated.EzuinoParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -15,9 +16,17 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 public class TypecheckerTest {
-    private SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
-    private BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-    private Typechecker typechecker = new Typechecker();
+
+    private SymbolTableVisitor symbolTableVisitor;
+    private BuildAstVisitor buildAstVisitor;
+    private Typechecker typechecker;
+
+    @Before
+    void init(){
+        this.symbolTableVisitor = new SymbolTableVisitor();
+        this.buildAstVisitor = new BuildAstVisitor();
+        this.typechecker = new Typechecker();
+    }
 
 
     @Test
@@ -251,8 +260,6 @@ public class TypecheckerTest {
         testWithTableAndTypeChecker(testProgram);
         assertFalse(ErrorHandler.hasErrors());
     }
-
-
 
     private EzuinoParser createParser(String testString) throws IOException {
         CharStream stream = CharStreams.fromString(testString);
