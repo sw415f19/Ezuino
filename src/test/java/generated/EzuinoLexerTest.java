@@ -612,14 +612,6 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void returnkeyword() throws IOException {
-		EzuinoParser ep = createParser("return");
-		ErrorListener el = setErrorHandler(ep);
-		ep.start();
-		assertTrue(el.hasError());
-	}
-
-	@Test
 	public void voidFunctionTest() throws IOException {
 		EzuinoParser ep = createParser("func f(){}");
 		ErrorListener el = setErrorHandler(ep);
