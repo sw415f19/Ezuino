@@ -17,6 +17,10 @@ public class ErrorHandler {
         return false;
     }
 
+    public static void reset(){
+        messageList.clear();
+    }
+
     public static void printErrorList()
     {
         if (hasErrors()){
