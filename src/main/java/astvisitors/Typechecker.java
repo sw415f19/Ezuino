@@ -80,8 +80,8 @@ public class Typechecker extends AstVisitor {
 
         checkType(node, node.getBlockNode());
 
-        if (isReservedKeyword(node.getId())) ErrorHandler.reservedKeyword(node.getId());
-        System.out.println("Checked return of func def!!");
+        if (isReservedKeyword(node.getId()))
+            ErrorHandler.reservedKeyword(node.getId());
     }
 
     public void visit(Return_stmtNode node) {
