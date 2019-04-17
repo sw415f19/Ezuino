@@ -9,7 +9,7 @@ import exceptions.ErrorHandler;
 
 public class Typechecker extends AstVisitor {
 
-    private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
+    private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
 
     public void visit(Func_callStmtNode node) {
 
@@ -58,36 +58,37 @@ public class Typechecker extends AstVisitor {
         /* Gets the if statements of the outermost block, and checks if there is an else with an return stmt */
         boolean elseStmtWithReturnExist = false;
         StmtsNode stmtsOfOutermostBlock = node.getBlockNode().getStmtsNode();
-        for(int i = 0; i < stmtsOfOutermostBlock.getChildCount(); i++){
-            if(stmtsOfOutermostBlock.getChild(i) instanceof If_stmtNode) {
+        for (int i = 0; i < stmtsOfOutermostBlock.getChildCount(); i++) {
+            if (stmtsOfOutermostBlock.getChild(i) instanceof If_stmtNode) {
                 If_stmtNode if_stmtNode = (If_stmtNode) stmtsOfOutermostBlock.getChild(i);
-                if(if_stmtNode.getElseBlock() != null){
-                    if(if_stmtNode.getElseBlock().getReturnstmtNode() != null) {
+                if (if_stmtNode.getElseBlock() != null) {
+                    if (if_stmtNode.getElseBlock().getReturnstmtNode() != null) {
                         elseStmtWithReturnExist = true;
                     }
                 }
             }
         }
 
-        /* If there are no else stmt in the outer most scope of the func def block and no other return stmt, the func def is not guaranteed to reach an return stmt */
+        /* If there are no else stmt in the outer most scope of the func def block, no other
+           return stmt, and the method is not void, the func def is not guaranteed to reach
+           an return stmt and throws an error */
         if (!elseStmtWithReturnExist && node.getBlockNode().getReturnstmtNode() == null) {
-            ErrorHandler.returnNotGuaranteed();
+            if(node.getType() != Type.VOID){
+                ErrorHandler.returnNotGuaranteed();
+            }
         }
 
         checkType(node, node.getBlockNode());
 
         if (isReservedKeyword(node.getId())) ErrorHandler.reservedKeyword(node.getId());
         System.out.println("Checked return of func def!!");
-
-
     }
 
     public void visit(Return_stmtNode node) {
-        if(node.getReturnExpr() != null){
+        if (node.getReturnExpr() != null) {
             node.getReturnExpr().accept(this);
             node.setType(node.getReturnExpr().getType());
-        }
-        else {
+        } else {
             node.setType(Type.VOID);
         }
     }
@@ -153,7 +154,7 @@ public class Typechecker extends AstVisitor {
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
             if (node.getChild(i) instanceof If_stmtNode) {
-                /* Checks whether there exist any else stmts. If there is none, it must chech that there are an return stmt in the main scope (blockNode). */
+                /* Checks whether there exist any else stmts. If there is none, it must check that there are an return stmt in the main scope (blockNode). */
                 ifStmtNodeExists = true;
                 if (i == 0) {
                     firstIfStament = node.getChild(i);
@@ -161,12 +162,29 @@ public class Typechecker extends AstVisitor {
                     checkType(firstIfStament, node.getChild(i));
                 }
             }
-
+        }
+        StmtNode firstWhileStmt = null;
+        boolean whileStmtExist = false;
+        for (int j = 0; j < node.getChildCount(); j++) {
+            if(node.getChild(j) instanceof While_stmtNode){
+                if(j == 0){
+                    whileStmtExist = true;
+                    firstWhileStmt = node.getChild(j);
+                    /* After the first while stmt check that it is the same type as the if stmts */
+                    if(ifStmtNodeExists) {
+                        checkType(firstIfStament, firstWhileStmt);
+                    }
+                } else {
+                    checkType(firstWhileStmt, node.getChild(j));
+                }
+            }
         }
         if (ifStmtNodeExists) {
             node.setType(firstIfStament.getType());
         }
-
+        if(whileStmtExist) {
+            node.setType(firstWhileStmt.getType());
+        }
     }
 
     public void visit(DclNode node) {
@@ -192,7 +210,7 @@ public class Typechecker extends AstVisitor {
         node.getExprNode().accept(this);
         node.getBlockNode().accept(this);
         checkSpecificType(node.getExprNode(), Type.BOOL);
-
+        node.setType(node.getBlockNode().getType());
     }
 
     public void visit(ExprNode node) {
@@ -255,7 +273,7 @@ public class Typechecker extends AstVisitor {
         checkType(node.getLeftNode(), node.getRelationalExprNode());
         node.setType(Type.BOOL);
     }
-      
+
     private void checkType(AstNode leftNode, AstNode rightNode) {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();
@@ -307,7 +325,7 @@ public class Typechecker extends AstVisitor {
     @Override
     public void visit(IdNode node) {
         if (node.getVal().toUpperCase().equals("TRUE") ||
-            node.getVal().toUpperCase().equals("FALSE"))
+                node.getVal().toUpperCase().equals("FALSE"))
             ErrorHandler.invalidTF();
     }
 

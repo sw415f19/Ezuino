@@ -1,18 +1,16 @@
 package astvisitors;
 
 import ast.AstNode;
-import astvisitors.SymbolTableVisitor;
-import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
 import exceptions.ErrorHandler;
-import exceptions.ErrorListener;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -108,6 +106,7 @@ public class TypecheckerTest {
                 "    }" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        ErrorHandler.printErrorList();
         assertFalse(ErrorHandler.hasErrors());
     }
 
@@ -155,11 +154,7 @@ public class TypecheckerTest {
         testWithTableAndTypeChecker(testProgram);
         assertTrue(ErrorHandler.hasErrors());
     }
-    /*
-    * DET HAR NOGET MED ERROR HANDLING AT GØRE, DEN SER FEJLEN MEN SKRIVER DET TIL EN
-    *  FIL ELLER ET ELLER ANDET NÅR DEN RAMMER EXCEPTIONS DEN PRINTER I HVERT FALD IKKE
-    * PRØV AT SÆTTE RETUR TIL 1, DEN HAR TO TYPER MEN PTRINTER IKKE FEJL
-    * */
+
     @Test
     public void returnAsBreakReturnTypeError() throws IOException {
         String testProgram = "func hello(){\n" +
@@ -197,6 +192,64 @@ public class TypecheckerTest {
                 "}";
         testWithTableAndTypeChecker(testProgram);
         assertTrue(ErrorHandler.hasErrors());
+    }
+
+    @Test
+    public void whileTest() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "    while(1<2){\n" +
+                "        return 1\n" +
+                "    }\n" +
+                "    return 1\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+        assertFalse(ErrorHandler.hasErrors());
+    }
+
+    @Test
+    public void whileTestNotGuaranteedReturn() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "    while(1<2){\n" +
+                "        return 1\n" +
+                "    }\n" +
+                "}\n";
+        testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
+    }
+
+    @Test
+    public void whileTestTypeNotTheSame() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "    while(1<2){\n" +
+                "        return \"hello\"\n" +
+                "    }\n" +
+                "    return \"my world\"\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
+    }
+
+    @Test
+    public void whileTestVoidFunc() throws IOException {
+        String testProgram = "func main() {\n" +
+                "    while(1<2){\n" +
+                "        int a\n" +
+                "    }\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+        assertFalse(ErrorHandler.hasErrors());
+    }
+
+    @Test
+    public void funcWithWhileStmtWithoutReturn() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "    while(1<2){\n" +
+                "        int a\n" +
+                "    }\n" +
+                "    return 1\n" +
+                "}\n";
+        testWithTableAndTypeChecker(testProgram);
+        assertFalse(ErrorHandler.hasErrors());
     }
 
 
