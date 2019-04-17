@@ -1,3 +1,34 @@
-if(1 = 2) {
-    return 42
+int testOne
+int testTwo
+int testThree
+int testFourOne
+int testFourTwo
+int testFour
+int medium
+ 
+testOne := 1
+testTwo := 20
+testThree := 30
+testFourOne := 10
+testFourTwo := 10
+testFour := testFourOne + testFourTwo
+
+func int findMedium(int testOne, int testTwo, int testThree, int testFour) {
+        int ret
+        ret := 1
+        return (testOne + testTwo + testThree + testFour) / 4
+    }
+
+func int asd() {
+    while (testOne < 10) {
+        testOne := testOne +1
+    }
+    if (testOne >= testTwo AND testOne != testFour) {
+        testTwo := testTwo + testTwo
+    }
+    else {
+        testTwo := testTwo * testTwo + testTwo #mindgames
+    }
+    medium := findMedium(testOne, testTwo, testThree, testFour)
+    return medium
 }

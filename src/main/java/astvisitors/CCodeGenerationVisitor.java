@@ -7,6 +7,8 @@ import ast.type.DoubleNode;
 import ast.type.IdNode;
 import ast.type.IntegerNode;
 import ast.type.StringNode;
+import exceptions.ErrorHandler;
+import exceptions.ErrorMessage;
 
 import java.io.PrintStream;
 import java.util.Iterator;
@@ -43,29 +45,49 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 out.print(", ");
             }
         }
-        out.print(");\n");
+        out.print(")");
     }
 
     @Override
     public void visit(BlockNode node) {
         out.print("{\n");
         // Checks for declarations
-        if (node.getDclsNode().getChildCount() != 0) {
+        if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
-            out.print("\n");
         }
         // Checks for statement calls
-        if (node.getStmtsNode().getChildCount() != 0) {
+        if (node.getStmtsNode() != null) {
             node.getStmtsNode().accept(this);
-            out.print("\n");
         }
-        node.getReturnstmtNode().accept(this);  // Might need implementation for exiting block without return
-        out.print(";\n}\n");  // Formatting
+        if (node.getReturnstmtNode() != null) {
+            node.getReturnstmtNode().accept(this);
+            out.print(";\n");
+        }
+        out.print("}\n");
     }
 
     @Override
     public void visit(Func_defNode node) {
-        out.print(node.getType() + " " + node.getId() + "(");
+        String nodeType = "";
+        String arrayLength = "";
+        // Formats the defined type to C types
+        switch (node.getType()) {
+            case INT:
+                nodeType="int ";
+                break;
+            case DOUBLE:
+                nodeType = "double ";
+                break;
+            case STRING:
+                // Converts the java string into a C char array of size 255
+                nodeType = "char ";
+                arrayLength = "[255]";
+                break;
+            case BOOL:
+                nodeType = "int ";
+                break;
+        }
+        out.print(nodeType + node.getId() + arrayLength + "(");
         for (Iterator<DclNode> iterator = node.getParameters().iterator(); iterator.hasNext(); ) {
             DclNode dclNode = iterator.next();
             dclNode.accept(this);
@@ -74,9 +96,8 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 out.print(", ");
             }
         }
-        out.print(") {\n");
+        out.print(") ");
         node.getBlockNode().accept(this);
-        out.print("}\n");
     }
 
     @Override
@@ -91,8 +112,11 @@ public class CCodeGenerationVisitor extends AstVisitor {
         node.getExpr().accept(this);
         out.print(") ");
         node.getIfBlock().accept(this);
-        out.print("else ");
-        node.getElseBlock().accept(this);
+        // Checks if there is a else block to print
+        if (node.getElseBlock() != null) {
+            out.print("else ");
+            node.getElseBlock().accept(this);
+        }
     }
 
     @Override
@@ -103,7 +127,12 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(BooleantfNode node) {
-        out.print(node.getBoolval());
+        if (node.getBoolval().equals("TRUE")) {
+            out.print("1");
+        }
+        if (node.getBoolval().equals("FALSE")) {
+            out.print("0");
+        }
     }
 
     @Override
@@ -116,33 +145,39 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        // Formats the antlr defined type to C types
-        if (node.getType().equals(Type.INT)) {
-            out.print("int " + node.getID() + ";");
+        String nodeType = "";
+        String arrayLength = "";
+        // Formats the defined type to C types
+        switch (node.getType()) {
+            case INT:
+                nodeType="int ";
+                break;
+            case DOUBLE:
+                nodeType = "double ";
+                break;
+            case STRING:
+                // Converts the java string into a C char array of size 255
+                nodeType = "char ";
+                arrayLength = "[255]";
+                break;
+            case BOOL:
+                nodeType = "int ";
+                break;
         }
-        if (node.getType().equals(Type.DOUBLE)) {
-            out.print("double " + node.getID() + ";");
-        }
-        // Converts the java string into a C char array of size 255
-        if (node.getType().equals(Type.STRING)) {
-            out.print("char array[255] " + node.getID() + ";");
-        }
-        if (node.getType().equals(Type.BOOL)) {
-            out.print("bool " + node.getID() + ";");
-        }
+        out.print(nodeType + node.getID() + arrayLength);
     }
 
     @Override
     public void visit(DclsNode node) {
         if (node.getChildCount() == 1) {
             node.getChild(0).accept(this);
-            out.print("\n");
+            out.print(";\n");
         }
         else {
             for (Iterator<DclNode> iterator = node.getChildIterator(); iterator.hasNext(); ) {
                 DclNode dclNode = iterator.next();
                 dclNode.accept(this);
-                out.print("\n");
+                out.print(";\n");
             }
         }
     }
@@ -151,14 +186,13 @@ public class CCodeGenerationVisitor extends AstVisitor {
     public void visit(While_stmtNode node) {
         out.print("while (");
         node.getExprNode().accept(this);
-        out.print(") {\n");
+        out.print(") ");
         node.getBlockNode().accept(this);
-        out.print("}\n");
     }
 
     @Override
     public void visit(Assign_stmtNode node) {
-        out.print(node.getId() + " = " );
+        out.print(node.getId() + " = ");
         node.getExprNode().accept(this);
         out.print(";\n");
     }
