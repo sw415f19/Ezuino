@@ -41,8 +41,7 @@ public abstract class AstVisitor {
 
 
     public void visit(AstNode astNode) {
-        System.out.println("In ASTNode visit:\t" + astNode);
-        astNode.accept(this);
+		System.err.println("Compiler implementation error: Dont know how to visit: " + astNode.toString());
     }
 
 }
