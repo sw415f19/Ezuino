@@ -1,6 +1,7 @@
 package ezuino;
 
 import ast.AstNode;
+import astvisitors.FuncVisitor;
 import astvisitors.IndentedPrintVisitor;
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
@@ -67,6 +68,9 @@ public class Main {
 
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
+        
+        FuncVisitor funcVisitor = new FuncVisitor();
+        astNode.accept(funcVisitor);
 
         SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true);
         astNode.accept(symbolTableFillingVisitor);

@@ -12,7 +12,7 @@ public class Typechecker extends AstVisitor {
     private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
 
     public void visit(Func_callStmtNode node) {
-
+        
     }
 
     public void visit(BlockNode node) {
