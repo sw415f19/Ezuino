@@ -1,15 +1,18 @@
-package astVisitors;
+package astvisitors;
 
 import ast.AstNode;
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
+import exceptions.ErrorHandler;
+import exceptions.ErrorListener;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 
@@ -22,9 +25,9 @@ public class TypecheckerTest {
     @Test
     public void nestedIfStmtsOuterScopeElseReturnValue() throws IOException {
         String testProgram = "func int hello(){\n" +
-                "  if(TRUE){\n" +
-                "    if(TRUE){\n" +
-                "        if(TRUE){\n" +
+                "  if(true){\n" +
+                "    if(true){\n" +
+                "        if(true){\n" +
                 "            return 1\n" +
                 "        }\n" +
                 "    }\n" +
@@ -35,14 +38,15 @@ public class TypecheckerTest {
                 "  \n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertFalse(ErrorHandler.hasErrors());
     }
 
     @Test
-    public void nestedIfStmtsOuterScopeElseDoNotReturnValue() throws IOException {
+    public void nestedIfStmtsOuterScopeElseDoNotReturnValueGivesError() throws IOException {
         String testProgram = "func int hello(){\n" +
-                "  if(TRUE){\n" +
-                "    if(TRUE){\n" +
-                "        if(TRUE){\n" +
+                "  if(true){\n" +
+                "    if(true){\n" +
+                "        if(true){\n" +
                 "            return 1\n" +
                 "        }\n" +
                 "    }\n" +
@@ -53,14 +57,15 @@ public class TypecheckerTest {
                 "  \n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
     }
 
     @Test
-    public void nestedIfStmtsOuterScopeElseDoNotExist() throws IOException {
+    public void nestedIfStmtsOuterScopeElseDoNotExistGivesError() throws IOException {
         String testProgram = "func int hello(){\n" +
-                "  if(TRUE){\n" +
-                "    if(TRUE){\n" +
-                "        if(TRUE){\n" +
+                "  if(true){\n" +
+                "    if(true){\n" +
+                "        if(true){\n" +
                 "            return 1\n" +
                 "        }\n" +
                 "    }\n" +
@@ -68,31 +73,33 @@ public class TypecheckerTest {
                 "  \n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
     }
 
     @Test
     public void emptyIfStmtAndReturnValue() throws IOException {
         String testProgram = "func int hello(){\n" +
-                "    if(TRUE) {\n" +
+                "    if(true) {\n" +
                 "\n" +
                 "    }\n" +
                 "    return 1\n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertFalse(ErrorHandler.hasErrors());
     }
 
     @Test
     public void multipleIfsSameLevel() throws IOException {
         String testProgram = "func int hello(){\n" +
-                "    if(TRUE) {\n" +
+                "    if(true) {\n" +
                 "        int a\n" +
                 "        return a\n" +
                 "    }\n" +
-                "    if(TRUE){\n" +
+                "    if(true){\n" +
                 "        int b\n" +
                 "        return b\n" +
                 "    }\n" +
-                "    if(TRUE) {\n" +
+                "    if(true) {\n" +
                 "        int c\n" +
                 "        return c\n" +
                 "    }\n" +
@@ -101,76 +108,87 @@ public class TypecheckerTest {
                 "    }" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertFalse(ErrorHandler.hasErrors());
     }
 
     @Test
     public void multipleIfsSameLevelNoElseOuterScopeGivesError() throws IOException {
         String testProgram = "func int hello(){\n" +
-                "    if(TRUE) {\n" +
+                "    if(true) {\n" +
                 "        int a\n" +
                 "        return a\n" +
                 "    }\n" +
-                "    if(TRUE){\n" +
+                "    if(true){\n" +
                 "        int b\n" +
                 "        return b\n" +
                 "    }\n" +
-                "    if(TRUE) {\n" +
+                "    if(true) {\n" +
                 "        int c\n" +
                 "        return c\n" +
                 "    }\n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
     }
 
     @Test
     public void missingElseStmtReturnError() throws IOException {
         String testProgram = "func int hello(){\n" +
                 "  int a\n" +
-                "  if(TRUE){\n" +
+                "  if(true){\n" +
                 "        return a\n" +
                 "  } \n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
+
     }
 
     @Test
     public void elseStmtHaveNoReturnGivesError() throws IOException {
         String testProgram = "func int hello(){\n" +
                 "  int a\n" +
-                "  if(TRUE){\n" +
+                "  if(true){\n" +
                 "        return a\n" +
                 "  } else{} \n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
     }
-
+    /*
+    * DET HAR NOGET MED ERROR HANDLING AT GØRE, DEN SER FEJLEN MEN SKRIVER DET TIL EN
+    *  FIL ELLER ET ELLER ANDET NÅR DEN RAMMER EXCEPTIONS DEN PRINTER I HVERT FALD IKKE
+    * PRØV AT SÆTTE RETUR TIL 1, DEN HAR TO TYPER MEN PTRINTER IKKE FEJL
+    * */
     @Test
     public void returnAsBreakReturnTypeError() throws IOException {
         String testProgram = "func hello(){\n" +
-                "  if(TRUE){\n" +
+                "  if(true){\n" +
                 "    return 1\n" +
                 "  }\n" +
                 "  return\n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
     }
 
     @Test
     public void returnAsBreakReturn() throws IOException {
         String testProgram = "func hello(){\n" +
-                "  if(TRUE){\n" +
+                "  if(true){\n" +
                 "    return\n" +
                 "  }\n" +
                 "  return\n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertFalse(ErrorHandler.hasErrors());
     }
 
     /* Gives error type mismatch, return statements are not the same type */
     @Test
     public void returnTwoDifferentTypesError() throws IOException {
         String testProgram = "func int hello(){\n" +
-                "  if(TRUE){\n" +
+                "  if(true){\n" +
                 "    return 3.4\n" +
                 "  }\n" +
                 "  else {\n" +
@@ -178,6 +196,7 @@ public class TypecheckerTest {
                 "  }\n" +
                 "}";
         testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
     }
 
 
@@ -190,9 +209,9 @@ public class TypecheckerTest {
         return parser;
     }
 
-    public void testWithTableAndTypeChecker(String testProgram) throws IOException {
-        EzuinoParser ep = createParser(testProgram);
-        AstNode astNode = ep.start().accept(buildAstVisitor);
+    private void testWithTableAndTypeChecker(String testProgram) throws IOException {
+        EzuinoParser ezuinoParser = createParser(testProgram);
+        AstNode astNode = ezuinoParser.start().accept(buildAstVisitor);
         astNode.accept(symbolTableVisitor);
         astNode.accept(typechecker);
     }

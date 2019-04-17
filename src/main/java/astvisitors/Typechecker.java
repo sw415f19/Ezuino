@@ -54,9 +54,6 @@ public class Typechecker extends AstVisitor {
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
-        if (node.getType() != Type.VOID) {
-            checkType(node, node.getBlockNode().getReturnstmtNode());
-        }
 
         /* Gets the if statements of the outermost block, and checks if there is an else with an return stmt */
         boolean elseStmtWithReturnExist = false;
@@ -74,9 +71,8 @@ public class Typechecker extends AstVisitor {
 
         /* If there are no else stmt in the outer most scope of the func def block and no other return stmt, the func def is not guaranteed to reach an return stmt */
         if (!elseStmtWithReturnExist && node.getBlockNode().getReturnstmtNode() == null) {
-            System.err.println("Return is not guaranteed, since there are no return or an else block in the outer scope with return");
+            ErrorHandler.returnNotGuaranteed();
         }
-
 
         checkType(node, node.getBlockNode());
 
@@ -84,10 +80,6 @@ public class Typechecker extends AstVisitor {
         System.out.println("Checked return of func def!!");
 
 
-    }
-
-    public void visit(Print_lNode node) {
-        node.getExprNode().accept(this);
     }
 
     public void visit(Return_stmtNode node) {
