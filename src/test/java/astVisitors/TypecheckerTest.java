@@ -22,7 +22,7 @@ public class TypecheckerTest {
     private Typechecker typechecker;
 
     @Before
-    void init(){
+    public void init(){
         this.symbolTableVisitor = new SymbolTableVisitor();
         this.buildAstVisitor = new BuildAstVisitor();
         this.typechecker = new Typechecker();
