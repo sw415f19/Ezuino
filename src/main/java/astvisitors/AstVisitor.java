@@ -22,6 +22,7 @@ public abstract class AstVisitor {
     public abstract void visit(AdditiveExprNode node);
     public abstract void visit(MultiplicativeExprNode node);
     public abstract void visit(LogicalAndExprNode node);
+    public abstract void visit(LogicalOrExprNode node);
     public abstract void visit(RelationalExprNode node);
     public abstract void visit(EqualityExprNode node);
     public abstract void visit(ParenthesisExprNode node);
@@ -41,8 +42,7 @@ public abstract class AstVisitor {
 
 
     public void visit(AstNode astNode) {
-        System.out.println("In ASTNode visit:\t" + astNode);
-        astNode.accept(this);
+		System.err.println("Compiler implementation error: Dont know how to visit: " + astNode.toString());
     }
 
 }

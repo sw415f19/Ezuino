@@ -23,6 +23,7 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(AdditiveExprNode node, int level);
 	public abstract void visitLevel(MultiplicativeExprNode node, int level);
 	public abstract void visitLevel(LogicalAndExprNode node, int level);
+	public abstract void visitLevel(LogicalOrExprNode node, int level);
 	public abstract void visitLevel(RelationalExprNode node, int level);
 	public abstract void visitLevel(EqualityExprNode node, int level);
 	public abstract void visitLevel(ParenthesisExprNode node, int level);
@@ -42,8 +43,7 @@ public abstract class AstLevelVisitor {
 	
 	
 	public void visitLevel(AstNode astNode, int level) {
-		System.out.println("In ASTNode visit:\t" + astNode);
-		astNode.acceptLevel(this, level);
+		System.err.println("Compiler implementation error: Dont know how to visit: " + astNode.toString());
 	}
 
 }
