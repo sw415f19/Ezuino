@@ -86,7 +86,7 @@ type
     | STRINGDCL
     ;
 return_stmt
-    : RETURN expr
+    : RETURN expr?
     ;
 if_stmt
     : IF '('expr')' block

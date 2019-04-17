@@ -201,7 +201,11 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitReturn_stmt(EzuinoParser.Return_stmtContext ctx) {
-        return new Return_stmtNode((AExpr) ctx.expr().accept(this));
+        AExpr aExpr = null;
+        if(ctx.expr() != null) {
+            aExpr = (AExpr) ctx.expr().accept(this);
+        }
+        return new Return_stmtNode(aExpr);
     }
 
     @Override
