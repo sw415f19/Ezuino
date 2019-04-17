@@ -26,13 +26,6 @@ public class Typechecker extends AstVisitor {
             node.getReturnstmtNode().accept(this);
         }
 
-        /*
-        if (!elseStmtWithReturnExist && node.getReturnstmtNode() == null) {
-            System.err.println("Return is not guaranteed, since there are no else block with return or an return outside nested scopes");
-        }
-        */
-
-
         /* Checks type if returnStmt exists and ifStmt have an type, typechecks and sets type.
          *  If only either returnStmt or ifStmt have an type blocknode is set to that type.  */
 
