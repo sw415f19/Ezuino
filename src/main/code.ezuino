@@ -1,6 +1,11 @@
-func int main() {
-    while(1<2){
-        int a
-    }
-    return 1
+int a
+
+func stuff(int a, double f, string s) {
+
 }
+
+func double themeaningoflife() {
+    return 42.0
+}
+
+stuff(a, themeaningoflife(), 32)

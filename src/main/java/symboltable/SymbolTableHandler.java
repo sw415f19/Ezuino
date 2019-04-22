@@ -2,6 +2,7 @@ package symboltable;
 
 import java.util.Stack;
 
+import ast.Func_defNode;
 import ast.ITypeNode;
 import ast.Type;
 import exceptions.ErrorHandler;
@@ -44,4 +45,9 @@ public class SymbolTableHandler {
 	public Type retrieveSymbol(String name) {
 		return symbolTableStack.peek().retrieveSymbol(name);
 	}
+
+    public ITypeNode getSymbolNode(String id)
+    {
+        return symbolTableStack.peek().getSymbolNode(id);
+    }
 }
