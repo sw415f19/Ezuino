@@ -3,23 +3,19 @@ package exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import ast.AstNode;
+import ast.BooleanLiteral;
 import ast.ITypeNode;
 import ast.Type;
 import ast.type.IdNode;
+import ast.type.ValNode;
 
 public class ErrorHandler {
 
     private static final List<ErrorMessage> messageList = new ArrayList<>();
 
-    public static boolean hasErrors() {
-        if (messageList.size() > 0)
-            return true;
+    private static boolean hasErrors() {
+        if (messageList.size() > 0) return true;
         return false;
-    }
-
-    public static void reset(){
-        messageList.clear();
     }
 
     public static void printErrorList()
@@ -57,15 +53,11 @@ public class ErrorHandler {
         messageList.add(new GeneralError(ErrorType.WARNING, "Tried to close a scope and pop a symbol table, however, the symbol table stack was empty!"));
     }
 
-    public static void typeMismatch(AstNode leftNode, AstNode rightNode)
+    public static void typeMismatch(ITypeNode leftNode, ITypeNode rightNode)
     {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();
         messageList.add(new GeneralError(ErrorType.ERROR, "Type mismatch! \n -- Left type: " + leftType.name() + " Right type: " + rightType.name() + " \n -- Left node: " + leftNode + " Right node: " + rightNode));
-    }
-
-    public static void returnNotGuaranteed(){
-        messageList.add(new GeneralError(ErrorType.ERROR, "Return is not guaranteed since there are no return or an else block in the outer scope with return"));
     }
 
     public static void invalidTF()
@@ -78,9 +70,20 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, a + " has already been declared in this scope"));
     }
 
+    public static void wrongTypeToList(Type type, ValNode node)
+    {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Trying to add " + node.getVal() + " which is of type " + node.getType() + " to a list of type " + type.toString()));
+    }
+
     public static void wrongTypeToList(Type type, IdNode node)
     {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Trying to add " + node.getVal() + " which is of type " + node.getType() + " to a list of type " + type.toString()));
     }
+
+    public static void wrongTypeToList(Type type, BooleanLiteral node)
+    {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Trying to add " + node.getBoolval() + " which is of type " + node.getType() + " to a list of type " + type.toString()));
+    }
+
 
 }

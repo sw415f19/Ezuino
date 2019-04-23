@@ -38,7 +38,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
 
         Type type = getType(ctx.type());
-        if (ctx.getText().contains("list"))return new DclNode(type, ctx.ID().getText(), true);
+        if (ctx.LISTDCL() != null)
+            return new DclNode(type, ctx.ID().getText(), true);
         return new DclNode(type, ctx.ID().getText());
     }
 
@@ -203,11 +204,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitReturn_stmt(EzuinoParser.Return_stmtContext ctx) {
-        AExpr aExpr = null;
-        if(ctx.expr() != null) {
-            aExpr = (AExpr) ctx.expr().accept(this);
-        }
-        return new Return_stmtNode(aExpr);
+        return new Return_stmtNode((AExpr) ctx.expr().accept(this));
     }
 
     @Override
