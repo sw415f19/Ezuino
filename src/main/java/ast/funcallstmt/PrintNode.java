@@ -1,17 +1,16 @@
-package ast.functions;
+package ast.funcallstmt;
 
 import java.util.ArrayList;
 
-import ast.Func_callStmtNode;
 import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class PrintNode extends Func_callStmtNode {
 
-    public PrintNode(String id, ArrayList<AExpr> parameters)
+    public PrintNode(ArrayList<AExpr> parameters)
     {
-        super(id, parameters);
+        this.parameters = parameters;
     }
 
     @Override
@@ -24,12 +23,6 @@ public class PrintNode extends Func_callStmtNode {
     public void acceptLevel(AstLevelVisitor v, int level)
     {
         v.visitLevel(this, level);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "motafuka";
     }
 
 }

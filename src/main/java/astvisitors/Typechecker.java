@@ -4,7 +4,9 @@ import java.util.Arrays;
 
 import ast.*;
 import ast.expr.*;
-import ast.functions.PrintNode;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 
@@ -349,6 +351,13 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(PrintNode node)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(CustomFuncCallStmtNode node)
     {
         // TODO Auto-generated method stub
         

@@ -2,12 +2,13 @@ package astvisitors;
 
 import ast.*;
 import ast.expr.*;
-import ast.functions.PrintNode;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.*;
 
 public abstract class AstVisitor {
 
-    public abstract void visit(Func_callStmtNode node);
     public abstract void visit(Func_callExprNode node);
     public abstract void visit(BlockNode node);
     public abstract void visit(Func_defNode node);
@@ -29,6 +30,7 @@ public abstract class AstVisitor {
     public abstract void visit(ParenthesisExprNode node);
     public abstract void visit(UnaryExprNode node);
     public abstract void visit(PrintNode node);
+    public abstract void visit(CustomFuncCallStmtNode node);
 
 
     //One added assignment nodes.

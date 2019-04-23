@@ -4,7 +4,9 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
-import ast.functions.PrintNode;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import symboltable.SymbolTableHandler;
 
@@ -51,13 +53,6 @@ public class SymbolTableVisitor extends AstVisitor {
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         node.setType(symbolTableHandler.retrieveSymbol(node.getId()));
-    }
-
-    @Override
-    public void visit(Func_callStmtNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
     }
 
     @Override
@@ -198,6 +193,15 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(PrintNode node)
+    {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        
+    }
+
+    @Override
+    public void visit(CustomFuncCallStmtNode node)
     {
         for (AExpr child : node.getParameters()) {
             child.accept(this);
