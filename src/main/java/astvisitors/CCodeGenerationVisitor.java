@@ -77,9 +77,9 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 nodeType = "double ";
                 break;
             case STRING:
-                // Converts the java string into a C char array of size 255
+                // Converts the java string into a C char array of size 256
                 nodeType = "char ";
-                arrayLength = "[255]";
+                arrayLength = "[256]";
                 break;
             case BOOL:
                 nodeType = "int ";
@@ -125,10 +125,10 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(BooleanLiteral node) {
-        if (node.getBoolval().equals("TRUE")) {
+        if (node.getBoolval().equals("true")) {
             out.print("1");
         }
-        if (node.getBoolval().equals("FALSE")) {
+        if (node.getBoolval().equals("false")) {
             out.print("0");
         }
     }
@@ -154,9 +154,9 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 nodeType = "double ";
                 break;
             case STRING:
-                // Converts the java string into a C char array of size 255
+                // Converts the java string into a C char array of size 256
                 nodeType = "char ";
-                arrayLength = "[255]";
+                arrayLength = "[256]";
                 break;
             case BOOL:
                 nodeType = "int ";
@@ -190,9 +190,16 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(Assign_stmtNode node) {
-        out.print(node.getId() + " = ");
-        node.getExprNode().accept(this);
-        out.print(";\n");
+        if (node.getExprNode().getType().equals(Type.STRING)) {
+            out.print("strcpy(" + node.getId() + ", ");
+            node.getExprNode().accept(this);
+            out.print(")\n");
+        }
+        else {
+            out.print(node.getId() + " = ");
+            node.getExprNode().accept(this);
+            out.print(";\n");
+        }
     }
 
     @Override
@@ -267,7 +274,12 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(StringLiteral node) {
-        out.print(node.getVal());
+        if (node.getVal().length() > 255) {
+            System.err.println("CCodeGenerationVisitor Error: String beyond maximum length!");
+        }
+        else {
+            out.print(node.getVal());
+        }
     }
 
     @Override
