@@ -69,8 +69,7 @@ public class Main {
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
         
-        FuncVisitor funcVisitor = new FuncVisitor();
-        astNode.accept(funcVisitor);
+
 
         SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true);
         astNode.accept(symbolTableFillingVisitor);
@@ -79,6 +78,8 @@ public class Main {
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
+        FuncVisitor funcVisitor = new FuncVisitor();
+        astNode.accept(funcVisitor);
 
         ErrorHandler.printErrorList();
     }

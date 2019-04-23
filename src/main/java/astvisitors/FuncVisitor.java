@@ -2,17 +2,20 @@ package astvisitors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
 import functionality.EzuinoList;
+import symboltable.SymbolTableHandler;
 
 public class FuncVisitor extends AstVisitor {
 
-    private static int max = 100;
-    private List<String> arguments = new ArrayList<>();
+    private PriorityQueue<String> queue = new PriorityQueue<String>(); 
+    private List<String> test = new ArrayList<>();
+    private EzuinoList ezuinoList = new EzuinoList();
 
     @Override
     public void visit(StartNode node) {
@@ -39,7 +42,9 @@ public class FuncVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-
+        if(node.isList()){
+           ezuinoList.newList(node.getID(), node.getType());
+        }
     }
 
     @Override
@@ -51,13 +56,13 @@ public class FuncVisitor extends AstVisitor {
     @Override
     public void visit(Func_callStmtNode node) {
 
-        if (node.getID().equals("list_add")) new EzuinoList();
+        if (node.getID().equals("listAdd")){
+            for (AExpr child : node.getParameters()) {
+                child.accept(this);
+            }
+    
+        } 
 
-
-
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
     }
 
     @Override
@@ -141,7 +146,14 @@ public class FuncVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        System.out.println(" ID NODE : " + node.getVal());
+        System.out.println(" ID NODE : " + node.getVal() +  " NODE TYPE : " +  node.getType());
+        test.add(node.getVal());
+        if (test.size() == 2){
+            
+            ezuinoList.addToList(test.get(0), node);
+            test.clear();
+        }
+        
     }
 
     @Override

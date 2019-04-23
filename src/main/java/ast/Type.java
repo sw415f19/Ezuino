@@ -6,4 +6,5 @@ public enum Type {
 	BOOL,
 	STRING,
 	VOID,
+	LIST
 }
