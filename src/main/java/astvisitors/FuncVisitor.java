@@ -72,46 +72,22 @@ public class FuncVisitor extends AstVisitor {
 
     @Override
     public void visit(IntegerLiteral node) {
-        System.out.println(" ID NODE : " + node.getVal() +  " NODE TYPE : " +  node.getType());
-        test.add(node.getVal());
-        if (test.size() == 2){
-            
-            ezuinoList.addToList(test.get(0), node);
-            test.clear();
-        }
+
     }
 
     @Override
     public void visit(DoubleLiteral node) {
-        System.out.println(" ID NODE : " + node.getVal() +  " NODE TYPE : " +  node.getType());
-        test.add(node.getVal());
-        if (test.size() == 2){
-            
-            ezuinoList.addToList(test.get(0), node);
-            test.clear();
-        }
+
     }
 
     @Override
     public void visit(BooleanLiteral node) {
-        System.out.println(" ID NODE : " + node.getBoolval() +  " NODE TYPE : " +  node.getType());
-        test.add(node.getBoolval());
-        if (test.size() == 2){
-            
-            ezuinoList.addToList(test.get(0), node);
-            test.clear();
-        }
+
     }
 
     @Override
     public void visit(StringLiteral node) {
-        System.out.println(" ID NODE : " + node.getVal() +  " NODE TYPE : " +  node.getType());
-        test.add(node.getVal());
-        if (test.size() == 2){
-            
-            ezuinoList.addToList(test.get(0), node);
-            test.clear();
-        }
+
     }
 
     @Override
@@ -170,6 +146,7 @@ public class FuncVisitor extends AstVisitor {
         System.out.println(" ID NODE : " + node.getVal() +  " NODE TYPE : " +  node.getType());
         test.add(node.getVal());
         if (test.size() == 2){
+            
             ezuinoList.addToList(test.get(0), node);
             test.clear();
         }

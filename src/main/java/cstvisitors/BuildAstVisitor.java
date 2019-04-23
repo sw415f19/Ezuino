@@ -38,8 +38,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
 
         Type type = getType(ctx.type());
-        if (ctx.LISTDCL() != null)
-            return new DclNode(type, ctx.ID().getText(), true);
+        if (ctx.getText().contains("list"))return new DclNode(type, ctx.ID().getText(), true);
         return new DclNode(type, ctx.ID().getText());
     }
 
