@@ -343,6 +343,10 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(LogicalOrExprNode node) {
-
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        checkSpecificType(node.getLeftNode(), Type.BOOL);
+        checkSpecificType(node.getRightNode(), Type.BOOL);
+        node.setType(Type.BOOL);
     }
 }
