@@ -5,6 +5,5 @@ public enum Type {
 	DOUBLE,
 	BOOL,
 	STRING,
-	VOID,
-	LIST
+	VOID
 }

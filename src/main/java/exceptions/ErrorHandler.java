@@ -3,9 +3,11 @@ package exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import ast.BooleanLiteral;
 import ast.ITypeNode;
 import ast.Type;
 import ast.type.IdNode;
+import ast.type.ValNode;
 
 public class ErrorHandler {
 
@@ -68,9 +70,20 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, a + " has already been declared in this scope"));
     }
 
+    public static void wrongTypeToList(Type type, ValNode node)
+    {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Trying to add " + node.getVal() + " which is of type " + node.getType() + " to a list of type " + type.toString()));
+    }
+
     public static void wrongTypeToList(Type type, IdNode node)
     {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Trying to add " + node.getVal() + " which is of type " + node.getType() + " to a list of type " + type.toString()));
     }
+
+    public static void wrongTypeToList(Type type, BooleanLiteral node)
+    {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Trying to add " + node.getBoolval() + " which is of type " + node.getType() + " to a list of type " + type.toString()));
+    }
+
 
 }
