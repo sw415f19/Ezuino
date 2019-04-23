@@ -3,6 +3,7 @@ package ezuino;
 import ast.AstNode;
 import astvisitors.FuncStructureVisitor;
 import astvisitors.IndentedPrintVisitor;
+import astvisitors.ReturnStmtChecker;
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
@@ -76,6 +77,9 @@ public class Main {
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
+        
+        ReturnStmtChecker rsc = new ReturnStmtChecker();
+        astNode.accept(rsc);
         
         FuncStructureVisitor fsv = new FuncStructureVisitor();
         astNode.accept(fsv);

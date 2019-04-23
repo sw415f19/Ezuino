@@ -5,7 +5,10 @@ func stuff(int a, double f, string s) {
 }
 
 func double themeaningoflife() {
+    if ( 1 < 2 ) {
+        return 1.0
+    }
     return 42.0
 }
 
-stuff(a, themeaningoflife(), 32)
+stuff(a, themeaningoflife(), "32")
