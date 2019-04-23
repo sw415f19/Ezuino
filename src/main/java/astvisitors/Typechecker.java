@@ -144,12 +144,14 @@ public class Typechecker extends AstVisitor {
     public void visit(StmtsNode node) {
         StmtNode firstIfStament = null;
         boolean ifStmtNodeExists = false;
+        int ifCount = 0;
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
             if (node.getChild(i) instanceof If_stmtNode) {
+                ifCount += 1;
                 /* Checks whether there exist any else stmts. If there is none, it must check that there are an return stmt in the main scope (blockNode). */
                 ifStmtNodeExists = true;
-                if (i == 0) {
+                if (ifCount == 1) {
                     firstIfStament = node.getChild(i);
                 } else {
                     checkType(firstIfStament, node.getChild(i));
@@ -158,9 +160,11 @@ public class Typechecker extends AstVisitor {
         }
         StmtNode firstWhileStmt = null;
         boolean whileStmtExist = false;
+        int whileCount = 0;
         for (int j = 0; j < node.getChildCount(); j++) {
             if(node.getChild(j) instanceof While_stmtNode){
-                if(j == 0){
+                whileCount += 1;
+                if(whileCount == 1){
                     whileStmtExist = true;
                     firstWhileStmt = node.getChild(j);
                     /* After the first while stmt check that it is the same type as the if stmts */
