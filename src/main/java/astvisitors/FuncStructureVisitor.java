@@ -103,7 +103,6 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(BooleanLiteral node)
     {
-
     }
 
     @Override
@@ -119,7 +118,6 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(DclNode node)
     {
-
     }
 
     @Override
@@ -170,7 +168,6 @@ public class FuncStructureVisitor extends AstVisitor {
 
     }
 
-    
     public void visit(LogicalOrExprNode node)
     {
         node.getLeftNode().accept(this);
@@ -218,29 +215,21 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(IntegerLiteral node)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void visit(DoubleLiteral node)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void visit(StringLiteral node)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void visit(IdNode node)
     {
-        // TODO Auto-generated method stub
-
     }
 
 }
