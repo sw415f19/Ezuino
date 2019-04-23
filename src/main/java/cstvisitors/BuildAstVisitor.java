@@ -12,6 +12,7 @@ import generated.EzuinoParser.ExprContext;
 import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.*;
+import ast.functions.PrintNode;
 import ast.type.*;
 import ast.expr.*;
 
@@ -173,6 +174,9 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
         if (ctx.parent instanceof EzuinoParser.PrimaryExprContext) {
             return new Func_callExprNode(id, parameters);
+        }
+        if (id == "print") {
+            return new PrintNode(id, parameters);
         }
         return new Func_callStmtNode(id, parameters);
     }

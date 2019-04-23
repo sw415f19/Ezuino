@@ -3,6 +3,7 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.functions.PrintNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -212,4 +213,14 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         node.getRightNode().acceptLevel(this, level + 1);
 		
 	}
+
+    @Override
+    public void visitLevel(PrintNode node, int level)
+    {
+        print(node, level);
+        for (AExpr child : node.getParameters()) {
+            child.acceptLevel(this, level + 1);
+        }
+        
+    }
 }

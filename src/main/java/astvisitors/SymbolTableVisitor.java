@@ -4,6 +4,7 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.functions.PrintNode;
 import ast.type.*;
 import symboltable.SymbolTableHandler;
 
@@ -194,4 +195,13 @@ public class SymbolTableVisitor extends AstVisitor {
         node.getRightNode().accept(this);
         
 	}
+
+    @Override
+    public void visit(PrintNode node)
+    {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        
+    }
 }

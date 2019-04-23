@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import ast.*;
 import ast.expr.*;
+import ast.functions.PrintNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 
@@ -344,5 +345,12 @@ public class Typechecker extends AstVisitor {
     @Override
     public void visit(LogicalOrExprNode node) {
 
+    }
+
+    @Override
+    public void visit(PrintNode node)
+    {
+        // TODO Auto-generated method stub
+        
     }
 }

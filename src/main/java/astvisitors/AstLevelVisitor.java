@@ -3,11 +3,13 @@ package astvisitors;
 
 import ast.*;
 import ast.expr.*;
+import ast.functions.PrintNode;
 import ast.type.*;
 
 public abstract class AstLevelVisitor {
 	
 	public abstract void visitLevel(Func_callStmtNode node, int level);
+	public abstract void visitLevel(PrintNode node, int level);
 	public abstract void visitLevel(Func_callExprNode node, int level);
 	public abstract void visitLevel(BlockNode node, int level);
 	public abstract void visitLevel(Func_defNode node, int level);

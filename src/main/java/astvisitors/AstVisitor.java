@@ -2,6 +2,7 @@ package astvisitors;
 
 import ast.*;
 import ast.expr.*;
+import ast.functions.PrintNode;
 import ast.type.*;
 
 public abstract class AstVisitor {
@@ -27,6 +28,7 @@ public abstract class AstVisitor {
     public abstract void visit(EqualityExprNode node);
     public abstract void visit(ParenthesisExprNode node);
     public abstract void visit(UnaryExprNode node);
+    public abstract void visit(PrintNode node);
 
 
     //One added assignment nodes.
