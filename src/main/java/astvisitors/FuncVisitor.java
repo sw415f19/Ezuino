@@ -2,18 +2,15 @@ package astvisitors;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
 import functionality.EzuinoList;
-import symboltable.SymbolTableHandler;
 
 public class FuncVisitor extends AstVisitor {
 
-    private PriorityQueue<String> queue = new PriorityQueue<String>(); 
     private List<String> test = new ArrayList<>();
     private EzuinoList ezuinoList = new EzuinoList();
 
