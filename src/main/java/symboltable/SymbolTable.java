@@ -1,4 +1,4 @@
-package symbolTable;
+package symboltable;
 
 import ast.ITypeNode;
 import ast.Type;
@@ -31,6 +31,9 @@ public class SymbolTable {
     }
 
     public Type retrieveSymbol(String key) {
+
+        if (key.toUpperCase().equals("TRUE") || key.toUpperCase().equals("FALSE")) return null;
+        
         if (symbolMap.containsKey(key)) {
             return symbolMap.get(key).getType();
         }

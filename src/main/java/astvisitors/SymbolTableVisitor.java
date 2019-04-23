@@ -5,18 +5,18 @@ import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
-import symbolTable.SymbolTableHandler;
+import symboltable.SymbolTableHandler;
 
 public class SymbolTableVisitor extends AstVisitor {
     private SymbolTableHandler symbolTableHandler;
-    
+
     public SymbolTableVisitor(boolean printDcl) {
-    	this.symbolTableHandler = new SymbolTableHandler(printDcl);
-	}
-    
+        this.symbolTableHandler = new SymbolTableHandler(printDcl);
+    }
+
     public SymbolTableVisitor() {
-    	this.symbolTableHandler = new SymbolTableHandler(false);
-	}
+        this.symbolTableHandler = new SymbolTableHandler(false);
+    }
 
     @Override
     public void visit(StartNode node) {
@@ -43,7 +43,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-    	symbolTableHandler.enterSymbol(node.getID(), node);
+        symbolTableHandler.enterSymbol(node.getID(), node);
     }
 
     @Override
@@ -61,35 +61,35 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-    	node.setType(symbolTableHandler.retrieveSymbol(node.getID()));
+        node.setType(symbolTableHandler.retrieveSymbol(node.getID()));
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
     }
 
     @Override
-    public void visit(IntegerNode node) {
+    public void visit(IntegerLiteral node) {
 
     }
 
     @Override
-    public void visit(DoubleNode node) {
+    public void visit(DoubleLiteral node) {
 
     }
 
     @Override
-    public void visit(BooleantfNode node) {
+    public void visit(BooleanLiteral node) {
 
     }
 
     @Override
-    public void visit(StringNode node) {
+    public void visit(StringLiteral node) {
 
     }
 
     @Override
     public void visit(Func_defNode node) {
-    	symbolTableHandler.enterSymbol(node.getId(), node);
+        symbolTableHandler.enterSymbol(node.getId(), node);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
@@ -98,7 +98,9 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Return_stmtNode node) {
-        node.getReturnExpr().accept(this);
+        if(node.getReturnExpr() != null){
+            node.getReturnExpr().accept(this);
+        }
     }
 
     @Override
@@ -184,5 +186,12 @@ public class SymbolTableVisitor extends AstVisitor {
 	public void visit(UnaryExprNode node) {
 		node.getNode().accept(this);
 		
+	}
+
+	@Override
+	public void visit(LogicalOrExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        
 	}
 }

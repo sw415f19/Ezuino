@@ -26,6 +26,20 @@ public class Typechecker extends AstVisitor {
             node.getReturnstmtNode().accept(this);
         }
 
+        /* Checks type if returnStmt exists and ifStmt have an type, typechecks and sets type.
+         *  If only either returnStmt or ifStmt have an type blocknode is set to that type.  */
+
+        boolean ifStmtsReturnValue = node.getStmtsNode().getType() != null;
+        boolean returnStmtReturnValue = node.getReturnstmtNode() != null;
+
+        if (ifStmtsReturnValue && returnStmtReturnValue) {
+            checkType(node.getStmtsNode(), node.getReturnstmtNode());
+            node.setType(node.getReturnstmtNode().getType());
+        } else if (ifStmtsReturnValue) {
+            node.setType(node.getStmtsNode().getType());
+        } else if (returnStmtReturnValue) {
+            node.setType(node.getReturnstmtNode().getType());
+        }
     }
 
     public void visit(Func_defNode node) {
@@ -33,18 +47,43 @@ public class Typechecker extends AstVisitor {
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
-        if (node.getType() != Type.VOID) {
-            checkType(node, node.getBlockNode().getReturnstmtNode());
-            System.out.println("Checked return of func def!!");
+
+        /* Gets the if statements of the outermost block, and checks if there is an else with an return stmt */
+        boolean elseStmtWithReturnExist = false;
+        StmtsNode stmtsOfOutermostBlock = node.getBlockNode().getStmtsNode();
+        for (int i = 0; i < stmtsOfOutermostBlock.getChildCount(); i++) {
+            if (stmtsOfOutermostBlock.getChild(i) instanceof If_stmtNode) {
+                If_stmtNode if_stmtNode = (If_stmtNode) stmtsOfOutermostBlock.getChild(i);
+                if (if_stmtNode.getElseBlock() != null) {
+                    if (if_stmtNode.getElseBlock().getReturnstmtNode() != null) {
+                        elseStmtWithReturnExist = true;
+                    }
+                }
+            }
         }
 
-        if (isReservedKeyword(node.getId())) ErrorHandler.reservedKeyword(node.getId());
+        /* If there are no else stmt in the outer most scope of the func def block, no other
+           return stmt, and the method is not void, the func def is not guaranteed to reach
+           an return stmt and throws an error */
+        if (!elseStmtWithReturnExist && node.getBlockNode().getReturnstmtNode() == null) {
+            if(node.getType() != Type.VOID){
+                ErrorHandler.returnNotGuaranteed();
+            }
+        }
+
+        checkType(node, node.getBlockNode());
+
+        if (isReservedKeyword(node.getId()))
+            ErrorHandler.reservedKeyword(node.getId());
     }
 
     public void visit(Return_stmtNode node) {
-        node.getReturnExpr().accept(this);
-        node.setType(node.getReturnExpr().getType());
-
+        if (node.getReturnExpr() != null) {
+            node.getReturnExpr().accept(this);
+            node.setType(node.getReturnExpr().getType());
+        } else {
+            node.setType(Type.VOID);
+        }
     }
 
     public void visit(If_stmtNode node) {
@@ -55,6 +94,37 @@ public class Typechecker extends AstVisitor {
         }
         checkSpecificType(node.getExpr(), Type.BOOL);
 
+        boolean ifAndElseBothReturnValue = false;
+        boolean ifReturnValue = false;
+        boolean elseReturnValue = false;
+
+        boolean ifStmtExist = node.getIfBlock() != null;
+        if (ifStmtExist) {
+            ifReturnValue = node.getIfBlock().getReturnstmtNode() != null;
+        }
+
+        boolean elseStmtExist = node.getElseBlock() != null;
+        if (elseStmtExist) {
+            elseReturnValue = node.getElseBlock().getReturnstmtNode() != null;
+        }
+
+        if (ifStmtExist && elseStmtExist) {
+            ifAndElseBothReturnValue = node.getIfBlock().getReturnstmtNode() != null &&
+                    node.getElseBlock().getReturnstmtNode() != null;
+        }
+
+
+        if (ifAndElseBothReturnValue) {
+            checkType(node.getIfBlock().getReturnstmtNode(), node.getElseBlock().getReturnstmtNode());
+            node.setType(node.getIfBlock().getReturnstmtNode().getType());
+        } else if (ifReturnValue) {
+            node.setType(node.getIfBlock().getReturnstmtNode().getType());
+        } else if (elseReturnValue) {
+            node.setType(node.getElseBlock().getReturnstmtNode().getType());
+        } else {
+            /* If it doesn't have a return, let the type be null */
+            node.setType(null);
+        }
     }
 
     public void visit(StartNode node) {
@@ -63,24 +133,56 @@ public class Typechecker extends AstVisitor {
 
     }
 
-    public void visit(BooleantfNode node) {
+    public void visit(BooleanLiteral node) {
         node.setType(Type.BOOL);
     }
 
     public void visit(StmtNode node) {
 
-
     }
 
     public void visit(StmtsNode node) {
+        StmtNode firstIfStament = null;
+        boolean ifStmtNodeExists = false;
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
+            if (node.getChild(i) instanceof If_stmtNode) {
+                /* Checks whether there exist any else stmts. If there is none, it must check that there are an return stmt in the main scope (blockNode). */
+                ifStmtNodeExists = true;
+                if (i == 0) {
+                    firstIfStament = node.getChild(i);
+                } else {
+                    checkType(firstIfStament, node.getChild(i));
+                }
+            }
         }
-
+        StmtNode firstWhileStmt = null;
+        boolean whileStmtExist = false;
+        for (int j = 0; j < node.getChildCount(); j++) {
+            if(node.getChild(j) instanceof While_stmtNode){
+                if(j == 0){
+                    whileStmtExist = true;
+                    firstWhileStmt = node.getChild(j);
+                    /* After the first while stmt check that it is the same type as the if stmts */
+                    if(ifStmtNodeExists) {
+                        checkType(firstIfStament, firstWhileStmt);
+                    }
+                } else {
+                    checkType(firstWhileStmt, node.getChild(j));
+                }
+            }
+        }
+        if (ifStmtNodeExists) {
+            node.setType(firstIfStament.getType());
+        }
+        if(whileStmtExist) {
+            node.setType(firstWhileStmt.getType());
+        }
     }
 
     public void visit(DclNode node) {
-        if (isReservedKeyword(node.getID())) ErrorHandler.reservedKeyword(node.getID());
+        if (isReservedKeyword(node.getID()))
+            ErrorHandler.reservedKeyword(node.getID());
     }
 
     public void visit(TypeNode node) {
@@ -95,14 +197,13 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(ValNode node) {
-
     }
 
     public void visit(While_stmtNode node) {
         node.getExprNode().accept(this);
         node.getBlockNode().accept(this);
         checkSpecificType(node.getExprNode(), Type.BOOL);
-
+        node.setType(node.getBlockNode().getType());
     }
 
     public void visit(ExprNode node) {
@@ -113,7 +214,7 @@ public class Typechecker extends AstVisitor {
 
     }
 
-    //One added assignment nodes.
+    // One added assignment nodes.
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
@@ -131,7 +232,6 @@ public class Typechecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(node.getLeftNode().getType());
-        System.out.println("Checked AdditiveExprNode type!!");
     }
 
     @Override
@@ -140,7 +240,6 @@ public class Typechecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(node.getLeftNode().getType());
-        System.out.println("Checked LogicalAndExprNode type!!");
     }
 
     @Override
@@ -150,7 +249,6 @@ public class Typechecker extends AstVisitor {
         checkSpecificType(node.getLeftNode(), Type.BOOL);
         checkSpecificType(node.getRightNode(), Type.BOOL);
         node.setType(Type.BOOL);
-        System.out.println("Checked LogicalAndExprNode type!!");
     }
 
     @Override
@@ -159,7 +257,6 @@ public class Typechecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(Type.BOOL);
-        System.out.println("Checked RelationalExprNode type!!");
     }
 
     @Override
@@ -168,32 +265,32 @@ public class Typechecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(Type.BOOL);
-        System.out.println("Checked EqualityExprNode type!!");
     }
 
-    private void checkType(ITypeNode leftNode, ITypeNode rightNode) {
+    private void checkType(AstNode leftNode, AstNode rightNode) {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();
         if (leftType == null) {
-            System.err.println("left type null!");
+            System.err.println("Left type null!");
             return;
         }
         if (rightType == null) {
-            System.err.println("right type null!");
+            System.err.println("Right type null!");
             return;
         }
         if (leftType != rightType) {
-            System.err.println("Type mismatch! Left type: " + leftType.name() + " Right type: " + rightType.name() + "\nLeft node: " + leftNode + " Right node: " + rightNode);
+            ErrorHandler.typeMismatch(leftNode, rightNode);
+
         }
     }
 
     private void checkSpecificType(ITypeNode node, Type expectedType) {
         Type nodeType = node.getType();
         if (nodeType == null) {
-            System.err.println("Null!! :( ");
+            System.err.println("node null in 184 :(");
         }
         if (nodeType != expectedType) {
-            System.err.println("Unexpeced type! Expected: " + expectedType.name() + ", was " + nodeType.name() + " - Node: " + node);
+            ErrorHandler.unexpectedType(node, nodeType);
         }
     }
 
@@ -201,26 +298,28 @@ public class Typechecker extends AstVisitor {
     public void visit(ParenthesisExprNode node) {
         node.getNode().accept(this);
         node.setType(node.getNode().getType());
-        System.out.println("Checked ParenthesisExprNode type!!");
     }
 
     @Override
-    public void visit(IntegerNode node) {
+    public void visit(IntegerLiteral node) {
         node.setType(Type.INT);
     }
 
     @Override
-    public void visit(DoubleNode node) {
+    public void visit(DoubleLiteral node) {
         node.setType(Type.DOUBLE);
     }
 
     @Override
-    public void visit(StringNode node) {
+    public void visit(StringLiteral node) {
         node.setType(Type.STRING);
     }
 
     @Override
     public void visit(IdNode node) {
+        if (node.getVal().toUpperCase().equals("TRUE") ||
+                node.getVal().toUpperCase().equals("FALSE"))
+            ErrorHandler.invalidTF();
     }
 
     @Override
@@ -232,10 +331,14 @@ public class Typechecker extends AstVisitor {
         return (Arrays.binarySearch(keywords, word.toUpperCase()) >= 0);
     }
 
-	@Override
-	public void visit(UnaryExprNode node) {
-		node.getNode().accept(this);
-		node.setType(node.getNode().getType());
-		
-	}
+    @Override
+    public void visit(UnaryExprNode node) {
+        node.getNode().accept(this);
+        node.setType(node.getNode().getType());
+    }
+
+    @Override
+    public void visit(LogicalOrExprNode node) {
+
+    }
 }

@@ -66,8 +66,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.val() != null) {
             return ctx.val().accept(this);
         }
-        if (ctx.booleantf() != null) {
-            return ctx.booleantf().accept(this);
+        if (ctx.BOOL() != null) {
+            return new BooleanLiteral(ctx.BOOL().getText());
         }
         if (ctx.func_call() != null) {
             return ctx.func_call().accept(this);
@@ -181,15 +181,15 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
 
         if (ctx.INTEGER() != null) {
-            return new IntegerNode(ctx.INTEGER().getText());
+            return new IntegerLiteral(ctx.INTEGER().getText());
         }
 
         if (ctx.DOUBLE() != null) {
-            return new DoubleNode(ctx.DOUBLE().getText());
+            return new DoubleLiteral(ctx.DOUBLE().getText());
         }
 
         if (ctx.STRING() != null) {
-            return new StringNode(ctx.STRING().getText());
+            return new StringLiteral(ctx.STRING().getText());
         }
 
         if (ctx.ID() != null) {
@@ -200,13 +200,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitBooleantf(EzuinoParser.BooleantfContext ctx) {
-        return new BooleantfNode(ctx.getText());
-    }
-
-    @Override
     public AstNode visitReturn_stmt(EzuinoParser.Return_stmtContext ctx) {
-        return new Return_stmtNode((AExpr) ctx.expr().accept(this));
+        AExpr aExpr = null;
+        if(ctx.expr() != null) {
+            aExpr = (AExpr) ctx.expr().accept(this);
+        }
+        return new Return_stmtNode(aExpr);
     }
 
     @Override
