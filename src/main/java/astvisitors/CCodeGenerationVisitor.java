@@ -3,12 +3,10 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
-import ast.type.DoubleNode;
+import ast.type.DoubleLiteral;
 import ast.type.IdNode;
-import ast.type.IntegerNode;
-import ast.type.StringNode;
-import exceptions.ErrorHandler;
-import exceptions.ErrorMessage;
+import ast.type.IntegerLiteral;
+import ast.type.StringLiteral;
 
 import java.io.PrintStream;
 import java.util.Iterator;
@@ -126,7 +124,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(BooleantfNode node) {
+    public void visit(BooleanLiteral node) {
         if (node.getBoolval().equals("TRUE")) {
             out.print("1");
         }
@@ -251,17 +249,24 @@ public class CCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerNode node) {
+    public void visit(LogicalOrExprNode node) {
+        node.getLeftNode().accept(this);
+        out.print("||");
+        node.getRightNode().accept(this);
+    }
+
+    @Override
+    public void visit(IntegerLiteral node) {
         out.print(node.getVal());
     }
 
     @Override
-    public void visit(DoubleNode node) {
+    public void visit(DoubleLiteral node) {
         out.print(node.getVal());
     }
 
     @Override
-    public void visit(StringNode node) {
+    public void visit(StringLiteral node) {
         out.print(node.getVal());
     }
 
