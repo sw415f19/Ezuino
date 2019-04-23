@@ -287,6 +287,72 @@ public class TypecheckerTest {
         return parser;
     }
 
+    @Test
+    public void firstIfElseIsEmptyButRestIfElseChecksTypeLongExample() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "\n" +
+                "    if(1 < 2) {\n" +
+                "    } else {\n" +
+                "        \n" +
+                "    }\n" +
+                "    while(1<2){\n" +
+                "        int a\n" +
+                "        return 2\n" +
+                "    }\n" +
+                "    if(1 < 2) {\n" +
+                "        return 2\n" +
+                "    } else {\n" +
+                "        \n" +
+                "    }\n" +
+                "    while(1<2){\n" +
+                "        int a\n" +
+                "    }\n" +
+                "    if(1 < 2) {\n" +
+                "        return 2.0\n" +
+                "    } else {\n" +
+                "        \n" +
+                "    }\n" +
+                "    while(1<2){\n" +
+                "        int a\n" +
+                "        return 2\n" +
+                "    }\n" +
+                "    return 1\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
+        ErrorHandler.reset();
+    }
+    @Test
+    public void firstIfElseIsEmptyButRestIfElseChecksType() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "    if(1<2){\n" +
+                "    }\n" +
+                "    else{}\n" +
+                "    if(1<2){ \n" +
+                "        return 2.0\n" +
+                "    }" +
+                "    return 1\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
+        ErrorHandler.reset();
+    }
+
+    @Test
+    public void firstWhileIsEmptyButRestWhileChecksType() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "    while(1<2){\n" +
+                "    }\n" +
+                "    while(1<2){\n" +
+                "\t     return 4.0\n" +
+                "    }" +
+                "    return 1\n" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+        assertTrue(ErrorHandler.hasErrors());
+        ErrorHandler.reset();
+    }
+
     private void testWithTableAndTypeChecker(String testProgram) throws IOException {
         SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();

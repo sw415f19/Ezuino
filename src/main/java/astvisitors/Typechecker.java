@@ -62,15 +62,14 @@ public class Typechecker extends AstVisitor {
             }
         }
 
-        /* If there are no else stmt in the outer most scope of the func def block, no other
-           return stmt, and the method is not void, the func def is not guaranteed to reach
-           an return stmt and throws an error */
+        /* If there are no else stmt with return in the outer most scope of the func def block,
+           no other return stmt, and the method is not void, the func def is not
+           guaranteed to reach an return stmt and throws an error */
         if (!elseStmtWithReturnExist && node.getBlockNode().getReturnstmtNode() == null) {
-            if(node.getType() != Type.VOID){
+            if (node.getType() != Type.VOID) {
                 ErrorHandler.returnNotGuaranteed();
             }
         }
-
         checkType(node, node.getBlockNode());
 
         if (isReservedKeyword(node.getId()))
@@ -141,45 +140,50 @@ public class Typechecker extends AstVisitor {
 
     }
 
+    /* For if stmts and while stmts check that they have the same type and set block node to that type. */
     public void visit(StmtsNode node) {
         StmtNode firstIfStament = null;
-        boolean ifStmtNodeExists = false;
+        StmtNode firstWhileStmt = null;
+        boolean ifStmtExist = false;
+        boolean whileStmtExist = false;
         int ifCount = 0;
+        int whileCount = 0;
+
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
             if (node.getChild(i) instanceof If_stmtNode) {
-                ifCount += 1;
-                /* Checks whether there exist any else stmts. If there is none, it must check that there are an return stmt in the main scope (blockNode). */
-                ifStmtNodeExists = true;
-                if (ifCount == 1) {
-                    firstIfStament = node.getChild(i);
-                } else {
-                    checkType(firstIfStament, node.getChild(i));
-                }
-            }
-        }
-        StmtNode firstWhileStmt = null;
-        boolean whileStmtExist = false;
-        int whileCount = 0;
-        for (int j = 0; j < node.getChildCount(); j++) {
-            if(node.getChild(j) instanceof While_stmtNode){
-                whileCount += 1;
-                if(whileCount == 1){
-                    whileStmtExist = true;
-                    firstWhileStmt = node.getChild(j);
-                    /* After the first while stmt check that it is the same type as the if stmts */
-                    if(ifStmtNodeExists) {
-                        checkType(firstIfStament, firstWhileStmt);
+                If_stmtNode if_stmtNode = (If_stmtNode) node.getChild(i);
+                /* If it is a stmt without a type, ie. it has no return type, do not use that stmt's
+                 *  type for type checking */
+                if (if_stmtNode.getType() != null) {
+                    ifCount += 1;
+                    ifStmtExist = true;
+                    if (ifCount == 1) {
+                        firstIfStament = node.getChild(i);
+                    } else {
+                        checkType(firstIfStament, node.getChild(i));
                     }
-                } else {
-                    checkType(firstWhileStmt, node.getChild(j));
+                }
+            }
+            if (node.getChild(i) instanceof While_stmtNode) {
+                While_stmtNode while_stmtNode = (While_stmtNode) node.getChild(i);
+                if (while_stmtNode.getType() != null) {
+                    whileCount += 1;
+                    if (whileCount == 1) {
+                        whileStmtExist = true;
+                        firstWhileStmt = node.getChild(i);
+                    } else {
+                        checkType(firstWhileStmt, node.getChild(i));
+                    }
                 }
             }
         }
-        if (ifStmtNodeExists) {
+
+        if (ifStmtExist && whileStmtExist) {
+            checkType(firstIfStament, firstWhileStmt);
+        } else if (ifStmtExist) {
             node.setType(firstIfStament.getType());
-        }
-        if(whileStmtExist) {
+        } else if (whileStmtExist) {
             node.setType(firstWhileStmt.getType());
         }
     }
