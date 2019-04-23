@@ -2,7 +2,6 @@ package symboltable;
 
 import java.util.Stack;
 
-import ast.Func_defNode;
 import ast.ITypeNode;
 import ast.Type;
 import exceptions.ErrorHandler;
