@@ -72,5 +72,15 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid spelling of TRUE / FALSE - mistype?"));
     }
 
+    public static void ParameterLengthError(String functionName)
+    {
+        messageList.add(new GeneralError(ErrorType.ERROR, "The number of arguments does not fit in the function \"" + functionName + "\""));
+    }
+
+    public static void ParameterTypeError(String functionName)
+    {
+        messageList.add(new GeneralError(ErrorType.ERROR, "The type of the parameters does not fit in the invokation of function \""  + functionName + "\""));
+    }
+
 
 }
