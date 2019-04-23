@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import ast.*;
 import ast.expr.*;
+import ast.expr.aexpr.AExpr;
 import ast.type.*;
 import exceptions.ErrorHandler;
 
@@ -12,7 +13,9 @@ public class Typechecker extends AstVisitor {
     private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
 
     public void visit(Func_callStmtNode node) {
-        
+        for(AExpr parameter: node.getParameters()) {
+            parameter.accept(this);
+        }
     }
 
     public void visit(BlockNode node) {
@@ -227,7 +230,9 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-
+        for(AExpr parameter: node.getParameters()) {
+            parameter.accept(this);
+        }
     }
 
     @Override

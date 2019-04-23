@@ -83,6 +83,14 @@ public class ErrorHandler {
     public static void wrongTypeToList(Type type, BooleanLiteral node)
     {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Trying to add " + node.getBoolval() + " which is of type " + node.getType() + " to a list of type " + type.toString()));
+    public static void ParameterLengthError(String functionName)
+    {
+        messageList.add(new GeneralError(ErrorType.ERROR, "The number of arguments does not fit in the function \"" + functionName + "\""));
+    }
+
+    public static void ParameterTypeError(String functionName)
+    {
+        messageList.add(new GeneralError(ErrorType.ERROR, "The type of the parameters does not fit in the invokation of function \""  + functionName + "\""));
     }
 
 
