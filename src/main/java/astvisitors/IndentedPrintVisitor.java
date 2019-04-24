@@ -3,6 +3,9 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -15,14 +18,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         resultString += level > 0 ? new String(new char[level]).replace("\0", "   ") : "";
         resultString += "+- " + node.toString();
         System.out.println(resultString);
-    }
-
-    @Override
-    public void visitLevel(Func_callStmtNode node, int level) {
-        print(node, level);
-        for (AExpr child : node.getParameters()) {
-            child.acceptLevel(this, level + 1);
-        }
     }
 
     @Override
@@ -212,4 +207,24 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         node.getRightNode().acceptLevel(this, level + 1);
 		
 	}
+
+    @Override
+    public void visitLevel(PrintNode node, int level)
+    {
+        print(node, level);
+        for (AExpr child : node.getParameters()) {
+            child.acceptLevel(this, level + 1);
+        }
+        
+    }
+
+    @Override
+    public void visitLevel(CustomFuncCallStmtNode node, int level)
+    {
+        print(node, level);
+        for (AExpr child : node.getParameters()) {
+            child.acceptLevel(this, level + 1);
+        }
+        
+    }
 }

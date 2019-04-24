@@ -4,6 +4,9 @@ import java.util.Arrays;
 
 import ast.*;
 import ast.expr.*;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
 import exceptions.ErrorHandler;
@@ -353,5 +356,19 @@ public class Typechecker extends AstVisitor {
         checkSpecificType(node.getLeftNode(), Type.BOOL);
         checkSpecificType(node.getRightNode(), Type.BOOL);
         node.setType(Type.BOOL);
+    }
+
+    @Override
+    public void visit(PrintNode node)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(CustomFuncCallStmtNode node)
+    {
+        // TODO Auto-generated method stub
+        
     }
 }
