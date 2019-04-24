@@ -193,7 +193,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
         if (node.getExprNode().getType().equals(Type.STRING)) {
             out.print("strcpy(" + node.getId() + ", ");
             node.getExprNode().accept(this);
-            out.print(")\n");
+            out.print(");\n");
         }
         else {
             out.print(node.getId() + " = ");
