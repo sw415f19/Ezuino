@@ -32,6 +32,17 @@ public class FuncStructureVisitor extends AstVisitor {
 
     }
 
+    private void checkSpecificType(ITypeNode node, Type expectedType)
+    {
+        Type nodeType = node.getType();
+        if (nodeType == null) {
+            System.err.println("FuncStructureVisitor: Programming error: nodeType = null");
+        }
+        if (nodeType != expectedType) {
+            ErrorHandler.unexpectedType(node, nodeType);
+        }
+    }
+
     @Override
     public void visit(Func_callExprNode node)
     {
@@ -230,8 +241,11 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(PrintNode node)
     {
-        // TODO Auto-generated method stub
-        
+        List<AExpr> parameters = node.getParameters();
+        if (parameters.size() != 1) {
+            ErrorHandler.ParameterLengthError(node.toString());
+        }
+        checkSpecificType(node.getParameters().get(0), Type.STRING);
     }
 
     @Override
@@ -239,7 +253,7 @@ public class FuncStructureVisitor extends AstVisitor {
     {
         Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getId());
         matchParameterList(node.getId(), node.getParameters(), funcdef.getParameters());
-        
+
     }
 
 }
