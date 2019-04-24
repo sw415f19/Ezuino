@@ -49,4 +49,12 @@ public class SymbolTable {
     private boolean notEmpty(String key) {
         return ("<missing ID>" != key.intern());
     }
+
+    public ITypeNode getSymbolNode(String id)
+    {
+        if(symbolMap.containsKey(id)) {
+            return symbolMap.get(id);
+        }
+        return this.parentTable.getSymbolNode(id);
+    }
 }

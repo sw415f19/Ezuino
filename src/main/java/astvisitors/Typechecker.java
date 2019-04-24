@@ -7,6 +7,7 @@ import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.PrintNode;
+import ast.expr.aexpr.AExpr;
 import ast.type.*;
 import exceptions.ErrorHandler;
 
@@ -15,7 +16,9 @@ public class Typechecker extends AstVisitor {
     private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
 
     public void visit(Func_callStmtNode node) {
-
+        for(AExpr parameter: node.getParameters()) {
+            parameter.accept(this);
+        }
     }
 
     public void visit(BlockNode node) {
@@ -230,7 +233,9 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-
+        for(AExpr parameter: node.getParameters()) {
+            parameter.accept(this);
+        }
     }
 
     @Override
@@ -346,7 +351,11 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(LogicalOrExprNode node) {
-
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        checkSpecificType(node.getLeftNode(), Type.BOOL);
+        checkSpecificType(node.getRightNode(), Type.BOOL);
+        node.setType(Type.BOOL);
     }
 
     @Override
