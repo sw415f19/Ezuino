@@ -6,6 +6,8 @@ import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.ListAddNode;
+import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
@@ -15,8 +17,7 @@ public class FuncStructureVisitor extends AstVisitor {
 
     private SymbolTableHandler symtable = new SymbolTableHandler(false);
 
-    private void matchParameterList(String functionname, List<AExpr> callparams, List<DclNode> defparams)
-    {
+    private void matchParameterList(String functionname, List<AExpr> callparams, List<DclNode> defparams) {
         int parametercount = callparams.size();
         if (parametercount != defparams.size()) {
             ErrorHandler.ParameterLengthError(functionname);
@@ -33,16 +34,14 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(Func_callExprNode node)
-    {
+    public void visit(Func_callExprNode node) {
         Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getID());
         matchParameterList(node.getID(), node.getParameters(), funcdef.getParameters());
 
     }
 
     @Override
-    public void visit(BlockNode node)
-    {
+    public void visit(BlockNode node) {
         symtable.openScope();
         DclsNode dcls = node.getDclsNode();
         StmtsNode stmts = node.getStmtsNode();
@@ -60,14 +59,12 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(Func_defNode node)
-    {
+    public void visit(Func_defNode node) {
         symtable.enterSymbol(node.getId(), node);
     }
 
     @Override
-    public void visit(Return_stmtNode node)
-    {
+    public void visit(Return_stmtNode node) {
         AExpr expr = node.getReturnExpr();
         if (expr != null) {
             expr.accept(this);
@@ -75,8 +72,7 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(If_stmtNode node)
-    {
+    public void visit(If_stmtNode node) {
         node.getExpr().accept(this);
         node.getIfBlock().accept(this);
         BlockNode elseblock = node.getElseBlock();
@@ -86,8 +82,7 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(StartNode node)
-    {
+    public void visit(StartNode node) {
         symtable.openScope();
         node.getDcls().accept(this);
         node.getStmts().accept(this);
@@ -96,13 +91,11 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(BooleanLiteral node)
-    {
+    public void visit(BooleanLiteral node) {
     }
 
     @Override
-    public void visit(StmtsNode node)
-    {
+    public void visit(StmtsNode node) {
         int childCount = node.getChildCount();
         for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
@@ -111,13 +104,11 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(DclNode node)
-    {
+    public void visit(DclNode node) {
     }
 
     @Override
-    public void visit(DclsNode node)
-    {
+    public void visit(DclsNode node) {
         int childCount = node.getChildCount();
         for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
@@ -126,120 +117,113 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(While_stmtNode node)
-    {
+    public void visit(While_stmtNode node) {
         node.getExprNode().accept(this);
         node.getBlockNode().accept(this);
 
     }
 
     @Override
-    public void visit(ParametersNode node)
-    {
+    public void visit(ParametersNode node) {
 
     }
 
     @Override
-    public void visit(AdditiveExprNode node)
-    {
+    public void visit(AdditiveExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
 
     }
 
     @Override
-    public void visit(MultiplicativeExprNode node)
-    {
+    public void visit(MultiplicativeExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
 
     }
 
     @Override
-    public void visit(LogicalAndExprNode node)
-    {
+    public void visit(LogicalAndExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
 
     }
 
-    public void visit(LogicalOrExprNode node)
-    {
-        node.getLeftNode().accept(this);
-        node.getRightNode().accept(this);
-
-    }
-
-    @Override
-    public void visit(RelationalExprNode node)
-    {
+    public void visit(LogicalOrExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
 
     }
 
     @Override
-    public void visit(EqualityExprNode node)
-    {
+    public void visit(RelationalExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+
+    }
+
+    @Override
+    public void visit(EqualityExprNode node) {
         node.getLeftNode().accept(this);
         node.getRelationalExprNode().accept(this);
 
     }
 
     @Override
-    public void visit(ParenthesisExprNode node)
-    {
+    public void visit(ParenthesisExprNode node) {
         node.getNode().accept(this);
 
     }
 
     @Override
-    public void visit(UnaryExprNode node)
-    {
+    public void visit(UnaryExprNode node) {
         node.getNode().accept(this);
 
     }
 
     @Override
-    public void visit(Assign_stmtNode node)
-    {
+    public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
 
     }
 
     @Override
-    public void visit(IntegerLiteral node)
-    {
+    public void visit(IntegerLiteral node) {
     }
 
     @Override
-    public void visit(DoubleLiteral node)
-    {
+    public void visit(DoubleLiteral node) {
     }
 
     @Override
-    public void visit(StringLiteral node)
-    {
+    public void visit(StringLiteral node) {
     }
 
     @Override
-    public void visit(IdNode node)
-    {
+    public void visit(IdNode node) {
     }
 
     @Override
-    public void visit(PrintNode node)
-    {
+    public void visit(PrintNode node) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
-    public void visit(CustomFuncCallStmtNode node)
-    {
+    public void visit(CustomFuncCallStmtNode node) {
         Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getId());
         matchParameterList(node.getId(), node.getParameters(), funcdef.getParameters());
-        
+
+    }
+
+    @Override
+    public void visit(ListAddNode node) {
+
+    }
+
+    @Override
+    public void visit(ListRemoveNode node) {
+
     }
 
 }

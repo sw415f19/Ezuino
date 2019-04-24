@@ -11,14 +11,14 @@ import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import symboltable.SymbolTableHandler;
 
-public class SymbolTableVisitor extends AstVisitor {
+public class ListVisitor extends AstVisitor {
     private SymbolTableHandler symbolTableHandler;
 
-    public SymbolTableVisitor(boolean printDcl) {
+    public ListVisitor(boolean printDcl) {
         this.symbolTableHandler = new SymbolTableHandler(printDcl);
     }
 
-    public SymbolTableVisitor() {
+    public ListVisitor() {
         this.symbolTableHandler = new SymbolTableHandler(false);
     }
 
@@ -47,7 +47,9 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        symbolTableHandler.enterSymbol(node.getID(), node);
+        if (node.isList()){
+            symbolTableHandler.enterSymbol(node.getID(), node);
+        }
     }
 
     @Override
@@ -202,23 +204,31 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
-
+            for (AExpr child : node.getParameters()) {
+                child.accept(this);
+            }
     }
 
     @Override
     public void visit(ListAddNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
+        if (node.getParameters().size() != 2){
+            System.err.println("TBD : Length error not 2");
         }
+        IdNode node2 = (IdNode)node.getParameters().get(0);
+        ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
+   
+        if (isSameType(listType, node.getParameters().get(1))){
+            System.err.println("TBD : PEPEOK YIS");
+        }
+            System.err.println("TBD : TYPES NOT EQUAL IN LISTADDNODE");
     }
 
     @Override
     public void visit(ListRemoveNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
+
+    }
+
+    private boolean isSameType(ITypeNode firstParam, ITypeNode secondParam){
+        return firstParam.getType() == secondParam.getType();
     }
 }

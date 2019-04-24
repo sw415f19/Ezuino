@@ -6,9 +6,9 @@ import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class PrintNode extends Func_callStmtNode {
+public class ListRemoveNode extends Func_callStmtNode {
 
-    public PrintNode(ArrayList<AExpr> parameters)
+    public ListRemoveNode(ArrayList<AExpr> parameters)
     {
         this.parameters = parameters;
     }
@@ -24,5 +24,4 @@ public class PrintNode extends Func_callStmtNode {
     {
         v.visitLevel(this, level);
     }
-
 }
