@@ -2,6 +2,8 @@ package astvisitors;
 
 import ast.*;
 import ast.expr.*;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -28,12 +30,6 @@ public class ReturnStmtChecker extends AstVisitor {
             ErrorHandler.typeMismatch(leftNode, rightNode);
 
         }
-    }
-
-    @Override
-    public void visit(Func_callStmtNode node)
-    {
-
     }
 
     @Override
@@ -200,6 +196,27 @@ public class ReturnStmtChecker extends AstVisitor {
     @Override
     public void visit(IdNode node)
     {
+    }
+
+    @Override
+    public void visit(LogicalOrExprNode node)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(PrintNode node)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(CustomFuncCallStmtNode node)
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }
