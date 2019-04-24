@@ -2,11 +2,13 @@ package astvisitors;
 
 import ast.*;
 import ast.expr.*;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.*;
 
 public abstract class AstVisitor {
 
-    public abstract void visit(Func_callStmtNode node);
     public abstract void visit(Func_callExprNode node);
     public abstract void visit(BlockNode node);
     public abstract void visit(Func_defNode node);
@@ -22,10 +24,13 @@ public abstract class AstVisitor {
     public abstract void visit(AdditiveExprNode node);
     public abstract void visit(MultiplicativeExprNode node);
     public abstract void visit(LogicalAndExprNode node);
+    public abstract void visit(LogicalOrExprNode node);
     public abstract void visit(RelationalExprNode node);
     public abstract void visit(EqualityExprNode node);
     public abstract void visit(ParenthesisExprNode node);
     public abstract void visit(UnaryExprNode node);
+    public abstract void visit(PrintNode node);
+    public abstract void visit(CustomFuncCallStmtNode node);
 
 
     //One added assignment nodes.
@@ -41,8 +46,7 @@ public abstract class AstVisitor {
 
 
     public void visit(AstNode astNode) {
-        System.out.println("In ASTNode visit:\t" + astNode);
-        astNode.accept(this);
+		System.err.println("Compiler implementation error: Dont know how to visit: " + astNode.toString());
     }
 
 }

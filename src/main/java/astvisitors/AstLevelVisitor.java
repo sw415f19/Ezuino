@@ -3,11 +3,15 @@ package astvisitors;
 
 import ast.*;
 import ast.expr.*;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.*;
 
 public abstract class AstLevelVisitor {
 	
-	public abstract void visitLevel(Func_callStmtNode node, int level);
+	public abstract void visitLevel(PrintNode node, int level);
+	public abstract void visitLevel(CustomFuncCallStmtNode node, int level);
 	public abstract void visitLevel(Func_callExprNode node, int level);
 	public abstract void visitLevel(BlockNode node, int level);
 	public abstract void visitLevel(Func_defNode node, int level);
@@ -23,6 +27,7 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(AdditiveExprNode node, int level);
 	public abstract void visitLevel(MultiplicativeExprNode node, int level);
 	public abstract void visitLevel(LogicalAndExprNode node, int level);
+	public abstract void visitLevel(LogicalOrExprNode node, int level);
 	public abstract void visitLevel(RelationalExprNode node, int level);
 	public abstract void visitLevel(EqualityExprNode node, int level);
 	public abstract void visitLevel(ParenthesisExprNode node, int level);
@@ -42,8 +47,7 @@ public abstract class AstLevelVisitor {
 	
 	
 	public void visitLevel(AstNode astNode, int level) {
-		System.out.println("In ASTNode visit:\t" + astNode);
-		astNode.acceptLevel(this, level);
+		System.err.println("Compiler implementation error: Dont know how to visit: " + astNode.toString());
 	}
 
 }

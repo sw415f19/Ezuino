@@ -264,7 +264,22 @@ public class TypecheckerTest {
         ErrorHandler.reset();
     }
 
-    private EzuinoParser createParser(String testString) throws IOException {
+    @Test
+    public void ifStmtAfterWhile() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "    while(1<2){\n" +
+                "    }\n" +
+                "    if(1>2) {\n" +
+                "      \n" +
+                "    }\n" +
+                " return 1" +
+                "}";
+        testWithTableAndTypeChecker(testProgram);
+        assertFalse(ErrorHandler.hasErrors());
+        ErrorHandler.reset();
+    }
+
+    private EzuinoParser createParser(String testString) {
         CharStream stream = CharStreams.fromString(testString);
         EzuinoLexer lexer = new EzuinoLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);

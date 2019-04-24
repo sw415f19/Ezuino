@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
 
 import exceptions.ErrorListener;
-
 public class EzuinoLexerTest {
 
 	@Test
@@ -229,17 +228,17 @@ public class EzuinoLexerTest {
 		ep.start();
 		assertFalse(el.hasError());
 	}
-
+	@Test
 	public void typeBooleanAssignExpression() throws IOException {
 		EzuinoParser ep = createParser("boolean a\na := (1 < 2)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
 		assertFalse(el.hasError());
 	}
-
+	@Test
 	public void typeBooleanAssignMultiExpression() throws IOException {
-		EzuinoParser ep = createParser("boolean a\na := (1 < 2) OR (func AND 3 < 4)");
-		ErrorListener el = setErrorHandler(ep);
+		EzuinoParser ep = createParser("boolean a\na := (1 < 2) OR (asd AND 3 < 4)");
+		ErrorListener el = setErrorHandler(ep); 
 		ep.start();
 		assertFalse(el.hasError());
 	}
@@ -613,14 +612,6 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void returnkeyword() throws IOException {
-		EzuinoParser ep = createParser("return");
-		ErrorListener el = setErrorHandler(ep);
-		ep.start();
-		assertTrue(el.hasError());
-	}
-
-	@Test
 	public void voidFunctionTest() throws IOException {
 		EzuinoParser ep = createParser("func f(){}");
 		ErrorListener el = setErrorHandler(ep);
@@ -777,7 +768,7 @@ public class EzuinoLexerTest {
 		EzuinoParser ep = createParser("list_add(a, b, c)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
-		assertTrue(el.hasError());
+		assertFalse(el.hasError());
 	}
 
 	@Test
@@ -801,7 +792,7 @@ public class EzuinoLexerTest {
 		EzuinoParser ep = createParser("list_remove(a, b, c)");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
-		assertTrue(el.hasError());
+		assertFalse(el.hasError());
 	}
 
 	@Test
@@ -841,9 +832,10 @@ public class EzuinoLexerTest {
 		EzuinoParser ep = createParser("{}");
 		ErrorListener el = setErrorHandler(ep);
 		ep.start();
-		assertTrue(el.hasError());
+		assertFalse(el.hasError());
 	}
 
+	
 	@Test
 	public void switchStmt() throws IOException {
 		String program = "switch(a)\n" + "  {case 1: return 1}" + "  {case 2: return 2}";

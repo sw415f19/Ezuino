@@ -5,6 +5,8 @@ import java.util.List;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.*;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -28,13 +30,6 @@ public class FuncStructureVisitor extends AstVisitor {
             }
         }
 
-    }
-
-    @Override
-    public void visit(Func_callStmtNode node)
-    {
-        Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getID());
-        matchParameterList(node.getID(), node.getParameters(), funcdef.getParameters());
     }
 
     @Override
@@ -103,7 +98,6 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(BooleanLiteral node)
     {
-
     }
 
     @Override
@@ -119,7 +113,6 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(DclNode node)
     {
-
     }
 
     @Override
@@ -170,7 +163,6 @@ public class FuncStructureVisitor extends AstVisitor {
 
     }
 
-    
     public void visit(LogicalOrExprNode node)
     {
         node.getLeftNode().accept(this);
@@ -218,29 +210,36 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(IntegerLiteral node)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void visit(DoubleLiteral node)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void visit(StringLiteral node)
     {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void visit(IdNode node)
     {
-        // TODO Auto-generated method stub
+    }
 
+    @Override
+    public void visit(PrintNode node)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(CustomFuncCallStmtNode node)
+    {
+        Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getId());
+        matchParameterList(node.getId(), node.getParameters(), funcdef.getParameters());
+        
     }
 
 }

@@ -3,6 +3,9 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -15,30 +18,6 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
         resultString += level > 0 ? new String(new char[level]).replace("\0", "   ") : "";
         resultString += "+- " + node.toString();
         System.out.println(resultString);
-    }
-    /*
-     * public void visit(StartNode s) { System.out.println("Printing AST:");
-     * //print(s, 0); visit(s.getDcls(), 1); visit(s.getStmts(), 1); }
-     * 
-     * public void visit(DclsNode d, int level) { int childCount =
-     * d.getChildCount(); print(d, level); for(int i = 0;i < childCount;i++) {
-     * DclNode child = d.getChild(i); visit(child, level + 1); } }
-     * 
-     * public void visit(DclNode d, int level) { print(d, level); }
-     * 
-     * public void visit(StmtsNode s, int level) { int childCount =
-     * s.getChildCount(); print(s, level); for(int i = 0; i< childCount; i++) {
-     * visit(s.getChild(i), level + 1); } }
-     * 
-     * public void visit(StmtNode s, int level) { print(s, level); }
-     */
-
-    @Override
-    public void visitLevel(Func_callStmtNode node, int level) {
-        print(node, level);
-        for (AExpr child : node.getParameters()) {
-            child.acceptLevel(this, level + 1);
-        }
     }
 
     @Override
@@ -220,4 +199,32 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 		node.getNode().acceptLevel(this, level + 1);
 		
 	}
+
+	@Override
+	public void visitLevel(LogicalOrExprNode node, int level) {
+        print(node, level);
+        node.getLeftNode().acceptLevel(this, level + 1);
+        node.getRightNode().acceptLevel(this, level + 1);
+		
+	}
+
+    @Override
+    public void visitLevel(PrintNode node, int level)
+    {
+        print(node, level);
+        for (AExpr child : node.getParameters()) {
+            child.acceptLevel(this, level + 1);
+        }
+        
+    }
+
+    @Override
+    public void visitLevel(CustomFuncCallStmtNode node, int level)
+    {
+        print(node, level);
+        for (AExpr child : node.getParameters()) {
+            child.acceptLevel(this, level + 1);
+        }
+        
+    }
 }
