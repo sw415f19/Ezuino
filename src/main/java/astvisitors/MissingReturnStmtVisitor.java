@@ -52,14 +52,8 @@ public class MissingReturnStmtVisitor extends AstVisitor {
         symtable.openScope();
         node.getBlockNode().accept(this);
 
-        if (node.getType() != Type.VOID) {
-            if (BlockNodeHasReturnStmt()) {
-                // Good
-            } else {
-                ErrorHandler.returnNotGuaranteed();
-                System.out.println("FUCK ur 2");
-
-            }
+        if (node.getType() != Type.VOID && (!BlockNodeHasReturnStmt())) {
+            ErrorHandler.returnNotGuaranteed();
         }
 
         symtable.closeScope();

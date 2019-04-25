@@ -27,7 +27,6 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
             return;
         }
         if (leftType != rightType) {
-            System.err.println("From jonas return checker...");
             ErrorHandler.typeMismatch(leftNode, rightNode);
 
         }
