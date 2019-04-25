@@ -250,7 +250,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
         }
         else {
             node.getLeftNode().accept(this);
-            out.print("!=");
+            out.print(node.getOperator());
             node.getRightNode().accept(this);
         }
     }
