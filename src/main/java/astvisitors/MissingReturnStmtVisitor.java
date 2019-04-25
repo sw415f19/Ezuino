@@ -8,35 +8,25 @@ import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
 
-public class ReturnStmtChecker extends AstVisitor {
+public class MissingReturnStmtVisitor extends AstVisitor {
 
     private SymbolTableHandler symtable = new SymbolTableHandler(false);
-    private final String FUNC_DEF_ID = "funcdef";
     private final String BLOCK_RETURN_STMT = "hasreturn";
 
-    private void checkType(AstNode leftNode, AstNode rightNode)
+    private ITypeNode getBlockReturnStmtNode()
     {
-        Type leftType = leftNode.getType();
-        Type rightType = rightNode.getType();
-        if (leftType == null) {
-            System.err.println("Left type null!");
-            return;
-        }
-        if (rightType == null) {
-            System.err.println("Right type null!");
-            return;
-        }
-        if (leftType != rightType) {
-            System.err.println("From jonas return checker...");
-            ErrorHandler.typeMismatch(leftNode, rightNode);
+        return symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT);
+    }
 
-        }
+    private boolean BlockNodeHasReturnStmt()
+    {
+        ITypeNode returnstmt = getBlockReturnStmtNode();
+        return returnstmt != null;
     }
 
     @Override
     public void visit(Func_callExprNode node)
     {
-
     }
 
     @Override
@@ -54,31 +44,30 @@ public class ReturnStmtChecker extends AstVisitor {
         if (returnstmt != null) {
             returnstmt.accept(this);
         }
-
     }
 
     @Override
     public void visit(Func_defNode node)
     {
         symtable.openScope();
-        symtable.enterSymbol(FUNC_DEF_ID, node);
         node.getBlockNode().accept(this);
-        
-        ITypeNode returnstmt = symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT);
-        if(returnstmt == null) {
-            System.err.println("missing return stmt!");
-        }
-        
-        symtable.closeScope();
 
+        if (node.getType() != Type.VOID) {
+            if (BlockNodeHasReturnStmt()) {
+                // Good
+            } else {
+                ErrorHandler.returnNotGuaranteed();
+                System.out.println("FUCK ur 2");
+
+            }
+        }
+
+        symtable.closeScope();
     }
 
     @Override
     public void visit(Return_stmtNode node)
     {
-        AstNode funcdefnode = (AstNode) symtable.getSymbolNode(FUNC_DEF_ID);
-        checkType(funcdefnode, node.getReturnExpr());
-        
         symtable.enterSymbol(BLOCK_RETURN_STMT, node);
 
     }
@@ -88,25 +77,23 @@ public class ReturnStmtChecker extends AstVisitor {
     {
         symtable.openScope();
         node.getIfBlock().accept(this);
-        boolean ifBlockHasReturnStmt = symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT) != null;
+        boolean ifBlockHasReturnStmt = BlockNodeHasReturnStmt();
         symtable.closeScope();
-        
-        
-        boolean elseBlockHasReturnStmt = false;
-        ITypeNode elseBlockReturnStmt = null;
+
         BlockNode elseblock = node.getElseBlock();
         if (elseblock != null) {
             symtable.openScope();
+
             elseblock.accept(this);
-            elseBlockReturnStmt = symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT);
-            elseBlockHasReturnStmt = elseBlockReturnStmt != null;
+            boolean elseBlockHasReturnStmt = BlockNodeHasReturnStmt();
+            ITypeNode returnStmt = getBlockReturnStmtNode();
             symtable.closeScope();
+
+            if (ifBlockHasReturnStmt && elseBlockHasReturnStmt) {
+                symtable.enterSymbol(BLOCK_RETURN_STMT, returnStmt);
+            }
         }
-        
-        
-        if (ifBlockHasReturnStmt && elseBlockHasReturnStmt) {
-            symtable.enterSymbol(BLOCK_RETURN_STMT, elseBlockReturnStmt);
-        }
+
     }
 
     @Override
@@ -122,7 +109,6 @@ public class ReturnStmtChecker extends AstVisitor {
     @Override
     public void visit(BooleanLiteral node)
     {
-
     }
 
     @Override
@@ -132,13 +118,11 @@ public class ReturnStmtChecker extends AstVisitor {
         for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
         }
-
     }
 
     @Override
     public void visit(DclNode node)
     {
-
     }
 
     @Override
@@ -148,7 +132,6 @@ public class ReturnStmtChecker extends AstVisitor {
         for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
         }
-
     }
 
     @Override
@@ -157,6 +140,7 @@ public class ReturnStmtChecker extends AstVisitor {
         symtable.openScope();
         node.getBlockNode().accept(this);
         symtable.closeScope();
+
     }
 
     @Override
@@ -180,6 +164,11 @@ public class ReturnStmtChecker extends AstVisitor {
     }
 
     @Override
+    public void visit(LogicalOrExprNode node)
+    {
+    }
+
+    @Override
     public void visit(RelationalExprNode node)
     {
     }
@@ -196,6 +185,16 @@ public class ReturnStmtChecker extends AstVisitor {
 
     @Override
     public void visit(UnaryExprNode node)
+    {
+    }
+
+    @Override
+    public void visit(PrintNode node)
+    {
+    }
+
+    @Override
+    public void visit(CustomFuncCallStmtNode node)
     {
     }
 
@@ -222,27 +221,6 @@ public class ReturnStmtChecker extends AstVisitor {
     @Override
     public void visit(IdNode node)
     {
-    }
-
-    @Override
-    public void visit(LogicalOrExprNode node)
-    {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(PrintNode node)
-    {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(CustomFuncCallStmtNode node)
-    {
-        // TODO Auto-generated method stub
-        
     }
 
 }
