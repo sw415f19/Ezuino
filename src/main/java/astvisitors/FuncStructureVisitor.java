@@ -165,7 +165,7 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(EqualityExprNode node) {
         node.getLeftNode().accept(this);
-        node.getRelationalExprNode().accept(this);
+        node.getRightNode().accept(this);
 
     }
 

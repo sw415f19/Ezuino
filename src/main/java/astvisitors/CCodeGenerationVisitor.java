@@ -3,6 +3,10 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.ListAddNode;
+import ast.funcallstmt.ListRemoveNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -19,8 +23,8 @@ public class CCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(Func_callStmtNode node) {
-        out.print(node.getID() + "(");
+    public void visit(CustomFuncCallStmtNode node) {
+        out.print(node.getId() + "(");
         for (Iterator<AExpr> iterator = node.getParameters().iterator(); iterator.hasNext(); ) {
             AExpr exp = iterator.next();
             exp.accept(this);
@@ -292,6 +296,21 @@ public class CCodeGenerationVisitor extends AstVisitor {
     @Override
     public void visit(IdNode node) {
         out.print(node.getVal());
+    }
+
+    @Override
+    public void visit(PrintNode node) {
+
+    }
+
+    @Override
+    public void visit(ListAddNode node) {
+
+    }
+
+    @Override
+    public void visit(ListRemoveNode node) {
+
     }
 
     @Override
