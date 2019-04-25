@@ -3,6 +3,7 @@ package ezuino;
 import ast.AstNode;
 import astvisitors.FuncStructureVisitor;
 import astvisitors.IndentedPrintVisitor;
+import astvisitors.ListVisitor;
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
@@ -79,6 +80,10 @@ public class Main {
         
         FuncStructureVisitor fsv = new FuncStructureVisitor();
         astNode.accept(fsv);
+ 
+        ListVisitor lv = new ListVisitor();
+        astNode.accept(lv);
+
 
         ErrorHandler.printErrorList();
     }
