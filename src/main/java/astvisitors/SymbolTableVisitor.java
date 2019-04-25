@@ -22,7 +22,7 @@ public class SymbolTableVisitor extends AstVisitor {
         this.symbolTableHandler = new SymbolTableHandler(false);
     }
 
-    private void EnterSymbol(String id, ITypeNode node) {
+    private void enterSymbol(String id, ITypeNode node) {
         if (!symbolTableHandler.enterSymbol(id, node)) {
             errorHandler.alreadyDeclared(id);
         }
@@ -61,18 +61,18 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        EnterSymbol(node.getID(), node);
+        enterSymbol(node.getID(), node);
     }
 
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
-        node.setType(symbolTableHandler.retrieveSymbol(node.getId()));
+        node.setType(getType(node.getId()));
     }
 
     @Override
     public void visit(Func_callExprNode node) {
-        node.setType(symbolTableHandler.retrieveSymbol(node.getID()));
+        node.setType(getType(node.getID()));
         for(AExpr child: node.getParameters()) {
             child.accept(this);
         }
@@ -100,7 +100,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
-        EnterSymbol(node.getId(), node);
+        enterSymbol(node.getId(), node);
         for(DclNode parameter: node.getParameters()) {
             parameter.accept(this);
         }
@@ -153,7 +153,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        node.setType(symbolTableHandler.retrieveSymbol(node.getVal()));
+        node.setType(getType(node.getVal()));
     }
 
     @Override

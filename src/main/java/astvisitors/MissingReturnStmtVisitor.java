@@ -23,7 +23,7 @@ public class MissingReturnStmtVisitor extends AstVisitor {
         return symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT);
     }
 
-    private boolean BlockNodeHasReturnStmt() {
+    private boolean blockNodeHasReturnStmt() {
         ITypeNode returnstmt = getBlockReturnStmtNode();
         return returnstmt != null;
     }
@@ -53,7 +53,7 @@ public class MissingReturnStmtVisitor extends AstVisitor {
         symtable.openScope();
         node.getBlockNode().accept(this);
 
-        if (node.getType() != Type.VOID && (!BlockNodeHasReturnStmt())) {
+        if (node.getType() != Type.VOID && (!blockNodeHasReturnStmt())) {
             errorHandler.returnNotGuaranteed();
         }
 
@@ -70,7 +70,7 @@ public class MissingReturnStmtVisitor extends AstVisitor {
     public void visit(If_stmtNode node) {
         symtable.openScope();
         node.getIfBlock().accept(this);
-        boolean ifBlockHasReturnStmt = BlockNodeHasReturnStmt();
+        boolean ifBlockHasReturnStmt = blockNodeHasReturnStmt();
         symtable.closeScope();
 
         BlockNode elseblock = node.getElseBlock();
@@ -78,7 +78,7 @@ public class MissingReturnStmtVisitor extends AstVisitor {
             symtable.openScope();
 
             elseblock.accept(this);
-            boolean elseBlockHasReturnStmt = BlockNodeHasReturnStmt();
+            boolean elseBlockHasReturnStmt = blockNodeHasReturnStmt();
             ITypeNode returnStmt = getBlockReturnStmtNode();
             symtable.closeScope();
 
