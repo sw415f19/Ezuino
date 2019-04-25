@@ -2,7 +2,6 @@ package symboltable;
 
 import ast.ITypeNode;
 import ast.Type;
-import exceptions.ErrorHandler;
 
 import java.util.HashMap;
 import java.util.Map;

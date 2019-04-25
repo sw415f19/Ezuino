@@ -4,7 +4,6 @@ import java.util.Stack;
 
 import ast.ITypeNode;
 import ast.Type;
-import exceptions.ErrorHandler;
 
 public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
