@@ -56,7 +56,7 @@ public class ErrorHandler {
         messageList.add(new GeneralError(ErrorType.WARNING, "Tried to close a scope and pop a symbol table, however, the symbol table stack was empty!"));
     }
 
-    public static void typeMismatch(AstNode leftNode, AstNode rightNode)
+    public static void typeMismatch(ITypeNode leftNode, ITypeNode rightNode)
     {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();

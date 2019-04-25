@@ -13,7 +13,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     private SymbolTableHandler symtable = new SymbolTableHandler(false);
     private final String FUNC_DEF_ID = "funcdef";
 
-    private void checkType(AstNode leftNode, AstNode rightNode)
+    private void checkType(ITypeNode leftNode, ITypeNode rightNode)
     {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();
@@ -69,7 +69,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     @Override
     public void visit(Return_stmtNode node)
     {
-        AstNode funcdefnode = (AstNode) symtable.getSymbolNode(FUNC_DEF_ID);
+        Func_defNode funcdefnode = (Func_defNode) symtable.getSymbolNode(FUNC_DEF_ID);
         checkType(funcdefnode, node.getReturnExpr());
 
     }
