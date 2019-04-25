@@ -1,24 +1,39 @@
 package astvisitors;
 
-
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.*;
+import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
 
 public class SymbolTableVisitor extends AstVisitor {
     private SymbolTableHandler symbolTableHandler;
+    private ErrorHandler errorHandler;
 
-    public SymbolTableVisitor(boolean printDcl) {
+    public SymbolTableVisitor(boolean printDcl, ErrorHandler errorhandler) {
         this.symbolTableHandler = new SymbolTableHandler(printDcl);
+        this.errorHandler = errorhandler;
     }
 
     public SymbolTableVisitor() {
         this.symbolTableHandler = new SymbolTableHandler(false);
+    }
+
+    private void EnterSymbol(String id, ITypeNode node) {
+        if (!symbolTableHandler.enterSymbol(id, node)) {
+            errorHandler.alreadyDeclared(id);
+        }
+    }
+
+    private Type getType(String id) {
+        Type result = symbolTableHandler.retrieveSymbol(id);
+        if (result == null) {
+            errorHandler.notDeclaredVar(id);
+        }
+        return result;
     }
 
     @Override
@@ -46,7 +61,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        symbolTableHandler.enterSymbol(node.getID(), node);
+        EnterSymbol(node.getID(), node);
     }
 
     @Override
@@ -58,7 +73,7 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(Func_callExprNode node) {
         node.setType(symbolTableHandler.retrieveSymbol(node.getID()));
-        for (AExpr child : node.getParameters()) {
+        for(AExpr child: node.getParameters()) {
             child.accept(this);
         }
     }
@@ -85,8 +100,8 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
-        symbolTableHandler.enterSymbol(node.getId(), node);
-        for (DclNode parameter : node.getParameters()) {
+        EnterSymbol(node.getId(), node);
+        for(DclNode parameter: node.getParameters()) {
             parameter.accept(this);
         }
         node.getBlockNode().accept(this);
@@ -94,7 +109,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Return_stmtNode node) {
-        if(node.getReturnExpr() != null){
+        if (node.getReturnExpr() != null) {
             node.getReturnExpr().accept(this);
         }
     }
@@ -112,7 +127,7 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(StmtsNode node) {
         int childCount = node.getChildCount();
-        for (int i = 0; i < childCount; i++) {
+        for(int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
         }
     }
@@ -120,7 +135,7 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(DclsNode node) {
         int childCount = node.getChildCount();
-        for (int i = 0; i < childCount; i++) {
+        for(int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
         }
     }
@@ -178,34 +193,32 @@ public class SymbolTableVisitor extends AstVisitor {
 
     }
 
-	@Override
-	public void visit(UnaryExprNode node) {
-		node.getNode().accept(this);
-		
-	}
-
-	@Override
-	public void visit(LogicalOrExprNode node) {
-        node.getLeftNode().accept(this);
-        node.getRightNode().accept(this);
-        
-	}
-
     @Override
-    public void visit(PrintNode node)
-    {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
-        
+    public void visit(UnaryExprNode node) {
+        node.getNode().accept(this);
+
     }
 
     @Override
-    public void visit(CustomFuncCallStmtNode node)
-    {
-        for (AExpr child : node.getParameters()) {
+    public void visit(LogicalOrExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+
+    }
+
+    @Override
+    public void visit(PrintNode node) {
+        for(AExpr child: node.getParameters()) {
             child.accept(this);
         }
-        
+
+    }
+
+    @Override
+    public void visit(CustomFuncCallStmtNode node) {
+        for(AExpr child: node.getParameters()) {
+            child.accept(this);
+        }
+
     }
 }

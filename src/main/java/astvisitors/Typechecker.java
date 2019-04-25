@@ -14,6 +14,11 @@ import exceptions.ErrorHandler;
 public class Typechecker extends AstVisitor {
 
     private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
+    private ErrorHandler errorHandler;
+
+    public Typechecker(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
 
     public void visit(Func_callStmtNode node) {
         for(AExpr parameter: node.getParameters()) {
@@ -81,7 +86,7 @@ public class Typechecker extends AstVisitor {
 
     public void visit(DclNode node) {
         if (isReservedKeyword(node.getID()))
-            ErrorHandler.reservedKeyword(node.getID());
+            errorHandler.reservedKeyword(node.getID());
     }
 
     public void visit(TypeNode node) {
@@ -179,7 +184,7 @@ public class Typechecker extends AstVisitor {
             return;
         }
         if (leftType != rightType) {
-            ErrorHandler.typeMismatch(leftNode, rightNode);
+            errorHandler.typeMismatch(leftNode, rightNode);
 
         }
     }
@@ -190,7 +195,7 @@ public class Typechecker extends AstVisitor {
             System.err.println("node null in 184 :(");
         }
         if (nodeType != expectedType) {
-            ErrorHandler.unexpectedType(node, nodeType);
+            errorHandler.unexpectedType(node, nodeType);
         }
     }
 
@@ -218,7 +223,7 @@ public class Typechecker extends AstVisitor {
     @Override
     public void visit(IdNode node) {
         if (node.getVal().toUpperCase().equals("TRUE") || node.getVal().toUpperCase().equals("FALSE"))
-            ErrorHandler.invalidTF();
+            errorHandler.invalidTF();
     }
 
     @Override

@@ -28,16 +28,16 @@ public class SymbolTableHandler {
 
     public void closeScope() {
         if (symbolTableStack.isEmpty()) {
-            ErrorHandler.emptyStack();
+            System.err.println("Programming error in SymbolTableHandler");
         }
         symbolTableStack.pop();
     }
 
-    public void enterSymbol(String name, ITypeNode node) {
+    public boolean enterSymbol(String name, ITypeNode node) {
         if (printDcl) {
             System.out.println("Setting " + name + " to " + node.toString());
         }
-        symbolTableStack.peek().enterSymbol(name, node);
+        return symbolTableStack.peek().enterSymbol(name, node);
     }
 
     public Type retrieveSymbol(String name) {

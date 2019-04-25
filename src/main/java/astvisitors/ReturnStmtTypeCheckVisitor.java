@@ -12,6 +12,11 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
 
     private SymbolTableHandler symtable = new SymbolTableHandler(false);
     private final String FUNC_DEF_ID = "funcdef";
+    private ErrorHandler errorHandler;
+
+    public ReturnStmtTypeCheckVisitor(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
 
     private void checkType(ITypeNode leftNode, ITypeNode rightNode) {
         Type leftType = leftNode.getType();
@@ -25,7 +30,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
             return;
         }
         if (leftType != rightType) {
-            ErrorHandler.typeMismatch(leftNode, rightNode);
+            errorHandler.typeMismatch(leftNode, rightNode);
 
         }
     }
@@ -65,7 +70,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     @Override
     public void visit(Return_stmtNode node) {
         Func_defNode funcdefnode = (Func_defNode) symtable.getSymbolNode(FUNC_DEF_ID);
-        checkType(funcdefnode, node.getReturnExpr());
+        checkType(funcdefnode, node);
 
     }
 

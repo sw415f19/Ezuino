@@ -15,15 +15,11 @@ public class SymbolTable {
         this.parentTable = previousTable;
     }
 
-    public void enterSymbol(String key, ITypeNode node) {
+    public boolean enterSymbol(String key, ITypeNode node) {
         if (!symbolMap.containsKey(key) && notEmpty(key)) {
             symbolMap.put(key, node);
         }
-
-        if (notEmpty(key)) {
-            return;
-        }
-        ErrorHandler.alreadyDeclared(key);
+        return notEmpty(key);
     }
 
     private boolean isGlobalScope() {
@@ -40,7 +36,6 @@ public class SymbolTable {
         }
 
         if (isGlobalScope()) {
-            ErrorHandler.notDeclaredVar(key);
             return null;
         }
 

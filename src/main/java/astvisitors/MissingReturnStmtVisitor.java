@@ -10,8 +10,14 @@ import symboltable.SymbolTableHandler;
 
 public class MissingReturnStmtVisitor extends AstVisitor {
 
-    private SymbolTableHandler symtable = new SymbolTableHandler(false);
+    private SymbolTableHandler symtable;
     private final String BLOCK_RETURN_STMT = "hasreturn";
+    private ErrorHandler errorHandler;
+
+    public MissingReturnStmtVisitor(ErrorHandler errorHandler) {
+        this.symtable = new SymbolTableHandler(false);
+        this.errorHandler = errorHandler;
+    }
 
     private ITypeNode getBlockReturnStmtNode() {
         return symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT);
@@ -48,7 +54,7 @@ public class MissingReturnStmtVisitor extends AstVisitor {
         node.getBlockNode().accept(this);
 
         if (node.getType() != Type.VOID && (!BlockNodeHasReturnStmt())) {
-            ErrorHandler.returnNotGuaranteed();
+            errorHandler.returnNotGuaranteed();
         }
 
         symtable.closeScope();

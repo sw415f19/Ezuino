@@ -30,7 +30,7 @@ public class Main {
         CharStream cs = CharStreams.fromFileName("src/main/code.ezuino");
 
         ErrorListener errorListener = new ErrorListener();
-
+        ErrorHandler errorhandler = new ErrorHandler();
         EzuinoLexer lLexer = new EzuinoLexer(cs);
         lLexer.removeErrorListeners();
         lLexer.addErrorListener(errorListener);
@@ -71,24 +71,25 @@ public class Main {
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
 
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true);
+        boolean printDcl = true;
+        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(printDcl, errorhandler);
         astNode.accept(symbolTableFillingVisitor);
         astNode.acceptLevel(ipv, 0);
-        Typechecker tc = new Typechecker();
+        Typechecker tc = new Typechecker(errorhandler);
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
         
-        ReturnStmtTypeCheckVisitor rsc = new ReturnStmtTypeCheckVisitor();
+        ReturnStmtTypeCheckVisitor rsc = new ReturnStmtTypeCheckVisitor(errorhandler);
         astNode.accept(rsc);
         
-        MissingReturnStmtVisitor mrsv = new MissingReturnStmtVisitor();
+        MissingReturnStmtVisitor mrsv = new MissingReturnStmtVisitor(errorhandler);
         astNode.accept(mrsv);
         
-        FuncStructureVisitor fsv = new FuncStructureVisitor();
+        FuncStructureVisitor fsv = new FuncStructureVisitor(errorhandler);
         astNode.accept(fsv);
 
-        ErrorHandler.printErrorList();
+        errorhandler.printErrorList();
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
