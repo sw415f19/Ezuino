@@ -243,9 +243,16 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(EqualityExprNode node) {
-        node.getLeftNode().accept(this);
-        out.print(node.getOperator());
-        node.getRightNode().accept(this);
+        if (node.getOperator().equals("=")) {
+            node.getLeftNode().accept(this);
+            out.print("==");
+            node.getRightNode().accept(this);
+        }
+        else {
+            node.getLeftNode().accept(this);
+            out.print("!=");
+            node.getRightNode().accept(this);
+        }
     }
 
     @Override
