@@ -90,4 +90,9 @@ public class ErrorHandler {
                         + " - tried to add it to an " + firstParam.getType() + " list."));
     }
 
+
+    public static void invalidKeyword() {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid syntax - Conditional syntax error."));
+    }
+
 }
