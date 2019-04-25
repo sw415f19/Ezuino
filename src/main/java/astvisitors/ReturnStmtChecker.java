@@ -12,6 +12,7 @@ public class ReturnStmtChecker extends AstVisitor {
 
     private SymbolTableHandler symtable = new SymbolTableHandler(false);
     private final String FUNC_DEF_ID = "funcdef";
+    private final String BLOCK_RETURN_STMT = "hasreturn";
 
     private void checkType(AstNode leftNode, AstNode rightNode)
     {
@@ -62,6 +63,12 @@ public class ReturnStmtChecker extends AstVisitor {
         symtable.openScope();
         symtable.enterSymbol(FUNC_DEF_ID, node);
         node.getBlockNode().accept(this);
+        
+        ITypeNode returnstmt = symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT);
+        if(returnstmt == null) {
+            System.err.println("missing return stmt!");
+        }
+        
         symtable.closeScope();
 
     }
@@ -71,16 +78,34 @@ public class ReturnStmtChecker extends AstVisitor {
     {
         AstNode funcdefnode = (AstNode) symtable.getSymbolNode(FUNC_DEF_ID);
         checkType(funcdefnode, node.getReturnExpr());
+        
+        symtable.enterSymbol(BLOCK_RETURN_STMT, node);
 
     }
 
     @Override
     public void visit(If_stmtNode node)
     {
+        symtable.openScope();
         node.getIfBlock().accept(this);
+        boolean ifBlockHasReturnStmt = symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT) != null;
+        symtable.closeScope();
+        
+        
+        boolean elseBlockHasReturnStmt = false;
+        ITypeNode elseBlockReturnStmt = null;
         BlockNode elseblock = node.getElseBlock();
         if (elseblock != null) {
+            symtable.openScope();
             elseblock.accept(this);
+            elseBlockReturnStmt = symtable.getSymbolCurrentScope(BLOCK_RETURN_STMT);
+            elseBlockHasReturnStmt = elseBlockReturnStmt != null;
+            symtable.closeScope();
+        }
+        
+        
+        if (ifBlockHasReturnStmt && elseBlockHasReturnStmt) {
+            symtable.enterSymbol(BLOCK_RETURN_STMT, elseBlockReturnStmt);
         }
     }
 
@@ -129,8 +154,9 @@ public class ReturnStmtChecker extends AstVisitor {
     @Override
     public void visit(While_stmtNode node)
     {
+        symtable.openScope();
         node.getBlockNode().accept(this);
-
+        symtable.closeScope();
     }
 
     @Override

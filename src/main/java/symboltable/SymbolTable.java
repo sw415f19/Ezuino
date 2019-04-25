@@ -57,4 +57,9 @@ public class SymbolTable {
         }
         return this.parentTable.getSymbolNode(id);
     }
+
+    public ITypeNode getSymbolCurrentScope(String id)
+    {
+        return symbolMap.get(id);
+    }
 }

@@ -49,4 +49,8 @@ public class SymbolTableHandler {
     {
         return symbolTableStack.peek().getSymbolNode(id);
     }
+    
+    public ITypeNode getSymbolCurrentScope(String id) {
+        return symbolTableStack.peek().getSymbolCurrentScope(id);
+    }
 }
