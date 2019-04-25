@@ -12,7 +12,6 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
 
     private SymbolTableHandler symtable = new SymbolTableHandler(false);
     private final String FUNC_DEF_ID = "funcdef";
-    private final String BLOCK_RETURN_STMT = "hasreturn";
 
     private void checkType(AstNode leftNode, AstNode rightNode)
     {
@@ -72,8 +71,6 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     {
         AstNode funcdefnode = (AstNode) symtable.getSymbolNode(FUNC_DEF_ID);
         checkType(funcdefnode, node.getReturnExpr());
-
-        symtable.enterSymbol(BLOCK_RETURN_STMT, node);
 
     }
 
