@@ -70,18 +70,18 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid spelling of TRUE / FALSE - mistype?"));
     }
 
-    public static void ParameterLengthError(String functionName) {
+    public static void parameterLengthError(String functionName) {
         messageList.add(new GeneralError(ErrorType.ERROR,
                 "The number of arguments does not fit in the function \"" + functionName + "\""));
     }
 
-    public static void ParameterTypeError(String functionName) {
+    public static void parameterTypeError(String functionName) {
         messageList.add(new GeneralError(ErrorType.ERROR,
                 "The type of the parameters does not fit in the invokation of function \"" + functionName + "\""));
     }
 
-    public static void invalidListLength(String s) {
-        messageList.add(new GeneralError(ErrorType.ERROR, "Tried to add more than one object to list \"" + s + "\" ."));
+    public static void invalidParamLength(String s) {
+        messageList.add(new GeneralError(ErrorType.ERROR, "Invalid list usage - correct example listAdd(myList, a) \"" + s + "\" ."));
     }
 
     public static void listNotSameType(ITypeNode firstParam, Func_callStmtNode node) {

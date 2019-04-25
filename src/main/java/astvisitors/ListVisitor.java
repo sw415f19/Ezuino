@@ -215,7 +215,7 @@ public class ListVisitor extends AstVisitor {
         ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
 
         if (node.getParameters().size() != 2) {
-            ErrorHandler.invalidListLength(node2.getVal());
+            ErrorHandler.invalidParamLength(node2.getVal());
         }
 
         if (isSameType(listType, node.getParameters().get(1))) {
@@ -230,7 +230,7 @@ public class ListVisitor extends AstVisitor {
         ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
 
         if (node.getParameters().size() != 2) {
-            ErrorHandler.invalidListLength(node2.getVal());
+            ErrorHandler.invalidParamLength(node2.getVal());
         }
 
         if (isSameType(listType, node.getParameters().get(1))) {
