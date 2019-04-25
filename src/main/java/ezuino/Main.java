@@ -72,6 +72,9 @@ public class Main {
         SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true);
         astNode.accept(symbolTableFillingVisitor);
         astNode.acceptLevel(ipv, 0);
+
+        ErrorHandler.printErrorList();
+
         Typechecker tc = new Typechecker();
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
@@ -80,7 +83,7 @@ public class Main {
         CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
         astNode.accept(cCodeGenerationVisitor);
 
-        ErrorHandler.printErrorList();
+        // ErrorHandler.printErrorList();
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
