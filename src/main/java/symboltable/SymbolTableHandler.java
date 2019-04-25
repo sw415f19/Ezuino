@@ -44,4 +44,9 @@ public class SymbolTableHandler {
 	public Type retrieveSymbol(String name) {
 		return symbolTableStack.peek().retrieveSymbol(name);
 	}
+
+    public ITypeNode getSymbolNode(String id)
+    {
+        return symbolTableStack.peek().getSymbolNode(id);
+    }
 }

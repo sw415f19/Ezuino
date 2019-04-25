@@ -1,6 +1,5 @@
 package astvisitors;
 
-
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
@@ -9,16 +8,17 @@ import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.*;
+import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
 
-public class SymbolTableVisitor extends AstVisitor {
+public class ListVisitor extends AstVisitor {
     private SymbolTableHandler symbolTableHandler;
 
-    public SymbolTableVisitor(boolean printDcl) {
+    public ListVisitor(boolean printDcl) {
         this.symbolTableHandler = new SymbolTableHandler(printDcl);
     }
 
-    public SymbolTableVisitor() {
+    public ListVisitor() {
         this.symbolTableHandler = new SymbolTableHandler(false);
     }
 
@@ -47,7 +47,9 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        symbolTableHandler.enterSymbol(node.getID(), node);
+        if (node.isList()) {
+            symbolTableHandler.enterSymbol(node.getID(), node);
+        }
     }
 
     @Override
@@ -151,7 +153,7 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(EqualityExprNode node) {
         node.getLeftNode().accept(this);
-        node.getRightNode().accept(this);
+        node.getRelationalExprNode().accept(this);
     }
 
     @Override
@@ -205,20 +207,39 @@ public class SymbolTableVisitor extends AstVisitor {
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
-
     }
 
     @Override
     public void visit(ListAddNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
+        IdNode node2 = (IdNode) node.getParameters().get(0);
+        ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
+
+        if (node.getParameters().size() != 2) {
+            ErrorHandler.invalidParamLength(node2.getVal());
         }
+
+        if (isSameType(listType, node.getParameters().get(1))) {
+            return;
+        }
+        ErrorHandler.listNotSameType(listType, node);
     }
 
     @Override
     public void visit(ListRemoveNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
+        IdNode node2 = (IdNode) node.getParameters().get(0);
+        ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
+
+        if (node.getParameters().size() != 2) {
+            ErrorHandler.invalidParamLength(node2.getVal());
         }
+
+        if (isSameType(listType, node.getParameters().get(1))) {
+            return;
+        }
+        ErrorHandler.listNotSameType(listType, node);
+    }
+
+    private boolean isSameType(ITypeNode firstParam, ITypeNode secondParam) {
+        return firstParam.getType() == secondParam.getType();
     }
 }

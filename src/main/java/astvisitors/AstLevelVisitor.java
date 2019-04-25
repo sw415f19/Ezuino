@@ -1,13 +1,18 @@
 package astvisitors;
 
-
 import ast.*;
 import ast.expr.*;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.ListAddNode;
+import ast.funcallstmt.ListRemoveNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.*;
 
 public abstract class AstLevelVisitor {
 	
-	public abstract void visitLevel(Func_callStmtNode node, int level);
+	public abstract void visitLevel(PrintNode node, int level);
+	public abstract void visitLevel(CustomFuncCallStmtNode node, int level);
 	public abstract void visitLevel(Func_callExprNode node, int level);
 	public abstract void visitLevel(BlockNode node, int level);
 	public abstract void visitLevel(Func_defNode node, int level);
@@ -27,7 +32,10 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(RelationalExprNode node, int level);
 	public abstract void visitLevel(EqualityExprNode node, int level);
 	public abstract void visitLevel(ParenthesisExprNode node, int level);
-    public abstract void visitLevel(UnaryExprNode node, int level);
+	public abstract void visitLevel(UnaryExprNode node, int level);
+	public abstract void visitLevel(ListAddNode node, int level);
+    public abstract void visitLevel(ListRemoveNode node, int level);
+
 
 	
 	//One added assignment nodes.

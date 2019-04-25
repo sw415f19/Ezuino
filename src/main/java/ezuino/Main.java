@@ -2,7 +2,9 @@ package ezuino;
 
 import ast.AstNode;
 import astvisitors.CCodeGenerationVisitor;
+import astvisitors.FuncStructureVisitor;
 import astvisitors.IndentedPrintVisitor;
+import astvisitors.ListVisitor;
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
@@ -66,6 +68,11 @@ public class Main {
         // Runs the three, filling up the AST array list attribute
         AstNode astNode = parseTree.accept(buildAstVisitor);
 
+        if (astNode == null){
+            ErrorHandler.invalidKeyword();
+            ErrorHandler.printErrorList();
+            return;
+        } 
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
 
@@ -79,6 +86,13 @@ public class Main {
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
+        
+        FuncStructureVisitor fsv = new FuncStructureVisitor();
+        astNode.accept(fsv);
+ 
+        ListVisitor lv = new ListVisitor();
+        astNode.accept(lv);
+
 
         CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
         astNode.accept(cCodeGenerationVisitor);
