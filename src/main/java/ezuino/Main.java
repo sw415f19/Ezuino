@@ -80,7 +80,7 @@ public class Main {
         
         FuncStructureVisitor fsv = new FuncStructureVisitor();
         astNode.accept(fsv);
-
+ 
         ListVisitor lv = new ListVisitor();
         astNode.accept(lv);
 

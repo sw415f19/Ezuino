@@ -1,6 +1,5 @@
 package astvisitors;
 
-
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
@@ -9,6 +8,7 @@ import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.*;
+import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
 
 public class ListVisitor extends AstVisitor {
@@ -47,7 +47,7 @@ public class ListVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        if (node.isList()){
+        if (node.isList()) {
             symbolTableHandler.enterSymbol(node.getID(), node);
         }
     }
@@ -204,31 +204,42 @@ public class ListVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
-            for (AExpr child : node.getParameters()) {
-                child.accept(this);
-            }
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
     }
 
     @Override
     public void visit(ListAddNode node) {
-        if (node.getParameters().size() != 2){
-            System.err.println("TBD : Length error not 2");
-        }
-        IdNode node2 = (IdNode)node.getParameters().get(0);
+        IdNode node2 = (IdNode) node.getParameters().get(0);
         ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
-   
-        if (isSameType(listType, node.getParameters().get(1))){
-            System.err.println("TBD : PEPEOK YIS");
+
+        if (node.getParameters().size() != 2) {
+            ErrorHandler.invalidListLength(node2.getVal());
         }
-            System.err.println("TBD : TYPES NOT EQUAL IN LISTADDNODE");
+
+        if (isSameType(listType, node.getParameters().get(1))) {
+            return;
+        }
+        ErrorHandler.listNotSameType(listType, node);
     }
 
     @Override
     public void visit(ListRemoveNode node) {
+        IdNode node2 = (IdNode) node.getParameters().get(0);
+        ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
 
+        if (node.getParameters().size() != 2) {
+            ErrorHandler.invalidListLength(node2.getVal());
+        }
+
+        if (isSameType(listType, node.getParameters().get(1))) {
+            return;
+        }
+        ErrorHandler.listNotSameType(listType, node);
     }
 
-    private boolean isSameType(ITypeNode firstParam, ITypeNode secondParam){
+    private boolean isSameType(ITypeNode firstParam, ITypeNode secondParam) {
         return firstParam.getType() == secondParam.getType();
     }
 }

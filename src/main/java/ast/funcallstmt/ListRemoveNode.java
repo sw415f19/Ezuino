@@ -8,20 +8,17 @@ import astvisitors.AstVisitor;
 
 public class ListRemoveNode extends Func_callStmtNode {
 
-    public ListRemoveNode(ArrayList<AExpr> parameters)
-    {
+    public ListRemoveNode(ArrayList<AExpr> parameters) {
         this.parameters = parameters;
     }
 
     @Override
-    public void accept(AstVisitor v)
-    {
+    public void accept(AstVisitor v) {
         v.visit(this);
     }
 
     @Override
-    public void acceptLevel(AstLevelVisitor v, int level)
-    {
+    public void acceptLevel(AstLevelVisitor v, int level) {
         v.visitLevel(this, level);
     }
 }
