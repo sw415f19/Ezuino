@@ -9,6 +9,8 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -35,6 +37,7 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
+        System.out.println(node instanceof IntegerCastNode);
         Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getID());
         matchParameterList(node.getID(), node.getParameters(), funcdef.getParameters());
 
@@ -223,6 +226,16 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(ListRemoveNode node) {
+
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
 
     }
 

@@ -7,6 +7,8 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -55,7 +57,6 @@ public class ListVisitor extends AstVisitor {
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
-        node.setType(symbolTableHandler.retrieveSymbol(node.getId()));
     }
 
     @Override
@@ -141,7 +142,7 @@ public class ListVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        node.setType(symbolTableHandler.retrieveSymbol(node.getVal()));
+     
     }
 
     @Override
@@ -241,5 +242,15 @@ public class ListVisitor extends AstVisitor {
 
     private boolean isSameType(ITypeNode firstParam, ITypeNode secondParam) {
         return firstParam.getType() == secondParam.getType();
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+
     }
 }
