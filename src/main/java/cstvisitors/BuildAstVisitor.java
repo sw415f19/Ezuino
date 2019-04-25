@@ -22,6 +22,7 @@ import ast.expr.*;
 public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitStart(EzuinoParser.StartContext ctx) {
+        if (ctx.stmts() == null) return null;
         StmtsNode stmts = (StmtsNode) ctx.stmts().accept(this);
         DclsNode dcls = (DclsNode) ctx.dcls().accept(this);
 

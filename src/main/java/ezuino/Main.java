@@ -67,6 +67,11 @@ public class Main {
         // Runs the three, filling up the AST array list attribute
         AstNode astNode = parseTree.accept(buildAstVisitor);
 
+        if (astNode == null){
+            ErrorHandler.invalidKeyword();
+            ErrorHandler.printErrorList();
+            return;
+        } 
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
 
