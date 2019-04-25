@@ -15,15 +15,13 @@ public class Typechecker extends AstVisitor {
 
     private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
 
-    public void visit(Func_callStmtNode node)
-    {
+    public void visit(Func_callStmtNode node) {
         for (AExpr parameter : node.getParameters()) {
             parameter.accept(this);
         }
     }
 
-    public void visit(BlockNode node)
-    {
+    public void visit(BlockNode node) {
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
         }
@@ -35,16 +33,14 @@ public class Typechecker extends AstVisitor {
         }
     }
 
-    public void visit(Func_defNode node)
-    {
+    public void visit(Func_defNode node) {
         node.getBlockNode().accept(this);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
     }
 
-    public void visit(Return_stmtNode node)
-    {
+    public void visit(Return_stmtNode node) {
         Type nodeType = Type.VOID;
         AExpr expression = node.getReturnExpr();
         if (expression != null) {
@@ -54,8 +50,7 @@ public class Typechecker extends AstVisitor {
         node.setType(nodeType);
     }
 
-    public void visit(If_stmtNode node)
-    {
+    public void visit(If_stmtNode node) {
         node.getExpr().accept(this);
         node.getIfBlock().accept(this);
         if (node.getElseBlock() != null) {
@@ -64,89 +59,75 @@ public class Typechecker extends AstVisitor {
         checkSpecificType(node.getExpr(), Type.BOOL);
     }
 
-    public void visit(StartNode node)
-    {
+    public void visit(StartNode node) {
         node.getDcls().accept(this);
         node.getStmts().accept(this);
 
     }
 
-    public void visit(BooleanLiteral node)
-    {
+    public void visit(BooleanLiteral node) {
         node.setType(Type.BOOL);
     }
 
-    public void visit(StmtNode node)
-    {
+    public void visit(StmtNode node) {
 
     }
 
-    public void visit(StmtsNode node)
-    {
+    public void visit(StmtsNode node) {
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
         }
     }
 
-    public void visit(DclNode node)
-    {
+    public void visit(DclNode node) {
         if (isReservedKeyword(node.getID()))
             ErrorHandler.reservedKeyword(node.getID());
     }
 
-    public void visit(TypeNode node)
-    {
+    public void visit(TypeNode node) {
 
     }
 
-    public void visit(DclsNode node)
-    {
+    public void visit(DclsNode node) {
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
         }
 
     }
 
-    public void visit(ValNode node)
-    {
+    public void visit(ValNode node) {
     }
 
-    public void visit(While_stmtNode node)
-    {
+    public void visit(While_stmtNode node) {
         node.getExprNode().accept(this);
         node.getBlockNode().accept(this);
         checkSpecificType(node.getExprNode(), Type.BOOL);
     }
 
-    public void visit(ExprNode node)
-    {
+    public void visit(ExprNode node) {
 
     }
 
-    public void visit(ParametersNode node)
-    {
+    public void visit(ParametersNode node) {
 
     }
 
     // One added assignment nodes.
-    public void visit(Assign_stmtNode node)
-    {
+    public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
 
     }
 
     @Override
-    public void visit(Func_callExprNode node)
-    {
+    public void visit(Func_callExprNode node) {
         for (AExpr parameter : node.getParameters()) {
             parameter.accept(this);
         }
     }
 
     @Override
-    public void visit(AdditiveExprNode node)
-    {
+    public void visit(AdditiveExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
@@ -154,8 +135,7 @@ public class Typechecker extends AstVisitor {
     }
 
     @Override
-    public void visit(MultiplicativeExprNode node)
-    {
+    public void visit(MultiplicativeExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
@@ -163,8 +143,7 @@ public class Typechecker extends AstVisitor {
     }
 
     @Override
-    public void visit(LogicalAndExprNode node)
-    {
+    public void visit(LogicalAndExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
         checkSpecificType(node.getLeftNode(), Type.BOOL);
@@ -173,8 +152,7 @@ public class Typechecker extends AstVisitor {
     }
 
     @Override
-    public void visit(RelationalExprNode node)
-    {
+    public void visit(RelationalExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
@@ -182,16 +160,14 @@ public class Typechecker extends AstVisitor {
     }
 
     @Override
-    public void visit(EqualityExprNode node)
-    {
+    public void visit(EqualityExprNode node) {
         node.getLeftNode().accept(this);
         node.getRelationalExprNode().accept(this);
         checkType(node.getLeftNode(), node.getRelationalExprNode());
         node.setType(Type.BOOL);
     }
 
-    private void checkType(ITypeNode leftNode, ITypeNode rightNode)
-    {
+    private void checkType(ITypeNode leftNode, ITypeNode rightNode) {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();
         if (leftType == null) {
@@ -208,8 +184,7 @@ public class Typechecker extends AstVisitor {
         }
     }
 
-    private void checkSpecificType(ITypeNode node, Type expectedType)
-    {
+    private void checkSpecificType(ITypeNode node, Type expectedType) {
         Type nodeType = node.getType();
         if (nodeType == null) {
             System.err.println("node null in 184 :(");
@@ -220,58 +195,49 @@ public class Typechecker extends AstVisitor {
     }
 
     @Override
-    public void visit(ParenthesisExprNode node)
-    {
+    public void visit(ParenthesisExprNode node) {
         node.getNode().accept(this);
         node.setType(node.getNode().getType());
     }
 
     @Override
-    public void visit(IntegerLiteral node)
-    {
+    public void visit(IntegerLiteral node) {
         node.setType(Type.INT);
     }
 
     @Override
-    public void visit(DoubleLiteral node)
-    {
+    public void visit(DoubleLiteral node) {
         node.setType(Type.DOUBLE);
     }
 
     @Override
-    public void visit(StringLiteral node)
-    {
+    public void visit(StringLiteral node) {
         node.setType(Type.STRING);
     }
 
     @Override
-    public void visit(IdNode node)
-    {
+    public void visit(IdNode node) {
         if (node.getVal().toUpperCase().equals("TRUE") || node.getVal().toUpperCase().equals("FALSE"))
             ErrorHandler.invalidTF();
     }
 
     @Override
-    public void visit(AstNode astNode)
-    {
+    public void visit(AstNode astNode) {
         super.visit(astNode);
     }
 
-    private boolean isReservedKeyword(String word)
-    {
+    private boolean isReservedKeyword(String word) {
         return (Arrays.binarySearch(keywords, word.toUpperCase()) >= 0);
     }
 
     @Override
-    public void visit(UnaryExprNode node)
-    {
+    public void visit(UnaryExprNode node) {
         node.getNode().accept(this);
         node.setType(node.getNode().getType());
     }
 
     @Override
-    public void visit(LogicalOrExprNode node)
-    {
+    public void visit(LogicalOrExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
         checkSpecificType(node.getLeftNode(), Type.BOOL);
@@ -280,12 +246,10 @@ public class Typechecker extends AstVisitor {
     }
 
     @Override
-    public void visit(PrintNode node)
-    {
+    public void visit(PrintNode node) {
     }
 
     @Override
-    public void visit(CustomFuncCallStmtNode node)
-    {
+    public void visit(CustomFuncCallStmtNode node) {
     }
 }

@@ -25,24 +25,25 @@ public class SymbolTable {
         }
         ErrorHandler.alreadyDeclared(key);
     }
-    
+
     private boolean isGlobalScope() {
-    	return this.parentTable == null;
+        return this.parentTable == null;
     }
 
     public Type retrieveSymbol(String key) {
 
-        if (key.toUpperCase().equals("TRUE") || key.toUpperCase().equals("FALSE")) return null;
-        
+        if (key.toUpperCase().equals("TRUE") || key.toUpperCase().equals("FALSE"))
+            return null;
+
         if (symbolMap.containsKey(key)) {
             return symbolMap.get(key).getType();
         }
-        
+
         if (isGlobalScope()) {
-        	ErrorHandler.notDeclaredVar(key);
+            ErrorHandler.notDeclaredVar(key);
             return null;
         }
-        
+
         return this.parentTable.retrieveSymbol(key);
     }
 
@@ -50,16 +51,14 @@ public class SymbolTable {
         return ("<missing ID>" != key.intern());
     }
 
-    public ITypeNode getSymbolNode(String id)
-    {
-        if(symbolMap.containsKey(id)) {
+    public ITypeNode getSymbolNode(String id) {
+        if (symbolMap.containsKey(id)) {
             return symbolMap.get(id);
         }
         return this.parentTable.getSymbolNode(id);
     }
 
-    public ITypeNode getSymbolCurrentScope(String id)
-    {
+    public ITypeNode getSymbolCurrentScope(String id) {
         return symbolMap.get(id);
     }
 }

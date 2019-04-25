@@ -13,8 +13,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     private SymbolTableHandler symtable = new SymbolTableHandler(false);
     private final String FUNC_DEF_ID = "funcdef";
 
-    private void checkType(ITypeNode leftNode, ITypeNode rightNode)
-    {
+    private void checkType(ITypeNode leftNode, ITypeNode rightNode) {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();
         if (leftType == null) {
@@ -32,14 +31,12 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(Func_callExprNode node)
-    {
+    public void visit(Func_callExprNode node) {
 
     }
 
     @Override
-    public void visit(BlockNode node)
-    {
+    public void visit(BlockNode node) {
         DclsNode dcls = node.getDclsNode();
         if (dcls != null) {
             dcls.accept(this);
@@ -56,8 +53,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(Func_defNode node)
-    {
+    public void visit(Func_defNode node) {
         symtable.openScope();
         symtable.enterSymbol(FUNC_DEF_ID, node);
         node.getBlockNode().accept(this);
@@ -67,16 +63,14 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(Return_stmtNode node)
-    {
+    public void visit(Return_stmtNode node) {
         Func_defNode funcdefnode = (Func_defNode) symtable.getSymbolNode(FUNC_DEF_ID);
         checkType(funcdefnode, node.getReturnExpr());
 
     }
 
     @Override
-    public void visit(If_stmtNode node)
-    {
+    public void visit(If_stmtNode node) {
         node.getIfBlock().accept(this);
         BlockNode elseblock = node.getElseBlock();
         if (elseblock != null) {
@@ -86,8 +80,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(StartNode node)
-    {
+    public void visit(StartNode node) {
         symtable.openScope();
         node.getDcls().accept(this);
         node.getStmts().accept(this);
@@ -96,14 +89,12 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(BooleanLiteral node)
-    {
+    public void visit(BooleanLiteral node) {
 
     }
 
     @Override
-    public void visit(StmtsNode node)
-    {
+    public void visit(StmtsNode node) {
         int childCount = node.getChildCount();
         for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
@@ -112,14 +103,12 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(DclNode node)
-    {
+    public void visit(DclNode node) {
 
     }
 
     @Override
-    public void visit(DclsNode node)
-    {
+    public void visit(DclsNode node) {
         int childCount = node.getChildCount();
         for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
@@ -128,90 +117,73 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(While_stmtNode node)
-    {
+    public void visit(While_stmtNode node) {
         node.getBlockNode().accept(this);
 
     }
 
     @Override
-    public void visit(ParametersNode node)
-    {
+    public void visit(ParametersNode node) {
     }
 
     @Override
-    public void visit(AdditiveExprNode node)
-    {
+    public void visit(AdditiveExprNode node) {
     }
 
     @Override
-    public void visit(MultiplicativeExprNode node)
-    {
+    public void visit(MultiplicativeExprNode node) {
     }
 
     @Override
-    public void visit(LogicalAndExprNode node)
-    {
+    public void visit(LogicalAndExprNode node) {
     }
 
     @Override
-    public void visit(RelationalExprNode node)
-    {
+    public void visit(RelationalExprNode node) {
     }
 
     @Override
-    public void visit(EqualityExprNode node)
-    {
+    public void visit(EqualityExprNode node) {
     }
 
     @Override
-    public void visit(ParenthesisExprNode node)
-    {
+    public void visit(ParenthesisExprNode node) {
     }
 
     @Override
-    public void visit(UnaryExprNode node)
-    {
+    public void visit(UnaryExprNode node) {
     }
 
     @Override
-    public void visit(Assign_stmtNode node)
-    {
+    public void visit(Assign_stmtNode node) {
     }
 
     @Override
-    public void visit(IntegerLiteral node)
-    {
+    public void visit(IntegerLiteral node) {
     }
 
     @Override
-    public void visit(DoubleLiteral node)
-    {
+    public void visit(DoubleLiteral node) {
     }
 
     @Override
-    public void visit(StringLiteral node)
-    {
+    public void visit(StringLiteral node) {
     }
 
     @Override
-    public void visit(IdNode node)
-    {
+    public void visit(IdNode node) {
     }
 
     @Override
-    public void visit(LogicalOrExprNode node)
-    {
+    public void visit(LogicalOrExprNode node) {
     }
 
     @Override
-    public void visit(PrintNode node)
-    {
+    public void visit(PrintNode node) {
     }
 
     @Override
-    public void visit(CustomFuncCallStmtNode node)
-    {
+    public void visit(CustomFuncCallStmtNode node) {
     }
 
 }

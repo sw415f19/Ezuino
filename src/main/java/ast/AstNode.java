@@ -10,8 +10,7 @@ public abstract class AstNode {
     public abstract void acceptLevel(AstLevelVisitor v, int level);
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.getClass().getSimpleName();
     }
 

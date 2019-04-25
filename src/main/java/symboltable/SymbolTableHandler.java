@@ -8,48 +8,46 @@ import exceptions.ErrorHandler;
 
 public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
-   
+
     private boolean printDcl;
-    
+
     public SymbolTableHandler(boolean printDcl) {
-    	this.printDcl = printDcl;
+        this.printDcl = printDcl;
     }
 
     public void openScope() {
-        if(symbolTableStack.empty()) {
+        if (symbolTableStack.empty()) {
             SymbolTable firstTable = new SymbolTable(null);
             symbolTableStack.push(firstTable);
-        }
-        else {
-            //Finds the previous table relative to the newly opened scope
+        } else {
+            // Finds the previous table relative to the newly opened scope
             SymbolTable symbolTable = new SymbolTable(symbolTableStack.peek());
             symbolTableStack.push(symbolTable);
         }
     }
 
     public void closeScope() {
-    	if(symbolTableStack.isEmpty()) {
-    		ErrorHandler.emptyStack();
-    	}
+        if (symbolTableStack.isEmpty()) {
+            ErrorHandler.emptyStack();
+        }
         symbolTableStack.pop();
     }
 
-	public void enterSymbol(String name, ITypeNode node) {
-		if(printDcl) {
-			System.out.println("Setting " + name + " to " + node.toString());			
-		}
-		symbolTableStack.peek().enterSymbol(name, node);
-	}
-	
-	public Type retrieveSymbol(String name) {
-		return symbolTableStack.peek().retrieveSymbol(name);
-	}
+    public void enterSymbol(String name, ITypeNode node) {
+        if (printDcl) {
+            System.out.println("Setting " + name + " to " + node.toString());
+        }
+        symbolTableStack.peek().enterSymbol(name, node);
+    }
 
-    public ITypeNode getSymbolNode(String id)
-    {
+    public Type retrieveSymbol(String name) {
+        return symbolTableStack.peek().retrieveSymbol(name);
+    }
+
+    public ITypeNode getSymbolNode(String id) {
         return symbolTableStack.peek().getSymbolNode(id);
     }
-    
+
     public ITypeNode getSymbolCurrentScope(String id) {
         return symbolTableStack.peek().getSymbolCurrentScope(id);
     }
