@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
