@@ -243,16 +243,11 @@ public class Typechecker extends AstVisitor {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
 
+        /*
         if ((node.getType() == Type.DOUBLE) && (node.getExprNode() instanceof IntegerCastNode)) {
             ErrorHandler.invalidCastException();
         }
-
-        if (node.getExprNode() instanceof DoubleCastNode) {
-            DoubleCastNode d = (DoubleCastNode) node.getExprNode();
-            if (d.getParameters().get(0).getType() == Type.INT) {
-                ErrorHandler.invalidCastException();
-            }
-        }
+        */
     }
 
     @Override
@@ -412,6 +407,7 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(IntegerCastNode node) {
+        node.setType(Type.INT);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
@@ -419,7 +415,11 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(DoubleCastNode node) {
+        node.setType(Type.DOUBLE);
         for (AExpr var : node.getParameters()) {
+            if (var.getType() == Type.INT) {
+                ErrorHandler.invalidCastException();
+            }
             var.accept(this);
         }
     }
