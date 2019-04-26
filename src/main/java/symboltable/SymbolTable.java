@@ -27,7 +27,7 @@ public class SymbolTable {
 
     public Type retrieveSymbol(String key) {
 
-        if (key.toUpperCase().equals("TRUE") || key.toUpperCase().equals("FALSE"))
+        if (key.equalsIgnoreCase("TRUE") || key.equalsIgnoreCase("FALSE"))
             return null;
 
         if (symbolMap.containsKey(key)) {

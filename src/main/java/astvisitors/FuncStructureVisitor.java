@@ -26,7 +26,7 @@ public class FuncStructureVisitor extends AstVisitor {
     private void matchParameterList(String functionname, List<AExpr> callparams, List<DclNode> defparams) {
         int parametercount = callparams.size();
         if (parametercount != defparams.size()) {
-            errorHandler.ParameterLengthError(functionname);
+            errorHandler.parameterLengthError(functionname);
 
             return;
         }
@@ -34,7 +34,7 @@ public class FuncStructureVisitor extends AstVisitor {
             AExpr callParam = callparams.get(i);
             DclNode dclnode = defparams.get(i);
             if (callParam.getType() != dclnode.getType()) {
-                errorHandler.ParameterTypeError(functionname);
+                errorHandler.parameterTypeError(functionname);
             }
         }
 

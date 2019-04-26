@@ -31,7 +31,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
             System.err.println("Right type null!");
             return;
         }
-        if (leftType != rightType) {
+        if (!leftType.equals(rightType)) {
             errorHandler.typeMismatch(leftNode, rightNode);
 
         }
