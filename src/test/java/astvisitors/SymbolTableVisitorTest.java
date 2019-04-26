@@ -34,11 +34,11 @@ public class SymbolTableVisitorTest {
                 "       c := 2\n" +
                 "    }\n" +
                 "}";
-        ErrorHandler e = testStuff(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
-    private ErrorHandler testStuff(String testString) throws IOException {
+    private ErrorHandler testProgram(String testString) throws IOException {
         ErrorHandler errorhandler = new ErrorHandler();
         SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor(false, errorhandler);
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
