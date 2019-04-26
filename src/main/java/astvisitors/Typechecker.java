@@ -15,7 +15,7 @@ import exceptions.ErrorHandler;
 
 public class Typechecker extends AstVisitor {
 
-    private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
+    private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
     private ErrorHandler errorHandler;
 
     public Typechecker(ErrorHandler errorHandler) {
@@ -23,7 +23,7 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(Func_callStmtNode node) {
-        for(AExpr parameter: node.getParameters()) {
+        for (AExpr parameter : node.getParameters()) {
             parameter.accept(this);
         }
     }
@@ -43,7 +43,7 @@ public class Typechecker extends AstVisitor {
 
     public void visit(Func_defNode node) {
         node.getBlockNode().accept(this);
-        for(DclNode parameter: node.getParameters()) {
+        for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
 
@@ -84,7 +84,7 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(StmtsNode node) {
-        for(int i = 0; i < node.getChildCount(); i++) {
+        for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
         }
     }
@@ -99,7 +99,7 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(DclsNode node) {
-        for(int i = 0; i < node.getChildCount(); i++) {
+        for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
         }
 
@@ -131,7 +131,7 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-        for(AExpr parameter: node.getParameters()) {
+        for (AExpr parameter : node.getParameters()) {
             parameter.accept(this);
         }
     }
@@ -257,7 +257,7 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
-        for(AExpr var: node.getParameters()) {
+        for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
 
@@ -265,21 +265,21 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
-        for(AExpr var: node.getParameters()) {
+        for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
     }
 
     @Override
     public void visit(ListAddNode node) {
-        for(AExpr var: node.getParameters()) {
+        for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
     }
 
     @Override
     public void visit(ListRemoveNode node) {
-        for(AExpr var: node.getParameters()) {
+        for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
     }

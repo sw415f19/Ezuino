@@ -25,7 +25,7 @@ public class ErrorHandler {
     public void printErrorList() {
         if (hasErrors()) {
             System.err.println(" -- ## ERROR OUTPUT CONSOLE ## -- ");
-            for (ErrorMessage message: messageList) {
+            for (ErrorMessage message : messageList) {
                 System.out.println(message);
             }
         }
