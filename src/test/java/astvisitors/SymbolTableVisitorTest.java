@@ -17,10 +17,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 public class SymbolTableVisitorTest {
-    private SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
-    private BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
 
-    /* Test with several scopes and one duplicate declaration (int a) */
     @Test
     public void intDclNodeTest() throws IOException {
         String testProgram = "int number\n" +

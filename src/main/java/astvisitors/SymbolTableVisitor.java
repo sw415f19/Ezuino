@@ -20,10 +20,6 @@ public class SymbolTableVisitor extends AstVisitor {
         this.errorHandler = errorhandler;
     }
 
-    public SymbolTableVisitor() {
-        this.symbolTableHandler = new SymbolTableHandler(false);
-    }
-
     private void enterSymbol(String id, ITypeNode node) {
         if (!symbolTableHandler.enterSymbol(id, node)) {
             errorHandler.alreadyDeclared(id);

@@ -13,13 +13,11 @@ import symboltable.SymbolTableHandler;
 
 public class ListVisitor extends AstVisitor {
     private SymbolTableHandler symbolTableHandler;
+    private ErrorHandler errorHandler;
 
-    public ListVisitor(boolean printDcl) {
-        this.symbolTableHandler = new SymbolTableHandler(printDcl);
-    }
-
-    public ListVisitor() {
+    public ListVisitor(ErrorHandler errorHandler) {
         this.symbolTableHandler = new SymbolTableHandler(false);
+        this.errorHandler = errorHandler;
     }
 
     @Override
@@ -215,13 +213,13 @@ public class ListVisitor extends AstVisitor {
         ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
 
         if (node.getParameters().size() != 2) {
-            ErrorHandler.invalidParamLength(node2.getVal());
+            errorHandler.invalidParamLength(node2.getVal());
         }
 
         if (isSameType(listType, node.getParameters().get(1))) {
             return;
         }
-        ErrorHandler.listNotSameType(listType, node);
+        errorHandler.listNotSameType(listType, node);
     }
 
     @Override
@@ -230,13 +228,13 @@ public class ListVisitor extends AstVisitor {
         ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
 
         if (node.getParameters().size() != 2) {
-            ErrorHandler.invalidParamLength(node2.getVal());
+            errorHandler.invalidParamLength(node2.getVal());
         }
 
         if (isSameType(listType, node.getParameters().get(1))) {
             return;
         }
-        ErrorHandler.listNotSameType(listType, node);
+        errorHandler.listNotSameType(listType, node);
     }
 
     private boolean isSameType(ITypeNode firstParam, ITypeNode secondParam) {
