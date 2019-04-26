@@ -9,6 +9,8 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -223,6 +225,16 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(ListRemoveNode node) {
+
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
 
     }
 
