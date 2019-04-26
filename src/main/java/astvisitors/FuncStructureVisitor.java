@@ -6,6 +6,8 @@ import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.ListAddNode;
+import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
@@ -25,6 +27,7 @@ public class FuncStructureVisitor extends AstVisitor {
         int parametercount = callparams.size();
         if (parametercount != defparams.size()) {
             errorHandler.ParameterLengthError(functionname);
+
             return;
         }
         for(int i = 0; i < parametercount; i++) {
@@ -217,6 +220,16 @@ public class FuncStructureVisitor extends AstVisitor {
     public void visit(CustomFuncCallStmtNode node) {
         Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getId());
         matchParameterList(node.getId(), node.getParameters(), funcdef.getParameters());
+
+    }
+
+    @Override
+    public void visit(ListAddNode node) {
+
+    }
+
+    @Override
+    public void visit(ListRemoveNode node) {
 
     }
 

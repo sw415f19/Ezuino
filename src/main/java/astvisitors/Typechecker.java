@@ -6,6 +6,8 @@ import ast.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.ListAddNode;
+import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
@@ -36,6 +38,7 @@ public class Typechecker extends AstVisitor {
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().accept(this);
         }
+
     }
 
     public void visit(Func_defNode node) {
@@ -43,6 +46,7 @@ public class Typechecker extends AstVisitor {
         for(DclNode parameter: node.getParameters()) {
             parameter.accept(this);
         }
+
     }
 
     public void visit(Return_stmtNode node) {
@@ -62,6 +66,7 @@ public class Typechecker extends AstVisitor {
             node.getElseBlock().accept(this);
         }
         checkSpecificType(node.getExpr(), Type.BOOL);
+
     }
 
     public void visit(StartNode node) {
@@ -252,9 +257,30 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
+        for(AExpr var: node.getParameters()) {
+            var.accept(this);
+        }
+
     }
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
+        for(AExpr var: node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(ListAddNode node) {
+        for(AExpr var: node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(ListRemoveNode node) {
+        for(AExpr var: node.getParameters()) {
+            var.accept(this);
+        }
     }
 }

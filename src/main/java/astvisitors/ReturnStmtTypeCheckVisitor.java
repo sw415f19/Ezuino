@@ -3,6 +3,8 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.ListAddNode;
+import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
@@ -189,6 +191,14 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
+    }
+
+    @Override
+    public void visit(ListAddNode node) {
+    }
+
+    @Override
+    public void visit(ListRemoveNode node) {
     }
 
 }

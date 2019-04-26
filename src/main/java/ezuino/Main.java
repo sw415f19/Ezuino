@@ -3,8 +3,12 @@ package ezuino;
 import ast.AstNode;
 import astvisitors.FuncStructureVisitor;
 import astvisitors.IndentedPrintVisitor;
+<<<<<<< HEAD
 import astvisitors.MissingReturnStmtVisitor;
 import astvisitors.ReturnStmtTypeCheckVisitor;
+=======
+import astvisitors.ListVisitor;
+>>>>>>> origin/master
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
@@ -68,6 +72,11 @@ public class Main {
         // Runs the three, filling up the AST array list attribute
         AstNode astNode = parseTree.accept(buildAstVisitor);
 
+        if (astNode == null){
+            errorhandler.invalidKeyword();
+            errorhandler.printErrorList();
+            return;
+        } 
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
 
@@ -88,6 +97,10 @@ public class Main {
         
         FuncStructureVisitor fsv = new FuncStructureVisitor(errorhandler);
         astNode.accept(fsv);
+ 
+        ListVisitor lv = new ListVisitor();
+        astNode.accept(lv);
+
 
         errorhandler.printErrorList();
     }

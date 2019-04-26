@@ -13,7 +13,8 @@ import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.Func_callStmtNode;
+import ast.funcallstmt.ListAddNode;
+import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.*;
 import ast.expr.*;
@@ -21,6 +22,7 @@ import ast.expr.*;
 public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitStart(EzuinoParser.StartContext ctx) {
+        if (ctx.stmts() == null) return null;
         StmtsNode stmts = (StmtsNode) ctx.stmts().accept(this);
         DclsNode dcls = (DclsNode) ctx.dcls().accept(this);
 
@@ -41,6 +43,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     public AstNode visitDcl(EzuinoParser.DclContext ctx) {
 
         Type type = getType(ctx.type());
+            if (ctx.LISTDCL() != null)
+            return new DclNode(type, ctx.ID().getText(), true);
         return new DclNode(type, ctx.ID().getText());
     }
 
@@ -179,6 +183,12 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         }
         if (id.equals("print")) {
             return new PrintNode(parameters);
+        }
+        if (id.equals("listAdd")) {
+            return new ListAddNode(parameters);
+        }
+        if (id.equals("listRemove")) {
+            return new ListRemoveNode(parameters);
         }
         return new CustomFuncCallStmtNode(id, parameters);
     }

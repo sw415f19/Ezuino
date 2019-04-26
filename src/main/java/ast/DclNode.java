@@ -5,6 +5,7 @@ import astvisitors.AstVisitor;
 
 public class DclNode extends TypeNode {
 	private String ID;
+	private Boolean isList = false;
 
 	public DclNode(Type type, String ID) {
 		this.type = type;
@@ -31,5 +32,16 @@ public class DclNode extends TypeNode {
 	@Override
 	public String toString() {
 		return super.toString() + "{ ID: " + ID + " type: " + type + " }";
+	}
+
+	public DclNode(Type type, String ID, boolean isList) {
+		this.type = type;
+		this.ID = ID;
+		this.isList = isList;
+	}
+
+
+ 	public Boolean isList(){
+		return isList;
 	}
 }
