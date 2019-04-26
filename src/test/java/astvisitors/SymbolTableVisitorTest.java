@@ -16,13 +16,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 public class SymbolTableVisitorTest {
-    private SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
-    private BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
 
-    /* Test with several scopes and one duplicate declaration (int a) */
     @Test
     public void intDclNodeTest() throws IOException {
-        EzuinoParser ep = createParser("int number\n" +
+        String testProgram = "int number\n" +
                 " \n" +
                 "func main() {\n" +
                 "    int a\n" +
@@ -36,24 +33,31 @@ public class SymbolTableVisitorTest {
                 "       int b\n" +
                 "       c := 2\n" +
                 "    }\n" +
-                "}");
-        AstNode astNode = ep.start().accept(buildAstVisitor);
-        astNode.accept(symbolTableVisitor);
+                "}";
+        ErrorHandler e = testProgram(testProgram);
+        assertTrue(e.hasErrors());
     }
-
-
+    
     @Test
     public void doesNotViewVariableDeclarationAsFunction() throws IOException {
-        EzuinoParser ep = createParser("int b\n" +
+        String testProgram = "int b\n" +
                 "int a\n" +
-                "b := a()");
-        AstNode astNode = ep.start().accept(buildAstVisitor);
-        astNode.accept(symbolTableVisitor);
-        assertTrue(ErrorHandler.hasErrors());
+                "b := a()";
+        ErrorHandler e = testProgram(testProgram);
+        assertTrue(e.hasErrors());
     }
 
+    private ErrorHandler testProgram(String testString) throws IOException {
+        ErrorHandler errorhandler = new ErrorHandler();
+        SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor(false, errorhandler);
+        BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+        EzuinoParser ezuinoParser = createParser(testString);
+        AstNode astNode = ezuinoParser.start().accept(buildAstVisitor);
+        astNode.accept(symbolTableVisitor);
+        return errorhandler;
+    }
 
-    private EzuinoParser createParser(String testString) throws IOException {
+    private EzuinoParser createParser(String testString) {
         CharStream stream = CharStreams.fromString(testString);
         EzuinoLexer lexer = new EzuinoLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);

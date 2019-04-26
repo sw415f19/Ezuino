@@ -1,6 +1,5 @@
 package astvisitors;
 
-
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
@@ -11,20 +10,46 @@ import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.*;
+import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
 
 public class SymbolTableVisitor extends AstVisitor {
+    private ErrorHandler errorHandler;
     private SymbolTableHandler stVariables;
     private SymbolTableHandler stFunctions;
 
-    public SymbolTableVisitor(boolean printDcl) {
+    public SymbolTableVisitor(boolean printDcl, ErrorHandler errorhandler) {
         this.stVariables = new SymbolTableHandler(printDcl);
         this.stFunctions = new SymbolTableHandler(printDcl);
+        this.errorHandler = errorhandler;
     }
 
-    public SymbolTableVisitor() {
-        this.stVariables = new SymbolTableHandler(false);
-        this.stFunctions = new SymbolTableHandler(false);
+    private void enterVariableSymbol(String id, ITypeNode node) {
+        if (!stVariables.enterSymbol(id, node)) {
+            errorHandler.alreadyDeclared(id);
+        }
+    }
+    
+    private void enterFunctionSymbol(String id, ITypeNode node) {
+        if (!stFunctions.enterSymbol(id, node)) {
+            errorHandler.alreadyDeclared(id);
+        }
+    }
+
+    private Type getVariableType(String id) {
+        Type result = stVariables.retrieveSymbol(id);
+        if (result == null) {
+            errorHandler.notDeclaredVar(id);
+        }
+        return result;
+    }
+
+    private Type getFunctionType(String id) {
+        Type result = stFunctions.retrieveSymbol(id);
+        if (result == null) {
+            errorHandler.notDeclaredVar(id);
+        }
+        return result;
     }
 
     @Override
@@ -52,18 +77,18 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        stVariables.enterSymbol(node.getID(), node);
+        enterVariableSymbol(node.getID(), node);
     }
 
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
-        node.setType(stVariables.retrieveSymbol(node.getId()));
+        node.setType(getVariableType(node.getId()));
     }
 
     @Override
     public void visit(Func_callExprNode node) {
-        node.setType(stFunctions.retrieveSymbol(node.getID()));
+        node.setType(getFunctionType(node.getID()));
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -91,7 +116,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
-        stFunctions.enterSymbol(node.getId(), node);
+        enterFunctionSymbol(node.getId(), node);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
@@ -144,7 +169,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        node.setType(stVariables.retrieveSymbol(node.getVal()));
+        node.setType(getVariableType(node.getVal()));
     }
 
     @Override
