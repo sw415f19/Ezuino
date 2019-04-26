@@ -95,4 +95,8 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid syntax - Conditional syntax error."));
     }
 
+    public static void invalidCastException() {
+        messageList.add(new GeneralError(ErrorType.ERROR, "Invalid Cast Error - tried to cast a Double to Integer"));
+    }
+
 }

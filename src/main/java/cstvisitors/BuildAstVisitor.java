@@ -184,6 +184,9 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
             return new IntegerCastNode(id, parameters);
         }
         if (id.equals("DOUBLE")) {
+            for (int i = 0; i < ctx.getChildCount(); i++) {
+                System.err.println(ctx.getChild(i));
+            }
             return new DoubleCastNode(id, parameters);
         }
 
