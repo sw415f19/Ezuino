@@ -108,7 +108,7 @@ INTDCL              : 'int' ;
 DOUBLEDCL           : 'double' ;
 STRINGDCL           : 'string' ;
 BOOLEANDCL          : 'boolean' ;
-LISTDCL                : 'list' ;
+LISTDCL             : 'list' ;
 // STATEMENTS
 ASSIGN              : ':=' ;
 // OPERATORS
