@@ -8,6 +8,8 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.*;
 import symboltable.SymbolTableHandler;
 
@@ -230,8 +232,22 @@ public class SymbolTableVisitor extends AstVisitor {
         stFunctions.openScope();
     }
 
-    private void closeScope(){
+    private void closeScope() {
         stVariables.closeScope();
         stFunctions.closeScope();
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) { 
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
     }
 }
