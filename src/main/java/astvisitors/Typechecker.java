@@ -9,6 +9,8 @@ import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
 import exceptions.ErrorHandler;
@@ -126,7 +128,6 @@ public class Typechecker extends AstVisitor {
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
-
     }
 
     @Override
@@ -280,6 +281,25 @@ public class Typechecker extends AstVisitor {
     @Override
     public void visit(ListRemoveNode node) {
         for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+        node.setType(Type.INT);
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+        node.setType(Type.DOUBLE);
+        for (AExpr var : node.getParameters()) {
+            if (var.getType() == Type.INT) {
+                ErrorHandler.invalidCastException();
+            }
             var.accept(this);
         }
     }

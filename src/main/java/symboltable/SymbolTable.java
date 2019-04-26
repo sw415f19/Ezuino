@@ -26,12 +26,12 @@ public class SymbolTable {
     }
 
     public Type retrieveSymbol(String key) {
-
+        
         if (key.equalsIgnoreCase("TRUE") || key.equalsIgnoreCase("FALSE"))
             return null;
 
         if (symbolMap.containsKey(key)) {
-            return symbolMap.get(key).getType();
+             return symbolMap.get(key).getType();
         }
 
         if (isGlobalScope()) {

@@ -84,8 +84,7 @@ public class Main {
         Typechecker tc = new Typechecker(errorhandler);
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
-        // System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
-
+        
         ReturnStmtTypeCheckVisitor rsc = new ReturnStmtTypeCheckVisitor(errorhandler);
         astNode.accept(rsc);
 

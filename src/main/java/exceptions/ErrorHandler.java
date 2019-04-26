@@ -3,7 +3,6 @@ package exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import ast.AstNode;
 import ast.ITypeNode;
 import ast.Type;
 import ast.funcallstmt.Func_callStmtNode;
@@ -83,6 +82,10 @@ public class ErrorHandler {
 
     public void invalidKeyword() {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid syntax - Conditional syntax error."));
+    }
+
+    public void invalidCastException() {
+        messageList.add(new GeneralError(ErrorType.ERROR, "Invalid Cast Error - tried to cast a Double to Integer"));
     }
 
 }

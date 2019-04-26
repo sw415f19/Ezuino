@@ -10,8 +10,8 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
-
 import static org.junit.Assert.assertTrue;
+
 
 import java.io.IOException;
 
@@ -34,6 +34,15 @@ public class SymbolTableVisitorTest {
                 "       c := 2\n" +
                 "    }\n" +
                 "}";
+        ErrorHandler e = testProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+    
+    @Test
+    public void doesNotViewVariableDeclarationAsFunction() throws IOException {
+        String testProgram = "int b\n" +
+                "int a\n" +
+                "b := a()";
         ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
