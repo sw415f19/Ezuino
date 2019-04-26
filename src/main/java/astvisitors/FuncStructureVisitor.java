@@ -37,7 +37,6 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-        System.out.println(node instanceof IntegerCastNode);
         Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getID());
         matchParameterList(node.getID(), node.getParameters(), funcdef.getParameters());
 
