@@ -1,3 +1,6 @@
-int b
-int a
-b := a()
+func int main() {
+    while(1<2){
+        int a
+    }
+    return 1
+}
