@@ -8,27 +8,21 @@ import exceptions.ErrorHandler;
 
 public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
-    private boolean isFunctionSymbolTable;
    
     private boolean printDcl;
-
+    
     public SymbolTableHandler(boolean printDcl) {
-        this.printDcl = printDcl;
-    }
-
-    public SymbolTableHandler(boolean printDcl, boolean isFunctionSymbolTable) {
     	this.printDcl = printDcl;
-    	this.isFunctionSymbolTable = isFunctionSymbolTable;
     }
 
     public void openScope() {
         if(symbolTableStack.empty()) {
-            SymbolTable firstTable = new SymbolTable(null, isFunctionSymbolTable);
+            SymbolTable firstTable = new SymbolTable(null);
             symbolTableStack.push(firstTable);
         }
         else {
             //Finds the previous table relative to the newly opened scope
-            SymbolTable symbolTable = new SymbolTable(symbolTableStack.peek(), isFunctionSymbolTable);
+            SymbolTable symbolTable = new SymbolTable(symbolTableStack.peek());
             symbolTableStack.push(symbolTable);
         }
     }

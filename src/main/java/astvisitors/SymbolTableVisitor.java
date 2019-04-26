@@ -13,16 +13,16 @@ import symboltable.SymbolTableHandler;
 
 public class SymbolTableVisitor extends AstVisitor {
     private SymbolTableHandler symbolTableHandlerVariables;
-    private SymbolTableHandler symbolTableHandlerFunctions;   /* Maybe needs better name */
+    private SymbolTableHandler symbolTableHandlerFunctions;
 
     public SymbolTableVisitor(boolean printDcl) {
-        this.symbolTableHandlerVariables = new SymbolTableHandler(printDcl, false);
-        this.symbolTableHandlerFunctions = new SymbolTableHandler(printDcl, true);
+        this.symbolTableHandlerVariables = new SymbolTableHandler(printDcl);
+        this.symbolTableHandlerFunctions = new SymbolTableHandler(printDcl);
     }
 
     public SymbolTableVisitor() {
-        this.symbolTableHandlerVariables = new SymbolTableHandler(false, false);
-        this.symbolTableHandlerFunctions = new SymbolTableHandler(false, true);
+        this.symbolTableHandlerVariables = new SymbolTableHandler(false);
+        this.symbolTableHandlerFunctions = new SymbolTableHandler(false);
     }
 
     @Override
