@@ -298,7 +298,7 @@ public class Typechecker extends AstVisitor {
         node.setType(Type.DOUBLE);
         for (AExpr var : node.getParameters()) {
             if (var.getType() == Type.INT) {
-                ErrorHandler.invalidCastException();
+                errorHandler.invalidCastException();
             }
             var.accept(this);
         }
