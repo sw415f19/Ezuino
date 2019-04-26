@@ -83,11 +83,11 @@ public class Main {
         astNode.acceptLevel(ipv, 0);
         //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
         
-        FuncStructureVisitor fsv = new FuncStructureVisitor();
-        astNode.accept(fsv);
+        //FuncStructureVisitor fsv = new FuncStructureVisitor();
+        //astNode.accept(fsv);
  
-        ListVisitor lv = new ListVisitor();
-        astNode.accept(lv);
+        //ListVisitor lv = new ListVisitor();
+        //astNode.accept(lv);
 
 
         ErrorHandler.printErrorList();

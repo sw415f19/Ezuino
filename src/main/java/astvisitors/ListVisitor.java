@@ -55,7 +55,6 @@ public class ListVisitor extends AstVisitor {
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
-        node.setType(symbolTableHandler.retrieveSymbol(node.getId()));
     }
 
     @Override
@@ -141,7 +140,6 @@ public class ListVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        node.setType(symbolTableHandler.retrieveSymbol(node.getVal()));
     }
 
     @Override

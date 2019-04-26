@@ -10,9 +10,11 @@ import java.util.Map;
 public class SymbolTable {
     private Map<String, ITypeNode> symbolMap = new HashMap<String, ITypeNode>();
     private SymbolTable parentTable;
+    private boolean isFunctionSymbolTable;
 
-    public SymbolTable(SymbolTable previousTable) {
+    public SymbolTable(SymbolTable previousTable, boolean isFunctionSymbolTable) {
         this.parentTable = previousTable;
+        this.isFunctionSymbolTable = isFunctionSymbolTable;
     }
 
     public void enterSymbol(String key, ITypeNode node) {
@@ -39,7 +41,12 @@ public class SymbolTable {
         }
         
         if (isGlobalScope()) {
-        	ErrorHandler.notDeclaredVar(key);
+            if(isFunctionSymbolTable){
+                ErrorHandler.notDeclaredVar("The function " + key);
+            } else {
+                ErrorHandler.notDeclaredVar("The variable " + key);
+            }
+
             return null;
         }
         
