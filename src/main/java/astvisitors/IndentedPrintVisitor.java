@@ -25,7 +25,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     @Override
     public void visitLevel(Func_callExprNode node, int level) {
         print(node, level);
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.acceptLevel(this, level + 1);
         }
     }
@@ -47,7 +47,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     @Override
     public void visitLevel(Func_defNode node, int level) {
         print(node, level);
-        for(DclNode parameter: node.getParameters()) {
+        for (DclNode parameter: node.getParameters()) {
             parameter.acceptLevel(this, level + 1);
         }
         node.getBlockNode().acceptLevel(this, level + 1);
@@ -91,7 +91,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     public void visitLevel(StmtsNode node, int level) {
         print(node, level);
         int childCount = node.getChildCount();
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             node.getChild(i).acceptLevel(this, level + 1);
         }
 
@@ -107,7 +107,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     public void visitLevel(DclsNode node, int level) {
         print(node, level);
         int childCount = node.getChildCount();
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             node.getChild(i).acceptLevel(this, level + 1);
         }
 
@@ -213,7 +213,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     @Override
     public void visitLevel(PrintNode node, int level) {
         print(node, level);
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.acceptLevel(this, level + 1);
         }
 
@@ -222,7 +222,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     @Override
     public void visitLevel(CustomFuncCallStmtNode node, int level) {
         print(node, level);
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.acceptLevel(this, level + 1);
         }
 
@@ -231,7 +231,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     @Override
     public void visitLevel(ListAddNode node, int level) {
         print(node, level);
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.acceptLevel(this, level + 1);
         }
     }
@@ -239,7 +239,7 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
     @Override
     public void visitLevel(ListRemoveNode node, int level) {
         print(node, level);
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.acceptLevel(this, level + 1);
         }
     }

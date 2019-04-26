@@ -71,7 +71,7 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(Func_callExprNode node) {
         node.setType(getType(node.getID()));
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.accept(this);
         }
     }
@@ -99,7 +99,7 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(Func_defNode node) {
         enterSymbol(node.getId(), node);
-        for(DclNode parameter: node.getParameters()) {
+        for (DclNode parameter: node.getParameters()) {
             parameter.accept(this);
         }
         node.getBlockNode().accept(this);
@@ -125,7 +125,7 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(StmtsNode node) {
         int childCount = node.getChildCount();
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
         }
     }
@@ -133,7 +133,7 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(DclsNode node) {
         int childCount = node.getChildCount();
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
         }
     }
@@ -206,7 +206,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.accept(this);
         }
 
@@ -214,7 +214,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.accept(this);
         }
 
@@ -222,14 +222,14 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(ListAddNode node) {
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.accept(this);
         }
     }
 
     @Override
     public void visit(ListRemoveNode node) {
-        for(AExpr child: node.getParameters()) {
+        for (AExpr child: node.getParameters()) {
             child.accept(this);
         }
     }

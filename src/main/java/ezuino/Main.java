@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
+
     public static void main(String[] args) throws IOException {
         CharStream cs = CharStreams.fromFileName("src/main/code.ezuino");
 
@@ -43,18 +44,17 @@ public class Main {
         parser.addErrorListener(errorListener);
 
         ParseTree parseTree = parser.start();
-        
-        if (errorListener.hasError())
-        {
+
+        if (errorListener.hasError()) {
             System.err.println("## Scanner/Paser Error - Please correct the following errors and try again. ##");
             errorListener.printErrors();
             return;
         }
-        
+
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 
-        //showCST(parseTree, parser);
+        // showCST(parseTree, parser);
 
         /*
          * Call of IndentedPrintVisitor BuildAstVisitor ezuinoVisitorForPrinting = new
@@ -69,11 +69,11 @@ public class Main {
         // Runs the three, filling up the AST array list attribute
         AstNode astNode = parseTree.accept(buildAstVisitor);
 
-        if (astNode == null){
+        if (astNode == null) {
             errorhandler.invalidKeyword();
             errorhandler.printErrorList();
             return;
-        } 
+        }
         IndentedPrintVisitor ipv = new IndentedPrintVisitor();
         astNode.acceptLevel(ipv, 0);
 
@@ -84,20 +84,19 @@ public class Main {
         Typechecker tc = new Typechecker(errorhandler);
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
-        //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
-        
+        // System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
+
         ReturnStmtTypeCheckVisitor rsc = new ReturnStmtTypeCheckVisitor(errorhandler);
         astNode.accept(rsc);
-        
+
         MissingReturnStmtVisitor mrsv = new MissingReturnStmtVisitor(errorhandler);
         astNode.accept(mrsv);
-        
+
         FuncStructureVisitor fsv = new FuncStructureVisitor(errorhandler);
         astNode.accept(fsv);
- 
+
         ListVisitor lv = new ListVisitor(errorhandler);
         astNode.accept(lv);
-
 
         errorhandler.printErrorList();
     }

@@ -103,7 +103,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     @Override
     public void visit(StmtsNode node) {
         int childCount = node.getChildCount();
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
         }
 
@@ -117,7 +117,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     @Override
     public void visit(DclsNode node) {
         int childCount = node.getChildCount();
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             node.getChild(i).accept(this);
         }
 
