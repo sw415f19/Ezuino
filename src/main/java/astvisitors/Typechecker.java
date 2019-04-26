@@ -242,12 +242,6 @@ public class Typechecker extends AstVisitor {
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
-
-        /*
-        if ((node.getType() == Type.DOUBLE) && (node.getExprNode() instanceof IntegerCastNode)) {
-            ErrorHandler.invalidCastException();
-        }
-        */
     }
 
     @Override
