@@ -3,12 +3,15 @@ package astvisitors;
 import ast.AstNode;
 import astvisitors.SymbolTableVisitor;
 import cstvisitors.BuildAstVisitor;
+import exceptions.ErrorHandler;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+
 
 import java.io.IOException;
 
@@ -37,6 +40,18 @@ public class SymbolTableVisitorTest {
         AstNode astNode = ep.start().accept(buildAstVisitor);
         astNode.accept(symbolTableVisitor);
     }
+
+
+    @Test
+    public void doesNotViewVariableDeclarationAsFunction() throws IOException {
+        EzuinoParser ep = createParser("int b\n" +
+                "int a\n" +
+                "b := a()");
+        AstNode astNode = ep.start().accept(buildAstVisitor);
+        astNode.accept(symbolTableVisitor);
+        assertTrue(ErrorHandler.hasErrors());
+    }
+
 
     private EzuinoParser createParser(String testString) throws IOException {
         CharStream stream = CharStreams.fromString(testString);

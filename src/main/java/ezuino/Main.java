@@ -81,7 +81,6 @@ public class Main {
         Typechecker tc = new Typechecker();
         astNode.accept(tc);
         astNode.acceptLevel(ipv, 0);
-        //System.out.println(SymbolTableVisitor.symbolTableManager.getSymbolTableSize());
         
         FuncStructureVisitor fsv = new FuncStructureVisitor();
         astNode.accept(fsv);

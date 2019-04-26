@@ -142,7 +142,6 @@ public class ListVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-     
     }
 
     @Override
