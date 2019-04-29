@@ -47,7 +47,7 @@ public class FuncStructureVisitor extends AstVisitor {
         if (nodeType == null) {
             System.err.println("FuncStructureVisitor: Programming error: nodeType = null");
         }
-        if (nodeType.equals(expectedType)) {
+        if (!nodeType.equals(expectedType)) {
             errorHandler.unexpectedType(node, nodeType);
         }
     }
