@@ -31,9 +31,8 @@ public class TypecheckerTest {
                 "} " +
                 "  \n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertFalse(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
@@ -51,9 +50,8 @@ public class TypecheckerTest {
                 "} " +
                 "  \n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
@@ -68,9 +66,8 @@ public class TypecheckerTest {
                 "  }\n" +
                 "  \n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
@@ -81,9 +78,8 @@ public class TypecheckerTest {
                 "    }\n" +
                 "    return 1\n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertFalse(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     @Test
@@ -105,10 +101,8 @@ public class TypecheckerTest {
                 "       return 1" +
                 "    }" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        ErrorHandler.printErrorList();
-        assertFalse(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     @Test
@@ -127,9 +121,8 @@ public class TypecheckerTest {
                 "        return c\n" +
                 "    }\n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
@@ -140,9 +133,8 @@ public class TypecheckerTest {
                 "        return a\n" +
                 "  } \n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
 
     }
 
@@ -154,9 +146,8 @@ public class TypecheckerTest {
                 "        return a\n" +
                 "  } else{} \n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
@@ -167,22 +158,20 @@ public class TypecheckerTest {
                 "  }\n" +
                 "  return\n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
     public void returnAsBreakReturn() throws IOException {
-        String testProgram = "func hello(){\n" +
-                "  if(true){\n" +
-                "    return\n" +
-                "  }\n" +
-                "  return\n" +
-                "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertFalse(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        String testProgram = "func hello(){ \n" +
+                "  if(true){ \n" +
+                "    return \n" +
+                "  } \n" +
+                "  return \n" +
+                "";
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     /* Gives error type mismatch, return statements are not the same type */
@@ -196,9 +185,8 @@ public class TypecheckerTest {
                 "    return 4\n" +
                 "  }\n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
@@ -209,9 +197,8 @@ public class TypecheckerTest {
                 "    }\n" +
                 "    return 1\n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertFalse(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     @Test
@@ -221,9 +208,8 @@ public class TypecheckerTest {
                 "        return 1\n" +
                 "    }\n" +
                 "}\n";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
@@ -234,9 +220,8 @@ public class TypecheckerTest {
                 "    }\n" +
                 "    return \"my world\"\n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertTrue(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     @Test
@@ -246,22 +231,25 @@ public class TypecheckerTest {
                 "        int a\n" +
                 "    }\n" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertFalse(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     @Test
     public void funcWithWhileStmtWithoutReturn() throws IOException {
-        String testProgram = "func int main() {\n" +
-                "    while(1<2){\n" +
-                "        int a\n" +
-                "    }\n" +
-                "    return 1\n" +
+        String testProgram = "func int main() { \n" +
+                "    while(1<2){ \n" +
+                "        int a \n" +
+                "    } \n" +
+                "    return 1 \n" +
                 "}\n";
-        testWithTableAndTypeChecker(testProgram);
-        assertFalse(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     @Test
@@ -274,9 +262,8 @@ public class TypecheckerTest {
                 "    }\n" +
                 " return 1" +
                 "}";
-        testWithTableAndTypeChecker(testProgram);
-        assertFalse(ErrorHandler.hasErrors());
-        ErrorHandler.reset();
+        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     private EzuinoParser createParser(String testString) {
@@ -287,13 +274,19 @@ public class TypecheckerTest {
         return parser;
     }
 
-    private void testWithTableAndTypeChecker(String testProgram) throws IOException {
-        SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor();
+    private ErrorHandler testWithTableAndTypeChecker(String testProgram) throws IOException {
+        ErrorHandler errorhandler = new ErrorHandler();
+        SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor(false, errorhandler);
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-        Typechecker typechecker = new Typechecker();
+        Typechecker typechecker = new Typechecker(errorhandler);
+        ReturnStmtTypeCheckVisitor rstcv = new ReturnStmtTypeCheckVisitor(errorhandler);
+        MissingReturnStmtVisitor mrsv = new MissingReturnStmtVisitor(errorhandler);
         EzuinoParser ezuinoParser = createParser(testProgram);
         AstNode astNode = ezuinoParser.start().accept(buildAstVisitor);
         astNode.accept(symbolTableVisitor);
         astNode.accept(typechecker);
+        astNode.accept(rstcv);
+        astNode.accept(mrsv);
+        return errorhandler;
     }
 }

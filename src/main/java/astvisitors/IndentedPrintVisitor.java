@@ -8,6 +8,8 @@ import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -238,6 +240,22 @@ public class IndentedPrintVisitor extends AstLevelVisitor {
 
     @Override
     public void visitLevel(ListRemoveNode node, int level) {
+        print(node, level);
+        for (AExpr child : node.getParameters()) {
+            child.acceptLevel(this, level + 1);
+        }
+    }
+
+    @Override
+    public void visitLevel(DoubleCastNode node, int level) {
+        print(node, level);
+        for (AExpr child : node.getParameters()) {
+            child.acceptLevel(this, level + 1);
+        }
+    }
+
+    @Override
+    public void visitLevel(IntegerCastNode node, int level) {
         print(node, level);
         for (AExpr child : node.getParameters()) {
             child.acceptLevel(this, level + 1);

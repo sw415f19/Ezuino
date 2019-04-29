@@ -9,6 +9,8 @@ import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.expr.aexpr.AExpr;
 import ast.type.*;
 import exceptions.ErrorHandler;
@@ -16,6 +18,11 @@ import exceptions.ErrorHandler;
 public class Typechecker extends AstVisitor {
 
     private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
+    private ErrorHandler errorHandler;
+
+    public Typechecker(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
 
     public void visit(Func_callStmtNode node) {
         for (AExpr parameter : node.getParameters()) {
@@ -34,23 +41,6 @@ public class Typechecker extends AstVisitor {
             node.getReturnstmtNode().accept(this);
         }
 
-        /*
-         * Checks type if returnStmt exists and ifStmt have an type, typechecks and sets
-         * type. If only either returnStmt or ifStmt have an type blocknode is set to
-         * that type.
-         */
-
-        boolean ifStmtsReturnValue = node.getStmtsNode().getType() != null;
-        boolean returnStmtReturnValue = node.getReturnstmtNode() != null;
-
-        if (ifStmtsReturnValue && returnStmtReturnValue) {
-            checkType(node.getStmtsNode(), node.getReturnstmtNode());
-            node.setType(node.getReturnstmtNode().getType());
-        } else if (ifStmtsReturnValue) {
-            node.setType(node.getStmtsNode().getType());
-        } else if (returnStmtReturnValue) {
-            node.setType(node.getReturnstmtNode().getType());
-        }
     }
 
     public void visit(Func_defNode node) {
@@ -59,47 +49,16 @@ public class Typechecker extends AstVisitor {
             parameter.accept(this);
         }
 
-        /*
-         * Gets the if statements of the outermost block, and checks if there is an else
-         * with an return stmt
-         */
-        boolean elseStmtWithReturnExist = false;
-        StmtsNode stmtsOfOutermostBlock = node.getBlockNode().getStmtsNode();
-        for (int i = 0; i < stmtsOfOutermostBlock.getChildCount(); i++) {
-            if (stmtsOfOutermostBlock.getChild(i) instanceof If_stmtNode) {
-                If_stmtNode if_stmtNode = (If_stmtNode) stmtsOfOutermostBlock.getChild(i);
-                if (if_stmtNode.getElseBlock() != null) {
-                    if (if_stmtNode.getElseBlock().getReturnstmtNode() != null) {
-                        elseStmtWithReturnExist = true;
-                    }
-                }
-            }
-        }
-
-        /*
-         * If there are no else stmt in the outer most scope of the func def block, no
-         * other return stmt, and the method is not void, the func def is not guaranteed
-         * to reach an return stmt and throws an error
-         */
-        if (!elseStmtWithReturnExist && node.getBlockNode().getReturnstmtNode() == null) {
-            if (node.getType() != Type.VOID) {
-                ErrorHandler.returnNotGuaranteed();
-            }
-        }
-
-        checkType(node, node.getBlockNode());
-
-        if (isReservedKeyword(node.getId()))
-            ErrorHandler.reservedKeyword(node.getId());
     }
 
     public void visit(Return_stmtNode node) {
-        if (node.getReturnExpr() != null) {
-            node.getReturnExpr().accept(this);
-            node.setType(node.getReturnExpr().getType());
-        } else {
-            node.setType(Type.VOID);
+        Type nodeType = Type.VOID;
+        AExpr expression = node.getReturnExpr();
+        if (expression != null) {
+            expression.accept(this);
+            nodeType = expression.getType();
         }
+        node.setType(nodeType);
     }
 
     public void visit(If_stmtNode node) {
@@ -110,36 +69,6 @@ public class Typechecker extends AstVisitor {
         }
         checkSpecificType(node.getExpr(), Type.BOOL);
 
-        boolean ifAndElseBothReturnValue = false;
-        boolean ifReturnValue = false;
-        boolean elseReturnValue = false;
-
-        boolean ifStmtExist = node.getIfBlock() != null;
-        if (ifStmtExist) {
-            ifReturnValue = node.getIfBlock().getReturnstmtNode() != null;
-        }
-
-        boolean elseStmtExist = node.getElseBlock() != null;
-        if (elseStmtExist) {
-            elseReturnValue = node.getElseBlock().getReturnstmtNode() != null;
-        }
-
-        if (ifStmtExist && elseStmtExist) {
-            ifAndElseBothReturnValue = node.getIfBlock().getReturnstmtNode() != null
-                    && node.getElseBlock().getReturnstmtNode() != null;
-        }
-
-        if (ifAndElseBothReturnValue) {
-            checkType(node.getIfBlock().getReturnstmtNode(), node.getElseBlock().getReturnstmtNode());
-            node.setType(node.getIfBlock().getReturnstmtNode().getType());
-        } else if (ifReturnValue) {
-            node.setType(node.getIfBlock().getReturnstmtNode().getType());
-        } else if (elseReturnValue) {
-            node.setType(node.getElseBlock().getReturnstmtNode().getType());
-        } else {
-            /* If it doesn't have a return, let the type be null */
-            node.setType(null);
-        }
     }
 
     public void visit(StartNode node) {
@@ -157,54 +86,14 @@ public class Typechecker extends AstVisitor {
     }
 
     public void visit(StmtsNode node) {
-        StmtNode firstIfStament = null;
-        boolean ifStmtNodeExists = false;
-        int ifCount = 0;
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
-            if (node.getChild(i) instanceof If_stmtNode) {
-                ifCount += 1;
-                /*
-                 * Checks whether there exist any else stmts. If there is none, it must check
-                 * that there are an return stmt in the main scope (blockNode).
-                 */
-                ifStmtNodeExists = true;
-                if (ifCount == 1) {
-                    firstIfStament = node.getChild(i);
-                } else {
-                    checkType(firstIfStament, node.getChild(i));
-                }
-            }
-        }
-        StmtNode firstWhileStmt = null;
-        boolean whileStmtExist = false;
-        int whileCount = 0;
-        for (int j = 0; j < node.getChildCount(); j++) {
-            if (node.getChild(j) instanceof While_stmtNode) {
-                whileCount += 1;
-                if (whileCount == 1) {
-                    whileStmtExist = true;
-                    firstWhileStmt = node.getChild(j);
-                    /* After the first while stmt check that it is the same type as the if stmts */
-                    if (ifStmtNodeExists) {
-                        checkType(firstIfStament, firstWhileStmt);
-                    }
-                } else {
-                    checkType(firstWhileStmt, node.getChild(j));
-                }
-            }
-        }
-        if (ifStmtNodeExists) {
-            node.setType(firstIfStament.getType());
-        }
-        if (whileStmtExist) {
-            node.setType(firstWhileStmt.getType());
         }
     }
 
     public void visit(DclNode node) {
         if (isReservedKeyword(node.getID()))
-            ErrorHandler.reservedKeyword(node.getID());
+            errorHandler.reservedKeyword(node.getID());
     }
 
     public void visit(TypeNode node) {
@@ -225,7 +114,6 @@ public class Typechecker extends AstVisitor {
         node.getExprNode().accept(this);
         node.getBlockNode().accept(this);
         checkSpecificType(node.getExprNode(), Type.BOOL);
-        node.setType(node.getBlockNode().getType());
     }
 
     public void visit(ExprNode node) {
@@ -240,7 +128,6 @@ public class Typechecker extends AstVisitor {
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
-
     }
 
     @Override
@@ -291,7 +178,7 @@ public class Typechecker extends AstVisitor {
         node.setType(Type.BOOL);
     }
 
-    private void checkType(AstNode leftNode, AstNode rightNode) {
+    private void checkType(ITypeNode leftNode, ITypeNode rightNode) {
         Type leftType = leftNode.getType();
         Type rightType = rightNode.getType();
         if (leftType == null) {
@@ -303,7 +190,7 @@ public class Typechecker extends AstVisitor {
             return;
         }
         if (leftType != rightType) {
-            ErrorHandler.typeMismatch(leftNode, rightNode);
+            errorHandler.typeMismatch(leftNode, rightNode);
 
         }
     }
@@ -314,7 +201,7 @@ public class Typechecker extends AstVisitor {
             System.err.println("node null in 184 :(");
         }
         if (nodeType != expectedType) {
-            ErrorHandler.unexpectedType(node, nodeType);
+            errorHandler.unexpectedType(node, nodeType);
         }
     }
 
@@ -342,7 +229,7 @@ public class Typechecker extends AstVisitor {
     @Override
     public void visit(IdNode node) {
         if (node.getVal().toUpperCase().equals("TRUE") || node.getVal().toUpperCase().equals("FALSE"))
-            ErrorHandler.invalidTF();
+            errorHandler.invalidTF();
     }
 
     @Override
@@ -371,9 +258,9 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
-       for (AExpr var : node.getParameters()) {
-           var.accept(this);
-       }
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
 
     }
 
@@ -394,6 +281,25 @@ public class Typechecker extends AstVisitor {
     @Override
     public void visit(ListRemoveNode node) {
         for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+        node.setType(Type.INT);
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+        node.setType(Type.DOUBLE);
+        for (AExpr var : node.getParameters()) {
+            if (var.getType() == Type.INT) {
+                errorHandler.invalidCastException();
+            }
             var.accept(this);
         }
     }

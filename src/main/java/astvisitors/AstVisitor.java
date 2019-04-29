@@ -7,6 +7,8 @@ import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.*;
 
 public abstract class AstVisitor {
@@ -35,6 +37,8 @@ public abstract class AstVisitor {
     public abstract void visit(CustomFuncCallStmtNode node);
     public abstract void visit(ListAddNode node);
     public abstract void visit(ListRemoveNode node);
+    public abstract void visit(IntegerCastNode node);
+    public abstract void visit(DoubleCastNode node);
 
     //One added assignment nodes.
     public abstract void visit(Assign_stmtNode node);

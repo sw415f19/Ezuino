@@ -16,6 +16,8 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.*;
 import ast.expr.*;
 
@@ -178,16 +180,27 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
             parameters.add((AExpr) param.accept(this));
         }
 
+        if ("INTEGER".equals(id)) {
+            return new IntegerCastNode(id, parameters);
+        }
+        if ("DOUBLE".equals(id)) {
+            for (int i = 0; i < ctx.getChildCount(); i++) {
+                System.err.println(ctx.getChild(i));
+            }
+            return new DoubleCastNode(id, parameters);
+        }
+
         if (ctx.parent instanceof EzuinoParser.PrimaryExprContext) {
             return new Func_callExprNode(id, parameters);
         }
-        if (id.equals("print")) {
+
+        if ("print".equals(id)) {
             return new PrintNode(parameters);
         }
-        if (id.equals("listAdd")) {
+        if ("listAdd".equals(id)) {
             return new ListAddNode(parameters);
         }
-        if (id.equals("listRemove")) {
+        if ("listRemove".equals(id)) {
             return new ListRemoveNode(parameters);
         }
         return new CustomFuncCallStmtNode(id, parameters);

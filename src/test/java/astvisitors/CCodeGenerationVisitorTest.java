@@ -7,6 +7,7 @@ import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
+import exceptions.ErrorHandler;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -24,7 +25,7 @@ public class CCodeGenerationVisitorTest {
 
     //    id referencing (int a\n a := a + 1)
     //    Func_callExprNode
-    //    CustomFuncCallStmtNode
+    //    CustomFuncCallStmtNode // print
     //    BlockNode
     //    Func_defNode  // done
     //    Return_stmtNode
@@ -32,16 +33,16 @@ public class CCodeGenerationVisitorTest {
     //    StartNode  // no code
     //    BooleanLiteral  // done
     //    StmtsNode
-    //    DclNode
-    //    DclsNode
+    //    DclNode  // done
+    //    DclsNode  // done
     //    While_stmtNode
     //    AdditiveExprNode  // done
-    //    MultiplicativeExprNode
+    //    MultiplicativeExprNode  // done
     //    LogicalAndExprNode  // done
     //    LogicalOrExprNode  // done
     //    RelationalExprNode  // done?
     //    EqualityExprNode  // done?
-    //    ParenthesisExprNode  // done? mangler impl af ændret concatenate af strings
+    //    ParenthesisExprNode  // done
     //    UnaryExprNode  // done
     //    Assign_stmtNode  // done
     //    IntegerLiteral  // done
@@ -50,11 +51,166 @@ public class CCodeGenerationVisitorTest {
     //    IdNode  // done
 
     @Test
-    public void dclNodeTest() throws IOException {
-        String program = "";
+    public void falseParenthesisWhile_stmtTest() throws IOException {
+        String program = "while ((((0)))) {\n" +
+                "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
+                "while ((((0)))) {\n" +
+                "}\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void trueParenthesisWhile_stmtTest() throws IOException {
+        String program = "while ((((1)))) {\n" +
+                "}";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "while ((((1)))) {\n" +
+                "}\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void notEqualWhile_stmtTest() throws IOException {
+        String program = "while (1 != 2) {\n" +
+                "}";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "while (1!=2) {\n" +
+                "}\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void equalWhile_stmtTest() throws IOException {
+        String program = "while (1 = 2) {\n" +
+                "}";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "while (1==2) {\n" +
+                "}\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void greaterOrEqualWhile_stmtTest() throws IOException {
+        String program = "while (1 >= 2) {\n" +
+                "}";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "while (1>=2) {\n" +
+                "}\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void lessOrEqualWhile_stmtTest() throws IOException {
+        String program = "while (1 <= 2) {\n" +
+                "}";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "while (1<=2) {\n" +
+                "}\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void greaterWhile_stmtTest() throws IOException {
+        String program = "while (1 > 2) {\n" +
+                "}";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "while (1>2) {\n" +
+                "}\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void lessWhile_stmtTest() throws IOException {
+        String program = "while (1 < 2) {\n" +
+                "}";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "while (1<2) {\n" +
+                "}\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void dclsNodeTest() throws IOException {
+        String program = "int i\n" +
+                "double d\n" +
+                "string s\n" +
+                "boolean b";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "int i;\n" +
+                "double d;\n" +
+                "char s[256];\n" +
+                "int b;\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void booleanDclTest() throws IOException {
+        String program = "boolean b";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "int b;\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void stringDclTest() throws IOException {
+        String program = "string s";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "char s[256];\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void doubleDclTest() throws IOException {
+        String program = "double d";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "double d;\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
+    public void intDclTest() throws IOException {
+        String program = "int i";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "int i;\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -669,6 +825,16 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
+    public void startNodeTest() throws IOException {
+        String program = "";
+        String expected = "#include <stdio.h>\n" +
+                "#include <string.h>\n" +
+                "int main (void) {\n" +
+                "}\n";
+        assertEquals(expected, getCCode(program));
+    }
+
+    @Test
     public void sampleProgramTest() throws IOException {
         String program = "int testOne\n" +
                 "int testTwo\n" +
@@ -770,10 +936,11 @@ public class CCodeGenerationVisitorTest {
 
         // Custom AST
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+        ErrorHandler errorhandler = new ErrorHandler();
         AstNode astNode = parseTree.accept(buildAstVisitor);
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true);
+        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true, errorhandler);
         astNode.accept(symbolTableFillingVisitor);
-        Typechecker tc = new Typechecker();
+        Typechecker tc = new Typechecker(errorhandler);
         astNode.accept(tc);
 
         // Custom Code generation
