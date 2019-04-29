@@ -7,19 +7,19 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
 
 public class ListVisitor extends AstVisitor {
     private SymbolTableHandler symbolTableHandler;
+    private ErrorHandler errorHandler;
 
-    public ListVisitor(boolean printDcl) {
-        this.symbolTableHandler = new SymbolTableHandler(printDcl);
-    }
-
-    public ListVisitor() {
+    public ListVisitor(ErrorHandler errorHandler) {
         this.symbolTableHandler = new SymbolTableHandler(false);
+        this.errorHandler = errorHandler;
     }
 
     @Override
@@ -55,7 +55,6 @@ public class ListVisitor extends AstVisitor {
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
-        node.setType(symbolTableHandler.retrieveSymbol(node.getId()));
     }
 
     @Override
@@ -141,7 +140,6 @@ public class ListVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        node.setType(symbolTableHandler.retrieveSymbol(node.getVal()));
     }
 
     @Override
@@ -215,13 +213,13 @@ public class ListVisitor extends AstVisitor {
         ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
 
         if (node.getParameters().size() != 2) {
-            ErrorHandler.invalidParamLength(node2.getVal());
+            errorHandler.invalidParamLength(node2.getVal());
         }
 
         if (isSameType(listType, node.getParameters().get(1))) {
             return;
         }
-        ErrorHandler.listNotSameType(listType, node);
+        errorHandler.listNotSameType(listType, node);
     }
 
     @Override
@@ -230,16 +228,26 @@ public class ListVisitor extends AstVisitor {
         ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
 
         if (node.getParameters().size() != 2) {
-            ErrorHandler.invalidParamLength(node2.getVal());
+            errorHandler.invalidParamLength(node2.getVal());
         }
 
         if (isSameType(listType, node.getParameters().get(1))) {
             return;
         }
-        ErrorHandler.listNotSameType(listType, node);
+        errorHandler.listNotSameType(listType, node);
     }
 
     private boolean isSameType(ITypeNode firstParam, ITypeNode secondParam) {
         return firstParam.getType() == secondParam.getType();
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+
     }
 }
