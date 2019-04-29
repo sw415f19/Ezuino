@@ -18,113 +18,127 @@ import generated.EzuinoParser;
 public class ReturnStmtTypeCheckerTest {
 
     @Test
-    public void WrongReturnType() {
+    public void wrongReturnType() {
         String program = "func int main() { return 2.0 }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void CorrectReturnType() {
+    public void correctReturnType() {
         String program = "func int main() { return 2 }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void WrongNestedIfReturnType() {
+    public void wrongNestedIfReturnType() {
         String program = "func int main() { if(1<2) { return 2.0 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void WrongNestedElseReturnType() {
+    public void wrongNestedElseReturnType() {
         String program = "func int main() { if(1<2) { } else { return 2.0 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void WrongNestedElseOtherScopeReturnType() {
+    public void wrongNestedElseOtherScopeReturnType() {
         String program = "func int main() { if(1<2) { if (2<2) { } } else { return 2.0 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void CorrectNestedIfReturnType() {
+    public void correctNestedIfReturnType() {
         String program = "func int main() { if(1<2) { return 2 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void CorrectNestedElseReturnType() {
+    public void correctNestedElseReturnType() {
         String program = "func int main() { if(1<2) { } else { return 2 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void CorrectNestedElseOtherScopeReturnType() {
+    public void correctNestedElseOtherScopeReturnType() {
         String program = "func int main() { if(1<2) { if (2<2) { } } else { return 2 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void WrongTypeWhileStmt() {
+    public void wrongTypeWhileStmt() {
         String program = "func int main() { while(1<2) { return 2.0 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void CorrectTypeWhileStmt() {
+    public void correctTypeWhileStmt() {
         String program = "func int main() { while(1<2) { return 2 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void MixedBlockWrongType() {
+    public void mixedBlockWrongType() {
         String program = "func int main() { while(1<2) { if(1>2) { return 2.0 } } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void MixedBlockCorrectType() {
+    public void mixedBlockCorrectType() {
         String program = "func int main() { while(1<2) { if(1>2) { return 2 } } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void ReversedMixedBlockWrongType() {
+    public void reversedMixedBlockWrongType() {
         String program = "func int main() { if(1<2) { while(1>2) { return 2.0 } } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void ReversedMixedBlockCorrectType() {
+    public void reversedMixedBlockCorrectType() {
         String program = "func int main() { if(1<2) { while(1>2) { return 2 } } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void SiblingBlockCorrectType() {
-        String program = "func int main() { if(1<2) { return 1 } while (1>2) { return 2.0 } } }";
+    public void siblingBlockWrongType() {
+        String program = "func int main() { if(1<2) { return 1 } while (1>2) { return 2.0 } }";
+        ErrorHandler errorHandler = parseProgram(program);
+        assertTrue(errorHandler.hasErrors());
+    }
+
+    @Test
+    public void siblingBlockCorrectType() {
+        String program = "func int main() { if(1<2) { return 1 } while (1>2) { return 2 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void ImplicitVoid() {
+    public void implicitVoid() {
         String program = "func main() { return }";
+        ErrorHandler errorHandler = parseProgram(program);
+        assertFalse(errorHandler.hasErrors());
+    }
+
+    @Test
+    public void implicitInIfVoid() {
+        String program = "func main() { if(1<2) { return } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
