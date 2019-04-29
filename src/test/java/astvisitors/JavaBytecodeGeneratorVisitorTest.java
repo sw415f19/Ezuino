@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import ast.AstNode;
 import cstvisitors.BuildAstVisitor;
+import exceptions.ErrorHandler;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 
@@ -35,9 +36,10 @@ public class JavaBytecodeGeneratorVisitorTest {
         // Custom AST
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         AstNode astNode = parseTree.accept(buildAstVisitor);
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true);
+        ErrorHandler errorhandler = new ErrorHandler();
+        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true, errorhandler);
         astNode.accept(symbolTableFillingVisitor);
-        Typechecker tc = new Typechecker();
+        Typechecker tc = new Typechecker(errorhandler);
         astNode.accept(tc);
 
         // Custom Code generation
