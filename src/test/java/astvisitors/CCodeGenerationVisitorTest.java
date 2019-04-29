@@ -7,6 +7,7 @@ import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
+import exceptions.ErrorHandler;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -935,10 +936,11 @@ public class CCodeGenerationVisitorTest {
 
         // Custom AST
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
+        ErrorHandler errorhandler = new ErrorHandler();
         AstNode astNode = parseTree.accept(buildAstVisitor);
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true);
+        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true, errorhandler);
         astNode.accept(symbolTableFillingVisitor);
-        Typechecker tc = new Typechecker();
+        Typechecker tc = new Typechecker(errorhandler);
         astNode.accept(tc);
 
         // Custom Code generation
