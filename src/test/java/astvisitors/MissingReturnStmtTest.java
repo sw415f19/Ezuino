@@ -19,35 +19,35 @@ public class MissingReturnStmtTest {
 
     @Test
     public void missingReturn() {
-        String program = "func int main() {\n" + "}";
+        String program = "func int main() { }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void hasReturn() {
-        String program = "func int main() {\n" + "return 2\n" + "}";
+        String program = "func int main() { return 2 }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void elseBlockMissingReturn() {
-        String program = "func int main() {\n" + "if(1<2) { return 1 }\n" + "}";
+        String program = "func int main() { if(1<2) { return 1 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void ifBlockMissingReturn() {
-        String program = "func int main() {\n" + "if(1<2) { } else { return 2 }\n" + "}";
+        String program = "func int main() { if(1<2) { } else { return 2 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void ifElseBlockHasReturn() {
-        String program = "func int main() {\n" + "if(1<2) { return 1 } else { return 2 }\n" + "}";
+        String program = "func int main() { if(1<2) { return 1 } else { return 2 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
