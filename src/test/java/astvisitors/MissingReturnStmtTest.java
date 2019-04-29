@@ -18,35 +18,35 @@ import generated.EzuinoParser;
 public class MissingReturnStmtTest {
 
     @Test
-    public void MissingReturn() {
+    public void missingReturn() {
         String program = "func int main() {\n" + "}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void HasReturn() {
+    public void hasReturn() {
         String program = "func int main() {\n" + "return 2\n" + "}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
-    public void ElseBlockMissingReturn() {
+    public void elseBlockMissingReturn() {
         String program = "func int main() {\n" + "if(1<2) { return 1 }\n" + "}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void IfBlockMissingReturn() {
+    public void ifBlockMissingReturn() {
         String program = "func int main() {\n" + "if(1<2) { } else { return 2 }\n" + "}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
-    public void IfElseBlockHasReturn() {
+    public void ifElseBlockHasReturn() {
         String program = "func int main() {\n" + "if(1<2) { return 1 } else { return 2 }\n" + "}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
