@@ -1,18 +1,18 @@
-package ast.funcallstmt;
+package ast.funcallstmt.cast;
 
-import java.util.ArrayList;
-
+import ast.expr.Func_callExprNode;
 import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public class PrintNode extends Func_callStmtNode {
+import java.util.ArrayList;
 
-    public PrintNode(ArrayList<AExpr> parameters)
-    {
-        this.parameters = parameters;
+public class IntegerCastNode extends Func_callExprNode {
+
+    public IntegerCastNode(String ID, ArrayList<AExpr> parameters) {
+        super(ID, parameters);
     }
-
+    
     @Override
     public void accept(AstVisitor v)
     {

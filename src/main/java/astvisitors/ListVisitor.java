@@ -13,56 +13,26 @@ import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
 
-public class SymbolTableVisitor extends AstVisitor {
+public class ListVisitor extends AstVisitor {
+    private SymbolTableHandler symbolTableHandler;
     private ErrorHandler errorHandler;
-    private SymbolTableHandler stVariables;
-    private SymbolTableHandler stFunctions;
 
-    public SymbolTableVisitor(boolean printDcl, ErrorHandler errorhandler) {
-        this.stVariables = new SymbolTableHandler(printDcl);
-        this.stFunctions = new SymbolTableHandler(printDcl);
-        this.errorHandler = errorhandler;
-    }
-
-    private void enterVariableSymbol(String id, ITypeNode node) {
-        if (!stVariables.enterSymbol(id, node)) {
-            errorHandler.alreadyDeclared(id);
-        }
-    }
-    
-    private void enterFunctionSymbol(String id, ITypeNode node) {
-        if (!stFunctions.enterSymbol(id, node)) {
-            errorHandler.alreadyDeclared(id);
-        }
-    }
-
-    private Type getVariableType(String id) {
-        Type result = stVariables.retrieveSymbol(id);
-        if (result == null) {
-            errorHandler.notDeclaredVar(id);
-        }
-        return result;
-    }
-
-    private Type getFunctionType(String id) {
-        Type result = stFunctions.retrieveSymbol(id);
-        if (result == null) {
-            errorHandler.notDeclaredVar(id);
-        }
-        return result;
+    public ListVisitor(ErrorHandler errorHandler) {
+        this.symbolTableHandler = new SymbolTableHandler(false);
+        this.errorHandler = errorHandler;
     }
 
     @Override
     public void visit(StartNode node) {
-        openScope();
+        symbolTableHandler.openScope();
         node.getDcls().accept(this);
         node.getStmts().accept(this);
-        closeScope();
+        symbolTableHandler.closeScope();
     }
 
     @Override
     public void visit(BlockNode node) {
-        openScope();
+        symbolTableHandler.openScope();
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
         }
@@ -72,23 +42,24 @@ public class SymbolTableVisitor extends AstVisitor {
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().accept(this);
         }
-        closeScope();
+        symbolTableHandler.closeScope();
     }
 
     @Override
     public void visit(DclNode node) {
-        enterVariableSymbol(node.getID(), node);
+        if (node.isList()) {
+            symbolTableHandler.enterSymbol(node.getID(), node);
+        }
     }
 
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
-        node.setType(getVariableType(node.getId()));
     }
 
     @Override
     public void visit(Func_callExprNode node) {
-        node.setType(getFunctionType(node.getID()));
+        node.setType(symbolTableHandler.retrieveSymbol(node.getID()));
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -116,7 +87,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
-        enterFunctionSymbol(node.getId(), node);
+        symbolTableHandler.enterSymbol(node.getId(), node);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
@@ -169,7 +140,6 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        node.setType(getVariableType(node.getVal()));
     }
 
     @Override
@@ -235,44 +205,49 @@ public class SymbolTableVisitor extends AstVisitor {
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
-
     }
 
     @Override
     public void visit(ListAddNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
+        IdNode node2 = (IdNode) node.getParameters().get(0);
+        ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
+
+        if (node.getParameters().size() != 2) {
+            errorHandler.invalidParamLength(node2.getVal());
         }
+
+        if (isSameType(listType, node.getParameters().get(1))) {
+            return;
+        }
+        errorHandler.listNotSameType(listType, node);
     }
 
     @Override
     public void visit(ListRemoveNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
+        IdNode node2 = (IdNode) node.getParameters().get(0);
+        ITypeNode listType = symbolTableHandler.getSymbolNode(node2.getVal());
+
+        if (node.getParameters().size() != 2) {
+            errorHandler.invalidParamLength(node2.getVal());
         }
+
+        if (isSameType(listType, node.getParameters().get(1))) {
+            return;
+        }
+        errorHandler.listNotSameType(listType, node);
     }
 
-    private void openScope(){
-        stVariables.openScope();
-        stFunctions.openScope();
-    }
-
-    private void closeScope() {
-        stVariables.closeScope();
-        stFunctions.closeScope();
+    private boolean isSameType(ITypeNode firstParam, ITypeNode secondParam) {
+        return firstParam.getType() == secondParam.getType();
     }
 
     @Override
-    public void visit(IntegerCastNode node) { 
-        for (AExpr var : node.getParameters()) {
-            var.accept(this);
-        }
+    public void visit(IntegerCastNode node) {
+
     }
 
     @Override
     public void visit(DoubleCastNode node) {
-        for (AExpr var : node.getParameters()) {
-            var.accept(this);
-        }
+
     }
 }

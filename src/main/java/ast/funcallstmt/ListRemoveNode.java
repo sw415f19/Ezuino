@@ -1,24 +1,20 @@
-package ast;
+package ast.funcallstmt;
 
+import java.util.ArrayList;
+
+import ast.expr.aexpr.AExpr;
 import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
-public abstract class TypeNode extends AstNode implements ITypeNode {
+public class ListRemoveNode extends Func_callStmtNode {
 
-    protected Type type;
-
-    public void setType(Type newType) {
-        this.type = newType;
-    }
-
-    public Type getType() {
-        return this.type;
+    public ListRemoveNode(ArrayList<AExpr> parameters) {
+        this.parameters = parameters;
     }
 
     @Override
     public void accept(AstVisitor v) {
         v.visit(this);
-
     }
 
     @Override

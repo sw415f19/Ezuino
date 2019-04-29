@@ -11,6 +11,7 @@ dcls
     ;
 dcl
     : type ID
+    | LISTDCL type ID
     ;
 stmts
     : stmt*
@@ -107,6 +108,7 @@ INTDCL              : 'int' ;
 DOUBLEDCL           : 'double' ;
 STRINGDCL           : 'string' ;
 BOOLEANDCL          : 'boolean' ;
+LISTDCL                : 'list' ;
 // STATEMENTS
 ASSIGN              : ':=' ;
 // OPERATORS
