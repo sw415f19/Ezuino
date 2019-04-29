@@ -71,7 +71,6 @@ public class CCodeGenerationVisitor extends AstVisitor {
     @Override
     public void visit(Func_defNode node) {
         String nodeType = "";
-        String arrayLength = "";
         // Formats the defined type to C types
         switch (node.getType()) {
             case INT:
@@ -81,15 +80,16 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 nodeType = "double ";
                 break;
             case STRING:
-                // Converts the java string into a C char array of size 256
                 nodeType = "char ";
-                arrayLength = "[256]";
                 break;
             case BOOL:
                 nodeType = "int ";
                 break;
+            case VOID:
+                nodeType = "void ";
+                break;
         }
-        out.print(nodeType + node.getId() + arrayLength + "(");
+        out.print(nodeType + node.getId() + "(");
         for (Iterator<DclNode> iterator = node.getParameters().iterator(); iterator.hasNext(); ) {
             DclNode dclNode = iterator.next();
             dclNode.accept(this);
@@ -104,8 +104,13 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(Return_stmtNode node) {
-        out.print("return ");
-        node.getReturnExpr().accept(this);
+        if (node.getReturnExpr() == null) {
+            out.print("return");
+        }
+        else {
+            out.print("return ");
+            node.getReturnExpr().accept(this);
+        }
     }
 
     @Override
@@ -123,8 +128,16 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(StartNode node) {
+        // includes
+        out.print("#include <stdio.h>\n" +
+                "#include <string.h>\n");
+        // open main
+        out.print("int main (void) {\n");
+        // start tree search
         node.getDcls().accept(this);
         node.getStmts().accept(this);
+        // close main
+        out.print("}\n");
     }
 
     @Override
