@@ -1,4 +1,4 @@
-package astVisitors;
+package astvisitors;
 
 import ast.AstNode;
 import astvisitors.CCodeGenerationVisitor;
