@@ -101,7 +101,6 @@ public class Main {
         CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
         astNode.accept(cCodeGenerationVisitor);
 
-        // ErrorHandler.printErrorList();
         errorhandler.printErrorList();
     }
 
