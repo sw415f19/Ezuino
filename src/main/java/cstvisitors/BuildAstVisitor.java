@@ -13,8 +13,6 @@ import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.ListAddNode;
-import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
@@ -193,12 +191,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
         if ("print".equals(id)) {
             return new PrintNode(parameters);
-        }
-        if ("listAdd".equals(id)) {
-            return new ListAddNode(parameters);
-        }
-        if ("listRemove".equals(id)) {
-            return new ListRemoveNode(parameters);
         }
         return new CustomFuncCallStmtNode(id, parameters);
     }

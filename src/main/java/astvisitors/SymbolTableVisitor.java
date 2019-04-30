@@ -4,8 +4,6 @@ import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.ListAddNode;
-import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
@@ -236,20 +234,6 @@ public class SymbolTableVisitor extends AstVisitor {
             child.accept(this);
         }
 
-    }
-
-    @Override
-    public void visit(ListAddNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(ListRemoveNode node) {
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
     }
 
     private void openScope(){
