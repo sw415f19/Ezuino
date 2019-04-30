@@ -96,6 +96,9 @@ public class Main {
     }
 
     private static void codeGeneration(AstNode ast) {
+        
+        //TODO: Create implementation
+        System.out.println("TODO" + ast.toString());
 
     }
 
