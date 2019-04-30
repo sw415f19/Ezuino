@@ -3,9 +3,6 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.Func_callStmtNode;
-import ast.funcallstmt.ListAddNode;
-import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
@@ -35,8 +32,6 @@ public abstract class AstLevelVisitor {
 	public abstract void visitLevel(EqualityExprNode node, int level);
 	public abstract void visitLevel(ParenthesisExprNode node, int level);
 	public abstract void visitLevel(UnaryExprNode node, int level);
-	public abstract void visitLevel(ListAddNode node, int level);
-	public abstract void visitLevel(ListRemoveNode node, int level);
 	public abstract void visitLevel(DoubleCastNode node, int level);
 	public abstract void visitLevel(IntegerCastNode node, int level);
 

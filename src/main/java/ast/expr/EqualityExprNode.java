@@ -8,12 +8,12 @@ import astvisitors.AstVisitor;
 public class EqualityExprNode extends AEqualityExpr {
     private AEqualityExpr leftNode;
     private String operator;
-    private ARelationalExpr relationalExprNode;
+    private ARelationalExpr rightNode;
 
     public EqualityExprNode(AEqualityExpr iEqualityExpr, String operator, ARelationalExpr iRelationalExpr) {
         this.leftNode = iEqualityExpr;
         this.operator = operator;
-        this.relationalExprNode = iRelationalExpr;
+        this.rightNode = iRelationalExpr;
     }
 
     @Override
@@ -34,8 +34,8 @@ public class EqualityExprNode extends AEqualityExpr {
         return operator;
     }
 
-    public ARelationalExpr getRelationalExprNode() {
-        return relationalExprNode;
+    public ARelationalExpr getRightNode() {
+        return rightNode;
     }
 
     @Override

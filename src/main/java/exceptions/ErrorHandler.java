@@ -72,10 +72,6 @@ public class ErrorHandler {
         messageList.add(new GeneralError(ErrorType.ERROR, "The type of the parameters does not fit in the invokation of function \"" + functionName + "\""));
     }
 
-    public void invalidParamLength(String s) {
-        messageList.add(new GeneralError(ErrorType.ERROR, "Invalid list usage - correct example listAdd(myList, a) \"" + s + "\" ."));
-    }
-
     public void listNotSameType(ITypeNode firstParam, Func_callStmtNode node) {
         messageList.add(new GeneralError(ErrorType.ERROR, String.valueOf(node.getParameters().get(1)) + " is type " + node.getParameters().get(1).getType() + " - tried to add it to an " + firstParam.getType() + " list."));
     }
