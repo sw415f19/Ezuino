@@ -23,11 +23,13 @@ public class ErrorHandler {
 
     public void printErrors(String reason) {
         if (hasErrors()) {
+            StringBuilder sb = new StringBuilder();
             String errmsg = "##  " + reason + "\n -- ## ERROR OUTPUT CONSOLE ## -- ";
-            System.err.println(errmsg);
+            sb.append(errmsg + "\n");
             for (ErrorMessage message : messageList) {
-                System.out.println(message);
+                sb.append(message + "\n");
             }
+            System.err.println(sb.toString());
         }
     }
 

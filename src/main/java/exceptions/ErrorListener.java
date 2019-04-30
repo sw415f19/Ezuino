@@ -11,8 +11,8 @@ import org.antlr.v4.runtime.dfa.DFA;
 
 public class ErrorListener implements ANTLRErrorListener {
 
-    private ErrorHandler errorHandler;
     private int errorCount;
+    private ErrorHandler errorHandler;
     
     public ErrorListener(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
@@ -22,6 +22,7 @@ public class ErrorListener implements ANTLRErrorListener {
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
             String msg, RecognitionException e) {
+        this.errorCount++;
         errorHandler.syntaxError(errorCount, msg, line, charPositionInLine);
     }
 
