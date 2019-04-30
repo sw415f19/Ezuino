@@ -29,6 +29,8 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.ListAddNode;
 import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
+import ast.funcallstmt.cast.DoubleCastNode;
+import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -234,4 +236,16 @@ public class JavaBytecodeGeneratorVisitor extends AstVisitor {
             child.accept(this);
         }
     }
+
+	@Override
+	public void visit(IntegerCastNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(DoubleCastNode node) {
+		// TODO Auto-generated method stub
+		
+	}
 }
