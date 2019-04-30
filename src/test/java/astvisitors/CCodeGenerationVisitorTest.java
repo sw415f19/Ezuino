@@ -1413,7 +1413,7 @@ public class CCodeGenerationVisitorTest {
         CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(ps);
         astNode.accept(cCodeGenerationVisitor);
         if(errorhandler.hasErrors()) {
-            errorhandler.printErrorList();
+            errorhandler.printErrors("Test reason");
         }
 
         // Return ByteArrayOutputStream String

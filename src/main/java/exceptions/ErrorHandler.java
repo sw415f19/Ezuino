@@ -21,12 +21,15 @@ public class ErrorHandler {
         messageList.clear();
     }
 
-    public void printErrorList() {
+    public void printErrors(String reason) {
         if (hasErrors()) {
-            System.err.println(" -- ## ERROR OUTPUT CONSOLE ## -- ");
+            StringBuilder sb = new StringBuilder();
+            String errmsg = "##  " + reason + "\n -- ## ERROR OUTPUT CONSOLE ## -- ";
+            sb.append(errmsg + "\n");
             for (ErrorMessage message : messageList) {
-                System.out.println(message);
+                sb.append(message + "\n");
             }
+            System.err.println(sb.toString());
         }
     }
 
@@ -90,6 +93,11 @@ public class ErrorHandler {
 
     public void invalidCastException() {
         messageList.add(new GeneralError(ErrorType.ERROR, "Invalid Cast Error - tried to cast a Double to Integer"));
+    }
+
+    public void syntaxError(int errorCount, String msg, int line, int charPositionInLine) {
+        String errorMsg = String.format("#" + errorCount + " - " + "Error parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine);
+        messageList.add(new SyntaxError(ErrorType.ERROR, errorMsg));
     }
 
 }

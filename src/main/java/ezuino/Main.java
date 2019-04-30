@@ -29,11 +29,26 @@ public class Main {
     public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) throws IOException {
+
         CharStream cs = CharStreams.fromFileName("src/main/code.ezuino");
 
-        ErrorListener errorListener = new ErrorListener();
-        ErrorHandler errorhandler = new ErrorHandler();
-        EzuinoLexer lLexer = new EzuinoLexer(cs);
+        ErrorHandler errorHandler = new ErrorHandler();
+        AstNode ast = syntaxAnalysis(cs, errorHandler);
+        if (errorHandler.hasErrors()) {
+            errorHandler.printErrors("Syntax errors");
+            return;
+        }
+        contextualAnalysis(ast, errorHandler);
+        if (errorHandler.hasErrors()) {
+            errorHandler.printErrors("Semantic errors");
+            return;
+        }
+        codeGeneration(ast);
+    }
+
+    private static AstNode syntaxAnalysis(CharStream charStream, ErrorHandler errorHandler) {
+        ErrorListener errorListener = new ErrorListener(errorHandler);
+        EzuinoLexer lLexer = new EzuinoLexer(charStream);
         lLexer.removeErrorListeners();
         lLexer.addErrorListener(errorListener);
 
@@ -45,59 +60,42 @@ public class Main {
 
         ParseTree parseTree = parser.start();
 
-        if (errorListener.hasError()) {
-            System.err.println("## Scanner/Paser Error - Please correct the following errors and try again. ##");
-            errorListener.printErrors();
-            return;
+        if (parseTree.getChildCount() == 0) {
+            errorHandler.invalidKeyword();
+            return null;
         }
 
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
 
-        // showCST(parseTree, parser);
-
-        /*
-         * Call of IndentedPrintVisitor BuildAstVisitor ezuinoVisitorForPrinting = new
-         * BuildAstVisitor(); StartNode astNode = (StartNode)
-         * ezuinoVisitorForPrinting.visit(parseTree); IndentedPrintVisitor ipv = new
-         * IndentedPrintVisitor(); // Gives nullPointerException atm.
-         * ipv.visit(astNode);
-         */
-
-        // Initializes the Ezuiono Vistor
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-        // Runs the three, filling up the AST array list attribute
-        AstNode astNode = parseTree.accept(buildAstVisitor);
+        return parseTree.accept(buildAstVisitor);
 
-        if (astNode == null) {
-            errorhandler.invalidKeyword();
-            errorhandler.printErrorList();
-            return;
-        }
-        IndentedPrintVisitor ipv = new IndentedPrintVisitor();
-        astNode.acceptLevel(ipv, 0);
+    }
+
+    private static void contextualAnalysis(AstNode ast, ErrorHandler errorHandler) {
+        IndentedPrintVisitor indentedPrintVisitor = new IndentedPrintVisitor();
+
+        ast.acceptLevel(indentedPrintVisitor, 0);
 
         boolean printDcl = true;
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(printDcl, errorhandler);
-        astNode.accept(symbolTableFillingVisitor);
-        astNode.acceptLevel(ipv, 0);
-        Typechecker tc = new Typechecker(errorhandler);
-        astNode.accept(tc);
-        astNode.acceptLevel(ipv, 0);
-        
-        ReturnStmtTypeCheckVisitor rsc = new ReturnStmtTypeCheckVisitor(errorhandler);
-        astNode.accept(rsc);
 
-        MissingReturnStmtVisitor mrsv = new MissingReturnStmtVisitor(errorhandler);
-        astNode.accept(mrsv);
+        ast.accept(new SymbolTableVisitor(printDcl, errorHandler));
+        ast.acceptLevel(indentedPrintVisitor, 0);
 
-        FuncStructureVisitor fsv = new FuncStructureVisitor(errorhandler);
-        astNode.accept(fsv);
+        ast.accept(new Typechecker(errorHandler));
+        ast.acceptLevel(indentedPrintVisitor, 0);
 
-        CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
-        astNode.accept(cCodeGenerationVisitor);
+        ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
 
-        errorhandler.printErrorList();
+        ast.accept(new MissingReturnStmtVisitor(errorHandler));
+
+        ast.accept(new FuncStructureVisitor(errorHandler));
+    }
+
+    private static void codeGeneration(AstNode ast) {
+
+        ast.accept(new CCodeGenerationVisitor(System.out));
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
