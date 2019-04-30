@@ -45,10 +45,10 @@ public class Func_defNode extends StmtNode implements ITypeNode {
         v.visitLevel(this, level);
     }
 
-    @Override
     public String toString() {
         return "Func_defNode{" +
-                "ID='" + ID + '\'' +
+                "ID: \"" + ID + "\" " +
+                "type: " + type + " " +
                 '}';
     }
 

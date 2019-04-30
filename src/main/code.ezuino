@@ -1,5 +1,6 @@
-int a
-func  b(int a) {
-
+func int main() {
+    while(1<2){
+        int a
+    }
+    return 1
 }
-a := b(1)
