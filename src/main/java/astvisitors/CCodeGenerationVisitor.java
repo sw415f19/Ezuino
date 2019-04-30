@@ -315,7 +315,12 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
-
+        out.print("printf(%s, ");
+        for (Iterator<AExpr> iterator = node.getParameters().iterator(); iterator.hasNext(); ) {
+            AExpr exp = iterator.next();
+            exp.accept(this);
+        }
+        out.print(");\n");
     }
 
     @Override
