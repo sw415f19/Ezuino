@@ -748,54 +748,6 @@ public class EzuinoLexerTest {
 	}
 
 	@Test
-	public void listAdd() throws IOException {
-		EzuinoParser ep = createParser("list_add()");
-		ErrorListener el = setErrorHandler(ep);
-		ep.start();
-		assertFalse(el.hasError());
-	}
-
-	@Test
-	public void listAddParam() throws IOException {
-		EzuinoParser ep = createParser("list_add(a)");
-		ErrorListener el = setErrorHandler(ep);
-		ep.start();
-		assertFalse(el.hasError());
-	}
-
-	@Test
-	public void listAddParams() throws IOException {
-		EzuinoParser ep = createParser("list_add(a, b, c)");
-		ErrorListener el = setErrorHandler(ep);
-		ep.start();
-		assertFalse(el.hasError());
-	}
-
-	@Test
-	public void listRemove() throws IOException {
-		EzuinoParser ep = createParser("list_remove()");
-		ErrorListener el = setErrorHandler(ep);
-		ep.start();
-		assertFalse(el.hasError());
-	}
-
-	@Test
-	public void listRemoveParam() throws IOException {
-		EzuinoParser ep = createParser("list_remove(a)");
-		ErrorListener el = setErrorHandler(ep);
-		ep.start();
-		assertFalse(el.hasError());
-	}
-
-	@Test
-	public void listRemoveParams() throws IOException {
-		EzuinoParser ep = createParser("list_remove(a, b, c)");
-		ErrorListener el = setErrorHandler(ep);
-		ep.start();
-		assertFalse(el.hasError());
-	}
-
-	@Test
 	public void intListDcl() throws IOException {
 		EzuinoParser ep = createParser("list int myList 4 := (1, 2, 3)");
 		ErrorListener el = setErrorHandler(ep);
