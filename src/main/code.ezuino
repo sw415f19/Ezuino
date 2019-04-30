@@ -1,5 +1,0 @@
-int a
-func  b(int a) {
-
-}
-a := b(1)
