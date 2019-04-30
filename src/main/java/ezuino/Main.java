@@ -6,7 +6,6 @@ import astvisitors.FuncStructureVisitor;
 import astvisitors.IndentedPrintVisitor;
 import astvisitors.MissingReturnStmtVisitor;
 import astvisitors.ReturnStmtTypeCheckVisitor;
-import astvisitors.ListVisitor;
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
@@ -94,9 +93,6 @@ public class Main {
 
         FuncStructureVisitor fsv = new FuncStructureVisitor(errorhandler);
         astNode.accept(fsv);
-
-        ListVisitor lv = new ListVisitor(errorhandler);
-        astNode.accept(lv);
 
         CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
         astNode.accept(cCodeGenerationVisitor);
