@@ -4,6 +4,7 @@ import ast.AstNode;
 import astvisitors.CCodeGenerationVisitor;
 import astvisitors.FuncStructureVisitor;
 import astvisitors.IndentedPrintVisitor;
+import astvisitors.JasminCodeGeneratorVisitor;
 import astvisitors.MissingReturnStmtVisitor;
 import astvisitors.ReturnStmtTypeCheckVisitor;
 import astvisitors.SymbolTableVisitor;
@@ -96,6 +97,8 @@ public class Main {
 
         CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
         astNode.accept(cCodeGenerationVisitor);
+        
+        JasminCodeGeneratorVisitor jasminCodeGenerator = new JasminCodeGeneratorVisitor(System.out);
 
         errorhandler.printErrorList();
     }
