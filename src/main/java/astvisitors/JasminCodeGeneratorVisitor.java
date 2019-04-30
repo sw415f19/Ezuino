@@ -23,6 +23,7 @@ import ast.expr.MultiplicativeExprNode;
 import ast.expr.ParenthesisExprNode;
 import ast.expr.RelationalExprNode;
 import ast.expr.UnaryExprNode;
+import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
@@ -41,137 +42,193 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 		this.out = out;
 	}
 	@Override
-	public void visit(Func_callExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void visit(StartNode node) {
+        node.getDcls().accept(this);
+        node.getStmts().accept(this);
+        out.print(sb);
+    }
 
-	@Override
-	public void visit(BlockNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(BlockNode node) {
+        if (node.getDclsNode() != null) {
+            node.getDclsNode().accept(this);
+        }
+        if (node.getStmtsNode() != null) {
+            node.getStmtsNode().accept(this);
+        }
+        if (node.getReturnstmtNode() != null) {
+            node.getReturnstmtNode().accept(this);
+        }
+    }
 
-	@Override
-	public void visit(Func_defNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(DclNode node) {
+    		
+    }
 
-	@Override
-	public void visit(Return_stmtNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(Assign_stmtNode node) {
+        node.getExprNode().accept(this);
+    }
 
-	@Override
-	public void visit(If_stmtNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(Func_callExprNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
 
-	@Override
-	public void visit(StartNode node) {
-		// TODO Auto-generated method stub
-		// Make the entire code for string builder, then print it as the last thing
-		out.print(sb);
-	}
+    @Override
+    public void visit(IntegerLiteral node) {
 
-	@Override
-	public void visit(BooleanLiteral node) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visit(StmtsNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(DoubleLiteral node) {
 
-	@Override
-	public void visit(DclNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visit(DclsNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(BooleanLiteral node) {
 
-	@Override
-	public void visit(While_stmtNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visit(ParametersNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(StringLiteral node) {
 
-	@Override
-	public void visit(AdditiveExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visit(MultiplicativeExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(Func_defNode node) {
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+    }
 
-	@Override
-	public void visit(LogicalAndExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(Return_stmtNode node) {
+        if (node.getReturnExpr() != null) {
+            node.getReturnExpr().accept(this);
+        }
+    }
 
-	@Override
-	public void visit(LogicalOrExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(If_stmtNode node) {
+        node.getExpr().accept(this);
+        node.getIfBlock().accept(this);
+        BlockNode elseBlock = node.getElseBlock();
+        if (elseBlock != null) {
+            elseBlock.accept(this);
+        }
+    }
 
-	@Override
-	public void visit(RelationalExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(StmtsNode node) {
+        int childCount = node.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            node.getChild(i).accept(this);
+        }
+    }
 
-	@Override
-	public void visit(EqualityExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(DclsNode node) {
+        int childCount = node.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            node.getChild(i).accept(this);
+        }
+    }
 
-	@Override
-	public void visit(ParenthesisExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(While_stmtNode node) {
+        node.getExprNode().accept(this);
+        node.getBlockNode().accept(this);
+    }
 
-	@Override
-	public void visit(UnaryExprNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(ParametersNode node) {
 
-	@Override
-	public void visit(PrintNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void visit(CustomFuncCallStmtNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void visit(IdNode node) {
+    }
+
+    @Override
+    public void visit(RelationalExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        
+        if(node.getOperator().equals("<") || node.getOperator().equals(">=")) {
+        	
+        }
+        else if(node.getOperator().equals(">") || node.getOperator().equals("<=")) {
+        	
+        }
+        else {
+        	throw new RuntimeException("Bad operator, should never get here");
+        }
+    }
+
+    @Override
+    public void visit(EqualityExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+    }
+
+    @Override
+    public void visit(ParenthesisExprNode node) {
+        node.getNode().accept(this);
+    }
+
+    @Override
+    public void visit(LogicalAndExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+    }
+
+    @Override
+    public void visit(AdditiveExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+
+    }
+
+    @Override
+    public void visit(MultiplicativeExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+
+    }
+
+    @Override
+    public void visit(UnaryExprNode node) {
+        node.getNode().accept(this);
+
+    }
+
+    @Override
+    public void visit(LogicalOrExprNode node) {
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+
+    }
+
+    @Override
+    public void visit(PrintNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+
+    }
+
+    @Override
+    public void visit(CustomFuncCallStmtNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+
+    }
 
 	@Override
 	public void visit(IntegerCastNode node) {
@@ -181,36 +238,6 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
 	@Override
 	public void visit(DoubleCastNode node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(Assign_stmtNode node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(IntegerLiteral node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(DoubleLiteral node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(StringLiteral node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void visit(IdNode node) {
 		// TODO Auto-generated method stub
 		
 	}
