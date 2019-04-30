@@ -24,13 +24,13 @@ public class SymbolTableVisitor extends AstVisitor {
 
     private void enterVariableSymbol(String id, ITypeNode node) {
         if (!stVariables.enterSymbol(id, node)) {
-            errorHandler.alreadyDeclared(id);
+            errorHandler.varAlreadyDeclared(id);
         }
     }
     
     private void enterFunctionSymbol(String id, ITypeNode node) {
         if (!stFunctions.enterSymbol(id, node)) {
-            errorHandler.alreadyDeclared(id);
+            errorHandler.funcAlreadyDeclared(id);
         }
     }
 
@@ -45,7 +45,7 @@ public class SymbolTableVisitor extends AstVisitor {
     private Type getFunctionType(String id) {
         Type result = stFunctions.retrieveSymbol(id);
         if (result == null) {
-            errorHandler.notDeclaredVar(id);
+            errorHandler.notDeclaredFunc(id);
         }
         return result;
     }

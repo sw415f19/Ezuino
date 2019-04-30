@@ -30,12 +30,20 @@ public class ErrorHandler {
         }
     }
 
-    public void alreadyDeclared(String character) {
-        messageList.add(new SyntaxError(ErrorType.ERROR, character + " is already defined in this scope."));
+    public void varAlreadyDeclared(String character) {
+        messageList.add(new SyntaxError(ErrorType.ERROR,  "Variable " + character + " is already defined in this scope."));
+    }
+
+    public void funcAlreadyDeclared(String character) {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Function " + character + " is already defined in this scope."));
     }
 
     public void notDeclaredVar(String character) {
-        messageList.add(new SyntaxError(ErrorType.ERROR, character + " has not been declared."));
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Variable " + character + " has not been declared."));
+    }
+
+    public void notDeclaredFunc(String character) {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Function " + character + " has not been declared."));
     }
 
     public void reservedKeyword(String character) {
