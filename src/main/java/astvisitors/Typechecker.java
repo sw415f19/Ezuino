@@ -118,11 +118,6 @@ public class Typechecker extends AstVisitor {
 
     }
 
-    public void visit(ParametersNode node) {
-
-    }
-
-    // One added assignment nodes.
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());

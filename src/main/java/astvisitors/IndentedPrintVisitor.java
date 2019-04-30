@@ -154,11 +154,6 @@ public class IndentedPrintVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(ParametersNode node) {
-        System.out.println("FUCK");
-    }
-
-    @Override
     public void visit(AdditiveExprNode node) {
         print(node);
 
