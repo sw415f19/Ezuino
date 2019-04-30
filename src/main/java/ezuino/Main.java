@@ -43,7 +43,11 @@ public class Main {
             errorHandler.printErrors("Semantic errors");
             return;
         }
-        codeGeneration(ast);
+        codeGeneration(ast, errorHandler);
+        if(errorHandler.hasErrors()){
+            errorHandler.printErrors("Code generation errors");
+            return;
+        }
     }
 
     private static AstNode syntaxAnalysis(CharStream charStream, ErrorHandler errorHandler) {
@@ -79,23 +83,27 @@ public class Main {
         ast.acceptLevel(indentedPrintVisitor, 0);
 
         boolean printDcl = true;
+        boolean hasNoError = !errorHandler.hasErrors();
 
-        ast.accept(new SymbolTableVisitor(printDcl, errorHandler));
+        if(hasNoError) {
+            ast.accept(new SymbolTableVisitor(printDcl, errorHandler));
+        }
         ast.acceptLevel(indentedPrintVisitor, 0);
-
-        ast.accept(new Typechecker(errorHandler));
         ast.acceptLevel(indentedPrintVisitor, 0);
-
-        ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
-
-        ast.accept(new MissingReturnStmtVisitor(errorHandler));
-
-        ast.accept(new FuncStructureVisitor(errorHandler));
+        hasNoError = !errorHandler.hasErrors();
+        if(hasNoError) {
+            ast.accept(new Typechecker(errorHandler));
+            ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
+            ast.accept(new MissingReturnStmtVisitor(errorHandler));
+            ast.accept(new FuncStructureVisitor(errorHandler));
+        }
     }
 
-    private static void codeGeneration(AstNode ast) {
-
-        ast.accept(new CCodeGenerationVisitor(System.out));
+    private static void codeGeneration(AstNode ast, ErrorHandler errorHandler) {
+        boolean hasNoError = !errorHandler.hasErrors();
+        if(hasNoError){
+            ast.accept(new CCodeGenerationVisitor(System.out));
+        }
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
