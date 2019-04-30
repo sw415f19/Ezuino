@@ -1,4 +1,4 @@
-package astVisitors;
+package astvisitors;
 
 import ast.AstNode;
 import astvisitors.CCodeGenerationVisitor;
@@ -34,7 +34,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void func_callBlockTest() throws IOException {
+    public void funcCallBlockTest() throws IOException {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
@@ -57,7 +57,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void func_defBlockTest() throws IOException {
+    public void funcDefBlockTest() throws IOException {
         String program = "if (true) {\n" +
                 "func boolean b() {\n" +
                 "return true\n" +
@@ -76,7 +76,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void if_stmtBlockTest() throws IOException {
+    public void ifStmtBlockTest() throws IOException {
         String program = "if (true) {\n" +
                 "if (true) {\n" +
                 "}\n" +
@@ -93,7 +93,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void while_stmtBlockTest() throws IOException {
+    public void whileStmtBlockTest() throws IOException {
         String program = "if (true) {\n" +
                 "while (true) {\n" +
                 "}\n" +
@@ -178,7 +178,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void sampleIf_stmtTest() throws IOException {
+    public void sampleIfStmtTest() throws IOException {
         String program = "func boolean b() {\n" +
                 "return false\n" +
                 "}\n" +
@@ -200,7 +200,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void notFunc_callIf_stmtTest() throws IOException {
+    public void notFuncCallIfStmtTest() throws IOException {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
@@ -219,7 +219,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void func_callIf_stmtTest() throws IOException {
+    public void funcCallIfStmtTest() throws IOException {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
@@ -238,7 +238,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void notFalseParenthesisIf_stmtTest() throws IOException {
+    public void notFalseParenthesisIfStmtTest() throws IOException {
         String program = "if ((((-false)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -251,7 +251,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void notTrueParenthesisIf_stmtTest() throws IOException {
+    public void notTrueParenthesisIfStmtTest() throws IOException {
         String program = "if ((((-true)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -264,7 +264,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void falseParenthesisIf_stmtTest() throws IOException {
+    public void falseParenthesisIfStmtTest() throws IOException {
         String program = "if ((((false)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -277,7 +277,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void trueParenthesisIf_stmtTest() throws IOException {
+    public void trueParenthesisIfStmtTest() throws IOException {
         String program = "if ((((true)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -290,7 +290,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void notEqualIf_stmtTest() throws IOException {
+    public void notEqualIfStmtTest() throws IOException {
         String program = "if (1 != 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -303,7 +303,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void equalIf_stmtTest() throws IOException {
+    public void equalIfStmtTest() throws IOException {
         String program = "if (1 = 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -316,7 +316,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void greaterOrEqualIf_stmtTest() throws IOException {
+    public void greaterOrEqualIfStmtTest() throws IOException {
         String program = "if (1 >= 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -329,7 +329,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void lessOrEqualIf_stmtTest() throws IOException {
+    public void lessOrEqualIfStmtTest() throws IOException {
         String program = "if (1 <= 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -342,7 +342,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void greaterIf_stmtTest() throws IOException {
+    public void greaterIfStmtTest() throws IOException {
         String program = "if (1 > 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -355,7 +355,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void lessIf_stmtTest() throws IOException {
+    public void lessIfStmtTest() throws IOException {
         String program = "if (1 < 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -368,7 +368,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void falseIf_stmtTest() throws IOException {
+    public void falseIfStmtTest() throws IOException {
         String program = "if (false) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -381,7 +381,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void trueIf_stmtTest() throws IOException {
+    public void trueIfStmtTest() throws IOException {
         String program = "if (true) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -394,7 +394,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void withElseIf_stmtTest() throws IOException {
+    public void withElseIfStmtTest() throws IOException {
         String program = "if(true) {\n" +
                 "} else {\n" +
                 "}";
@@ -410,7 +410,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void sampleWhile_stmtTest() throws IOException {
+    public void sampleWhileStmtTest() throws IOException {
         String program = "func boolean b() {\n" +
                 "return false\n" +
                 "}\n" +
@@ -429,7 +429,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void notFunc_callWhile_stmtTest() throws IOException {
+    public void notFuncCallWhileStmtTest() throws IOException {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
@@ -448,7 +448,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void func_callWhile_stmtTest() throws IOException {
+    public void funcCallWhileStmtTest() throws IOException {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
@@ -467,7 +467,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void notFalseParenthesisWhile_stmtTest() throws IOException {
+    public void notFalseParenthesisWhileStmtTest() throws IOException {
         String program = "while ((((-false)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -480,7 +480,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void notTrueParenthesisWhile_stmtTest() throws IOException {
+    public void notTrueParenthesisWhileStmtTest() throws IOException {
         String program = "while ((((-true)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -493,7 +493,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void falseParenthesisWhile_stmtTest() throws IOException {
+    public void falseParenthesisWhileStmtTest() throws IOException {
         String program = "while ((((false)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -506,7 +506,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void trueParenthesisWhile_stmtTest() throws IOException {
+    public void trueParenthesisWhileStmtTest() throws IOException {
         String program = "while ((((true)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -519,7 +519,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void notEqualWhile_stmtTest() throws IOException {
+    public void notEqualWhileStmtTest() throws IOException {
         String program = "while (1 != 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -532,7 +532,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void equalWhile_stmtTest() throws IOException {
+    public void equalWhileStmtTest() throws IOException {
         String program = "while (1 = 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -545,7 +545,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void greaterOrEqualWhile_stmtTest() throws IOException {
+    public void greaterOrEqualWhileStmtTest() throws IOException {
         String program = "while (1 >= 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -558,7 +558,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void lessOrEqualWhile_stmtTest() throws IOException {
+    public void lessOrEqualWhileStmtTest() throws IOException {
         String program = "while (1 <= 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -571,7 +571,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void greaterWhile_stmtTest() throws IOException {
+    public void greaterWhileStmtTest() throws IOException {
         String program = "while (1 > 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -584,7 +584,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void lessWhile_stmtTest() throws IOException {
+    public void lessWhileStmtTest() throws IOException {
         String program = "while (1 < 2) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -597,7 +597,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void falseWhile_stmtTest() throws IOException {
+    public void falseWhileStmtTest() throws IOException {
         String program = "while (false) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -610,7 +610,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void trueWhile_stmtTest() throws IOException {
+    public void trueWhileStmtTest() throws IOException {
         String program = "while (true) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -684,7 +684,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void stringFunc_defTest() throws IOException {
+    public void stringFuncDefTest() throws IOException {
         String program = "string s\n" +
                 "func string b(string s) {\n" +
                 "return s\n" +
@@ -703,7 +703,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void doubleFunc_defTest() throws IOException {
+    public void doubleFuncDefTest() throws IOException {
         String program = "double a\n" +
                 "func double b(double a) {\n" +
                 "return a\n" +
@@ -722,7 +722,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void intFunc_defTest() throws IOException {
+    public void intFuncDefTest() throws IOException {
         String program = "int a\n" +
                 "func int b(int a) {\n" +
                 "return a\n" +
@@ -741,7 +741,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void voidFunc_defTest() throws IOException {
+    public void voidFuncDefTest() throws IOException {
         String program = "func b() {\n" +
                 "return\n" +
                 "}";
@@ -809,7 +809,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void DoubleUnaryExprTest() throws IOException {
+    public void doubleUnaryExprTest() throws IOException {
         String program = "double a\n" +
                 "a := -23.12";
         String expected = "#include <stdio.h>\n" +
@@ -1142,7 +1142,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void functionAssign_stmtTest() throws IOException {
+    public void functionAssignStmtTest() throws IOException {
         String program = "int a\n" +
                 "func int b(int a) {\n" +
                 "return 1\n" +
@@ -1161,7 +1161,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void BooleanAssign_stmtTest() throws IOException {
+    public void booleanAssignStmtTest() throws IOException {
         String program = "boolean d\n" +
                 "d := true";
         String expected = "#include <stdio.h>\n" +
@@ -1174,7 +1174,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void integerAssign_stmtTest() throws IOException {
+    public void integerAssignStmtTest() throws IOException {
         String program = "int a\n" +
                 "a := 100";
         String expected = "#include <stdio.h>\n" +
@@ -1186,7 +1186,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void doubleAssign_stmtTest() throws IOException {
+    public void doubleAssignStmtTest() throws IOException {
         String program = "double b\n" +
                 "b := 52.04";
         String expected = "#include <stdio.h>\n" +
@@ -1199,7 +1199,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     @Test
-    public void stringAssign_stmtTest() throws IOException {
+    public void stringAssignStmtTest() throws IOException {
         String program = "string c\n" +
                 "c := \"Is anybody there?\"";
         String expected = "#include <stdio.h>\n" +
@@ -1402,7 +1402,7 @@ public class CCodeGenerationVisitorTest {
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         ErrorHandler errorhandler = new ErrorHandler();
         AstNode astNode = parseTree.accept(buildAstVisitor);
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(true, errorhandler);
+        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(false, errorhandler);
         astNode.accept(symbolTableFillingVisitor);
         Typechecker tc = new Typechecker(errorhandler);
         astNode.accept(tc);
