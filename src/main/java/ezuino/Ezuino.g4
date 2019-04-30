@@ -11,7 +11,6 @@ dcls
     ;
 dcl
     : type ID
-    | LISTDCL type ID
     ;
 stmts
     : stmt*
@@ -37,7 +36,7 @@ parenthesisExpr
     ;
 unaryExpr
     : parenthesisExpr
-    | op=('-'|'!') parenthesisExpr
+    | operator=('-'|'!') parenthesisExpr
     ;
 multiplicativeExpr
     : unaryExpr
@@ -108,7 +107,6 @@ INTDCL              : 'int' ;
 DOUBLEDCL           : 'double' ;
 STRINGDCL           : 'string' ;
 BOOLEANDCL          : 'boolean' ;
-LISTDCL                : 'list' ;
 // STATEMENTS
 ASSIGN              : ':=' ;
 // OPERATORS

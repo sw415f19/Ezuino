@@ -570,42 +570,6 @@ public class EzuinoLexerTest {
     }
 
     @Test
-    public void listAdd() throws IOException {
-        ErrorHandler errorHandler = parseProgram("list_add()");
-        assertFalse(errorHandler.hasErrors());
-    }
-
-    @Test
-    public void listAddParam() throws IOException {
-        ErrorHandler errorHandler = parseProgram("list_add(a)");
-        assertFalse(errorHandler.hasErrors());
-    }
-
-    @Test
-    public void listAddParams() throws IOException {
-        ErrorHandler errorHandler = parseProgram("list_add(a, b, c)");
-        assertFalse(errorHandler.hasErrors());
-    }
-
-    @Test
-    public void listRemove() throws IOException {
-        ErrorHandler errorHandler = parseProgram("list_remove()");
-        assertFalse(errorHandler.hasErrors());
-    }
-
-    @Test
-    public void listRemoveParam() throws IOException {
-        ErrorHandler errorHandler = parseProgram("list_remove(a)");
-        assertFalse(errorHandler.hasErrors());
-    }
-
-    @Test
-    public void listRemoveParams() throws IOException {
-        ErrorHandler errorHandler = parseProgram("list_remove(a, b, c)");
-        assertFalse(errorHandler.hasErrors());
-    }
-
-    @Test
     public void intListDcl() throws IOException {
         ErrorHandler errorHandler = parseProgram("list int myList 4 := (1, 2, 3)");
         assertTrue(errorHandler.hasErrors());
@@ -777,4 +741,5 @@ public class EzuinoLexerTest {
 
         return errorHandler;
     }
+
 }

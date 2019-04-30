@@ -3,8 +3,6 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.ListAddNode;
-import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
@@ -196,18 +194,6 @@ public class MissingReturnStmtVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-    }
-
-    @Override
-    public void visit(ListAddNode node) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void visit(ListRemoveNode node) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

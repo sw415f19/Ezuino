@@ -1,11 +1,11 @@
 package ezuino;
 
 import ast.AstNode;
+import astvisitors.CCodeGenerationVisitor;
 import astvisitors.FuncStructureVisitor;
 import astvisitors.IndentedPrintVisitor;
 import astvisitors.MissingReturnStmtVisitor;
 import astvisitors.ReturnStmtTypeCheckVisitor;
-import astvisitors.ListVisitor;
 import astvisitors.SymbolTableVisitor;
 import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
@@ -91,15 +91,11 @@ public class Main {
         ast.accept(new MissingReturnStmtVisitor(errorHandler));
 
         ast.accept(new FuncStructureVisitor(errorHandler));
-
-        ast.accept(new ListVisitor(errorHandler));
     }
 
     private static void codeGeneration(AstNode ast) {
 
-        // TODO: Create implementation
-        System.out.println("TODO" + ast.toString());
-
+        ast.accept(new CCodeGenerationVisitor(System.out));
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {

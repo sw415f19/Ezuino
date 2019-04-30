@@ -6,8 +6,6 @@ import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.ListAddNode;
-import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
@@ -40,6 +38,16 @@ public class FuncStructureVisitor extends AstVisitor {
             }
         }
 
+    }
+
+    private void checkSpecificType(ITypeNode node, Type expectedType) {
+        Type nodeType = node.getType();
+        if (nodeType == null) {
+            System.err.println("FuncStructureVisitor: Programming error: nodeType = null");
+        }
+        if (!nodeType.equals(expectedType)) {
+            errorHandler.unexpectedType(node, nodeType);
+        }
     }
 
     @Override
@@ -174,7 +182,7 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(EqualityExprNode node) {
         node.getLeftNode().accept(this);
-        node.getRelationalExprNode().accept(this);
+        node.getRightNode().accept(this);
 
     }
 
@@ -214,8 +222,11 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
-        // TODO Auto-generated method stub
-
+        List<AExpr> parameters = node.getParameters();
+        if (parameters.size() != 1) {
+            errorHandler.parameterLengthError(node.toString());
+        }
+        checkSpecificType(node.getParameters().get(0), Type.STRING);
     }
 
     @Override
@@ -226,23 +237,12 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(ListAddNode node) {
-
-    }
-
-    @Override
-    public void visit(ListRemoveNode node) {
-
-    }
-
-    @Override
     public void visit(IntegerCastNode node) {
 
     }
 
     @Override
     public void visit(DoubleCastNode node) {
-
     }
 
 }

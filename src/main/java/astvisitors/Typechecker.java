@@ -6,8 +6,6 @@ import ast.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.Func_callStmtNode;
-import ast.funcallstmt.ListAddNode;
-import ast.funcallstmt.ListRemoveNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
@@ -173,8 +171,8 @@ public class Typechecker extends AstVisitor {
     @Override
     public void visit(EqualityExprNode node) {
         node.getLeftNode().accept(this);
-        node.getRelationalExprNode().accept(this);
-        checkType(node.getLeftNode(), node.getRelationalExprNode());
+        node.getRightNode().accept(this);
+        checkType(node.getLeftNode(), node.getRightNode());
         node.setType(Type.BOOL);
     }
 
@@ -266,20 +264,6 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
-        for (AExpr var : node.getParameters()) {
-            var.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(ListAddNode node) {
-        for (AExpr var : node.getParameters()) {
-            var.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(ListRemoveNode node) {
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
