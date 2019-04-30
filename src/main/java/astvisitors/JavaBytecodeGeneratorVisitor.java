@@ -66,7 +66,7 @@ public class JavaBytecodeGeneratorVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-
+    		
     }
 
     @Override
@@ -113,6 +113,7 @@ public class JavaBytecodeGeneratorVisitor extends AstVisitor {
     public void visit(Return_stmtNode node) {
         if (node.getReturnExpr() != null) {
             node.getReturnExpr().accept(this);
+            stringBuilder.append(BytecodeInstructions.return_op);
         }
     }
 
@@ -161,6 +162,16 @@ public class JavaBytecodeGeneratorVisitor extends AstVisitor {
     public void visit(RelationalExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
+        
+        if(node.getOperator().equals("<") || node.getOperator().equals(">=")) {
+        	stringBuilder.append("aawda");
+        }
+        else if(node.getOperator().equals(">") || node.getOperator().equals("<=")) {
+        	
+        }
+        else {
+        	throw new RuntimeException("Bad operator, should never get here");
+        }
     }
 
     @Override

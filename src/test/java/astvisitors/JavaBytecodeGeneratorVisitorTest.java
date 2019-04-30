@@ -21,8 +21,8 @@ import generated.EzuinoParser;
 public class JavaBytecodeGeneratorVisitorTest {
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void boolTest() {
+		String program = "1 < 3";
 	}
 
 	private String getJBCode(String input) throws IOException {
