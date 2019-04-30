@@ -74,17 +74,15 @@ public class Main {
     }
 
     private static void contextualAnalysis(AstNode ast, ErrorHandler errorHandler) {
-        IndentedPrintVisitor indentedPrintVisitor = new IndentedPrintVisitor();
-
-        ast.acceptLevel(indentedPrintVisitor, 0);
 
         boolean printDcl = true;
+        ast.accept(new IndentedPrintVisitor());
 
         ast.accept(new SymbolTableVisitor(printDcl, errorHandler));
-        ast.acceptLevel(indentedPrintVisitor, 0);
+        ast.accept(new IndentedPrintVisitor());
 
         ast.accept(new Typechecker(errorHandler));
-        ast.acceptLevel(indentedPrintVisitor, 0);
+        ast.accept(new IndentedPrintVisitor());
 
         ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
 

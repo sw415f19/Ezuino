@@ -2,7 +2,6 @@ package ast.expr;
 
 import ast.expr.aexpr.AEqualityExpr;
 import ast.expr.aexpr.ARelationalExpr;
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class EqualityExprNode extends AEqualityExpr {
@@ -20,11 +19,6 @@ public class EqualityExprNode extends AEqualityExpr {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
-	
-	@Override
-	public void acceptLevel(AstLevelVisitor v, int level) {
-		v.visitLevel(this, level);
-	}
 
     public AEqualityExpr getLeftNode() {
         return leftNode;
@@ -40,6 +34,6 @@ public class EqualityExprNode extends AEqualityExpr {
 
     @Override
     public String toString() {
-        return super.toString() + "{ operator: "+ operator + " type: " + type +  " }";
+        return super.toString() + "{ operator: " + operator + " type: " + type + " }";
     }
 }
