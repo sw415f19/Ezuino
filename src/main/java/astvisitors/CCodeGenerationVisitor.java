@@ -220,11 +220,6 @@ public class CCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(ParametersNode node) {
-        // ParametersNode does currently not have an implementation
-    }
-
-    @Override
     public void visit(ParenthesisExprNode node) {
         out.print("(");
         node.getNode().accept(this);

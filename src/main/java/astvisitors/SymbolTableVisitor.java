@@ -161,11 +161,6 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(ParametersNode node) {
-
-    }
-
-    @Override
     public void visit(IdNode node) {
         node.setType(getVariableType(node.getVal()));
     }

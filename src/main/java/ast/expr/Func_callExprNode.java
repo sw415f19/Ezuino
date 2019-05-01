@@ -2,7 +2,6 @@ package ast.expr;
 
 import ast.expr.aexpr.AExpr;
 import ast.expr.aexpr.APrimaryExpr;
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 import java.util.ArrayList;
@@ -12,14 +11,12 @@ public class Func_callExprNode extends APrimaryExpr {
     private String ID;
     private ArrayList<AExpr> parameters = new ArrayList<AExpr>();
 
-
     public Func_callExprNode(String ID, ArrayList<AExpr> parameters) {
         this.ID = ID;
         this.parameters = parameters;
     }
 
-    public String getID()
-    {
+    public String getID() {
         return ID;
     }
 
@@ -33,13 +30,8 @@ public class Func_callExprNode extends APrimaryExpr {
     }
 
     @Override
-    public void acceptLevel(AstLevelVisitor v, int level) {
-        v.visitLevel(this, level);
-    }
-
-    @Override
     public String toString() {
-        return super.toString() + " { ID: " + this.ID + " type: " + type +  " }";
+        return super.toString() + " { ID: " + this.ID + " type: " + type + " }";
     }
 
 }

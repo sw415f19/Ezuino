@@ -2,7 +2,6 @@ package ast.expr;
 
 import ast.expr.aexpr.AMultiplicativeExpr;
 import ast.expr.aexpr.AUnaryExpr;
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class MultiplicativeExprNode extends AMultiplicativeExpr {
@@ -20,11 +19,6 @@ public class MultiplicativeExprNode extends AMultiplicativeExpr {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
-	
-	@Override
-	public void acceptLevel(AstLevelVisitor v, int level) {
-		v.visitLevel(this, level);
-	}
 
     public AMultiplicativeExpr getLeftNode() {
         return leftNode;
@@ -37,9 +31,9 @@ public class MultiplicativeExprNode extends AMultiplicativeExpr {
     public AUnaryExpr getRightNode() {
         return rightNode;
     }
-    
+
     @Override
     public String toString() {
-    	return super.toString() + "{ operator: " + operator + " type: " + type +  " }";
+        return super.toString() + "{ operator: " + operator + " type: " + type + " }";
     }
 }

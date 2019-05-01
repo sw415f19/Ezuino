@@ -141,11 +141,6 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(ParametersNode node) {
-
-    }
-
-    @Override
     public void visit(AdditiveExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);

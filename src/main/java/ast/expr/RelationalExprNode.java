@@ -1,7 +1,6 @@
 package ast.expr;
 
 import ast.expr.aexpr.*;
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class RelationalExprNode extends ARelationalExpr {
@@ -19,11 +18,6 @@ public class RelationalExprNode extends ARelationalExpr {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
-	
-	@Override
-	public void acceptLevel(AstLevelVisitor v, int level) {
-		v.visitLevel(this, level);
-	}
 
     public ARelationalExpr getLeftNode() {
         return leftNode;
@@ -39,6 +33,6 @@ public class RelationalExprNode extends ARelationalExpr {
 
     @Override
     public String toString() {
-        return super.toString() + "{ operator: "+ operator + " type: " + type +  " }";
+        return super.toString() + "{ operator: " + operator + " type: " + type + " }";
     }
 }

@@ -133,10 +133,6 @@ public class MissingReturnStmtVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(ParametersNode node) {
-    }
-
-    @Override
     public void visit(AdditiveExprNode node) {
     }
 

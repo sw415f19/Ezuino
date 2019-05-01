@@ -3,243 +3,309 @@ package astvisitors;
 import ast.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
-import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.PrintNode;
-import ast.funcallstmt.cast.DoubleCastNode;
-import ast.funcallstmt.cast.IntegerCastNode;
-import ast.type.DoubleLiteral;
-import ast.type.IdNode;
-import ast.type.IntegerLiteral;
-import ast.type.StringLiteral;
+import ast.funcallstmt.*;
+import ast.funcallstmt.cast.*;
+import ast.type.*;
 
-public class IndentedPrintVisitor extends AstLevelVisitor {
+public class IndentedPrintVisitor extends AstVisitor {
 
-    public void print(AstNode node, int level) {
+    private StringBuilder sb = new StringBuilder();
+    private int level;
+
+    private void print(AstNode node) {
         String resultString = "";
         resultString += level > 0 ? new String(new char[level]).replace("\0", "   ") : "";
         resultString += "+- " + node.toString();
-        System.out.println(resultString);
+        sb.append(resultString + "\n");
+    }
+
+    private void end() {
+        System.out.println(sb.toString());
+    }
+
+    private void indentLevel() {
+        level++;
+    }
+
+    private void unindentLevel() {
+        level--;
     }
 
     @Override
-    public void visitLevel(Func_callExprNode node, int level) {
-        print(node, level);
+    public void visit(Func_callExprNode node) {
+        print(node);
+        indentLevel();
         for (AExpr child : node.getParameters()) {
-            child.acceptLevel(this, level + 1);
+            child.accept(this);
         }
+        unindentLevel();
+
     }
 
     @Override
-    public void visitLevel(BlockNode node, int level) {
-        print(node, level);
+    public void visit(BlockNode node) {
+        print(node);
+        indentLevel();
         if (node.getDclsNode() != null) {
-            node.getDclsNode().acceptLevel(this, level + 1);
+            node.getDclsNode().accept(this);
         }
         if (node.getStmtsNode() != null) {
-            node.getStmtsNode().acceptLevel(this, level + 1);
+            node.getStmtsNode().accept(this);
         }
         if (node.getReturnstmtNode() != null) {
-            node.getReturnstmtNode().acceptLevel(this, level + 1);
+            node.getReturnstmtNode().accept(this);
         }
+        unindentLevel();
+
     }
 
     @Override
-    public void visitLevel(Func_defNode node, int level) {
-        print(node, level);
+    public void visit(Func_defNode node) {
+        print(node);
+        indentLevel();
         for (DclNode parameter : node.getParameters()) {
-            parameter.acceptLevel(this, level + 1);
+            parameter.accept(this);
         }
-        node.getBlockNode().acceptLevel(this, level + 1);
+        node.getBlockNode().accept(this);
+        unindentLevel();
+
     }
 
     @Override
-    public void visitLevel(Return_stmtNode node, int level) {
-        print(node, level);
-        /* If the return stmt is not null ie. a void return */
+    public void visit(Return_stmtNode node) {
+        print(node);
+        indentLevel();
         if (node.getReturnExpr() != null) {
-            node.getReturnExpr().acceptLevel(this, level + 1);
+            node.getReturnExpr().accept(this);
         }
+        unindentLevel();
+
     }
 
     @Override
-    public void visitLevel(If_stmtNode node, int level) {
-        print(node, level);
-        node.getExpr().acceptLevel(this, level + 1);
-        node.getIfBlock().acceptLevel(this, level + 1);
+    public void visit(If_stmtNode node) {
+        print(node);
+        indentLevel();
+        node.getExpr().accept(this);
+        node.getIfBlock().accept(this);
         BlockNode elseBlock = node.getElseBlock();
         if (elseBlock != null) {
-            elseBlock.acceptLevel(this, level + 1);
+            elseBlock.accept(this);
         }
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(StartNode node, int level) {
-        print(node, level);
-        node.getDcls().acceptLevel(this, level + 1);
-        node.getStmts().acceptLevel(this, level + 1);
+    public void visit(StartNode node) {
+        print(node);
+        indentLevel();
+        node.getDcls().accept(this);
+        node.getStmts().accept(this);
+        unindentLevel();
+        end();
 
     }
 
     @Override
-    public void visitLevel(BooleanLiteral node, int level) {
-        print(node, level);
+    public void visit(BooleanLiteral node) {
+        print(node);
+
     }
 
     @Override
-    public void visitLevel(StmtsNode node, int level) {
-        print(node, level);
+    public void visit(StmtsNode node) {
+        print(node);
+        indentLevel();
         int childCount = node.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            node.getChild(i).acceptLevel(this, level + 1);
+            node.getChild(i).accept(this);
         }
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(DclNode node, int level) {
-        print(node, level);
+    public void visit(DclNode node) {
+        print(node);
 
     }
 
     @Override
-    public void visitLevel(DclsNode node, int level) {
-        print(node, level);
+    public void visit(DclsNode node) {
+        print(node);
+        indentLevel();
         int childCount = node.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            node.getChild(i).acceptLevel(this, level + 1);
+            node.getChild(i).accept(this);
         }
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(While_stmtNode node, int level) {
-        print(node, level);
-        node.getExprNode().acceptLevel(this, level + 1);
-        node.getBlockNode().acceptLevel(this, level + 1);
-    }
-
-    @Override
-    public void visitLevel(ParametersNode node, int level) {
-        System.out.println("In ParametersNode");
+    public void visit(While_stmtNode node) {
+        print(node);
+        indentLevel();
+        node.getExprNode().accept(this);
+        node.getBlockNode().accept(this);
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(Assign_stmtNode node, int level) {
-        print(node, level);
-        node.getExprNode().acceptLevel(this, level + 1);
+    public void visit(AdditiveExprNode node) {
+        print(node);
+
+        indentLevel();
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        unindentLevel();
     }
 
     @Override
-    public void visitLevel(IntegerLiteral node, int level) {
-        print(node, level);
-    }
-
-    @Override
-    public void visitLevel(DoubleLiteral node, int level) {
-        print(node, level);
-    }
-
-    @Override
-    public void visitLevel(StringLiteral node, int level) {
-        print(node, level);
-    }
-
-    @Override
-    public void visitLevel(IdNode node, int level) {
-        print(node, level);
-    }
-
-    @Override
-    public void visitLevel(RelationalExprNode node, int level) {
-        print(node, level);
-        node.getLeftNode().acceptLevel(this, level + 1);
-        node.getRightNode().acceptLevel(this, level + 1);
-    }
-
-    @Override
-    public void visitLevel(EqualityExprNode node, int level) {
-        print(node, level);
-        node.getLeftNode().acceptLevel(this, level + 1);
-        node.getRightNode().acceptLevel(this, level + 1);
-    }
-
-    @Override
-    public void visitLevel(ParenthesisExprNode node, int level) {
-        print(node, level);
-        node.getNode().acceptLevel(this, level + 1);
-    }
-
-    @Override
-    public void visitLevel(LogicalAndExprNode node, int level) {
-        print(node, level);
-        node.getLeftNode().acceptLevel(this, level + 1);
-        node.getRightNode().acceptLevel(this, level + 1);
-    }
-
-    @Override
-    public void visitLevel(AdditiveExprNode node, int level) {
-        print(node, level);
-        node.getLeftNode().acceptLevel(this, level + 1);
-        node.getRightNode().acceptLevel(this, level + 1);
+    public void visit(MultiplicativeExprNode node) {
+        print(node);
+        indentLevel();
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(MultiplicativeExprNode node, int level) {
-        print(node, level);
-        node.getLeftNode().acceptLevel(this, level + 1);
-        node.getRightNode().acceptLevel(this, level + 1);
+    public void visit(LogicalAndExprNode node) {
+        print(node);
+        indentLevel();
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(UnaryExprNode node, int level) {
-        print(node, level);
-        node.getNode().acceptLevel(this, level + 1);
+    public void visit(LogicalOrExprNode node) {
+        print(node);
+        indentLevel();
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(LogicalOrExprNode node, int level) {
-        print(node, level);
-        node.getLeftNode().acceptLevel(this, level + 1);
-        node.getRightNode().acceptLevel(this, level + 1);
+    public void visit(RelationalExprNode node) {
+        print(node);
+        indentLevel();
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(PrintNode node, int level) {
-        print(node, level);
+    public void visit(EqualityExprNode node) {
+        print(node);
+        indentLevel();
+        node.getLeftNode().accept(this);
+        node.getRightNode().accept(this);
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(ParenthesisExprNode node) {
+        print(node);
+        indentLevel();
+        node.getNode().accept(this);
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(UnaryExprNode node) {
+        print(node);
+        indentLevel();
+        node.getNode().accept(this);
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(PrintNode node) {
+        print(node);
+        indentLevel();
         for (AExpr child : node.getParameters()) {
-            child.acceptLevel(this, level + 1);
+            child.accept(this);
         }
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(CustomFuncCallStmtNode node, int level) {
-        print(node, level);
+    public void visit(CustomFuncCallStmtNode node) {
+        print(node);
+        indentLevel();
         for (AExpr child : node.getParameters()) {
-            child.acceptLevel(this, level + 1);
+            child.accept(this);
         }
+        unindentLevel();
 
     }
 
     @Override
-    public void visitLevel(DoubleCastNode node, int level) {
-        print(node, level);
+    public void visit(IntegerCastNode node) {
+        print(node);
+        indentLevel();
         for (AExpr child : node.getParameters()) {
-            child.acceptLevel(this, level + 1);
+            child.accept(this);
         }
+        unindentLevel();
+
     }
 
     @Override
-    public void visitLevel(IntegerCastNode node, int level) {
-        print(node, level);
+    public void visit(DoubleCastNode node) {
+        print(node);
+        indentLevel();
         for (AExpr child : node.getParameters()) {
-            child.acceptLevel(this, level + 1);
+            child.accept(this);
         }
+        unindentLevel();
+
     }
+
+    @Override
+    public void visit(Assign_stmtNode node) {
+        print(node);
+        indentLevel();
+        node.getExprNode().accept(this);
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(IntegerLiteral node) {
+        print(node);
+
+    }
+
+    @Override
+    public void visit(DoubleLiteral node) {
+        print(node);
+
+    }
+
+    @Override
+    public void visit(StringLiteral node) {
+        print(node);
+
+    }
+
+    @Override
+    public void visit(IdNode node) {
+        print(node);
+
+    }
+
 }
