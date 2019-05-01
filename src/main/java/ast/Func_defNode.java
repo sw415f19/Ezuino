@@ -40,7 +40,10 @@ public class Func_defNode extends StmtNode implements ITypeNode {
     }
 
     public String toString() {
-        return "Func_defNode{" + "ID: \"" + ID + "\" " + "type: " + type + " " + '}';
+        return "Func_defNode{" +
+                "ID: \"" + ID + "\" " +
+                "type: " + type + " " +
+                '}';
     }
 
     @Override
