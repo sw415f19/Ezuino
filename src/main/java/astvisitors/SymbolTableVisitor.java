@@ -225,6 +225,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
+        getFunctionType(node.getId());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
