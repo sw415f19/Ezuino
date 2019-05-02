@@ -1,7 +1,8 @@
 package astvisitors;
 
 import java.io.PrintStream;
-
+import java.util.ArrayList;
+import java.util.List;
 import ast.Assign_stmtNode;
 import ast.BlockNode;
 import ast.BooleanLiteral;
@@ -37,9 +38,12 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
 	private PrintStream out;
 	private StringBuilder sb;
+	private List<String> currentVariableEnvironment;
 	
 	public JasminCodeGeneratorVisitor(PrintStream out) {
 		this.out = out;
+		currentVariableEnvironment = new ArrayList<String>();
+		sb = new StringBuilder();
 	}
 	@Override
     public void visit(StartNode node) {
@@ -50,6 +54,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
     @Override
     public void visit(BlockNode node) {
+    	// Need to remember the state of the environment, as we cannot rollback the changes made in this block otherwise
+    	List<String> oldVariableEnvironment = new ArrayList<String>(currentVariableEnvironment);
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
         }
@@ -59,16 +65,40 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().accept(this);
         }
+        currentVariableEnvironment = oldVariableEnvironment;
     }
 
     @Override
     public void visit(DclNode node) {
-    		
+    		currentVariableEnvironment.add(node.getID());
+    		switch(node.getType()){
+    		case INT: case BOOL:
+    			appendLine("iconst_0");
+    			appendLine("istore " + currentVariableEnvironment.indexOf(node.getID()));
+    			break;
+    		case DOUBLE:
+    			appendLine("dconst_0");
+    			appendLine("dstore " + currentVariableEnvironment.indexOf(node.getID()));
+    			break;
+    		case STRING:
+    			appendLine("new java/lang/String");
+    			appendLine("astore " + currentVariableEnvironment.indexOf(node.getID()));
+    		}
     }
 
     @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
+        switch(node.getExprNode().getType()) {
+        case INT: case BOOL:
+        	appendLine("istore " + currentVariableEnvironment.indexOf(node.getId()));
+        	break;
+        case DOUBLE:
+        	appendLine("dstore " + currentVariableEnvironment.indexOf(node.getId()));
+        	break;
+        case STRING:
+        	appendLine("astore " + currentVariableEnvironment.indexOf(node.getId()));
+        }
     }
 
     @Override
@@ -80,22 +110,29 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
     @Override
     public void visit(IntegerLiteral node) {
-
+    	appendLine("bipush " + node.getVal());
     }
 
     @Override
     public void visit(DoubleLiteral node) {
-
+    	appendLine("ldc " + node.getVal());
     }
 
     @Override
     public void visit(BooleanLiteral node) {
-
+    	switch(node.getBoolval().toUpperCase()) {
+    	case "FALSE":
+    		appendLine("bipush 1");
+    		break;
+    	case "TRUE":
+    		appendLine("bipush 0");
+    		break;
+    	}
     }
 
     @Override
     public void visit(StringLiteral node) {
-
+    	appendLine("ldc " + node.getVal() + "");
     }
 
     @Override
@@ -240,6 +277,10 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 	public void visit(DoubleCastNode node) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void appendLine(String s) {
+		sb.append(s).append('\n');
 	}
 
 }

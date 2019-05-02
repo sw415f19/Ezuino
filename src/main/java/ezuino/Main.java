@@ -22,7 +22,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import javax.swing.*;
+
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -95,10 +98,15 @@ public class Main {
         FuncStructureVisitor fsv = new FuncStructureVisitor(errorhandler);
         astNode.accept(fsv);
 
-        CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
-        astNode.accept(cCodeGenerationVisitor);
+        //CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(System.out);
+        //astNode.accept(cCodeGenerationVisitor);
         
+        PrintStream oldOut = System.out;
+        File jasminFile = File.createTempFile("jasmincode", ".j");
+        PrintStream jasminPrintStream = new PrintStream(jasminFile);
         JasminCodeGeneratorVisitor jasminCodeGenerator = new JasminCodeGeneratorVisitor(System.out);
+        astNode.accept(jasminCodeGenerator);
+        Runtime.getRuntime().exec("java -jar " + jasminFile.getCanonicalPath());
 
         errorhandler.printErrorList();
     }
