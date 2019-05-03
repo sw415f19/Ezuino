@@ -191,10 +191,10 @@ public class Typechecker extends AstVisitor {
     private void checkSpecificType(ITypeNode node, Type expectedType) {
         Type nodeType = node.getType();
         if (nodeType == null) {
-            System.err.println("node null in 184 :(");
+            System.err.println("Compiler error. nodeType was null in Typechecker.");
         }
         if (nodeType != expectedType) {
-            errorHandler.unexpectedType(node, nodeType);
+            errorHandler.unexpectedType(node, expectedType);
         }
     }
 
