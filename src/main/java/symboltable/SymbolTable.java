@@ -15,10 +15,9 @@ public class SymbolTable {
     }
 
     public boolean enterSymbol(String key, ITypeNode node) {
-        if (!symbolMap.containsKey(key) && notEmpty(key)) {
-            symbolMap.put(key, node);
-        }
-        return notEmpty(key);
+        boolean result = !symbolMap.containsKey(key);
+        symbolMap.put(key, node);
+        return result;
     }
 
     private boolean isGlobalScope() {
@@ -26,12 +25,12 @@ public class SymbolTable {
     }
 
     public Type retrieveSymbol(String key) {
-        
+
         if (key.equalsIgnoreCase("TRUE") || key.equalsIgnoreCase("FALSE"))
             return null;
 
         if (symbolMap.containsKey(key)) {
-             return symbolMap.get(key).getType();
+            return symbolMap.get(key).getType();
         }
 
         if (isGlobalScope()) {
@@ -39,10 +38,6 @@ public class SymbolTable {
         }
 
         return this.parentTable.retrieveSymbol(key);
-    }
-
-    private boolean notEmpty(String key) {
-        return ("<missing ID>" != key.intern());
     }
 
     public ITypeNode getSymbolNode(String id) {
