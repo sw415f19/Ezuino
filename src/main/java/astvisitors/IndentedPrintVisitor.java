@@ -1,6 +1,7 @@
 package astvisitors;
 
 import ast.*;
+import ast.arduino.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.*;
@@ -8,7 +9,6 @@ import ast.funcallstmt.cast.*;
 import ast.type.*;
 
 public class IndentedPrintVisitor extends AstVisitor {
-
     private StringBuilder sb = new StringBuilder();
     private int level;
 
@@ -308,4 +308,103 @@ public class IndentedPrintVisitor extends AstVisitor {
 
     }
 
+    @Override
+    public void visit(AnalogReadNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(AnalogWriteNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(DelayMicroNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(DelayNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(DigitalReadNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(DigitalWriteNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(SetPinModeNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(SerialBeginNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(SerialEndNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+    }
+
+    @Override
+    public void visit(PinLevelNode node) {
+        print(node);
+    }
+
+    @Override
+    public void visit(PinModeNode node) {
+        print(node);
+    }
 }

@@ -1,6 +1,7 @@
 package astvisitors;
 
 import ast.*;
+import ast.arduino.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
@@ -310,7 +311,79 @@ public class ArduinoCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(AstNode astNode) {
-        super.visit(astNode);
+    public void visit(AnalogReadNode node) {
+        builder.append("analogRead(");
+        node.getParameters().get(0).accept(this);
+        builder.append(");\n");
+    }
+
+    @Override
+    public void visit(AnalogWriteNode node) {
+        builder.append("analogWrite(");
+        node.getParameters().get(0).accept(this);
+        builder.append(", ");
+        node.getParameters().get(1).accept(this);
+        builder.append(");\n");
+    }
+
+    @Override
+    public void visit(DelayMicroNode node) {
+        builder.append("delayMicroseconds(");
+        node.getParameters().get(0).accept(this);
+        builder.append(");\n");
+    }
+
+    @Override
+    public void visit(DelayNode node) {
+        builder.append("delay(");
+        node.getParameters().get(0).accept(this);
+        builder.append(");\n");
+    }
+
+    @Override
+    public void visit(DigitalReadNode node) {
+        builder.append("digitalRead(");
+        node.getParameters().get(0).accept(this);
+        builder.append(");\n");
+    }
+
+    @Override
+    public void visit(DigitalWriteNode node) {
+        builder.append("digitalWrite(");
+        node.getParameters().get(0).accept(this);
+        builder.append(", ");
+        node.getParameters().get(1).accept(this);
+        builder.append(");\n");
+    }
+
+    @Override
+    public void visit(SetPinModeNode node) {
+        builder.append("pinMode(");
+        node.getParameters().get(0).accept(this);
+        builder.append(", ");
+        node.getParameters().get(1).accept(this);
+        builder.append(");\n");
+    }
+
+    @Override
+    public void visit(SerialBeginNode node) {
+        builder.append("Serial.begin(");
+        node.getParameters().get(0).accept(this);
+        builder.append(");\n");
+    }
+
+    @Override
+    public void visit(SerialEndNode node) {
+        builder.append("Serial.end();\n");
+    }
+
+    @Override
+    public void visit(PinLevelNode node) {
+        builder.append(node.getVal());
+    }
+
+    @Override
+    public void visit(PinModeNode node) {
+        builder.append(node.getVal());
     }
 }
