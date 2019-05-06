@@ -3,6 +3,8 @@ package astvisitors;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -141,6 +143,44 @@ public class ReturnStmtTypeCheckerTest {
         String program = "func main() { if(1<2) { return } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
+    }
+
+    @Test
+    public void whileTestTypeNotTheSame() throws IOException {
+        String testProgram = "func int main() {\n" +
+                "    while(1<2){\n" +
+                "        return \"hello\"\n" +
+                "    }\n" +
+                "    return \"my world\"\n" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void returnTwoDifferentTypesError() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  if(true){\n" +
+                "    return 3.4\n" +
+                "  }\n" +
+                "  else {\n" +
+                "    return 4\n" +
+                "  }\n" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void returnAsBreakReturnTypeError() throws IOException {
+        String testProgram = "func hello(){\n" +
+                "  if(true){\n" +
+                "    return 1\n" +
+                "  }\n" +
+                "  return\n" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
     }
 
     private ErrorHandler parseProgram(String program) {
