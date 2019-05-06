@@ -1,14 +1,14 @@
 package ast.funcallstmt;
 
-import java.util.ArrayList;
-
 import ast.expr.aexpr.AExpr;
 import astvisitors.AstVisitor;
 
+import java.util.List;
+
 public class PrintNode extends Func_callStmtNode {
 
-    public PrintNode(ArrayList<AExpr> parameters) {
-        this.parameters = parameters;
+    public PrintNode(String id, List<AExpr> parameters) {
+        super(id, parameters);
     }
 
     @Override
