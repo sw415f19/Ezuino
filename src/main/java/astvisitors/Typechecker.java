@@ -250,6 +250,7 @@ public class Typechecker extends AstVisitor {
             break;
         default:
             System.err.println("Compiler error! Unexpected operator in UnaryExprNode in Typechecker");
+            break;
         }
     }
 
