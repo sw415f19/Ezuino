@@ -56,11 +56,7 @@ public class MissingReturnStmtTest {
 
     @Test
     public void whileTestNotGuaranteedReturn() throws IOException {
-        String testProgram = "func int main() {\n" +
-                "    while(1<2){\n" +
-                "        return 1\n" +
-                "    }\n" +
-                "}\n";
+        String testProgram = "func int main(){ while(1<2){ return 1 } }";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
@@ -153,15 +149,54 @@ public class MissingReturnStmtTest {
 
     @Test
     public void missingElseStmtReturnError() throws IOException {
-        String testProgram = "func int hello(){\n" +
-                "  int a\n" +
-                "  if(true){\n" +
-                "        return a\n" +
-                "  } \n" +
-                "}";
+        String testProgram = "func int hello(){ int a if(true){ return a } }";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
 
+    }
+
+    @Test
+    public void emptyIfStmtAndReturnValue() throws IOException {
+        String testProgram = "func int hello(){ if(true) { } return 1 }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void multipleIfsSameLevel() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "    if(true) {\n" +
+                "        int a\n" +
+                "        return a\n" +
+                "    }\n" +
+                "    if(true){\n" +
+                "        int b\n" +
+                "        return b\n" +
+                "    }\n" +
+                "    if(true) {\n" +
+                "        int c\n" +
+                "        return c\n" +
+                "    }\n" +
+                "    else{" +
+                "       return 1" +
+                "    }" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void returnAsBreakReturn() throws IOException {
+        String testProgram = "func hello(){ if(true){ return } return }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void funcWithWhileStmtWithoutReturn() throws IOException {
+        String testProgram = "func int main(){ while(1<2){ int a } return 1 }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     private ErrorHandler parseProgram(String program) {

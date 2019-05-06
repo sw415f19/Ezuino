@@ -147,40 +147,44 @@ public class ReturnStmtTypeCheckerTest {
 
     @Test
     public void whileTestTypeNotTheSame() throws IOException {
-        String testProgram = "func int main() {\n" +
-                "    while(1<2){\n" +
-                "        return \"hello\"\n" +
-                "    }\n" +
-                "    return \"my world\"\n" +
-                "}";
+        String testProgram = "func int main() { while(1<2){ return \"hi\" } return \"sup\"}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void returnTwoDifferentTypesError() throws IOException {
-        String testProgram = "func int hello(){\n" +
-                "  if(true){\n" +
-                "    return 3.4\n" +
-                "  }\n" +
-                "  else {\n" +
-                "    return 4\n" +
-                "  }\n" +
-                "}";
+        String testProgram = "func int hello(){ if(true){ return 3.4 } else { return 4 }}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void returnAsBreakReturnTypeError() throws IOException {
-        String testProgram = "func hello(){\n" +
-                "  if(true){\n" +
-                "    return 1\n" +
-                "  }\n" +
-                "  return\n" +
-                "}";
+        String testProgram = "func hello(){ if(true){ return 1 } return }";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void whileTest() throws IOException {
+        String testProgram = "func int main(){ while(1<2) { return 1 } return 1 }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void whileTestVoidFunc() throws IOException {
+        String testProgram = "func main(){ while(1<2){ int a } }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void ifStmtAfterWhile() throws IOException {
+        String testProgram = "func int main(){ while(1<2){ } if(1>2) { } return 1 }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     private ErrorHandler parseProgram(String program) {
