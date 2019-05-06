@@ -6,4 +6,6 @@ public enum Type {
 	BOOL,
 	STRING,
 	VOID,
+	PINMODE,
+	PINLEVEL,
 }
