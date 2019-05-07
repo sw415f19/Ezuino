@@ -17,7 +17,8 @@ import java.io.PrintStream;
 import java.util.Iterator;
 
 public class CCodeGenerationVisitor extends AstVisitor {
-    private PrintStream out;
+    private final StringBuilder builder = new StringBuilder();
+    private final PrintStream out;
 
     public CCodeGenerationVisitor(PrintStream printStream) {
         this.out = printStream;
@@ -25,35 +26,35 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
-        out.print(node.getId() + "(");
+        builder.append(node.getId()).append("(");
         for (Iterator<AExpr> iterator = node.getParameters().iterator(); iterator.hasNext(); ) {
             AExpr exp = iterator.next();
             exp.accept(this);
             // Adds separating comma if there is another parameter
             if (iterator.hasNext()) {
-                out.print(", ");
+                builder.append(", ");
             }
         }
-        out.print(");\n");
+        builder.append(");\n");
     }
 
     @Override
     public void visit(Func_callExprNode node) {
-        out.print(node.getID() + "(");
+        builder.append(node.getID()).append("(");
         for (Iterator<AExpr> iterator = node.getParameters().iterator(); iterator.hasNext(); ) {
             AExpr exp = iterator.next();
             exp.accept(this);
             // Adds separating comma if there is another parameter
             if (iterator.hasNext()) {
-                out.print(", ");
+                builder.append(", ");
             }
         }
-        out.print(")");
+        builder.append(")");
     }
 
     @Override
     public void visit(BlockNode node) {
-        out.print("{\n");
+        builder.append("{\n");
         // Checks for declarations
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
@@ -64,9 +65,9 @@ public class CCodeGenerationVisitor extends AstVisitor {
         }
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().accept(this);
-            out.print(";\n");
+            builder.append(";\n");
         }
-        out.print("}\n");
+        builder.append("}\n");
     }
 
     @Override
@@ -75,7 +76,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
         // Formats the defined type to C types
         switch (node.getType()) {
             case INT:
-                nodeType="int ";
+                nodeType = "int ";
                 break;
             case DOUBLE:
                 nodeType = "double ";
@@ -90,39 +91,39 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 nodeType = "void ";
                 break;
         }
-        out.print(nodeType + node.getId() + "(");
+        builder.append(nodeType).append(node.getId()).append("(");
         for (Iterator<DclNode> iterator = node.getParameters().iterator(); iterator.hasNext(); ) {
             DclNode dclNode = iterator.next();
             dclNode.accept(this);
             // Adds separating comma if there is another parameter
             if (iterator.hasNext()) {
-                out.print(", ");
+                builder.append(", ");
             }
         }
-        out.print(") ");
+        builder.append(") ");
         node.getBlockNode().accept(this);
     }
 
     @Override
     public void visit(Return_stmtNode node) {
         if (node.getReturnExpr() == null) {
-            out.print("return");
+            builder.append("return");
         }
         else {
-            out.print("return ");
+            builder.append("return ");
             node.getReturnExpr().accept(this);
         }
     }
 
     @Override
     public void visit(If_stmtNode node) {
-        out.print("if (");
+        builder.append("if (");
         node.getExpr().accept(this);
-        out.print(") ");
+        builder.append(") ");
         node.getIfBlock().accept(this);
         // Checks if there is a else block to print
         if (node.getElseBlock() != null) {
-            out.print("else ");
+            builder.append("else ");
             node.getElseBlock().accept(this);
         }
     }
@@ -130,24 +131,26 @@ public class CCodeGenerationVisitor extends AstVisitor {
     @Override
     public void visit(StartNode node) {
         // includes
-        out.print("#include <stdio.h>\n" +
+        builder.append("#include <stdio.h>\n" +
                 "#include <string.h>\n");
         // open main
-        out.print("int main (void) {\n");
+        builder.append("int main (void) {\n");
         // start tree search
         node.getDcls().accept(this);
         node.getStmts().accept(this);
         // close main
-        out.print("}\n");
+        builder.append("}\n");
+        // prints the final string
+        out.print(builder.toString());
     }
 
     @Override
     public void visit(BooleanLiteral node) {
         if (node.getBoolval().equals("true")) {
-            out.print("1");
+            builder.append("1");
         }
         if (node.getBoolval().equals("false")) {
-            out.print("0");
+            builder.append("0");
         }
     }
 
@@ -166,7 +169,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
         // Formats the defined type to C types
         switch (node.getType()) {
             case INT:
-                nodeType="int ";
+                nodeType = "int ";
                 break;
             case DOUBLE:
                 nodeType = "double ";
@@ -180,77 +183,77 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 nodeType = "int ";
                 break;
         }
-        out.print(nodeType + node.getID() + arrayLength);
+        builder.append(nodeType).append(node.getID()).append(arrayLength);
     }
 
     @Override
     public void visit(DclsNode node) {
         if (node.getChildCount() == 1) {
             node.getChild(0).accept(this);
-            out.print(";\n");
+            builder.append(";\n");
         }
         else {
             for (Iterator<DclNode> iterator = node.getChildIterator(); iterator.hasNext(); ) {
                 DclNode dclNode = iterator.next();
                 dclNode.accept(this);
-                out.print(";\n");
+                builder.append(";\n");
             }
         }
     }
 
     @Override
     public void visit(While_stmtNode node) {
-        out.print("while (");
+        builder.append("while (");
         node.getExprNode().accept(this);
-        out.print(") ");
+        builder.append(") ");
         node.getBlockNode().accept(this);
     }
 
     @Override
     public void visit(Assign_stmtNode node) {
         if (node.getExprNode().getType().equals(Type.STRING)) {
-            out.print("strcpy(" + node.getId() + ", ");
+            builder.append("strcpy(").append(node.getId()).append(", ");
             node.getExprNode().accept(this);
-            out.print(");\n");
+            builder.append(");\n");
         }
         else {
-            out.print(node.getId() + " = ");
+            builder.append(node.getId()).append(" = ");
             node.getExprNode().accept(this);
-            out.print(";\n");
+            builder.append(";\n");
         }
     }
 
     @Override
     public void visit(ParenthesisExprNode node) {
-        out.print("(");
+        builder.append("(");
         node.getNode().accept(this);
-        out.print(")");
+        builder.append(")");
     }
 
     @Override
     public void visit(UnaryExprNode node) {
-        out.print(node.getOperator());
+        builder.append(node.getOperator());
         node.getNode().accept(this);
     }
 
     @Override
     public void visit(MultiplicativeExprNode node) {
         node.getLeftNode().accept(this);
-        out.print(node.getOperator());
+        builder.append(node.getOperator());
         node.getRightNode().accept(this);
     }
 
     @Override
     public void visit(AdditiveExprNode node) {
         node.getLeftNode().accept(this);
-        out.print(node.getOperator());
+        builder.append(node.getOperator());
         node.getRightNode().accept(this);
     }
 
     @Override
     public void visit(RelationalExprNode node) {
         node.getLeftNode().accept(this);
-        out.print(node.getOperator());
+        builder.append(node.getOperator());
         node.getRightNode().accept(this);
     }
 
@@ -258,12 +261,12 @@ public class CCodeGenerationVisitor extends AstVisitor {
     public void visit(EqualityExprNode node) {
         if (node.getOperator().equals("=")) {
             node.getLeftNode().accept(this);
-            out.print("==");
+            builder.append("==");
             node.getRightNode().accept(this);
         }
         else {
             node.getLeftNode().accept(this);
-            out.print(node.getOperator());
+            builder.append(node.getOperator());
             node.getRightNode().accept(this);
         }
     }
@@ -271,25 +274,25 @@ public class CCodeGenerationVisitor extends AstVisitor {
     @Override
     public void visit(LogicalAndExprNode node) {
         node.getLeftNode().accept(this);
-        out.print("&&");
+        builder.append("&&");
         node.getRightNode().accept(this);
     }
 
     @Override
     public void visit(LogicalOrExprNode node) {
         node.getLeftNode().accept(this);
-        out.print("||");
+        builder.append("||");
         node.getRightNode().accept(this);
     }
 
     @Override
     public void visit(IntegerLiteral node) {
-        out.print(node.getVal());
+        builder.append(node.getVal());
     }
 
     @Override
     public void visit(DoubleLiteral node) {
-        out.print(node.getVal());
+        builder.append(node.getVal());
     }
 
     @Override
@@ -298,86 +301,73 @@ public class CCodeGenerationVisitor extends AstVisitor {
             System.err.println("CCodeGenerationVisitor Error: String beyond maximum length!");
         }
         else {
-            out.print(node.getVal());
+            builder.append(node.getVal());
         }
     }
 
     @Override
     public void visit(IdNode node) {
-        out.print(node.getVal());
+        builder.append(node.getVal());
     }
 
     @Override
     public void visit(PrintNode node) {
-        out.print("printf(%s, ");
+        builder.append("printf(%s, ");
         for (AExpr exp : node.getParameters()) {
             exp.accept(this);
         }
-        out.print(");\n");
+        builder.append(");\n");
     }
 
     @Override
     public void visit(IntegerCastNode node) {
-
     }
 
     @Override
     public void visit(DoubleCastNode node) {
-
     }
 
     @Override
     public void visit(AnalogReadNode node) {
-
     }
 
     @Override
     public void visit(AnalogWriteNode node) {
-
     }
 
     @Override
     public void visit(DelayMicroNode node) {
-
     }
 
     @Override
     public void visit(DelayNode node) {
-
     }
 
     @Override
     public void visit(DigitalReadNode node) {
-
     }
 
     @Override
     public void visit(DigitalWriteNode node) {
-
     }
 
     @Override
     public void visit(SetPinModeNode node) {
-
     }
 
     @Override
     public void visit(SerialBeginNode node) {
-
     }
 
     @Override
     public void visit(SerialEndNode node) {
-
     }
 
     @Override
     public void visit(PinLevelNode node) {
-
     }
 
     @Override
     public void visit(PinModeNode node) {
-
     }
 }
