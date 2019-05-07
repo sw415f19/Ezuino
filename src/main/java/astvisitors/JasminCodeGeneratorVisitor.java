@@ -2,6 +2,7 @@ package astvisitors;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import ast.Assign_stmtNode;
 import ast.BlockNode;
@@ -14,6 +15,7 @@ import ast.ParametersNode;
 import ast.Return_stmtNode;
 import ast.StartNode;
 import ast.StmtsNode;
+import ast.Type;
 import ast.While_stmtNode;
 import ast.expr.AdditiveExprNode;
 import ast.expr.EqualityExprNode;
@@ -39,6 +41,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 	private PrintStream out;
 	private StringBuilder sb;
 	private List<String> currentVariableEnvironment;
+	private int labelCounter = 0;
+	private int currentStackSize = 0;
+	private int maxStackSize = 0;
 	
 	public JasminCodeGeneratorVisitor(PrintStream out) {
 		this.out = out;
@@ -47,8 +52,13 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 	}
 	@Override
     public void visit(StartNode node) {
+		appendLine(".class public program");
+		appendLine(".super java/lang/Object");
+		appendLine(".method public static main([Ljava/lang/String;)V");
         node.getDcls().accept(this);
         node.getStmts().accept(this);
+        appendLine(".limit stack " + maxStackSize);
+        appendLine(".end method");
         out.print(sb);
     }
 
@@ -71,6 +81,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     @Override
     public void visit(DclNode node) {
     		currentVariableEnvironment.add(node.getID());
+    		incrementStack();
     		switch(node.getType()){
     		case INT: case BOOL:
     			appendLine("iconst_0");
@@ -84,6 +95,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     			appendLine("new java/lang/String");
     			appendLine("astore " + currentVariableEnvironment.indexOf(node.getID()));
     		}
+    		decrementStack();
+    		
     }
 
     @Override
@@ -91,14 +104,16 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
         node.getExprNode().accept(this);
         switch(node.getExprNode().getType()) {
         case INT: case BOOL:
-        	appendLine("istore " + currentVariableEnvironment.indexOf(node.getId()));
+        	appendLine("istore " + currentVariableEnvironment.lastIndexOf(node.getId()));
+        	
         	break;
         case DOUBLE:
-        	appendLine("dstore " + currentVariableEnvironment.indexOf(node.getId()));
+        	appendLine("dstore " + currentVariableEnvironment.lastIndexOf(node.getId()));
         	break;
         case STRING:
-        	appendLine("astore " + currentVariableEnvironment.indexOf(node.getId()));
+        	appendLine("astore " + currentVariableEnvironment.lastIndexOf(node.getId()));
         }
+        decrementStack();
     }
 
     @Override
@@ -110,29 +125,33 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
     @Override
     public void visit(IntegerLiteral node) {
+    	incrementStack();
     	appendLine("bipush " + node.getVal());
     }
 
     @Override
     public void visit(DoubleLiteral node) {
+    	incrementStack();
     	appendLine("ldc " + node.getVal());
     }
 
     @Override
     public void visit(BooleanLiteral node) {
+    	incrementStack();
     	switch(node.getBoolval().toUpperCase()) {
     	case "FALSE":
-    		appendLine("bipush 1");
+    		appendLine("bipush 0");
     		break;
     	case "TRUE":
-    		appendLine("bipush 0");
+    		appendLine("bipush 1");
     		break;
     	}
     }
 
     @Override
     public void visit(StringLiteral node) {
-    	appendLine("ldc " + node.getVal() + "");
+    	incrementStack();
+    	appendLine("ldc " + node.getVal());
     }
 
     @Override
@@ -152,12 +171,28 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
     @Override
     public void visit(If_stmtNode node) {
-        node.getExpr().accept(this);
-        node.getIfBlock().accept(this);
-        BlockNode elseBlock = node.getElseBlock();
-        if (elseBlock != null) {
-            elseBlock.accept(this);
-        }
+
+    	BlockNode elseBlock = node.getElseBlock();
+    	if(elseBlock == null) {
+    		int skipLabel = getNextLabel();
+    		node.getExpr().accept(this);
+    		appendLine("ifeq " + skipLabel); //if condition is false, skip (eq checks top of stack for a 0)
+    		decrementStack();
+    		node.getIfBlock().accept(this);
+    		append("skipLabel" +": ");
+    	}
+    	else {
+    		int trueLabel = getNextLabel();
+    		int endLabel = getNextLabel();
+    		node.getExpr().accept(this);
+    		appendLine("ifne " + trueLabel); //if condition is true, go to if block
+    		decrementStack();
+    		elseBlock.accept(this);
+    		appendLine("goto " + endLabel);
+    		append(trueLabel + ": ");
+    		node.getIfBlock().accept(this);
+    		append(endLabel + ": ");
+    	}
     }
 
     @Override
@@ -178,8 +213,17 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
     @Override
     public void visit(While_stmtNode node) {
-        node.getExprNode().accept(this);
+    	int beginLabel = getNextLabel();
+    	int enterLabel = getNextLabel();
+    	appendLine("goto " + enterLabel);
+    	append(beginLabel + ": ");
         node.getBlockNode().accept(this);
+        append(enterLabel + ": ");
+        node.getExprNode().accept(this);
+        appendLine("ifne " + beginLabel);
+        decrementStack();
+        //There is no iftrue command, so we have to use ifne instead, which jumps if the stack head is not 0 (true is a non-zero value)
+        //Per typechecker, this value should be a "boolean", and not an "integer".
     }
 
     @Override
@@ -189,22 +233,54 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
     @Override
     public void visit(IdNode node) {
+    	incrementStack();
+        switch(node.getType()) {
+        case INT: case BOOL:
+        	appendLine("iload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
+        	break;
+        case DOUBLE:
+        	appendLine("dload" + currentVariableEnvironment.lastIndexOf(node.getVal()));
+        	break;
+        case STRING:
+        	appendLine("aload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
+        	break;
+        	
+        }
     }
 
     @Override
     public void visit(RelationalExprNode node) {
+    	int trueLabel = getNextLabel();
+    	int endLabel = getNextLabel();
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
-        
-        if(node.getOperator().equals("<") || node.getOperator().equals(">=")) {
-        	
-        }
-        else if(node.getOperator().equals(">") || node.getOperator().equals("<=")) {
-        	
+        Type comparedType = node.getLeftNode().getType();
+        if(comparedType.equals(Type.INT)) {
+        	appendLine("lcmp");
         }
         else {
-        	throw new RuntimeException("Bad operator, should never get here");
+        	appendLine("dcmpg");
         }
+        switch(node.getOperator()) {
+        case "<":
+        	appendLine("iflt " + trueLabel);
+        	break;
+        case ">":
+        	appendLine("ifgt" + trueLabel);
+        	break;
+        case "<=":
+        	appendLine("ifle" + trueLabel);
+        	break;
+        case ">=":
+        	appendLine("ifge " + trueLabel);
+        	break;
+        }
+        appendLine("iconst_0");
+        appendLine("goto " + endLabel);
+        append(trueLabel + ": ");
+        appendLine("iconst_1");
+        append(endLabel + ": ");
+        decrementStack();
     }
 
     @Override
@@ -282,5 +358,22 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 	private void appendLine(String s) {
 		sb.append(s).append('\n');
 	}
-
+	private void append(String s) {
+		sb.append(s);
+	}
+	private int getNextLabel() {
+		return labelCounter++;
+	}
+	private void incrementStack() {
+		currentStackSize++;
+		if(currentStackSize > maxStackSize) {
+			maxStackSize = currentStackSize;
+		}
+	}
+	private void decrementStack() {
+		currentStackSize--;
+		if (currentStackSize < 0) {
+			currentStackSize = 0;
+		}
+	}
 }
