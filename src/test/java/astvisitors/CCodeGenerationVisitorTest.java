@@ -1,13 +1,11 @@
 package astvisitors;
 
 import ast.AstNode;
-import astvisitors.CCodeGenerationVisitor;
-import astvisitors.SymbolTableVisitor;
-import astvisitors.Typechecker;
 import cstvisitors.BuildAstVisitor;
+import exceptions.ErrorHandler;
+import exceptions.ErrorListener;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
-import exceptions.ErrorHandler;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -24,7 +22,7 @@ public class CCodeGenerationVisitorTest {
     // Each generated code ends with a blank line, therefor every expected string ends with a \n
     @Test
     public void printNodeTest() throws IOException {
-        String program = "print (\"Hello world!\")";
+        String program = "Print (\"Hello world!\")";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
@@ -837,13 +835,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void trueFalseUnaryExprTest() throws IOException {
         String program = "if (!true AND !false) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (!1&&!0) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -852,13 +848,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void longNotFalseUnaryExprTest() throws IOException {
         String program = "if (!(false)) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (!(0)) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -867,13 +861,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void shortNotFalseUnaryExprTest() throws IOException {
         String program = "if (!false) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (!0) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -882,13 +874,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void longNotTrueUnaryExprTest() throws IOException {
         String program = "if (!(true)) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (!(1)) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -897,13 +887,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void shortNotTrueUnaryExprTest() throws IOException {
         String program = "if (!true) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (!1) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -964,13 +952,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void greaterOrEqualRelationalExprTest() throws IOException {
         String program = "if (1 >= 2) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1>=2) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -979,13 +965,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void lessOrEqualRelationalExprTest() throws IOException {
         String program = "if (1 <= 2) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1<=2) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -994,13 +978,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void greaterRelationalExprTest() throws IOException {
         String program = "if (1 > 2) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1>2) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1009,13 +991,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void lessRelationalExprTest() throws IOException {
         String program = "if (1 < 2) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1<2) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1024,13 +1004,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void notequalEqualityExprTest() throws IOException {
         String program = "if (1 != 2) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1!=2) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1039,13 +1017,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void equalEqualityExprTest() throws IOException {
         String program = "if (1 = 2) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1==2) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1054,13 +1030,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void trueFalseLogicalOrExprTest() throws IOException {
         String program = "if (true OR false) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1||0) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1069,13 +1043,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void falseLogicalOrExprTest() throws IOException {
         String program = "if (false OR false) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (0||0) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1084,13 +1056,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void trueLogicalOrExprTest() throws IOException {
         String program = "if (true OR true) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1||1) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1099,13 +1069,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void truefalseLogicalAndExprTest() throws IOException {
         String program = "if (true AND false) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1&&0) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1114,13 +1082,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void falseLogicalAndExprTest() throws IOException {
         String program = "if (false AND false) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (0&&0) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1129,13 +1095,11 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void trueLogicalAndExprTest() throws IOException {
         String program = "if (true AND true) {\n" +
-                "return 1\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int main (void) {\n" +
                 "if (1&&1) {\n" +
-                "return 1;\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -1391,29 +1355,35 @@ public class CCodeGenerationVisitorTest {
 
     // Takes a program as a String and returns the generated C code
     private String getCCode(String input) throws IOException {
+        ErrorHandler errorHandler = new ErrorHandler();
         // ANTLR
-        CharStream cs = CharStreams.fromString(input);
-        EzuinoLexer lLexer = new EzuinoLexer(cs);
+        CharStream charStream = CharStreams.fromString(input);
+        ErrorListener errorListener = new ErrorListener(errorHandler);
+        EzuinoLexer lLexer = new EzuinoLexer(charStream);
+        lLexer.removeErrorListeners();
+        lLexer.addErrorListener(errorListener);
         CommonTokenStream tokens = new CommonTokenStream(lLexer);
         EzuinoParser parser = new EzuinoParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(errorListener);
         ParseTree parseTree = parser.start();
 
         // Custom AST
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-        ErrorHandler errorhandler = new ErrorHandler();
-        AstNode astNode = parseTree.accept(buildAstVisitor);
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(false, errorhandler);
-        astNode.accept(symbolTableFillingVisitor);
-        Typechecker tc = new Typechecker(errorhandler);
-        astNode.accept(tc);
+        AstNode ast = parseTree.accept(buildAstVisitor);
+        ast.accept(new SymbolTableVisitor(false, errorHandler));
+        ast.accept(new Typechecker(errorHandler));
+        ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
+        ast.accept(new MissingReturnStmtVisitor(errorHandler));
+        ast.accept(new FuncStructureVisitor(errorHandler));
 
         // Custom Code generation
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(os);
         CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(ps);
-        astNode.accept(cCodeGenerationVisitor);
-        if(errorhandler.hasErrors()) {
-            errorhandler.printErrors("Test reason");
+        ast.accept(cCodeGenerationVisitor);
+        if(errorHandler.hasErrors()) {
+            errorHandler.printErrors("Test reason");
         }
 
         // Return ByteArrayOutputStream String
