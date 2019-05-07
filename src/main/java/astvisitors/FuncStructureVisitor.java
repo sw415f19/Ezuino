@@ -62,6 +62,17 @@ public class FuncStructureVisitor extends AstVisitor {
         }
     }
 
+    private void checkArduinoRange(AExpr parameter) {
+        if (parameter instanceof IntegerLiteral) {
+            IntegerLiteral integerLiteral = (IntegerLiteral) parameter;
+            int val = Integer.parseInt(integerLiteral.getVal());
+            // Arduino uses 8-bit unsigned int
+            if (val < 0 || val > 255) {
+                errorHandler.arduinoIntRangeError(val);
+            }
+        }
+    }
+
     @Override
     public void visit(Func_callExprNode node) {
         Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getID());
@@ -253,48 +264,100 @@ public class FuncStructureVisitor extends AstVisitor {
     @Override
     public void visit(AnalogReadNode node) {
         Type[] expectedType = {Type.INT};
+        AExpr firstParam = node.getParameters().get(0);
+        if (!(firstParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getID());
+        }
+        checkArduinoRange(firstParam);
         checkFuncParameters(node.getID(), node.getParameters(), 1, expectedType);
     }
 
     @Override
     public void visit(AnalogWriteNode node) {
         Type[] expectedType = {Type.INT, Type.INT};
+        AExpr firstParam = node.getParameters().get(0);
+        if (!(firstParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
+        checkArduinoRange(firstParam);
+        AExpr secondParam = node.getParameters().get(1);
+        if (!(secondParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
+        checkArduinoRange(secondParam);
         checkFuncParameters(node.getId(), node.getParameters(), 2, expectedType);
     }
 
     @Override
     public void visit(DelayMicroNode node) {
         Type[] expectedType = {Type.INT};
+        AExpr firstParam = node.getParameters().get(0);
+        if (!(firstParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
         checkFuncParameters(node.getId(), node.getParameters(), 1, expectedType);
     }
 
     @Override
     public void visit(DelayNode node) {
         Type[] expectedType = {Type.INT};
+        AExpr firstParam = node.getParameters().get(0);
+        if (!(firstParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
         checkFuncParameters(node.getId(), node.getParameters(), 1, expectedType);
     }
 
     @Override
     public void visit(DigitalReadNode node) {
         Type[] expectedType = {Type.INT};
+        AExpr firstParam = node.getParameters().get(0);
+        if (!(firstParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getID());
+        }
+        checkArduinoRange(firstParam);
         checkFuncParameters(node.getID(), node.getParameters(), 1, expectedType);
     }
 
     @Override
     public void visit(DigitalWriteNode node) {
-        Type[] expectedType = {Type.INT, Type.PINLEVEL};
+        Type[] expectedType = {Type.INT, Type.INT};
+        AExpr firstParam = node.getParameters().get(0);
+        if (!(firstParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
+        checkArduinoRange(firstParam);
+        AExpr secondParam = node.getParameters().get(1);
+        if (!(secondParam instanceof IntegerLiteral || secondParam instanceof PinLevelNode)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
+        checkArduinoRange(secondParam);
         checkFuncParameters(node.getId(), node.getParameters(), 2, expectedType);
     }
 
     @Override
     public void visit(SetPinModeNode node) {
-        Type[] expectedType = {Type.INT, Type.PINMODE};
+        Type[] expectedType = {Type.INT, Type.INT};
+        AExpr firstParam = node.getParameters().get(0);
+        if (!(firstParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
+        checkArduinoRange(firstParam);
+        AExpr secondParam = node.getParameters().get(1);
+        if (!(secondParam instanceof IntegerLiteral || secondParam instanceof PinModeNode)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
+        checkArduinoRange(secondParam);
         checkFuncParameters(node.getId(), node.getParameters(), 2, expectedType);
     }
 
     @Override
     public void visit(SerialBeginNode node) {
         Type[] expectedType = {Type.INT};
+        AExpr firstParam = node.getParameters().get(0);
+        if (!(firstParam instanceof IntegerLiteral)) {
+            errorHandler.invalidFunctionParameterError(node.getId());
+        }
         checkFuncParameters(node.getId(), node.getParameters(), 1, expectedType);
     }
 
@@ -306,11 +369,9 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(PinLevelNode node) {
-
     }
 
     @Override
     public void visit(PinModeNode node) {
-
     }
 }

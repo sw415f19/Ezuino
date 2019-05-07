@@ -324,11 +324,11 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(PinLevelNode node) {
-        node.setType(Type.PINLEVEL);
+        node.setType(Type.INT);
     }
 
     @Override
     public void visit(PinModeNode node) {
-        node.setType(Type.PINMODE);
+        node.setType(Type.INT);
     }
 }
