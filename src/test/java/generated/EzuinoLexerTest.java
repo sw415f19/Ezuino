@@ -522,6 +522,12 @@ public class EzuinoLexerTest {
     }
 
     @Test
+    public void leadingCommaFunctiontest() throws IOException {
+        ErrorHandler errorHandler = parseProgram("func f(, int b){}");
+        assertTrue(errorHandler.hasErrors());
+    }
+
+    @Test
     public void voidReturnFunction() throws IOException {
         ErrorHandler errorHandler = parseProgram("func f(){return 42}");
         assertFalse(errorHandler.hasErrors());
