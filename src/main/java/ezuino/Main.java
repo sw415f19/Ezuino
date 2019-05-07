@@ -43,11 +43,7 @@ public class Main {
             errorHandler.printErrors("Semantic errors");
             return;
         }
-        codeGeneration(ast, errorHandler);
-        if(errorHandler.hasErrors()){
-            errorHandler.printErrors("Code generation errors");
-            return;
-        }
+        codeGeneration(ast);
     }
 
     private static AstNode syntaxAnalysis(CharStream charStream, ErrorHandler errorHandler) {
@@ -99,11 +95,8 @@ public class Main {
         }
     }
 
-    private static void codeGeneration(AstNode ast, ErrorHandler errorHandler) {
-        boolean hasNoError = !errorHandler.hasErrors();
-        if(hasNoError){
-            ast.accept(new CCodeGenerationVisitor(System.out));
-        }
+    private static void codeGeneration(AstNode ast) {
+        ast.accept(new CCodeGenerationVisitor(System.out));
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
