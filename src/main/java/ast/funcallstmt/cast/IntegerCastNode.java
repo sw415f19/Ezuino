@@ -4,7 +4,6 @@ import ast.expr.Func_callExprNode;
 import ast.expr.aexpr.AExpr;
 import astvisitors.AstVisitor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IntegerCastNode extends Func_callExprNode {

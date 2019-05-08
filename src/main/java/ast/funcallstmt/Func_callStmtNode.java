@@ -2,9 +2,7 @@ package ast.funcallstmt;
 
 import ast.StmtNode;
 import ast.expr.aexpr.AExpr;
-import astvisitors.AstVisitor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Func_callStmtNode extends StmtNode {
@@ -23,10 +21,4 @@ public abstract class Func_callStmtNode extends StmtNode {
     public String getId() {
         return Id;
     }
-
-    @Override
-    public void accept(AstVisitor v) {
-        v.visit(this);
-    }
-
 }
