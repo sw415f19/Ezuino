@@ -25,9 +25,7 @@ public class CCodeGenerationVisitorTest {
         String program = "Print (\"Hello world!\")";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
-                "printf(%s, \"Hello world!\");\n" +
-                "}\n";
+                "printf(%s, \"Hello world!\");\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -42,14 +40,12 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
                 "if (1) {\n" +
                 "int a;\n" +
                 "a = b();\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -63,11 +59,9 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
                 "int b() {\n" +
                 "return 1;\n" +
-                "}\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -81,10 +75,8 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
                 "if (1) {\n" +
-                "}\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -98,10 +90,8 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
                 "while (1) {\n" +
-                "}\n" +
                 "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
@@ -115,11 +105,9 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
                 "int b;\n" +
                 "b = 1;\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -132,11 +120,9 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
                 "char s[256];\n" +
                 "strcpy(s, \"hello world!\");\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -149,11 +135,9 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
                 "double d;\n" +
                 "d = 23.14;\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -166,11 +150,9 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
                 "int i;\n" +
                 "i = 0;\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -185,14 +167,12 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int b() {\n" +
                 "return 0;\n" +
                 "}\n" +
                 "if (-(1>2)&&(1)&&(-b())) {\n" +
                 "}\n" +
                 "else {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -206,12 +186,10 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
                 "if (-b()) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -225,12 +203,10 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
                 "if (b()) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -241,9 +217,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if ((((-0)))) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -254,9 +228,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if ((((-1)))) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -267,9 +239,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if ((((0)))) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -280,9 +250,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if ((((1)))) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -293,9 +261,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1!=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -306,9 +272,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1==2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -319,9 +283,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1>=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -332,9 +294,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1<=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -345,9 +305,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1>2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -358,9 +316,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1<2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -371,9 +327,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (0) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -384,9 +338,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -398,11 +350,9 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1) {\n" +
                 "}\n" +
                 "else {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -416,12 +366,10 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int b() {\n" +
                 "return 0;\n" +
                 "}\n" +
                 "while (-(1>2)&&(1)&&(-b())) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -435,12 +383,10 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
                 "while (-b()) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -454,12 +400,10 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
                 "while (b()) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -470,9 +414,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while ((((-0)))) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -483,9 +425,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while ((((-1)))) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -496,9 +436,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while ((((0)))) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -509,9 +447,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while ((((1)))) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -522,9 +458,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while (1!=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -535,9 +469,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while (1==2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -548,9 +480,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while (1>=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -561,9 +491,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while (1<=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -574,9 +502,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while (1>2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -587,9 +513,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while (1<2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -600,9 +524,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while (0) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -613,9 +535,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "while (1) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -628,12 +548,10 @@ public class CCodeGenerationVisitorTest {
                 "boolean b";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int i;\n" +
                 "double d;\n" +
                 "char s[256];\n" +
-                "int b;\n" +
-                "}\n";
+                "int b;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -642,9 +560,7 @@ public class CCodeGenerationVisitorTest {
         String program = "boolean b";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
-                "int b;\n" +
-                "}\n";
+                "int b;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -653,9 +569,7 @@ public class CCodeGenerationVisitorTest {
         String program = "string s";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
-                "char s[256];\n" +
-                "}\n";
+                "char s[256];\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -664,9 +578,7 @@ public class CCodeGenerationVisitorTest {
         String program = "double d";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
-                "double d;\n" +
-                "}\n";
+                "double d;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -675,9 +587,7 @@ public class CCodeGenerationVisitorTest {
         String program = "int i";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
-                "int i;\n" +
-                "}\n";
+                "int i;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -690,13 +600,11 @@ public class CCodeGenerationVisitorTest {
                 "s := b(\"Hello world!\")";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "char s[256];\n" +
                 "char b(char s[256]) {\n" +
                 "return s;\n" +
                 "}\n" +
-                "strcpy(s, b(\"Hello world!\"));\n" +
-                "}\n";
+                "strcpy(s, b(\"Hello world!\"));\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -709,13 +617,11 @@ public class CCodeGenerationVisitorTest {
                 "a := b(1.23)";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "double a;\n" +
                 "double b(double a) {\n" +
                 "return a;\n" +
                 "}\n" +
-                "a = b(1.23);\n" +
-                "}\n";
+                "a = b(1.23);\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -728,13 +634,11 @@ public class CCodeGenerationVisitorTest {
                 "a := b(1)";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
                 "int b(int a) {\n" +
                 "return a;\n" +
                 "}\n" +
-                "a = b(1);\n" +
-                "}\n";
+                "a = b(1);\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -745,10 +649,8 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "void b() {\n" +
                 "return;\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -759,24 +661,19 @@ public class CCodeGenerationVisitorTest {
                 "a := (100 + (10 + ((1 + 1000))))";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = (100+(10+((1+1000))));\n" +
-                "}\n";
+                "a = (100+(10+((1+1000))));\n";
         assertEquals(expected, getCCode(program));
     }
 
-    // will most likely fail when we change how to concatenate strings in the C code generator
     @Test
     public void stringParenthesisExprTest() throws IOException {
         String program = "string s\n" +
                 "s := (\"Hello world!\")";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "char s[256];\n" +
-                "strcpy(s, (\"Hello world!\"));\n" +
-                "}\n";
+                "strcpy(s, (\"Hello world!\"));\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -786,10 +683,8 @@ public class CCodeGenerationVisitorTest {
                 "a := (34.115)";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "double a;\n" +
-                "a = (34.115);\n" +
-                "}\n";
+                "a = (34.115);\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -799,10 +694,8 @@ public class CCodeGenerationVisitorTest {
                 "a := (100)";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = (100);\n" +
-                "}\n";
+                "a = (100);\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -812,10 +705,8 @@ public class CCodeGenerationVisitorTest {
                 "a := -23.12";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "double a;\n" +
-                "a = -23.12;\n" +
-                "}\n";
+                "a = -23.12;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -825,10 +716,8 @@ public class CCodeGenerationVisitorTest {
                 "a := -100";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = -100;\n" +
-                "}\n";
+                "a = -100;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -838,9 +727,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (!1&&!0) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -851,9 +738,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (!(0)) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -864,9 +749,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (!0) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -877,9 +760,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (!(1)) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -890,9 +771,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (!1) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -903,10 +782,8 @@ public class CCodeGenerationVisitorTest {
                 "a := 1 / 2";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = 1/2;\n" +
-                "}\n";
+                "a = 1/2;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -916,10 +793,8 @@ public class CCodeGenerationVisitorTest {
                 "a := 1 * 2";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = 1*2;\n" +
-                "}\n";
+                "a = 1*2;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -929,10 +804,8 @@ public class CCodeGenerationVisitorTest {
                 "a := 1 - 2";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = 1-2;\n" +
-                "}\n";
+                "a = 1-2;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -942,10 +815,8 @@ public class CCodeGenerationVisitorTest {
                 "a := 1 + 2";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = 1+2;\n" +
-                "}\n";
+                "a = 1+2;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -955,9 +826,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1>=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -968,9 +837,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1<=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -981,9 +848,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1>2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -994,9 +859,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1<2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1007,9 +870,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1!=2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1020,9 +881,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1==2) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1033,9 +892,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1||0) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1046,9 +903,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (0||0) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1059,9 +914,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1||1) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1072,9 +925,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1&&0) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1085,9 +936,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (0&&0) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1098,9 +947,7 @@ public class CCodeGenerationVisitorTest {
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "if (1&&1) {\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1114,13 +961,11 @@ public class CCodeGenerationVisitorTest {
                 "a := b(1)";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
                 "int b(int a) {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "a = b(1);\n" +
-                "}\n";
+                "a = b(1);\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1130,10 +975,8 @@ public class CCodeGenerationVisitorTest {
                 "d := true";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int d;\n" +
-                "d = 1;\n" +
-                "}\n";
+                "d = 1;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1143,9 +986,8 @@ public class CCodeGenerationVisitorTest {
                 "a := 100";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\nint a;\n" +
-                "a = 100;\n" +
-                "}\n";
+                "int a;\n" +
+                "a = 100;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1155,10 +997,8 @@ public class CCodeGenerationVisitorTest {
                 "b := 52.04";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "double b;\n" +
-                "b = 52.04;\n" +
-                "}\n";
+                "b = 52.04;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1168,10 +1008,8 @@ public class CCodeGenerationVisitorTest {
                 "c := \"Is anybody there?\"";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "char c[256];\n" +
-                "strcpy(c, \"Is anybody there?\");\n" +
-                "}\n";
+                "strcpy(c, \"Is anybody there?\");\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1181,10 +1019,8 @@ public class CCodeGenerationVisitorTest {
                 "a := false";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = 0;\n" +
-                "}\n";
+                "a = 0;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1194,10 +1030,8 @@ public class CCodeGenerationVisitorTest {
                 "a := true";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = 1;\n" +
-                "}\n";
+                "a = 1;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1207,10 +1041,8 @@ public class CCodeGenerationVisitorTest {
                 "i := 1001";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int i;\n" +
-                "i = 1001;\n" +
-                "}\n";
+                "i = 1001;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1220,9 +1052,8 @@ public class CCodeGenerationVisitorTest {
                 "d := 23.12";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\ndouble d;\n" +
-                "d = 23.12;\n" +
-                "}\n";
+                "double d;\n" +
+                "d = 23.12;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1232,10 +1063,8 @@ public class CCodeGenerationVisitorTest {
                 "s := \"Hello World!\"";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "char s[256];\n" +
-                "strcpy(s, \"Hello World!\");\n" +
-                "}\n";
+                "strcpy(s, \"Hello World!\");\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1245,10 +1074,8 @@ public class CCodeGenerationVisitorTest {
                 "a := 1";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int a;\n" +
-                "a = 1;\n" +
-                "}\n";
+                "a = 1;\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1256,9 +1083,7 @@ public class CCodeGenerationVisitorTest {
     public void startNodeTest() throws IOException {
         String program = "";
         String expected = "#include <stdio.h>\n" +
-                "#include <string.h>\n" +
-                "int main (void) {\n" +
-                "}\n";
+                "#include <string.h>\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1309,7 +1134,6 @@ public class CCodeGenerationVisitorTest {
 
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int main (void) {\n" +
                 "int testOne;\n" +
                 "int testTwo;\n" +
                 "int testThree;\n" +
@@ -1348,7 +1172,6 @@ public class CCodeGenerationVisitorTest {
                 "}\n" +
                 "medium = findMedium(testOne, testTwo, testThree, testFour);\n" +
                 "return medium;\n" +
-                "}\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1356,6 +1179,7 @@ public class CCodeGenerationVisitorTest {
     // Takes a program as a String and returns the generated C code
     private String getCCode(String input) throws IOException {
         ErrorHandler errorHandler = new ErrorHandler();
+        
         // ANTLR
         CharStream charStream = CharStreams.fromString(input);
         ErrorListener errorListener = new ErrorListener(errorHandler);

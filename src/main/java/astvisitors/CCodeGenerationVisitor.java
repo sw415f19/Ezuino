@@ -133,13 +133,9 @@ public class CCodeGenerationVisitor extends AstVisitor {
         // includes
         builder.append("#include <stdio.h>\n" +
                 "#include <string.h>\n");
-        // open main
-        builder.append("int main (void) {\n");
         // start tree search
         node.getDcls().accept(this);
         node.getStmts().accept(this);
-        // close main
-        builder.append("}\n");
         // prints the final string
         out.print(builder.toString());
     }
