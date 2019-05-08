@@ -238,9 +238,9 @@ public class Typechecker extends AstVisitor {
         String nodeOperator = node.getOperator();
 
         boolean printErr = false;
-        if (nodeOperator.equals("-")) {
+        if ("-".equals(nodeOperator)) {
             printErr = nodeType.equals(Type.BOOL) || nodeType.equals(Type.STRING);
-        } else if (nodeOperator.equals("!")) {
+        } else if ("!".equals(nodeOperator)) {
             printErr = !nodeType.equals(Type.BOOL);
         }
         if (printErr) {
