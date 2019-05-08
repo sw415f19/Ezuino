@@ -54,7 +54,7 @@ public class ErrorHandler {
     }
 
     public void unexpectedType(ITypeNode node, Type type) {
-        messageList.add(new GeneralError(ErrorType.ERROR, "\" " + "Unexpeced type! Expected: " + type.name() + ", was " + node.getType().name() + " - Node: " + node));
+        messageList.add(new GeneralError(ErrorType.ERROR, "Unexpeced type! Expected: " + type.name() + ", was " + node.getType().name() + " - Node: " + node));
     }
 
     public void emptyStack() {

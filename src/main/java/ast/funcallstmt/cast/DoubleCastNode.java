@@ -2,7 +2,6 @@ package ast.funcallstmt.cast;
 
 import ast.expr.Func_callExprNode;
 import ast.expr.aexpr.AExpr;
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 import java.util.ArrayList;
@@ -14,15 +13,8 @@ public class DoubleCastNode extends Func_callExprNode {
     }
 
     @Override
-    public void accept(AstVisitor v)
-    {
+    public void accept(AstVisitor v) {
         v.visit(this);
-    }
-
-    @Override
-    public void acceptLevel(AstLevelVisitor v, int level)
-    {
-        v.visitLevel(this, level);
     }
 
 }
