@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class ArduinoCodeGenerationVisitorTest {
     // Each generated code ends with a blank line, therefor every expected string ends with a \n
     @Test
-    public void AnalogReadTest() throws IOException {
+    public void analogReadTest() throws IOException {
         String program = "int a\n" +
                 "a := AnalogRead(14)";
         String expected = "int a;\n" +
@@ -30,7 +30,7 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void AnalogReadIdNodeTest() throws IOException {
+    public void analogReadIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "int b\n" +
                 "b := 14\n" +
@@ -43,14 +43,14 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void AnalogWriteTest() throws IOException {
+    public void analogWriteTest() throws IOException {
         String program = "AnalogWrite(13, 15)";
         String expected = "analogWrite(13, 15);\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
-    public void AnalogWriteFirstIdNodeTest() throws IOException {
+    public void analogWriteFirstIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "a := 13\n" +
                 "AnalogWrite(a, 15)";
@@ -61,7 +61,7 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void AnalogWriteSecondIdNodeTest() throws IOException {
+    public void analogWriteSecondIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "a := 15\n" +
                 "AnalogWrite(13, a)";
@@ -72,14 +72,14 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void DelayMicroTest() throws IOException {
+    public void delayMicroTest() throws IOException {
         String program = "DelayMicro(1000)";
         String expected = "delayMicroseconds(1000);\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
-    public void DelayMicroIdNodeTest() throws IOException {
+    public void delayMicroIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "a := 1000\n" +
                 "DelayMicro(a)";
@@ -90,14 +90,14 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void DelayTest() throws IOException {
+    public void delayTest() throws IOException {
         String program = "Delay(1000)";
         String expected = "delay(1000);\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
-    public void DelayIdNodeTest() throws IOException {
+    public void delayIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "a := 1000\n" +
                 "Delay(a)";
@@ -108,28 +108,28 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void PinModeInputPullUpTest() throws IOException {
+    public void pinModeInputPullUpTest() throws IOException {
         String program = "PinMode(13, INPUT_PULLUP)";
         String expected = "pinMode(13, INPUT_PULLUP);\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
-    public void PinModeOutputTest() throws IOException {
+    public void pinModeOutputTest() throws IOException {
         String program = "PinMode(13, OUTPUT)";
         String expected = "pinMode(13, OUTPUT);\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
-    public void PinModeInputTest() throws IOException {
+    public void pinModeInputTest() throws IOException {
         String program = "PinMode(13, INPUT)";
         String expected = "pinMode(13, INPUT);\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
-    public void PinModeInputFirstIdNodeTest() throws IOException {
+    public void pinModeInputFirstIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "a := 13\n" +
                 "PinMode(a, INPUT)";
@@ -140,7 +140,7 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void PinModeInputSecondIdNodeTest() throws IOException {
+    public void pinModeInputSecondIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "a := 2\n" +
                 "PinMode(13, a)";
@@ -151,21 +151,21 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void DigitalWriteLowTest() throws IOException {
+    public void digitalWriteLowTest() throws IOException {
         String program = "DigitalWrite(13, LOW)";
         String expected = "digitalWrite(13, LOW);\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
-    public void DigitalWriteHighTest() throws IOException {
+    public void digitalWriteHighTest() throws IOException {
         String program = "DigitalWrite(13, HIGH)";
         String expected = "digitalWrite(13, HIGH);\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
-    public void DigitalWriteSecondIdNodeTest() throws IOException {
+    public void digitalWriteSecondIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "a := 1" +
                 "DigitalWrite(13, a)";
@@ -176,7 +176,7 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void DigitalWriteFirstIdNodeTest() throws IOException {
+    public void digitalWriteFirstIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "a := 13\n" +
                 "DigitalWrite(a, HIGH)";
@@ -187,7 +187,7 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void DigitalReadTest() throws IOException {
+    public void digitalReadTest() throws IOException {
         String program = "int a\n" +
                 "a := DigitalRead(13)";
         String expected = "int a;\n" +
@@ -196,7 +196,7 @@ public class ArduinoCodeGenerationVisitorTest {
     }
 
     @Test
-    public void DigitalReadIdNodeTest() throws IOException {
+    public void digitalReadIdNodeTest() throws IOException {
         String program = "int a\n" +
                 "int b\n" +
                 "b := 13\n" +

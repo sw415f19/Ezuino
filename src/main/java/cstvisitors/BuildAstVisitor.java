@@ -191,9 +191,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
             switch(id) {
                 case "AnalogRead" : return new AnalogReadNode(id, parameters);
                 case "DigitalRead" : return new DigitalReadNode(id, parameters);
+                default : return new Func_callExprNode(id, parameters);
             }
-            return new Func_callExprNode(id, parameters);
-
         }
         // Check for reserved keywords in id
         switch(id) {
@@ -205,8 +204,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
             case "PinMode" : return new SetPinModeNode(id, parameters);
             case "SerialBegin" : return new SerialBeginNode(id, parameters);
             case "SerialEnd" : return new SerialEndNode(id, parameters);
+            default : return new CustomFuncCallStmtNode(id, parameters);
         }
-        return new CustomFuncCallStmtNode(id, parameters);
     }
 
     @Override
