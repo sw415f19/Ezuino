@@ -3,6 +3,8 @@ package astvisitors;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -50,6 +52,151 @@ public class MissingReturnStmtTest {
         String program = "func int main() { if(1<2) { return 1 } else { return 2 } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
+    }
+
+    @Test
+    public void whileTestNotGuaranteedReturn() throws IOException {
+        String testProgram = "func int main(){ while(1<2){ return 1 } }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void nestedIfStmtsOuterScopeElseReturnValue() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  if(true){\n" +
+                "    if(true){\n" +
+                "        if(true){\n" +
+                "            return 1\n" +
+                "        }\n" +
+                "    }\n" +
+                "  }\n" +
+                " else{" +
+                "   return 1" +
+                "} " +
+                "  \n" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void elseStmtHaveNoReturnGivesError() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  int a\n" +
+                "  if(true){\n" +
+                "        return a\n" +
+                "  } else{} \n" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void nestedIfStmtsOuterScopeElseDoNotReturnValueGivesError() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  if(true){\n" +
+                "    if(true){\n" +
+                "        if(true){\n" +
+                "            return 1\n" +
+                "        }\n" +
+                "    }\n" +
+                "  }\n" +
+                " else{" +
+                "  " +
+                "} " +
+                "  \n" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void nestedIfStmtsOuterScopeElseDoNotExistGivesError() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "  if(true){\n" +
+                "    if(true){\n" +
+                "        if(true){\n" +
+                "            return 1\n" +
+                "        }\n" +
+                "    }\n" +
+                "  }\n" +
+                "  \n" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void multipleIfsSameLevelNoElseOuterScopeGivesError() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "    if(true) {\n" +
+                "        int a\n" +
+                "        return a\n" +
+                "    }\n" +
+                "    if(true){\n" +
+                "        int b\n" +
+                "        return b\n" +
+                "    }\n" +
+                "    if(true) {\n" +
+                "        int c\n" +
+                "        return c\n" +
+                "    }\n" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void missingElseStmtReturnError() throws IOException {
+        String testProgram = "func int hello(){ int a if(true){ return a } }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+
+    }
+
+    @Test
+    public void emptyIfStmtAndReturnValue() throws IOException {
+        String testProgram = "func int hello(){ if(true) { } return 1 }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void multipleIfsSameLevel() throws IOException {
+        String testProgram = "func int hello(){\n" +
+                "    if(true) {\n" +
+                "        int a\n" +
+                "        return a\n" +
+                "    }\n" +
+                "    if(true){\n" +
+                "        int b\n" +
+                "        return b\n" +
+                "    }\n" +
+                "    if(true) {\n" +
+                "        int c\n" +
+                "        return c\n" +
+                "    }\n" +
+                "    else{" +
+                "       return 1" +
+                "    }" +
+                "}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void returnAsBreakReturn() throws IOException {
+        String testProgram = "func hello(){ if(true){ return } return }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void funcWithWhileStmtWithoutReturn() throws IOException {
+        String testProgram = "func int main(){ while(1<2){ int a } return 1 }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     private ErrorHandler parseProgram(String program) {
