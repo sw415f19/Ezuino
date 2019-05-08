@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import ast.Assign_stmtNode;
 import ast.BlockNode;
 import ast.BooleanLiteral;
@@ -52,13 +53,10 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 	}
 	@Override
     public void visit(StartNode node) {
-		appendLine(".class public program");
-		appendLine(".super java/lang/Object");
-		appendLine(".method public static main([Ljava/lang/String;)V");
+		generatePrefixSetupCode();
         node.getDcls().accept(this);
         node.getStmts().accept(this);
-        appendLine(".limit stack " + maxStackSize);
-        appendLine(".end method");
+        generatePostfixSetupCode();
         out.print(sb);
     }
 
@@ -166,6 +164,23 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     public void visit(Return_stmtNode node) {
         if (node.getReturnExpr() != null) {
             node.getReturnExpr().accept(this);
+            switch(node.getType()) {
+            case INT:
+            	appendLine("ireturn");
+            	break;
+            case DOUBLE:
+            	appendLine("dreturn");
+            	break;
+            case BOOL:
+            	appendLine("ireturn");
+            	break;
+            case STRING:
+            	appendLine("areturn");
+            	break;
+            }
+        }
+        else {
+        	appendLine("return");
         }
     }
 
@@ -251,42 +266,25 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     @Override
     public void visit(RelationalExprNode node) {
     	int trueLabel = getNextLabel();
-    	int endLabel = getNextLabel();
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
         Type comparedType = node.getLeftNode().getType();
-        if(comparedType.equals(Type.INT)) {
-        	appendLine("lcmp");
-        }
-        else {
-        	appendLine("dcmpg");
-        }
-        switch(node.getOperator()) {
-        case "<":
-        	appendLine("iflt " + trueLabel);
-        	break;
-        case ">":
-        	appendLine("ifgt" + trueLabel);
-        	break;
-        case "<=":
-        	appendLine("ifle" + trueLabel);
-        	break;
-        case ">=":
-        	appendLine("ifge " + trueLabel);
-        	break;
-        }
-        appendLine("iconst_0");
-        appendLine("goto " + endLabel);
-        append(trueLabel + ": ");
-        appendLine("iconst_1");
-        append(endLabel + ": ");
-        decrementStack();
+        
+        appendComparisonBasedOnType(comparedType);
+        appendConditionalJump(node.getOperator(), trueLabel);
+        appendConditionalBooleanToStack(trueLabel);
     }
 
     @Override
     public void visit(EqualityExprNode node) {
+    	int trueLabel = getNextLabel();
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
+        Type comparedType = node.getLeftNode().getType();
+        
+        appendComparisonBasedOnType(comparedType);
+        appendConditionalJump(node.getOperator(), trueLabel);
+        appendConditionalBooleanToStack(trueLabel);        
     }
 
     @Override
@@ -295,15 +293,43 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     }
 
     @Override
-    public void visit(LogicalAndExprNode node) {
+    public void visit(LogicalAndExprNode node) {	
         node.getLeftNode().accept(this);
+        generateCodeForLogicalNegation();
         node.getRightNode().accept(this);
+        generateCodeForLogicalNegation();
+        generateCodeForLogicalOr();
+        generateCodeForLogicalNegation();
+        //my group: You can't just use formal logic to rewrite code you dislike
+        //DeMorgan's Laws: That's where you're wrong, kiddo
+        
     }
 
     @Override
     public void visit(AdditiveExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
+        switch(node.getType()) {
+        case INT:
+        	if(node.getOperator().equals("+")) {
+        		appendLine("iadd");
+        	}
+        	else {
+        		appendLine("isub");
+        	}
+        	break;
+        case DOUBLE:
+        	if(node.getOperator().equals("+")) {
+        		appendLine("dadd");
+        	}
+        	else{
+        		appendLine("dsub");
+        	}
+        	break;
+        case STRING:
+        	appendLine("java/lang/String.concat:(Ljava/lang/String;)Ljava/lang/String;");
+        	break;
+        }
 
     }
 
@@ -311,12 +337,42 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     public void visit(MultiplicativeExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
-
+        switch(node.getType()) {
+        case INT:
+        	if(node.getOperator().equals("*")) {
+        		appendLine("imul");
+        	}
+        	else {
+        		appendLine("idiv");
+        	}
+        	break;
+        case DOUBLE:
+        	if(node.getOperator().equals("*")) {
+        		appendLine("dmul");
+        	}
+        	else {
+        		appendLine("ddiv");
+        	}
+        	break;
+        }
     }
 
     @Override
     public void visit(UnaryExprNode node) {
         node.getNode().accept(this);
+        if(node.getOperator().equals("-")) {
+        	switch(node.getType()) {
+        	case INT: case BOOL:
+        		appendLine("ineg");
+        		break;
+        	case DOUBLE:
+        		appendLine("dneg");
+        		break;
+        	}
+        }
+        else {
+        	generateCodeForLogicalNegation();
+        }
 
     }
 
@@ -324,15 +380,19 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     public void visit(LogicalOrExprNode node) {
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
-
+        generateCodeForLogicalOr();
     }
 
     @Override
     public void visit(PrintNode node) {
+    	incrementStack();
+    	appendLine("getstatic java/lang/System/out Ljava/io/PrintStream;");
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
-
+        appendLine("invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V");
+        decrementStack();
+        decrementStack();
     }
 
     @Override
@@ -375,5 +435,85 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 		if (currentStackSize < 0) {
 			currentStackSize = 0;
 		}
+	}
+	private void appendComparisonBasedOnType(Type comparedType) {
+		if(comparedType.equals(Type.INT)) {
+        	appendLine("lcmp");
+        }
+        else {
+        	appendLine("dcmpg");
+        }
+		decrementStack();
+	}
+	private void appendConditionalJump(String conditionOperator, int label) {
+		switch(conditionOperator) {
+        case "<":
+        	appendLine("iflt " + label);
+        	break;
+        case ">":
+        	appendLine("ifgt" + label);
+        	break;
+        case "<=":
+        	appendLine("ifle" + label);
+        	break;
+        case ">=":
+        	appendLine("ifge " + label);
+        	break;
+        case "=":
+        	appendLine("ifeq " + label);
+        	break;
+        case "!=":
+        	appendLine("ifne " + label);
+        	break;
+        }
+		decrementStack();
+	}
+	private void appendConditionalBooleanToStack(int trueLabel){
+		//Jump to truelabel to get a true value on stack, otherwise just get a false falue
+		int endLabel = getNextLabel();
+		appendLine("iconst_0");
+        appendLine("goto " + endLabel);
+        append(trueLabel + ": ");
+        appendLine("iconst_1");
+        append(endLabel + ": ");
+        incrementStack();
+	}
+	private void generateCodeForLogicalOr() {
+		int trueLabel = getNextLabel();
+    	int endLabel = getNextLabel();
+		appendLine("ior");
+        decrementStack();
+        appendLine("iconst_0");
+        incrementStack();
+        appendLine("if_icmpne " + trueLabel); //if the ior doesn't result in a zero-byte
+        decrementStack();
+        decrementStack();
+        appendLine("iconst_0");
+        appendLine("goto " + endLabel);
+        append(trueLabel + ": ");
+        appendLine("iconst_1");
+        append(endLabel + ": ");
+        incrementStack();
+	}
+	private void generateCodeForLogicalNegation() {
+		int trueLabel = getNextLabel();
+		int endLabel = getNextLabel();
+		appendLine("ifne " + trueLabel);
+		appendLine("iconst_0");
+		appendLine("goto " + endLabel);
+		append(trueLabel + ": ");
+		appendLine("iconst_1");
+		append(endLabel + ": ");
+		
+	}
+	private void generatePrefixSetupCode() {
+		appendLine(".class public program");
+		appendLine(".super java/lang/Object");
+		appendLine(".method public static main([Ljava/lang/String;)V");
+	}
+	private void generatePostfixSetupCode() {
+        appendLine("return");
+        appendLine(".limit stack " + maxStackSize);
+        appendLine(".end method");
 	}
 }
