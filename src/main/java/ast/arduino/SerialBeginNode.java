@@ -4,7 +4,6 @@ import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.Func_callStmtNode;
 import astvisitors.AstVisitor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SerialBeginNode extends Func_callStmtNode {
