@@ -230,8 +230,8 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
                 case "INPUT_PULLUP" : return new PinModeNode(ID);
                 case "HIGH" : return new PinLevelNode(ID);
                 case "LOW" : return new PinLevelNode(ID);
+                default : return new IdNode(ID);
             }
-            return new IdNode(ID);
         }
         return null;
     }
