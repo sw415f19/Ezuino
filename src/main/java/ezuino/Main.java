@@ -78,16 +78,16 @@ public class Main {
         boolean printDcl = true;
         boolean hasNoError = !errorHandler.hasErrors();
 
-        ast.accept(new IndentedPrintVisitor)
+        ast.accept(new IndentedPrintVisitor());
 
         if(hasNoError) {
             ast.accept(new SymbolTableVisitor(printDcl, errorHandler));
-            ast.accept(new IndentedPrintVisitor)
+            ast.accept(new IndentedPrintVisitor());
         }
         hasNoError = !errorHandler.hasErrors();
         if(hasNoError) {
             ast.accept(new Typechecker(errorHandler));
-            ast.accept(new IndentedPrintVisitor)
+            ast.accept(new IndentedPrintVisitor());
             ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
             ast.accept(new MissingReturnStmtVisitor(errorHandler));
             ast.accept(new FuncStructureVisitor(errorHandler));
