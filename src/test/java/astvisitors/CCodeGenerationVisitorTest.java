@@ -1179,7 +1179,7 @@ public class CCodeGenerationVisitorTest {
     // Takes a program as a String and returns the generated C code
     private String getCCode(String input) throws IOException {
         ErrorHandler errorHandler = new ErrorHandler();
-        
+
         // ANTLR
         CharStream charStream = CharStreams.fromString(input);
         ErrorListener errorListener = new ErrorListener(errorHandler);
