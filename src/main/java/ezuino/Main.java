@@ -1,6 +1,7 @@
 package ezuino;
 
 import ast.AstNode;
+import astvisitors.AstVisitor;
 import astvisitors.CCodeGenerationVisitor;
 import astvisitors.FuncStructureVisitor;
 import astvisitors.IndentedPrintVisitor;
@@ -24,9 +25,9 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
-    public static ArrayList<String> numbers = new ArrayList<String>();
 
     public static void main(String[] args) throws IOException {
 
@@ -75,22 +76,23 @@ public class Main {
 
     private static void contextualAnalysis(AstNode ast, ErrorHandler errorHandler) {
 
+        List<AstVisitor> visitors = new ArrayList<>();
+
         boolean printDcl = true;
-        boolean hasNoError = !errorHandler.hasErrors();
+        visitors.add(new IndentedPrintVisitor());
+        visitors.add(new SymbolTableVisitor(printDcl, errorHandler));
+        visitors.add(new IndentedPrintVisitor());
+        visitors.add(new Typechecker(errorHandler));
+        visitors.add(new IndentedPrintVisitor());
+        visitors.add(new ReturnStmtTypeCheckVisitor(errorHandler));
+        visitors.add(new MissingReturnStmtVisitor(errorHandler));
+        visitors.add(new FuncStructureVisitor(errorHandler));
 
-        ast.accept(new IndentedPrintVisitor());
-
-        if(hasNoError) {
-            ast.accept(new SymbolTableVisitor(printDcl, errorHandler));
-            ast.accept(new IndentedPrintVisitor());
-        }
-        hasNoError = !errorHandler.hasErrors();
-        if(hasNoError) {
-            ast.accept(new Typechecker(errorHandler));
-            ast.accept(new IndentedPrintVisitor());
-            ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
-            ast.accept(new MissingReturnStmtVisitor(errorHandler));
-            ast.accept(new FuncStructureVisitor(errorHandler));
+        for (AstVisitor visitor : visitors) {
+            ast.accept(visitor);
+            if (errorHandler.hasErrors()) {
+                return;
+            }
         }
     }
 
