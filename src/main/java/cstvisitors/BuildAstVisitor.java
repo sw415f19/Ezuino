@@ -174,7 +174,6 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
         for (ExprContext param : ctx.func_call_param().expr()) {
             parameters.add((AExpr) param.accept(this));
-            System.out.println();
         }
 
         if ("INTEGER".equals(id)) {
