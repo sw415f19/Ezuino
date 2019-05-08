@@ -162,7 +162,7 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return false\n" +
                 "}\n" +
-                "if (-(1 > 2) AND (true) AND (-b())) {\n" +
+                "if (!(1 > 2) AND (true) AND (!b())) {\n" +
                 "} else {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
@@ -170,7 +170,7 @@ public class CCodeGenerationVisitorTest {
                 "int b() {\n" +
                 "return 0;\n" +
                 "}\n" +
-                "if (-(1>2)&&(1)&&(-b())) {\n" +
+                "if (!(1>2)&&(1)&&(!b())) {\n" +
                 "}\n" +
                 "else {\n" +
                 "}\n";
@@ -182,14 +182,14 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "if (-b()) {\n" +
+                "if (!b()) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "if (-b()) {\n" +
+                "if (!b()) {\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -213,22 +213,22 @@ public class CCodeGenerationVisitorTest {
 
     @Test
     public void notFalseParenthesisIfStmtTest() throws IOException {
-        String program = "if ((((-false)))) {\n" +
+        String program = "if ((((!false)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if ((((-0)))) {\n" +
+                "if ((((!0)))) {\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notTrueParenthesisIfStmtTest() throws IOException {
-        String program = "if ((((-true)))) {\n" +
+        String program = "if ((((!true)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if ((((-1)))) {\n" +
+                "if ((((!1)))) {\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -362,14 +362,14 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return false\n" +
                 "}\n" +
-                "while (-(1 > 2) AND (true) AND (-b())) {\n" +
+                "while (!(1 > 2) AND (true) AND (!b())) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 0;\n" +
                 "}\n" +
-                "while (-(1>2)&&(1)&&(-b())) {\n" +
+                "while (!(1>2)&&(1)&&(!b())) {\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -379,14 +379,14 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "while (-b()) {\n" +
+                "while (!b()) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "while (-b()) {\n" +
+                "while (!b()) {\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -410,22 +410,22 @@ public class CCodeGenerationVisitorTest {
 
     @Test
     public void notFalseParenthesisWhileStmtTest() throws IOException {
-        String program = "while ((((-false)))) {\n" +
+        String program = "while ((((!false)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while ((((-0)))) {\n" +
+                "while ((((!0)))) {\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notTrueParenthesisWhileStmtTest() throws IOException {
-        String program = "while ((((-true)))) {\n" +
+        String program = "while ((((!true)))) {\n" +
                 "}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while ((((-1)))) {\n" +
+                "while ((((!1)))) {\n" +
                 "}\n";
         assertEquals(expected, getCCode(program));
     }

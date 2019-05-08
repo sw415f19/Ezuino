@@ -357,13 +357,13 @@ public class ArduinoCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return false\n" +
                 "}\n" +
-                "if (-(1 > 2) AND (true) AND (-b())) {\n" +
+                "if (!(1 > 2) AND (true) AND (!b())) {\n" +
                 "} else {\n" +
                 "}";
         String expected = "bool b() {\n" +
                 "return false;\n" +
                 "}\n" +
-                "if (-(1>2)&&(true)&&(-b())) {\n" +
+                "if (!(1>2)&&(true)&&(!b())) {\n" +
                 "}\n" +
                 "else {\n" +
                 "}\n";
@@ -375,12 +375,12 @@ public class ArduinoCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "if (-b()) {\n" +
+                "if (!b()) {\n" +
                 "}";
         String expected = "bool b() {\n" +
                 "return true;\n" +
                 "}\n" +
-                "if (-b()) {\n" +
+                "if (!b()) {\n" +
                 "}\n";
         assertEquals(expected, getArduinoCode(program));
     }
@@ -402,18 +402,18 @@ public class ArduinoCodeGenerationVisitorTest {
 
     @Test
     public void notFalseParenthesisIfStmtTest() throws IOException {
-        String program = "if ((((-false)))) {\n" +
+        String program = "if ((((!false)))) {\n" +
                 "}";
-        String expected = "if ((((-false)))) {\n" +
+        String expected = "if ((((!false)))) {\n" +
                 "}\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
     public void notTrueParenthesisIfStmtTest() throws IOException {
-        String program = "if ((((-true)))) {\n" +
+        String program = "if ((((!true)))) {\n" +
                 "}";
-        String expected = "if ((((-true)))) {\n" +
+        String expected = "if ((((!true)))) {\n" +
                 "}\n";
         assertEquals(expected, getArduinoCode(program));
     }
@@ -525,12 +525,12 @@ public class ArduinoCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return false\n" +
                 "}\n" +
-                "while (-(1 > 2) AND (true) AND (-b())) {\n" +
+                "while (!(1 > 2) AND (true) AND (!b())) {\n" +
                 "}";
         String expected = "bool b() {\n" +
                 "return false;\n" +
                 "}\n" +
-                "while (-(1>2)&&(true)&&(-b())) {\n" +
+                "while (!(1>2)&&(true)&&(!b())) {\n" +
                 "}\n";
         assertEquals(expected, getArduinoCode(program));
     }
@@ -540,12 +540,12 @@ public class ArduinoCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "while (-b()) {\n" +
+                "while (!b()) {\n" +
                 "}";
         String expected = "bool b() {\n" +
                 "return true;\n" +
                 "}\n" +
-                "while (-b()) {\n" +
+                "while (!b()) {\n" +
                 "}\n";
         assertEquals(expected, getArduinoCode(program));
     }
@@ -567,18 +567,18 @@ public class ArduinoCodeGenerationVisitorTest {
 
     @Test
     public void notFalseParenthesisWhileStmtTest() throws IOException {
-        String program = "while ((((-false)))) {\n" +
+        String program = "while ((((!false)))) {\n" +
                 "}";
-        String expected = "while ((((-false)))) {\n" +
+        String expected = "while ((((!false)))) {\n" +
                 "}\n";
         assertEquals(expected, getArduinoCode(program));
     }
 
     @Test
     public void notTrueParenthesisWhileStmtTest() throws IOException {
-        String program = "while ((((-true)))) {\n" +
+        String program = "while ((((!true)))) {\n" +
                 "}";
-        String expected = "while ((((-true)))) {\n" +
+        String expected = "while ((((!true)))) {\n" +
                 "}\n";
         assertEquals(expected, getArduinoCode(program));
     }
