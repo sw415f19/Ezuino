@@ -456,6 +456,12 @@ public class EzuinoLexerTest {
     }
 
     @Test
+    public void elseIfNotRecognized() throws IOException {
+        ErrorHandler errorHandler = parseProgram("if(TRUE){} else if (1<2) {}");
+        assertTrue(errorHandler.hasErrors());
+    }
+
+    @Test
     public void ifShorthandIf() throws IOException {
         ErrorHandler errorHandler = parseProgram("int a\na := TRUE? 1 : 2");
         assertTrue(errorHandler.hasErrors());

@@ -28,7 +28,7 @@ public class SymbolTableVisitor extends AstVisitor {
             errorHandler.varAlreadyDeclared(id);
         }
     }
-    
+
     private void enterFunctionSymbol(String id, ITypeNode node) {
         if (!stFunctions.enterSymbol(id, node)) {
             errorHandler.funcAlreadyDeclared(id);
@@ -71,7 +71,6 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(BlockNode node) {
-        openScope();
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
         }
@@ -81,7 +80,6 @@ public class SymbolTableVisitor extends AstVisitor {
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().accept(this);
         }
-        closeScope();
     }
 
     @Override
@@ -126,10 +124,13 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(Func_defNode node) {
         enterFunctionSymbol(node.getId(), node);
+
+        openScope();
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
         node.getBlockNode().accept(this);
+        closeScope();
     }
 
     @Override
@@ -142,11 +143,15 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(If_stmtNode node) {
         node.getExpr().accept(this);
+        openScope();
         node.getIfBlock().accept(this);
+        closeScope();
+        openScope();
         BlockNode elseBlock = node.getElseBlock();
         if (elseBlock != null) {
             elseBlock.accept(this);
         }
+        closeScope();
     }
 
     @Override
@@ -168,7 +173,9 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(While_stmtNode node) {
         node.getExprNode().accept(this);
+        openScope();
         node.getBlockNode().accept(this);
+        closeScope();
     }
 
     @Override
