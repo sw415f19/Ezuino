@@ -8,6 +8,7 @@ import generated.EzuinoParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,7 +32,7 @@ public class TypecheckerTest {
                 "} " +
                 "  \n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -50,7 +51,7 @@ public class TypecheckerTest {
                 "} " +
                 "  \n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -66,7 +67,7 @@ public class TypecheckerTest {
                 "  }\n" +
                 "  \n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -78,7 +79,7 @@ public class TypecheckerTest {
                 "    }\n" +
                 "    return 1\n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
@@ -101,7 +102,7 @@ public class TypecheckerTest {
                 "       return 1" +
                 "    }" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
@@ -121,7 +122,7 @@ public class TypecheckerTest {
                 "        return c\n" +
                 "    }\n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -133,7 +134,7 @@ public class TypecheckerTest {
                 "        return a\n" +
                 "  } \n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
 
     }
@@ -146,7 +147,7 @@ public class TypecheckerTest {
                 "        return a\n" +
                 "  } else{} \n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -158,7 +159,7 @@ public class TypecheckerTest {
                 "  }\n" +
                 "  return\n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -170,7 +171,7 @@ public class TypecheckerTest {
                 "  } \n" +
                 "  return \n" +
                 "";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
@@ -185,7 +186,7 @@ public class TypecheckerTest {
                 "    return 4\n" +
                 "  }\n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -197,7 +198,7 @@ public class TypecheckerTest {
                 "    }\n" +
                 "    return 1\n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
@@ -208,7 +209,7 @@ public class TypecheckerTest {
                 "        return 1\n" +
                 "    }\n" +
                 "}\n";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -220,7 +221,7 @@ public class TypecheckerTest {
                 "    }\n" +
                 "    return \"my world\"\n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
@@ -231,7 +232,7 @@ public class TypecheckerTest {
                 "        int a\n" +
                 "    }\n" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
@@ -248,7 +249,7 @@ public class TypecheckerTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
@@ -262,31 +263,193 @@ public class TypecheckerTest {
                 "    }\n" +
                 " return 1" +
                 "}";
-        ErrorHandler e = testWithTableAndTypeChecker(testProgram);
+        ErrorHandler e = testProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
-    private EzuinoParser createParser(String testString) {
+    @Test
+    public void notStringTest() throws IOException {
+        String program = "string s s := !\"test\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void minusStringTest() throws IOException {
+        String program = "string s s := -\"test\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void notIntegerTest() throws IOException {
+        String program = "int i i := !1";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void minusIntegerTest() throws IOException {
+        String program = "int i i := -1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void notDoubleTest() throws IOException {
+        String program = "double d d := !1.0";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void minusDoubleTest() throws IOException {
+        String program = "double d d := -1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void notBooleanTest() throws IOException {
+        String program = "boolean b b := !true";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void minusBooleanTest() throws IOException {
+        String program = "boolean b b := -true";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void addString() throws IOException {
+        String program = "string s s := \"1\" + \"2\"";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void addBoolean() throws IOException {
+        String program = "boolean b b := true + false";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void addInteger() throws IOException {
+        String program = "int i i := 1 + 1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void addDouble() throws IOException {
+        String program = "double d d := 1.0 + 1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void subtractString() throws IOException {
+        String program = "string s s := \"1\" - \"2\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void subtractBoolean() throws IOException {
+        String program = "boolean b b := true - false";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void subtractInteger() throws IOException {
+        String program = "int i i := 1 - 1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void subtractDouble() throws IOException {
+        String program = "double d d := 1.0 - 1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void multiplyString() throws IOException {
+        String program = "string s s := \"1\" * \"2\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void multiplyBoolean() throws IOException {
+        String program = "boolean b b := true * false";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void multiplyInteger() throws IOException {
+        String program = "int i i := 1 * 1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void multiplyDouble() throws IOException {
+        String program = "double d d := 1.0 * 1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void divideString() throws IOException {
+        String program = "string s s := \"1\" / \"2\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void divideBoolean() throws IOException {
+        String program = "boolean b b := true / false";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void divideInteger() throws IOException {
+        String program = "int i i := 1 / 1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void divideDouble() throws IOException {
+        String program = "double d d := 1.0 / 1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    private ErrorHandler testProgram(String testString) throws IOException {
+
         CharStream stream = CharStreams.fromString(testString);
+
         EzuinoLexer lexer = new EzuinoLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         EzuinoParser parser = new EzuinoParser(tokens);
-        return parser;
-    }
-
-    private ErrorHandler testWithTableAndTypeChecker(String testProgram) throws IOException {
-        ErrorHandler errorhandler = new ErrorHandler();
-        SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor(false, errorhandler);
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-        Typechecker typechecker = new Typechecker(errorhandler);
-        ReturnStmtTypeCheckVisitor rstcv = new ReturnStmtTypeCheckVisitor(errorhandler);
-        MissingReturnStmtVisitor mrsv = new MissingReturnStmtVisitor(errorhandler);
-        EzuinoParser ezuinoParser = createParser(testProgram);
-        AstNode astNode = ezuinoParser.start().accept(buildAstVisitor);
-        astNode.accept(symbolTableVisitor);
-        astNode.accept(typechecker);
-        astNode.accept(rstcv);
-        astNode.accept(mrsv);
+        ParseTree parseTree = parser.start();
+        AstNode astNode = parseTree.accept(buildAstVisitor);
+
+        ErrorHandler errorhandler = new ErrorHandler();
+        boolean printDcl = false;
+        astNode.accept(new SymbolTableVisitor(printDcl, errorhandler));
+        astNode.accept(new Typechecker(errorhandler));
         return errorhandler;
     }
 }
