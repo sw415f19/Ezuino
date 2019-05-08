@@ -299,11 +299,13 @@ public class TypecheckerTest {
 
     private ErrorHandler testProgram(String program) throws IOException {
         CharStream stream = CharStreams.fromString(program);
+        
         EzuinoLexer lexer = new EzuinoLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
         AstNode astNode = parseTree.accept(new BuildAstVisitor());
+        
         ErrorHandler errorhandler = new ErrorHandler();
         boolean printDcl = false;
         astNode.accept(new SymbolTableVisitor(printDcl, errorhandler));
