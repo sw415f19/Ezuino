@@ -261,6 +261,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(AnalogReadNode node) {
+        node.setType(Type.INT);
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -289,6 +290,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DigitalReadNode node) {
+        node.setType(Type.INT);
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }

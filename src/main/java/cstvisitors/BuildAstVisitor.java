@@ -188,15 +188,19 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         }
 
         if (ctx.parent instanceof EzuinoParser.PrimaryExprContext) {
+            switch(id) {
+                case "AnalogRead" : return new AnalogReadNode(id, parameters);
+                case "DigitalRead" : return new DigitalReadNode(id, parameters);
+            }
             return new Func_callExprNode(id, parameters);
+
         }
         // Check for reserved keywords in id
         switch(id) {
             case "Print": return new PrintNode(id, parameters);
-            case "AnalogRead" : return new AnalogReadNode(id, parameters);
             case "DelayMicro" : return new DelayMicroNode(id, parameters);
             case "Delay" : return new DelayNode(id, parameters);
-            case "DigitalRead" : return new DigitalReadNode(id, parameters);
+            case "AnalogWrite" : return new AnalogWriteNode(id, parameters);
             case "DigitalWrite" : return new DigitalWriteNode(id, parameters);
             case "PinMode" : return new SetPinModeNode(id, parameters);
             case "SerialBegin" : return new SerialBeginNode(id, parameters);

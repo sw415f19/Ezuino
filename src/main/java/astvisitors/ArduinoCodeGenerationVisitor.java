@@ -314,7 +314,7 @@ public class ArduinoCodeGenerationVisitor extends AstVisitor {
     public void visit(AnalogReadNode node) {
         builder.append("analogRead(");
         node.getParameters().get(0).accept(this);
-        builder.append(");\n");
+        builder.append(")");
     }
 
     @Override
@@ -344,7 +344,7 @@ public class ArduinoCodeGenerationVisitor extends AstVisitor {
     public void visit(DigitalReadNode node) {
         builder.append("digitalRead(");
         node.getParameters().get(0).accept(this);
-        builder.append(");\n");
+        builder.append(")");
     }
 
     @Override
