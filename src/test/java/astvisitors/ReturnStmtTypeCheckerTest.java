@@ -3,6 +3,8 @@ package astvisitors;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -141,6 +143,48 @@ public class ReturnStmtTypeCheckerTest {
         String program = "func main() { if(1<2) { return } }";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
+    }
+
+    @Test
+    public void whileTestTypeNotTheSame() throws IOException {
+        String testProgram = "func int main() { while(1<2){ return \"hi\" } return \"sup\"}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void returnTwoDifferentTypesError() throws IOException {
+        String testProgram = "func int hello(){ if(true){ return 3.4 } else { return 4 }}";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void returnAsBreakReturnTypeError() throws IOException {
+        String testProgram = "func hello(){ if(true){ return 1 } return }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void whileTest() throws IOException {
+        String testProgram = "func int main(){ while(1<2) { return 1 } return 1 }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void whileTestVoidFunc() throws IOException {
+        String testProgram = "func main(){ while(1<2){ int a } }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void ifStmtAfterWhile() throws IOException {
+        String testProgram = "func int main(){ while(1<2){ } if(1>2) { } return 1 }";
+        ErrorHandler e = parseProgram(testProgram);
+        assertFalse(e.hasErrors());
     }
 
     private ErrorHandler parseProgram(String program) {
