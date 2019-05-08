@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.experimental.max.MaxCore;
+
 import ast.Assign_stmtNode;
+import ast.AstNode;
 import ast.BlockNode;
 import ast.BooleanLiteral;
 import ast.DclNode;
@@ -29,6 +32,7 @@ import ast.expr.RelationalExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
@@ -41,15 +45,20 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
 	private PrintStream out;
 	private StringBuilder sb;
+	private StringBuilder functionStringBuilder; //needed to remember the functions and declare them after main
 	private List<String> currentVariableEnvironment;
+	private List<String> currentLocalFunctions;
 	private int labelCounter = 0;
 	private int currentStackSize = 0;
 	private int maxStackSize = 0;
+	private int maxLocals = 0;
 	
 	public JasminCodeGeneratorVisitor(PrintStream out) {
 		this.out = out;
 		currentVariableEnvironment = new ArrayList<String>();
+		currentLocalFunctions = new ArrayList<String>();
 		sb = new StringBuilder();
+		functionStringBuilder = new StringBuilder();
 	}
 	@Override
     public void visit(StartNode node) {
@@ -64,6 +73,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     public void visit(BlockNode node) {
     	// Need to remember the state of the environment, as we cannot rollback the changes made in this block otherwise
     	List<String> oldVariableEnvironment = new ArrayList<String>(currentVariableEnvironment);
+    	List<String> oldLocalFunctions = new ArrayList<String>(currentLocalFunctions);
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
         }
@@ -74,11 +84,15 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
             node.getReturnstmtNode().accept(this);
         }
         currentVariableEnvironment = oldVariableEnvironment;
+        currentLocalFunctions = oldLocalFunctions;
     }
 
     @Override
     public void visit(DclNode node) {
     		currentVariableEnvironment.add(node.getID());
+    		if(maxLocals < currentVariableEnvironment.size() + currentLocalFunctions.size()) {
+    			maxLocals = currentVariableEnvironment.size() + currentLocalFunctions.size();
+    		}
     		incrementStack();
     		switch(node.getType()){
     		case INT: case BOOL:
@@ -119,6 +133,13 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
+        append("invokestatic program/");
+        generateFunctionSignature(node);
+        if(!currentLocalFunctions.contains(node.getID())) {
+        	currentLocalFunctions.add(node.getID());
+        	maxLocals = Math.max(maxLocals, currentLocalFunctions.size() + currentVariableEnvironment.size());
+        }
+        
     }
 
     @Override
@@ -154,10 +175,33 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 
     @Override
     public void visit(Func_defNode node) {
+    	//made under the assumption that there are no duplicate IDs
+    	StringBuilder oldStringBuilder = sb;
+    	sb = functionStringBuilder;
+    	List<String> oldVariableEnvironment = currentVariableEnvironment;
+    	int oldStackSize = currentStackSize;
+    	int oldMaxStack = maxStackSize;
+    	int oldMaxLocals = maxLocals;
+    	currentStackSize = 0;
+    	maxStackSize = 0;
+    	maxLocals = 0;
+    	currentVariableEnvironment = new ArrayList<String>();
+    	
+    	append(".method public static ");
+    	generateFunctionSignature(node);
         for (DclNode parameter : node.getParameters()) {
-            parameter.accept(this);
+            currentVariableEnvironment.add(parameter.getID());
+            maxLocals++;
         }
         node.getBlockNode().accept(this);
+        appendLine(".limit stack " + maxStackSize);
+        appendLine(".limit locals " + maxLocals);
+        appendLine(".end method");
+        currentVariableEnvironment = oldVariableEnvironment;
+        sb = oldStringBuilder;
+        maxStackSize = oldMaxStack;
+        currentStackSize = oldStackSize;
+        maxLocals = oldMaxLocals;
     }
 
     @Override
@@ -399,7 +443,13 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
-
+        
+        append("invokestatic program/");
+        generateFunctionSignature(node);
+        if(!currentLocalFunctions.contains(node.getId())) {
+        	currentLocalFunctions.add(node.getId());
+        	maxLocals = Math.max(maxLocals, currentLocalFunctions.size() + currentVariableEnvironment.size());
+        }
     }
 
 	@Override
@@ -510,6 +560,118 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 		append(endLabel + ": ");
 		
 	}
+	private void generateFunctionSignature(AstNode functionNode) {
+		if(functionNode instanceof Func_callExprNode) {
+			generateSignatureForExprFunc((Func_callExprNode)functionNode);
+		}
+		else if(functionNode instanceof Func_defNode) {
+			generateSignatureForFuncDef((Func_defNode)functionNode);
+		}
+		else if(functionNode instanceof CustomFuncCallStmtNode) {
+			generateSignatureForStmtFunc((CustomFuncCallStmtNode)functionNode);
+		}
+	}
+	private void generateSignatureForStmtFunc(CustomFuncCallStmtNode node) {
+		append(node.getId());
+		append("(");
+		for (AExpr parameter : node.getParameters()) {
+            switch(parameter.getType()) {
+            case INT: case BOOL:
+            	append("I");
+            	break;
+            case DOUBLE:
+            	append("D");
+            	break;
+            case STRING:
+            	append("Ljava/lang/String;");
+            	break;
+            }
+            ;
+        }
+        append(")");
+        switch(node.getType()) {
+        case INT: case BOOL:
+        	appendLine("I");
+        	break;
+        case DOUBLE:
+        	appendLine("D");
+        	break;
+        case STRING:
+        	appendLine("Ljava/lang/String;");
+        	break;
+        case VOID:
+        	appendLine("V");
+        	break;
+        }
+ 
+	}
+	private void generateSignatureForFuncDef(Func_defNode node) {
+		append(node.getId());
+		append("(");
+		for (DclNode parameter : node.getParameters()) {
+            switch(parameter.getType()) {
+            case INT: case BOOL:
+            	append("I");
+            	break;
+            case DOUBLE:
+            	append("D");
+            	break;
+            case STRING:
+            	append("Ljava/lang/String;");
+            	break;
+            }
+            ;
+        }
+        append(")");
+        switch(node.getType()) {
+        case INT: case BOOL:
+        	appendLine("I");
+        	break;
+        case DOUBLE:
+        	appendLine("D");
+        	break;
+        case STRING:
+        	appendLine("Ljava/lang/String;");
+        	break;
+        case VOID:
+        	appendLine("V");
+        	break;
+        }
+		
+	}
+	private void generateSignatureForExprFunc(Func_callExprNode node) {
+		append(node.getID());
+		append("(");
+		for (AExpr parameter : node.getParameters()) {
+            switch(parameter.getType()) {
+            case INT: case BOOL:
+            	append("I");
+            	break;
+            case DOUBLE:
+            	append("D");
+            	break;
+            case STRING:
+            	append("Ljava/lang/String;");
+            	break;
+            }
+            ;
+        }
+        append(")");
+        switch(node.getType()) {
+        case INT: case BOOL:
+        	appendLine("I");
+        	break;
+        case DOUBLE:
+        	appendLine("D");
+        	break;
+        case STRING:
+        	appendLine("Ljava/lang/String;");
+        	break;
+        case VOID:
+        	appendLine("V");
+        	break;
+        }
+	}
 	private void generatePrefixSetupCode() {
 		appendLine(".class public program");
 		appendLine(".super java/lang/Object");
@@ -518,6 +680,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 	private void generatePostfixSetupCode() {
         appendLine("return");
         appendLine(".limit stack " + maxStackSize);
+        appendLine(".limit locals " + maxLocals);
         appendLine(".end method");
+        sb.append(functionStringBuilder);
 	}
 }
