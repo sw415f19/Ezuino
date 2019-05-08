@@ -281,7 +281,6 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
         node.getLeftNode().accept(this);
         node.getRightNode().accept(this);
         Type comparedType = node.getLeftNode().getType();
-        
         appendComparisonBasedOnType(comparedType);
         appendConditionalJump(node.getOperator(), trueLabel);
         appendConditionalBooleanToStack(trueLabel);        
@@ -437,11 +436,16 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 		}
 	}
 	private void appendComparisonBasedOnType(Type comparedType) {
-		if(comparedType.equals(Type.INT)) {
+		switch(comparedType) {
+		case INT:
         	appendLine("lcmp");
-        }
-        else {
-        	appendLine("dcmpg");
+        	break;
+		case DOUBLE:
+			appendLine("dcmpg");
+			break;
+		case STRING:
+			appendLine("java/lang/String.compareTo:(Ljava/lang/String;)I");
+			break;
         }
 		decrementStack();
 	}
