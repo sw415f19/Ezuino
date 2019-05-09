@@ -24,13 +24,13 @@ public class SymbolTableVisitor extends AstVisitor {
 
     private void enterVariableSymbol(String id, ITypeNode node) {
         if (!stVariables.enterSymbol(id, node)) {
-            errorHandler.alreadyDeclared(id);
+            errorHandler.varAlreadyDeclared(id);
         }
     }
-    
+
     private void enterFunctionSymbol(String id, ITypeNode node) {
         if (!stFunctions.enterSymbol(id, node)) {
-            errorHandler.alreadyDeclared(id);
+            errorHandler.funcAlreadyDeclared(id);
         }
     }
 
@@ -45,7 +45,7 @@ public class SymbolTableVisitor extends AstVisitor {
     private Type getFunctionType(String id) {
         Type result = stFunctions.retrieveSymbol(id);
         if (result == null) {
-            errorHandler.notDeclaredVar(id);
+            errorHandler.notDeclaredFunc(id);
         }
         return result;
     }
@@ -60,7 +60,6 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(BlockNode node) {
-        openScope();
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
         }
@@ -70,7 +69,6 @@ public class SymbolTableVisitor extends AstVisitor {
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().accept(this);
         }
-        closeScope();
     }
 
     @Override
@@ -115,10 +113,13 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(Func_defNode node) {
         enterFunctionSymbol(node.getId(), node);
+
+        openScope();
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
         node.getBlockNode().accept(this);
+        closeScope();
     }
 
     @Override
@@ -131,11 +132,15 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(If_stmtNode node) {
         node.getExpr().accept(this);
+        openScope();
         node.getIfBlock().accept(this);
+        closeScope();
+        openScope();
         BlockNode elseBlock = node.getElseBlock();
         if (elseBlock != null) {
             elseBlock.accept(this);
         }
+        closeScope();
     }
 
     @Override
@@ -157,12 +162,9 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(While_stmtNode node) {
         node.getExprNode().accept(this);
+        openScope();
         node.getBlockNode().accept(this);
-    }
-
-    @Override
-    public void visit(ParametersNode node) {
-
+        closeScope();
     }
 
     @Override
@@ -230,6 +232,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
+        getFunctionType(node.getId());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -237,7 +240,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     }
 
-    private void openScope(){
+    private void openScope() {
         stVariables.openScope();
         stFunctions.openScope();
     }
@@ -248,7 +251,7 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerCastNode node) { 
+    public void visit(IntegerCastNode node) {
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }

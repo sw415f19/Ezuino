@@ -2,7 +2,6 @@ package ast.expr;
 
 import ast.expr.aexpr.AExpr;
 import ast.expr.aexpr.AParenthesisExpr;
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class ParenthesisExprNode extends AParenthesisExpr {
@@ -16,18 +15,13 @@ public class ParenthesisExprNode extends AParenthesisExpr {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
-	
-	@Override
-	public void acceptLevel(AstLevelVisitor v, int level) {
-		v.visitLevel(this, level);
-	}
 
     public AExpr getNode() {
         return this.node;
     }
-    
+
     @Override
     public String toString() {
-    	return super.toString() + " { type: "+ type + " }";
+        return super.toString() + " { type: " + type + " }";
     }
 }

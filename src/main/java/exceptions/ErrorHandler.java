@@ -21,21 +21,32 @@ public class ErrorHandler {
         messageList.clear();
     }
 
-    public void printErrorList() {
+    public void printErrors(String reason) {
         if (hasErrors()) {
-            System.err.println(" -- ## ERROR OUTPUT CONSOLE ## -- ");
+            StringBuilder sb = new StringBuilder();
+            String errmsg = "##  " + reason + "\n -- ## ERROR OUTPUT CONSOLE ## -- ";
+            sb.append(errmsg + "\n");
             for (ErrorMessage message : messageList) {
-                System.out.println(message);
+                sb.append(message + "\n");
             }
+            System.err.println(sb.toString());
         }
     }
 
-    public void alreadyDeclared(String character) {
-        messageList.add(new SyntaxError(ErrorType.ERROR, character + " is already defined in this scope."));
+    public void varAlreadyDeclared(String character) {
+        messageList.add(new SyntaxError(ErrorType.ERROR,  "Variable " + character + " is already defined in this scope."));
+    }
+
+    public void funcAlreadyDeclared(String character) {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Function " + character + " is already defined in this scope."));
     }
 
     public void notDeclaredVar(String character) {
-        messageList.add(new SyntaxError(ErrorType.ERROR, character + " has not been declared."));
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Variable " + character + " has not been declared."));
+    }
+
+    public void notDeclaredFunc(String character) {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Function " + character + " has not been declared."));
     }
 
     public void reservedKeyword(String character) {
@@ -43,7 +54,7 @@ public class ErrorHandler {
     }
 
     public void unexpectedType(ITypeNode node, Type type) {
-        messageList.add(new GeneralError(ErrorType.ERROR, "\" " + "Unexpeced type! Expected: " + type.name() + ", was " + node.getType().name() + " - Node: " + node));
+        messageList.add(new GeneralError(ErrorType.ERROR, "Unexpeced type! Expected: " + type.name() + ", was " + node.getType().name() + " - Node: " + node));
     }
 
     public void emptyStack() {
@@ -82,6 +93,11 @@ public class ErrorHandler {
 
     public void invalidCastException() {
         messageList.add(new GeneralError(ErrorType.ERROR, "Invalid Cast Error - tried to cast a Double to Integer"));
+    }
+
+    public void syntaxError(int errorCount, String msg, int line, int charPositionInLine) {
+        String errorMsg = String.format("#" + errorCount + " - " + "Error parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine);
+        messageList.add(new SyntaxError(ErrorType.ERROR, errorMsg));
     }
 
 }

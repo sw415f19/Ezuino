@@ -2,7 +2,6 @@ package ast;
 
 import java.util.Iterator;
 import java.util.List;
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class Func_defNode extends StmtNode implements ITypeNode {
@@ -38,11 +37,6 @@ public class Func_defNode extends StmtNode implements ITypeNode {
     @Override
     public void accept(AstVisitor v) {
         v.visit(this);
-    }
-
-    @Override
-    public void acceptLevel(AstLevelVisitor v, int level) {
-        v.visitLevel(this, level);
     }
 
     public String toString() {

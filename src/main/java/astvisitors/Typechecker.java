@@ -118,11 +118,6 @@ public class Typechecker extends AstVisitor {
 
     }
 
-    public void visit(ParametersNode node) {
-
-    }
-
-    // One added assignment nodes.
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
@@ -196,10 +191,10 @@ public class Typechecker extends AstVisitor {
     private void checkSpecificType(ITypeNode node, Type expectedType) {
         Type nodeType = node.getType();
         if (nodeType == null) {
-            System.err.println("node null in 184 :(");
+            System.err.println("Compiler error. nodeType was null in Typechecker.");
         }
         if (nodeType != expectedType) {
-            errorHandler.unexpectedType(node, nodeType);
+            errorHandler.unexpectedType(node, expectedType);
         }
     }
 
@@ -243,6 +238,20 @@ public class Typechecker extends AstVisitor {
     public void visit(UnaryExprNode node) {
         node.getNode().accept(this);
         node.setType(node.getNode().getType());
+        switch (node.getOperator()) {
+        case "!":
+            checkSpecificType(node, Type.BOOL);
+            break;
+        case "-":
+            Type nodeType = node.getType();
+            if (!(nodeType.equals(Type.DOUBLE) || nodeType.equals(Type.INT))) {
+                errorHandler.unexpectedType(node, Type.INT);
+            }
+            break;
+        default:
+            System.err.println("Compiler error! Unexpected operator in UnaryExprNode in Typechecker");
+            break;
+        }
     }
 
     @Override

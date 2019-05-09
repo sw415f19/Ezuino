@@ -1,7 +1,6 @@
 package ast.expr;
 
 import ast.expr.aexpr.*;
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class LogicalAndExprNode extends ALogicalAndExpr {
@@ -17,11 +16,6 @@ public class LogicalAndExprNode extends ALogicalAndExpr {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
-	
-	@Override
-	public void acceptLevel(AstLevelVisitor v, int level) {
-		v.visitLevel(this, level);
-	}
 
     public ALogicalAndExpr getLeftNode() {
         return leftNode;

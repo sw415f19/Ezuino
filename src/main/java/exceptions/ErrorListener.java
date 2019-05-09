@@ -1,9 +1,6 @@
 package exceptions;
 
-import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.List;
-import java.util.Locale;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.Parser;
@@ -14,14 +11,19 @@ import org.antlr.v4.runtime.dfa.DFA;
 
 public class ErrorListener implements ANTLRErrorListener {
 
-    private int errorCount = 0;
-    List<String> errorList = new ArrayList<>();
+    private int errorCount;
+    private ErrorHandler errorHandler;
+    
+    public ErrorListener(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+        this.errorCount = 0;
+    }
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
             String msg, RecognitionException e) {
-                this.errorCount++;
-                errorList.add((String.format(Locale.ROOT, "#" + errorCount + " - "+ "Error parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine)));
+        this.errorCount++;
+        errorHandler.syntaxError(errorCount, msg, line, charPositionInLine);
     }
 
     @Override
@@ -40,16 +42,6 @@ public class ErrorListener implements ANTLRErrorListener {
     public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction,
             ATNConfigSet configs) {
 
-    }
-
-    public boolean hasError(){
-        return errorCount > 0;
-    }
-
-    public void printErrors(){
-            for (int i = 0; i < errorList.size(); i++) {
-                    System.out.println(errorList.get(i));
-            }
     }
     
 }

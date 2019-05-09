@@ -15,7 +15,6 @@ import ast.DclNode;
 import ast.DclsNode;
 import ast.Func_defNode;
 import ast.If_stmtNode;
-import ast.ParametersNode;
 import ast.Return_stmtNode;
 import ast.StartNode;
 import ast.StmtsNode;
@@ -290,11 +289,6 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
         decrementStack();
         //There is no iftrue command, so we have to use ifne instead, which jumps if the stack head is not 0 (true is a non-zero value)
         //Per typechecker, this value should be a "boolean", and not an "integer".
-    }
-
-    @Override
-    public void visit(ParametersNode node) {
-
     }
 
     @Override

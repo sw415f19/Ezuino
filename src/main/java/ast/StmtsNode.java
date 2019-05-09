@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import astvisitors.AstLevelVisitor;
 import astvisitors.AstVisitor;
 
 public class StmtsNode extends AstNode {
@@ -30,10 +29,5 @@ public class StmtsNode extends AstNode {
     @Override
     public void accept(AstVisitor v) {
         v.visit(this);
-    }
-
-    @Override
-    public void acceptLevel(AstLevelVisitor v, int level) {
-        v.visitLevel(this, level);
     }
 }
