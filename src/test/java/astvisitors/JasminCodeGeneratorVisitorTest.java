@@ -65,8 +65,8 @@ public class JasminCodeGeneratorVisitorTest {
 			Process proc;
 			try {
 				proc = Runtime.getRuntime().exec("java -classpath " + ezuinoSourceFileDir.getPath() + " " + classFile.getName().replace(".class", ""));
-				PushbackInputStream pIn = new PushbackInputStream(proc.getInputStream());
-				PushbackInputStream pErr = new PushbackInputStream(proc.getErrorStream());
+				InputStream pIn = proc.getInputStream();
+				InputStream pErr = proc.getErrorStream();
 				pIn.transferTo(System.out);
 				assertEquals(-1, pErr.read());
 				
