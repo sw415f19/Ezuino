@@ -29,6 +29,7 @@ import cstvisitors.BuildAstVisitor;
 import exceptions.ErrorHandler;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
+import jasmin.*;
 
 public class JasminCodeGeneratorVisitorTest {
 
