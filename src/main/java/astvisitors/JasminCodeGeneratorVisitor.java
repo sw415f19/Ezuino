@@ -2,10 +2,7 @@ package astvisitors;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import org.junit.experimental.max.MaxCore;
 
 import ast.Assign_stmtNode;
 import ast.AstNode;
@@ -31,7 +28,6 @@ import ast.expr.RelationalExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
