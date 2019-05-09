@@ -48,17 +48,24 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
 	private StringBuilder functionStringBuilder; //needed to remember the functions and declare them after main
 	private List<String> currentVariableEnvironment;
 	private List<String> currentLocalFunctions;
+	private String programName;
 	private int labelCounter = 0;
 	private int currentStackSize = 0;
-	private int maxStackSize = 0;
-	private int maxLocals = 0;
+	private int maxStackSize = 1;
+	private int maxLocals = 1;
 	
 	public JasminCodeGeneratorVisitor(PrintStream out) {
+		this(out, "program");
+	}
+	
+	public JasminCodeGeneratorVisitor(PrintStream out, String programName) {
 		this.out = out;
 		currentVariableEnvironment = new ArrayList<String>();
 		currentLocalFunctions = new ArrayList<String>();
 		sb = new StringBuilder();
 		functionStringBuilder = new StringBuilder();
+		this.programName = programName;
+		
 	}
 	@Override
     public void visit(StartNode node) {
@@ -183,8 +190,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
     	int oldMaxStack = maxStackSize;
     	int oldMaxLocals = maxLocals;
     	currentStackSize = 0;
-    	maxStackSize = 0;
-    	maxLocals = 0;
+    	maxStackSize = 1;
+    	maxLocals = 1;
     	currentVariableEnvironment = new ArrayList<String>();
     	
     	append(".method public static ");
@@ -370,7 +377,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
         	}
         	break;
         case STRING:
-        	appendLine("java/lang/String.concat:(Ljava/lang/String;)Ljava/lang/String;");
+        	appendLine("invokevirtual java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;");
         	break;
         }
 
@@ -673,7 +680,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor{
         }
 	}
 	private void generatePrefixSetupCode() {
-		appendLine(".class public program");
+		appendLine(".class public " + programName);
 		appendLine(".super java/lang/Object");
 		appendLine(".method public static main([Ljava/lang/String;)V");
 	}
