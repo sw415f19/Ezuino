@@ -111,6 +111,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		case STRING:
 			appendLine("new java/lang/String");
 			appendLine("astore " + currentVariableEnvironment.indexOf(node.getID()));
+			break;
+		default:
+			appendLine("FEJL");
 		}
 		decrementStack();
 
@@ -130,6 +133,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		case STRING:
 			appendLine("astore " + currentVariableEnvironment.lastIndexOf(node.getId()));
+			break;
+		default:
+			appendLine("FEJL");
 		}
 		decrementStack();
 	}
@@ -215,7 +221,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		if (node.getReturnExpr() != null) {
 			node.getReturnExpr().accept(this);
 			switch (node.getType()) {
-			case INT: case BOOL:
+			case INT:
+			case BOOL:
 				appendLine("ireturn");
 				break;
 			case DOUBLE:
@@ -224,6 +231,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			case STRING:
 				appendLine("areturn");
 				break;
+			default:
+				appendLine("FEJL");
 			}
 		} else {
 			appendLine("return");
@@ -301,6 +310,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		case STRING:
 			appendLine("aload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
 			break;
+		default:
+			appendLine("FEJL");
 
 		}
 	}
@@ -368,6 +379,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		case STRING:
 			appendLine("invokevirtual java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;");
 			break;
+		default:
+			appendLine("FEJL");
 		}
 
 	}
@@ -391,6 +404,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				appendLine("ddiv");
 			}
 			break;
+		default:
+			appendLine("FEJL");
 		}
 	}
 
@@ -406,6 +421,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			case DOUBLE:
 				appendLine("dneg");
 				break;
+			default:
+				appendLine("FEJL");
 			}
 		} else {
 			generateCodeForLogicalNegation();
@@ -438,11 +455,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			child.accept(this);
 		}
 
-		append("invokestatic program/");
+		append("invokestatic " + programName + "/");
 		generateFunctionSignature(node);
 		if (!currentLocalFunctions.contains(node.getId())) {
 			currentLocalFunctions.add(node.getId());
 			maxLocals = Math.max(maxLocals, currentLocalFunctions.size() + currentVariableEnvironment.size());
+		}
+		if (!node.getType().equals(Type.VOID)) {
+			appendLine("pop");
 		}
 	}
 
@@ -492,6 +512,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		case STRING:
 			appendLine("java/lang/String.compareTo:(Ljava/lang/String;)I");
 			break;
+		default:
+			appendLine("FEJL");
 		}
 		decrementStack();
 	}
@@ -587,6 +609,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			case STRING:
 				append("Ljava/lang/String;");
 				break;
+			default:
+				appendLine("FEJL");
 			}
 			;
 		}
@@ -624,12 +648,15 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			case STRING:
 				append("Ljava/lang/String;");
 				break;
+			default:
+				append("FEJL");
 			}
 			;
 		}
 		append(")");
 		switch (node.getType()) {
-		case INT: case BOOL:
+		case INT:
+		case BOOL:
 			appendLine("I");
 			break;
 		case DOUBLE:
@@ -660,6 +687,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			case STRING:
 				append("Ljava/lang/String;");
 				break;
+			default:
+				append("FEJL");
 			}
 		}
 		append(")");
