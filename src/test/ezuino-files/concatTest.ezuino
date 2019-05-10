@@ -3,3 +3,4 @@ string b
 a := "Hello "
 b := "World!"
 print(a + b)
+print("x" + "D" + "D" + "D")

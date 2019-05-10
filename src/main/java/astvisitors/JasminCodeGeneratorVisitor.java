@@ -105,8 +105,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("istore " + currentVariableEnvironment.indexOf(node.getID()));
 			break;
 		case DOUBLE:
-			appendLine("dconst_0");
-			appendLine("dstore " + currentVariableEnvironment.indexOf(node.getID()));
+			appendLine("fconst_0");
+			appendLine("fstore " + currentVariableEnvironment.indexOf(node.getID()));
 			break;
 		case STRING:
 			appendLine("new java/lang/String");
@@ -129,7 +129,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 
 			break;
 		case DOUBLE:
-			appendLine("dstore " + currentVariableEnvironment.lastIndexOf(node.getId()));
+			appendLine("fstore " + currentVariableEnvironment.lastIndexOf(node.getId()));
 			break;
 		case STRING:
 			appendLine("astore " + currentVariableEnvironment.lastIndexOf(node.getId()));
@@ -226,7 +226,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				appendLine("ireturn");
 				break;
 			case DOUBLE:
-				appendLine("dreturn");
+				appendLine("freturn");
 				break;
 			case STRING:
 				appendLine("areturn");
@@ -305,7 +305,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("iload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
 			break;
 		case DOUBLE:
-			appendLine("dload" + currentVariableEnvironment.lastIndexOf(node.getVal()));
+			appendLine("fload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
 			break;
 		case STRING:
 			appendLine("aload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
@@ -371,9 +371,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		case DOUBLE:
 			if (node.getOperator().equals("+")) {
-				appendLine("dadd");
+				appendLine("fadd");
 			} else {
-				appendLine("dsub");
+				appendLine("fsub");
 			}
 			break;
 		case STRING:
@@ -399,9 +399,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		case DOUBLE:
 			if (node.getOperator().equals("*")) {
-				appendLine("dmul");
+				appendLine("fmul");
 			} else {
-				appendLine("ddiv");
+				appendLine("fdiv");
 			}
 			break;
 		default:
@@ -419,7 +419,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				appendLine("ineg");
 				break;
 			case DOUBLE:
-				appendLine("dneg");
+				appendLine("fneg");
 				break;
 			default:
 				appendLine("FEJL");
@@ -507,7 +507,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("lcmp");
 			break;
 		case DOUBLE:
-			appendLine("dcmpg");
+			appendLine("fcmpg");
 			break;
 		case STRING:
 			appendLine("java/lang/String.compareTo:(Ljava/lang/String;)I");
@@ -604,7 +604,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				append("I");
 				break;
 			case DOUBLE:
-				append("D");
+				append("F");
 				break;
 			case STRING:
 				append("Ljava/lang/String;");
@@ -621,7 +621,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("I");
 			break;
 		case DOUBLE:
-			appendLine("D");
+			appendLine("F");
 			break;
 		case STRING:
 			appendLine("Ljava/lang/String;");
@@ -643,7 +643,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				append("I");
 				break;
 			case DOUBLE:
-				append("D");
+				append("F");
 				break;
 			case STRING:
 				append("Ljava/lang/String;");
@@ -660,7 +660,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("I");
 			break;
 		case DOUBLE:
-			appendLine("D");
+			appendLine("F");
 			break;
 		case STRING:
 			appendLine("Ljava/lang/String;");
@@ -682,7 +682,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				append("I");
 				break;
 			case DOUBLE:
-				append("D");
+				append("F");
 				break;
 			case STRING:
 				append("Ljava/lang/String;");
@@ -698,7 +698,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("I");
 			break;
 		case DOUBLE:
-			appendLine("D");
+			appendLine("F");
 			break;
 		case STRING:
 			appendLine("Ljava/lang/String;");
