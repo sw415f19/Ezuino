@@ -36,19 +36,18 @@ public class JasminCodeGeneratorVisitorTest {
 	public void predefinedProgramsTest() {
 		File ezuinoSourceFileDir = new File("./src/test/ezuino-files/");
 		List<File> ezuinoSourceFiles = Arrays.asList(ezuinoSourceFileDir.listFiles()).stream()
-				.filter(x -> x.getName().matches(".*.ezuino")).collect(Collectors.toList()); //only add .ezuino files
+				.filter(x -> x.getName().matches(".*.ezuino")).collect(Collectors.toList()); // only add .ezuino files
 		List<File> jasminFiles = new ArrayList<File>();
 		String[] runParams = new String[ezuinoSourceFiles.size() + 2];
 		runParams[0] = "-d";
 		runParams[1] = ezuinoSourceFileDir.getPath() + "/";
 		int i = 2;
-		
-		for(File file : ezuinoSourceFiles) {
+
+		for (File file : ezuinoSourceFiles) {
 			File outputFile = new File(file.getPath().replace(".ezuino", ".j"));
 			try {
 				compileToJasmin(file, outputFile);
-			}
-			catch (FileNotFoundException e){
+			} catch (FileNotFoundException e) {
 				System.out.println("Could not write to file: " + outputFile.getName());
 				fail();
 			}
@@ -56,56 +55,60 @@ public class JasminCodeGeneratorVisitorTest {
 			runParams[i] = outputFile.getPath();
 			i++;
 		}
-		jasminFiles.forEach(file -> file.deleteOnExit()); //comment this line out to inspect .j files
+		jasminFiles.forEach(file -> file.deleteOnExit()); // comment this line out to inspect .j files
 		jasmin.Main.main(runParams);
 		List<File> classFiles = Arrays.asList(ezuinoSourceFileDir.listFiles()).stream()
-				.filter(x -> x.getName().matches(".*.class")).collect(Collectors.toList()); //only add .class files
-		classFiles.forEach(file -> file.deleteOnExit()); //comment this line out to inspect .class files
-		for(File classFile : classFiles) {
+				.filter(x -> x.getName().matches(".*.class")).collect(Collectors.toList()); // only add .class files
+		classFiles.forEach(file -> file.deleteOnExit()); // comment this line out to inspect .class files
+		for (File classFile : classFiles) {
 			Process proc;
 			try {
-				proc = Runtime.getRuntime().exec("java -classpath " + ezuinoSourceFileDir.getPath() + " " + classFile.getName().replace(".class", ""));
+				proc = Runtime.getRuntime().exec("java -classpath " + ezuinoSourceFileDir.getPath() + " "
+						+ classFile.getName().replace(".class", ""));
 				InputStream pIn = proc.getInputStream();
 				InputStream pErr = proc.getErrorStream();
 				assertEquals(-1, pErr.read());
-				
+
 			} catch (IOException e) {
-				
+
 			}
-			
+
 		}
 	}
+
 	private void compileToJasmin(File inputFile, File outputFile) throws FileNotFoundException {
 		ParseTree parseTree = parseANTLR(inputFile);
 		AstNode startNode = buildAndDecorateAST(parseTree);
 		generateJasminToOutput(startNode, outputFile);
 	}
+
 	private ParseTree parseANTLR(File inputFile) {
 		CharStream cs = null;
 		try {
 			cs = CharStreams.fromFileName(inputFile.getPath());
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			System.out.println("Could not find file: " + inputFile.getName());
 		}
-        EzuinoLexer lLexer = new EzuinoLexer(cs);
-        CommonTokenStream tokens = new CommonTokenStream(lLexer);
-        EzuinoParser parser = new EzuinoParser(tokens);
-        return parser.start();
+		EzuinoLexer lLexer = new EzuinoLexer(cs);
+		CommonTokenStream tokens = new CommonTokenStream(lLexer);
+		EzuinoParser parser = new EzuinoParser(tokens);
+		return parser.start();
 	}
+
 	private AstNode buildAndDecorateAST(ParseTree parseTree) {
 		BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
-        ErrorHandler errorhandler = new ErrorHandler();
-        AstNode astNode = parseTree.accept(buildAstVisitor);
-        SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(false, errorhandler);
-        astNode.accept(symbolTableFillingVisitor);
-        Typechecker tc = new Typechecker(errorhandler);
-        astNode.accept(tc);
-        return astNode;
+		ErrorHandler errorhandler = new ErrorHandler();
+		AstNode astNode = parseTree.accept(buildAstVisitor);
+		SymbolTableVisitor symbolTableFillingVisitor = new SymbolTableVisitor(false, errorhandler);
+		astNode.accept(symbolTableFillingVisitor);
+		Typechecker tc = new Typechecker(errorhandler);
+		astNode.accept(tc);
+		return astNode;
 	}
+
 	private void generateJasminToOutput(AstNode startNode, File outputFile) throws FileNotFoundException {
-        PrintStream ps = new PrintStream(outputFile);
-        JasminCodeGeneratorVisitor jscgv = new JasminCodeGeneratorVisitor(ps, outputFile.getName().replace(".j", ""));
-        startNode.accept(jscgv);
+		PrintStream ps = new PrintStream(outputFile);
+		JasminCodeGeneratorVisitor jscgv = new JasminCodeGeneratorVisitor(ps, outputFile.getName().replace(".j", ""));
+		startNode.accept(jscgv);
 	}
 }
