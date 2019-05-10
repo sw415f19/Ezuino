@@ -1,6 +1,7 @@
 package astvisitors;
 
 import ast.*;
+import ast.arduino.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
@@ -50,6 +51,16 @@ public class SymbolTableVisitor extends AstVisitor {
         return result;
     }
 
+    private void openScope(){
+        stVariables.openScope();
+        stFunctions.openScope();
+    }
+
+    private void closeScope() {
+        stVariables.closeScope();
+        stFunctions.closeScope();
+    }
+
     @Override
     public void visit(StartNode node) {
         openScope();
@@ -92,22 +103,22 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IntegerLiteral node) {
-
+        node.setType(Type.INT);
     }
 
     @Override
     public void visit(DoubleLiteral node) {
-
-    }
-
-    @Override
-    public void visit(BooleanLiteral node) {
-
+        node.setType(Type.DOUBLE);
     }
 
     @Override
     public void visit(StringLiteral node) {
+        node.setType(Type.STRING);
+    }
 
+    @Override
+    public void visit(BooleanLiteral node) {
+        node.setType(Type.BOOL);
     }
 
     @Override
@@ -232,25 +243,16 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
+        // Check if function is declared
         getFunctionType(node.getId());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
-
-    }
-
-    private void openScope() {
-        stVariables.openScope();
-        stFunctions.openScope();
-    }
-
-    private void closeScope() {
-        stVariables.closeScope();
-        stFunctions.closeScope();
     }
 
     @Override
     public void visit(IntegerCastNode node) {
+        node.setType(Type.INT);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
@@ -258,8 +260,84 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DoubleCastNode node) {
+        node.setType(Type.DOUBLE);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
+    }
+
+    @Override
+    public void visit(AnalogReadNode node) {
+        node.setType(Type.INT);
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(AnalogWriteNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DelayMicroNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DelayNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DigitalReadNode node) {
+        node.setType(Type.INT);
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DigitalWriteNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(SetPinModeNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(SerialBeginNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(SerialEndNode node) {
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(PinLevelNode node) {
+        node.setType(Type.INT);
+    }
+
+    @Override
+    public void visit(PinModeNode node) {
+        node.setType(Type.INT);
     }
 }

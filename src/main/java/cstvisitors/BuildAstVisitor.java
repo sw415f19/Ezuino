@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ast.*;
+import ast.arduino.*;
 import generated.EzuinoBaseVisitor;
 import generated.EzuinoParser;
 import generated.EzuinoParser.DclContext;
@@ -169,7 +170,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
     @Override
     public AstNode visitFunc_call(EzuinoParser.Func_callContext ctx) {
         String id = ctx.ID().getText();
-        ArrayList<AExpr> parameters = new ArrayList<AExpr>();
+        List<AExpr> parameters = new ArrayList<AExpr>();
 
         for (ExprContext param : ctx.func_call_param().expr()) {
             parameters.add((AExpr) param.accept(this));
@@ -186,18 +187,28 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         }
 
         if (ctx.parent instanceof EzuinoParser.PrimaryExprContext) {
-            return new Func_callExprNode(id, parameters);
+            switch(id) {
+                case "AnalogRead" : return new AnalogReadNode(id, parameters);
+                case "DigitalRead" : return new DigitalReadNode(id, parameters);
+                default : return new Func_callExprNode(id, parameters);
+            }
         }
-
-        if ("print".equals(id)) {
-            return new PrintNode(parameters);
+        // Check for reserved keywords in id
+        switch(id) {
+            case "Print": return new PrintNode(id, parameters);
+            case "DelayMicro" : return new DelayMicroNode(id, parameters);
+            case "Delay" : return new DelayNode(id, parameters);
+            case "AnalogWrite" : return new AnalogWriteNode(id, parameters);
+            case "DigitalWrite" : return new DigitalWriteNode(id, parameters);
+            case "PinMode" : return new SetPinModeNode(id, parameters);
+            case "SerialBegin" : return new SerialBeginNode(id, parameters);
+            case "SerialEnd" : return new SerialEndNode(id, parameters);
+            default : return new CustomFuncCallStmtNode(id, parameters);
         }
-        return new CustomFuncCallStmtNode(id, parameters);
     }
 
     @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
-
         if (ctx.INTEGER() != null) {
             return new IntegerLiteral(ctx.INTEGER().getText());
         }
@@ -209,11 +220,18 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         if (ctx.STRING() != null) {
             return new StringLiteral(ctx.STRING().getText());
         }
-
+        // Check for reserved keywords in ID
         if (ctx.ID() != null) {
-            return new IdNode(ctx.ID().getText());
+            String ID = ctx.ID().getText();
+            switch(ID) {
+                case "INPUT": return new PinModeNode(ID);
+                case "OUTPUT" : return new PinModeNode(ID);
+                case "INPUT_PULLUP" : return new PinModeNode(ID);
+                case "HIGH" : return new PinLevelNode(ID);
+                case "LOW" : return new PinLevelNode(ID);
+                default : return new IdNode(ID);
+            }
         }
-
         return null;
     }
 
@@ -255,7 +273,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         return new BlockNode(dcls, stmts, returnstmts);
     }
 
-    public Type getType(EzuinoParser.TypeContext ctx) {
+    private Type getType(EzuinoParser.TypeContext ctx) {
         Type type = null;
         if (ctx == null) {
         	return Type.VOID;

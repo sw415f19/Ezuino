@@ -1,13 +1,14 @@
-package ast.funcallstmt;
+package ast.arduino;
 
 import ast.expr.aexpr.AExpr;
+import ast.funcallstmt.Func_callStmtNode;
 import astvisitors.AstVisitor;
 
 import java.util.List;
 
-public class PrintNode extends Func_callStmtNode {
+public class SerialBeginNode extends Func_callStmtNode {
 
-    public PrintNode(String id, List<AExpr> parameters) {
+    public SerialBeginNode(String id, List<AExpr> parameters) {
         super(id, parameters);
     }
 
@@ -15,5 +16,4 @@ public class PrintNode extends Func_callStmtNode {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
-
 }

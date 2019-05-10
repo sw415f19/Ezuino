@@ -4,14 +4,13 @@ import ast.expr.aexpr.AExpr;
 import ast.expr.aexpr.APrimaryExpr;
 import astvisitors.AstVisitor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Func_callExprNode extends APrimaryExpr {
-
     private String ID;
-    private ArrayList<AExpr> parameters = new ArrayList<AExpr>();
+    private List<AExpr> parameters;
 
-    public Func_callExprNode(String ID, ArrayList<AExpr> parameters) {
+    public Func_callExprNode(String ID, List<AExpr> parameters) {
         this.ID = ID;
         this.parameters = parameters;
     }
@@ -20,7 +19,7 @@ public class Func_callExprNode extends APrimaryExpr {
         return ID;
     }
 
-    public ArrayList<AExpr> getParameters() {
+    public List<AExpr> getParameters() {
         return parameters;
     }
 
