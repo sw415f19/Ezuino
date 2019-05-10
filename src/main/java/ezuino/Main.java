@@ -1,13 +1,7 @@
 package ezuino;
 
 import ast.AstNode;
-import astvisitors.CCodeGenerationVisitor;
-import astvisitors.FuncStructureVisitor;
-import astvisitors.IndentedPrintVisitor;
-import astvisitors.MissingReturnStmtVisitor;
-import astvisitors.ReturnStmtTypeCheckVisitor;
-import astvisitors.SymbolTableVisitor;
-import astvisitors.Typechecker;
+import astvisitors.*;
 import cstvisitors.BuildAstVisitor;
 import cstvisitors.CSTPrinter;
 import exceptions.ErrorHandler;
@@ -95,7 +89,8 @@ public class Main {
     }
 
     private static void codeGeneration(AstNode ast) {
-        ast.accept(new CCodeGenerationVisitor(System.out));
+
+        ast.accept(new ArduinoCodeGenerationVisitor(System.out));
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {

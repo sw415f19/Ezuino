@@ -1,21 +1,14 @@
 package ast.funcallstmt;
 
-import java.util.ArrayList;
-
 import ast.expr.aexpr.AExpr;
 import astvisitors.AstVisitor;
 
+import java.util.List;
+
 public class CustomFuncCallStmtNode extends Func_callStmtNode {
 
-    private String Id;
-
-    public CustomFuncCallStmtNode(String Id, ArrayList<AExpr> parameters) {
-        this.parameters = parameters;
-        this.Id = Id;
-    }
-
-    public String getId() {
-        return Id;
+    public CustomFuncCallStmtNode(String id, List<AExpr> parameters) {
+        super(id, parameters);
     }
 
     @Override
@@ -25,7 +18,7 @@ public class CustomFuncCallStmtNode extends Func_callStmtNode {
 
     @Override
     public String toString() {
-        return super.toString() + " { ID: " + this.Id + " }";
+        return super.toString() + " { ID: " + this.getId() + " }";
     }
 
 }

@@ -16,11 +16,11 @@ import ast.type.StringLiteral;
 import java.io.PrintStream;
 import java.util.Iterator;
 
-public class CCodeGenerationVisitor extends AstVisitor {
+public class ArduinoCodeGenerationVisitor extends AstVisitor {
     private final StringBuilder builder = new StringBuilder();
     private final PrintStream out;
 
-    public CCodeGenerationVisitor(PrintStream printStream) {
+    public ArduinoCodeGenerationVisitor(PrintStream printStream) {
         this.out = printStream;
     }
 
@@ -85,7 +85,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 nodeType = "char ";
                 break;
             case BOOL:
-                nodeType = "int ";
+                nodeType = "bool ";
                 break;
             case VOID:
                 nodeType = "void ";
@@ -130,9 +130,6 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(StartNode node) {
-        // includes
-        builder.append("#include <stdio.h>\n" +
-                "#include <string.h>\n");
         // start tree search
         node.getDcls().accept(this);
         node.getStmts().accept(this);
@@ -142,12 +139,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(BooleanLiteral node) {
-        if (node.getBoolval().equals("true")) {
-            builder.append("1");
-        }
-        if (node.getBoolval().equals("false")) {
-            builder.append("0");
-        }
+        builder.append(node.getBoolval());
     }
 
     @Override
@@ -171,12 +163,12 @@ public class CCodeGenerationVisitor extends AstVisitor {
                 nodeType = "double ";
                 break;
             case STRING:
-                // Converts the java string into a C char array of size 256
+                // Converts the java string into a char array of size 42
                 nodeType = "char ";
-                arrayLength = "[256]";
+                arrayLength = "[42]";
                 break;
             case BOOL:
-                nodeType = "int ";
+                nodeType = "bool ";
                 break;
         }
         builder.append(nodeType).append(node.getID()).append(arrayLength);
@@ -207,16 +199,9 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(Assign_stmtNode node) {
-        if (node.getExprNode().getType().equals(Type.STRING)) {
-            builder.append("strcpy(").append(node.getId()).append(", ");
-            node.getExprNode().accept(this);
-            builder.append(");\n");
-        }
-        else {
-            builder.append(node.getId()).append(" = ");
-            node.getExprNode().accept(this);
-            builder.append(";\n");
-        }
+        builder.append(node.getId()).append(" = ");
+        node.getExprNode().accept(this);
+        builder.append(";\n");
     }
 
     @Override
@@ -293,8 +278,8 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(StringLiteral node) {
-        if (node.getVal().length() > 255) {
-            System.err.println("CCodeGenerationVisitor Error: String beyond maximum length!");
+        if (node.getVal().length() > 41) {
+            System.err.println("ArduinoCodeGenerationVisitor Error: String beyond maximum length!");
         }
         else {
             builder.append(node.getVal());
@@ -308,7 +293,7 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
-        builder.append("printf(%s, ");
+        builder.append("Serial.print(");
         for (AExpr exp : node.getParameters()) {
             exp.accept(this);
         }
@@ -317,53 +302,88 @@ public class CCodeGenerationVisitor extends AstVisitor {
 
     @Override
     public void visit(IntegerCastNode node) {
+
     }
 
     @Override
     public void visit(DoubleCastNode node) {
+
     }
 
     @Override
     public void visit(AnalogReadNode node) {
+        builder.append("analogRead(");
+        node.getParameters().get(0).accept(this);
+        builder.append(")");
     }
 
     @Override
     public void visit(AnalogWriteNode node) {
+        builder.append("analogWrite(");
+        node.getParameters().get(0).accept(this);
+        builder.append(", ");
+        node.getParameters().get(1).accept(this);
+        builder.append(");\n");
     }
 
     @Override
     public void visit(DelayMicroNode node) {
+        builder.append("delayMicroseconds(");
+        node.getParameters().get(0).accept(this);
+        builder.append(");\n");
     }
 
     @Override
     public void visit(DelayNode node) {
+        builder.append("delay(");
+        node.getParameters().get(0).accept(this);
+        builder.append(");\n");
     }
 
     @Override
     public void visit(DigitalReadNode node) {
+        builder.append("digitalRead(");
+        node.getParameters().get(0).accept(this);
+        builder.append(")");
     }
 
     @Override
     public void visit(DigitalWriteNode node) {
+        builder.append("digitalWrite(");
+        node.getParameters().get(0).accept(this);
+        builder.append(", ");
+        node.getParameters().get(1).accept(this);
+        builder.append(");\n");
     }
 
     @Override
     public void visit(SetPinModeNode node) {
+        builder.append("pinMode(");
+        node.getParameters().get(0).accept(this);
+        builder.append(", ");
+        node.getParameters().get(1).accept(this);
+        builder.append(");\n");
     }
 
     @Override
     public void visit(SerialBeginNode node) {
+        builder.append("Serial.begin(");
+        node.getParameters().get(0).accept(this);
+        builder.append(");\n");
     }
 
     @Override
     public void visit(SerialEndNode node) {
+        builder.append("Serial.end();\n");
     }
 
     @Override
     public void visit(PinLevelNode node) {
+        builder.append(node.getVal());
     }
 
     @Override
     public void visit(PinModeNode node) {
+        builder.append(node.getVal());
     }
 }

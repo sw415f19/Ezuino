@@ -1,6 +1,7 @@
 package astvisitors;
 
 import ast.*;
+import ast.arduino.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
@@ -204,4 +205,58 @@ public class MissingReturnStmtVisitor extends AstVisitor {
         
     }
 
+    @Override
+    public void visit(AnalogReadNode node) {
+
+    }
+
+    @Override
+    public void visit(AnalogWriteNode node) {
+
+    }
+
+    @Override
+    public void visit(DelayMicroNode node) {
+
+    }
+
+    @Override
+    public void visit(DelayNode node) {
+
+    }
+
+    @Override
+    public void visit(DigitalReadNode node) {
+
+    }
+
+    @Override
+    public void visit(DigitalWriteNode node) {
+
+    }
+
+    @Override
+    public void visit(SetPinModeNode node) {
+
+    }
+
+    @Override
+    public void visit(SerialBeginNode node) {
+
+    }
+
+    @Override
+    public void visit(SerialEndNode node) {
+
+    }
+
+    @Override
+    public void visit(PinLevelNode node) {
+
+    }
+
+    @Override
+    public void visit(PinModeNode node) {
+
+    }
 }
