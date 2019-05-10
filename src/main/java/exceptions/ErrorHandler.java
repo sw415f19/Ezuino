@@ -100,4 +100,11 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, errorMsg));
     }
 
+    public void invalidFunctionParameterError(String nodeName) {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid parameter in function: " + nodeName));
+    }
+
+    public void arduinoIntRangeError(int val) {
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Int out of Arduino value range: " + val));
+    }
 }

@@ -1,4 +1,4 @@
-package ast.funcallstmt.cast;
+package ast.arduino;
 
 import ast.expr.Func_callExprNode;
 import ast.expr.aexpr.AExpr;
@@ -6,9 +6,9 @@ import astvisitors.AstVisitor;
 
 import java.util.List;
 
-public class IntegerCastNode extends Func_callExprNode {
+public class AnalogReadNode extends Func_callExprNode {
 
-    public IntegerCastNode(String ID, List<AExpr> parameters) {
+    public AnalogReadNode(String ID, List<AExpr> parameters) {
         super(ID, parameters);
     }
 
@@ -16,5 +16,4 @@ public class IntegerCastNode extends Func_callExprNode {
     public void accept(AstVisitor v) {
         v.visit(this);
     }
-
 }

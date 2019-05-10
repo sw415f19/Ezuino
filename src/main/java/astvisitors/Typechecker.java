@@ -1,33 +1,61 @@
 package astvisitors;
 
-import java.util.Arrays;
-
 import ast.*;
+import ast.arduino.*;
 import ast.expr.*;
+import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.Func_callStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.funcallstmt.cast.DoubleCastNode;
 import ast.funcallstmt.cast.IntegerCastNode;
-import ast.expr.aexpr.AExpr;
-import ast.type.*;
+import ast.type.DoubleLiteral;
+import ast.type.IdNode;
+import ast.type.IntegerLiteral;
+import ast.type.StringLiteral;
 import exceptions.ErrorHandler;
 
-public class Typechecker extends AstVisitor {
+import java.util.Arrays;
 
-    private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
+public class Typechecker extends AstVisitor {
+    private final String keywords[] = {"PRINT", "RETURN", "DEFAULT", "SWITCH"};
     private ErrorHandler errorHandler;
 
     public Typechecker(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
     }
 
-    public void visit(Func_callStmtNode node) {
-        for (AExpr parameter : node.getParameters()) {
-            parameter.accept(this);
+    private void checkType(ITypeNode leftNode, ITypeNode rightNode) {
+        Type leftType = leftNode.getType();
+        Type rightType = rightNode.getType();
+        if (leftType == null) {
+            System.err.println("Left type null!");
+            return;
+        }
+        if (rightType == null) {
+            System.err.println("Right type null!");
+            return;
+        }
+        if (leftType != rightType) {
+            errorHandler.typeMismatch(leftNode, rightNode);
+
         }
     }
 
+    private void checkSpecificType(ITypeNode node, Type expectedType) {
+        Type nodeType = node.getType();
+        if (nodeType == null) {
+            System.err.println("node null in 184 :(");
+        }
+        if (nodeType != expectedType) {
+            errorHandler.unexpectedType(node, nodeType);
+        }
+    }
+
+    private boolean isReservedKeyword(String word) {
+        return (Arrays.binarySearch(keywords, word.toUpperCase()) >= 0);
+    }
+
+    @Override
     public void visit(BlockNode node) {
         if (node.getDclsNode() != null) {
             node.getDclsNode().accept(this);
@@ -38,17 +66,17 @@ public class Typechecker extends AstVisitor {
         if (node.getReturnstmtNode() != null) {
             node.getReturnstmtNode().accept(this);
         }
-
     }
 
+    @Override
     public void visit(Func_defNode node) {
         node.getBlockNode().accept(this);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
-
     }
 
+    @Override
     public void visit(Return_stmtNode node) {
         Type nodeType = Type.VOID;
         AExpr expression = node.getReturnExpr();
@@ -59,6 +87,7 @@ public class Typechecker extends AstVisitor {
         node.setType(nodeType);
     }
 
+    @Override
     public void visit(If_stmtNode node) {
         node.getExpr().accept(this);
         node.getIfBlock().accept(this);
@@ -66,58 +95,42 @@ public class Typechecker extends AstVisitor {
             node.getElseBlock().accept(this);
         }
         checkSpecificType(node.getExpr(), Type.BOOL);
-
     }
 
+    @Override
     public void visit(StartNode node) {
         node.getDcls().accept(this);
         node.getStmts().accept(this);
-
     }
 
-    public void visit(BooleanLiteral node) {
-        node.setType(Type.BOOL);
-    }
-
-    public void visit(StmtNode node) {
-
-    }
-
+    @Override
     public void visit(StmtsNode node) {
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
         }
     }
 
+    @Override
     public void visit(DclNode node) {
         if (isReservedKeyword(node.getID()))
             errorHandler.reservedKeyword(node.getID());
     }
 
-    public void visit(TypeNode node) {
-
-    }
-
+    @Override
     public void visit(DclsNode node) {
         for (int i = 0; i < node.getChildCount(); i++) {
             node.getChild(i).accept(this);
         }
-
     }
 
-    public void visit(ValNode node) {
-    }
-
+    @Override
     public void visit(While_stmtNode node) {
         node.getExprNode().accept(this);
         node.getBlockNode().accept(this);
         checkSpecificType(node.getExprNode(), Type.BOOL);
     }
 
-    public void visit(ExprNode node) {
-
-    }
-
+    @Override
     public void visit(Assign_stmtNode node) {
         node.getExprNode().accept(this);
         checkType(node, node.getExprNode());
@@ -171,33 +184,6 @@ public class Typechecker extends AstVisitor {
         node.setType(Type.BOOL);
     }
 
-    private void checkType(ITypeNode leftNode, ITypeNode rightNode) {
-        Type leftType = leftNode.getType();
-        Type rightType = rightNode.getType();
-        if (leftType == null) {
-            System.err.println("Left type null!");
-            return;
-        }
-        if (rightType == null) {
-            System.err.println("Right type null!");
-            return;
-        }
-        if (leftType != rightType) {
-            errorHandler.typeMismatch(leftNode, rightNode);
-
-        }
-    }
-
-    private void checkSpecificType(ITypeNode node, Type expectedType) {
-        Type nodeType = node.getType();
-        if (nodeType == null) {
-            System.err.println("Compiler error. nodeType was null in Typechecker.");
-        }
-        if (nodeType != expectedType) {
-            errorHandler.unexpectedType(node, expectedType);
-        }
-    }
-
     @Override
     public void visit(ParenthesisExprNode node) {
         node.getNode().accept(this);
@@ -206,32 +192,24 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(IntegerLiteral node) {
-        node.setType(Type.INT);
     }
 
     @Override
     public void visit(DoubleLiteral node) {
-        node.setType(Type.DOUBLE);
     }
 
     @Override
     public void visit(StringLiteral node) {
-        node.setType(Type.STRING);
+    }
+
+    @Override
+    public void visit(BooleanLiteral node) {
     }
 
     @Override
     public void visit(IdNode node) {
         if (node.getVal().toUpperCase().equals("TRUE") || node.getVal().toUpperCase().equals("FALSE"))
             errorHandler.invalidTF();
-    }
-
-    @Override
-    public void visit(AstNode astNode) {
-        super.visit(astNode);
-    }
-
-    private boolean isReservedKeyword(String word) {
-        return (Arrays.binarySearch(keywords, word.toUpperCase()) >= 0);
     }
 
     @Override
@@ -268,7 +246,6 @@ public class Typechecker extends AstVisitor {
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
-
     }
 
     @Override
@@ -280,7 +257,6 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(IntegerCastNode node) {
-        node.setType(Type.INT);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
@@ -288,12 +264,82 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(DoubleCastNode node) {
-        node.setType(Type.DOUBLE);
         for (AExpr var : node.getParameters()) {
             if (var.getType() == Type.INT) {
                 errorHandler.invalidCastException();
             }
             var.accept(this);
         }
+    }
+
+    @Override
+    public void visit(AnalogReadNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(AnalogWriteNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DelayMicroNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DelayNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DigitalReadNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DigitalWriteNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(SetPinModeNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(SerialBeginNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(SerialEndNode node) {
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(PinLevelNode node) {
+    }
+
+    @Override
+    public void visit(PinModeNode node) {
     }
 }
