@@ -41,10 +41,10 @@ public class TypeChecker extends AstVisitor {
     private void checkSpecificType(ITypeNode node, Type expectedType) {
         Type nodeType = node.getType();
         if (nodeType == null) {
-            System.err.println("node null in 184 :(");
+            System.err.println("Compiler error. nodeType was null in Typechecker.");
         }
         if (nodeType != expectedType) {
-            errorHandler.unexpectedType(node, nodeType);
+            errorHandler.unexpectedType(node, expectedType);
         }
     }
 
@@ -140,6 +140,10 @@ public class TypeChecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(node.getLeftNode().getType());
+        if (node.getType().equals(Type.BOOL) ||
+                node.getType().equals(Type.STRING) && node.getOperator().equals("-")) {
+            errorHandler.invalidOperatorForType(node.getOperator(), node.getType());
+        }
     }
 
     @Override
@@ -148,6 +152,9 @@ public class TypeChecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(node.getLeftNode().getType());
+        if (node.getType().equals(Type.STRING) || node.getType().equals(Type.BOOL)) {
+            errorHandler.invalidOperatorForType(node.getOperator(), node.getType());
+        }
     }
 
     @Override
@@ -204,20 +211,19 @@ public class TypeChecker extends AstVisitor {
     @Override
     public void visit(UnaryExprNode node) {
         node.getNode().accept(this);
-        node.setType(node.getNode().getType());
-        switch (node.getOperator()) {
-        case "!":
-            checkSpecificType(node, Type.BOOL);
-            break;
-        case "-":
-            Type nodeType = node.getType();
-            if (!(nodeType.equals(Type.DOUBLE) || nodeType.equals(Type.INT))) {
-                errorHandler.unexpectedType(node, Type.INT);
-            }
-            break;
-        default:
-            System.err.println("Compiler error! Unexpected operator in UnaryExprNode in TypeChecker");
-            break;
+        Type nodeType = node.getNode().getType();
+        node.setType(nodeType);
+        String nodeOperator = node.getOperator();
+
+        boolean printErr = false;
+        if ("-".equals(nodeOperator)) {
+            printErr = nodeType.equals(Type.BOOL) || nodeType.equals(Type.STRING);
+        } else if ("!".equals(nodeOperator)) {
+            printErr = !nodeType.equals(Type.BOOL);
+        }
+        if (printErr) {
+            errorHandler.invalidOperatorForType(nodeOperator, nodeType);
+
         }
     }
 

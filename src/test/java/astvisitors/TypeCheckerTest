@@ -130,21 +130,182 @@ public class TypeCheckerTest {
     }
 
     @Test
-    public void booleanMinusOperator() throws IOException {
-        String program = "double b b := -true";
+    public void notStringTest() throws IOException {
+        String program = "string s s := !\"test\"";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
+    @Test
+    public void minusStringTest() throws IOException {
+        String program = "string s s := -\"test\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void notIntegerTest() throws IOException {
+        String program = "int i i := !1";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void minusIntegerTest() throws IOException {
+        String program = "int i i := -1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void notDoubleTest() throws IOException {
+        String program = "double d d := !1.0";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void minusDoubleTest() throws IOException {
+        String program = "double d d := -1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void notBooleanTest() throws IOException {
+        String program = "boolean b b := !true";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void minusBooleanTest() throws IOException {
+        String program = "boolean b b := -true";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void addString() throws IOException {
+        String program = "string s s := \"1\" + \"2\"";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void addBoolean() throws IOException {
+        String program = "boolean b b := true + false";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void addInteger() throws IOException {
+        String program = "int i i := 1 + 1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void addDouble() throws IOException {
+        String program = "double d d := 1.0 + 1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void subtractString() throws IOException {
+        String program = "string s s := \"1\" - \"2\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void subtractBoolean() throws IOException {
+        String program = "boolean b b := true - false";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void subtractInteger() throws IOException {
+        String program = "int i i := 1 - 1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void subtractDouble() throws IOException {
+        String program = "double d d := 1.0 - 1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void multiplyString() throws IOException {
+        String program = "string s s := \"1\" * \"2\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void multiplyBoolean() throws IOException {
+        String program = "boolean b b := true * false";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void multiplyInteger() throws IOException {
+        String program = "int i i := 1 * 1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void multiplyDouble() throws IOException {
+        String program = "double d d := 1.0 * 1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void divideString() throws IOException {
+        String program = "string s s := \"1\" / \"2\"";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void divideBoolean() throws IOException {
+        String program = "boolean b b := true / false";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void divideInteger() throws IOException {
+        String program = "int i i := 1 / 1";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void divideDouble() throws IOException {
+        String program = "double d d := 1.0 / 1.0";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
     private ErrorHandler testProgram(String program) throws IOException {
         CharStream stream = CharStreams.fromString(program);
-
+        
         EzuinoLexer lexer = new EzuinoLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         EzuinoParser parser = new EzuinoParser(tokens);
         ParseTree parseTree = parser.start();
         AstNode astNode = parseTree.accept(new BuildAstVisitor());
-
+        
         ErrorHandler errorhandler = new ErrorHandler();
         boolean printDcl = false;
         astNode.accept(new SymbolTableVisitor(printDcl, errorhandler));

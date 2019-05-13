@@ -34,7 +34,7 @@ public class ErrorHandler {
     }
 
     public void varAlreadyDeclared(String character) {
-        messageList.add(new SyntaxError(ErrorType.ERROR,  "Variable " + character + " is already defined in this scope."));
+        messageList.add(new SyntaxError(ErrorType.ERROR, "Variable " + character + " is already defined in this scope."));
     }
 
     public void funcAlreadyDeclared(String character) {
@@ -98,6 +98,11 @@ public class ErrorHandler {
     public void syntaxError(int errorCount, String msg, int line, int charPositionInLine) {
         String errorMsg = String.format("#" + errorCount + " - " + "Error parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine);
         messageList.add(new SyntaxError(ErrorType.ERROR, errorMsg));
+    }
+
+    public void invalidOperatorForType(String operator, Type type) {
+        messageList.add(new GeneralError(ErrorType.ERROR, "Invalid operator \"" + operator + "\" for type " + type.toString()));
+
     }
 
     public void invalidFunctionParameterError(String nodeName) {
