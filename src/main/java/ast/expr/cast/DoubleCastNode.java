@@ -1,4 +1,4 @@
-package ast.funcallstmt.cast;
+package ast.expr.cast;
 
 import ast.expr.Func_callExprNode;
 import ast.expr.aexpr.AExpr;

@@ -49,8 +49,12 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Function " + character + " has not been declared."));
     }
 
-    public void reservedKeyword(String character) {
-        messageList.add(new GeneralError(ErrorType.ERROR, "\" " + character + " \"" + " is a reserved keyword and can not be used."));
+    public void reservedKeyword(String Id, String Keyword) {
+        messageList.add(new GeneralError(ErrorType.ERROR, "\"" + Id + "\"" + " is too similar to \"" + Keyword + "\" which is a reserved keyword."));
+    }
+
+    public void compatibilityKeyword(String Keyword) {
+        messageList.add(new GeneralError(ErrorType.ERROR, "\"" + Keyword + "\"" + " is a Java specified keyword and therefore unavailable."));
     }
 
     public void unexpectedType(ITypeNode node, Type type) {
@@ -69,10 +73,6 @@ public class ErrorHandler {
 
     public void returnNotGuaranteed() {
         messageList.add(new GeneralError(ErrorType.ERROR, "Return is not guaranteed since there are no return or an else block in the outer scope with return"));
-    }
-
-    public void invalidTF() {
-        messageList.add(new SyntaxError(ErrorType.ERROR, "Invalid spelling of TRUE / FALSE - mistype?"));
     }
 
     public void parameterLengthError(String functionName) {

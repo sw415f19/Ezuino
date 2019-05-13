@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-public class TypecheckerTest {
+public class TypeCheckerTest {
 
     @Test
     public void wrongIfExprType() throws IOException {
@@ -148,7 +148,7 @@ public class TypecheckerTest {
         ErrorHandler errorhandler = new ErrorHandler();
         boolean printDcl = false;
         astNode.accept(new SymbolTableVisitor(printDcl, errorhandler));
-        astNode.accept(new Typechecker(errorhandler));
+        astNode.accept(new TypeChecker(errorhandler));
         return errorhandler;
     }
 }
