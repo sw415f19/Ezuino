@@ -70,12 +70,12 @@ public class Main {
     private static void contextualAnalysis(AstNode ast, ErrorHandler errorHandler) {
 
         List<AstVisitor> visitors = new ArrayList<>();
-
+        
         boolean printDcl = true;
         visitors.add(new IndentedPrintVisitor());
         visitors.add(new SymbolTableVisitor(printDcl, errorHandler));
         visitors.add(new IndentedPrintVisitor());
-        visitors.add(new Typechecker(errorHandler));
+        visitors.add(new TypeChecker(errorHandler));
         visitors.add(new IndentedPrintVisitor());
         visitors.add(new ReturnStmtTypeCheckVisitor(errorHandler));
         visitors.add(new MissingReturnStmtVisitor(errorHandler));
