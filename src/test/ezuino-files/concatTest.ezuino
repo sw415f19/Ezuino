@@ -2,5 +2,5 @@ string a
 string b
 a := "Hello "
 b := "World!"
-print(a + b)
-print("x" + "D" + "D" + "D")
+Print(a + b)
+Print("x" + "D" + "D" + "D")

@@ -137,7 +137,6 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		case INT:
 		case BOOL:
 			appendLine("istore " + currentVariableEnvironment.lastIndexOf(node.getId()));
-
 			break;
 		case DOUBLE:
 			appendLine("fstore " + currentVariableEnvironment.lastIndexOf(node.getId()));
@@ -147,6 +146,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		default:
 			appendLine("FEJL");
+			break;
 		}
 		decrementStack();
 	}
@@ -187,6 +187,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		case "TRUE":
 			appendLine("bipush 1");
 			break;
+		default:
+			appendLine("FEJL");
 		}
 	}
 
@@ -434,6 +436,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				break;
 			default:
 				appendLine("FEJL");
+				break;
 			}
 		} else {
 			generateCodeForLogicalNegation();
@@ -591,6 +594,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		default:
 			appendLine("FEJL");
+			break;
 		}
 		decrementStack();
 	}
@@ -614,6 +618,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		case "!=":
 			appendLine("ifne " + label);
+			break;
+		default:
+			appendLine("FEJL");
 			break;
 		}
 		decrementStack();
@@ -728,7 +735,6 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			default:
 				append("FEJL");
 			}
-			;
 		}
 		append(")");
 		switch (node.getType()) {
@@ -766,6 +772,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				break;
 			default:
 				append("FEJL");
+				break;
 			}
 		}
 		append(")");
@@ -783,6 +790,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		case VOID:
 			appendLine("V");
 			break;
+		default:
+			appendLine("FEJL");
 		}
 	}
 
