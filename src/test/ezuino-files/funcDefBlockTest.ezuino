@@ -1,0 +1,5 @@
+if (true) {
+func boolean b() {
+return true
+}
+}

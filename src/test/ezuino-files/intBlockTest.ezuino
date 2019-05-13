@@ -1,0 +1,4 @@
+if (true) {
+int i
+i := 0
+}
