@@ -29,44 +29,65 @@ public class SymbolTableVisitor extends AstVisitor {
         }
     }
 
-    private void enterFunctionSymbol(String id, ITypeNode node) {
+    private void enterFunctionSymbol(Func_defNode node) {
+        String id = node.getId();
+        if (!stFunctions.isGlobalScope()) {
+            errorHandler.nestedFuncDef(id);
+        }
         if (!stFunctions.enterSymbol(id, node)) {
             errorHandler.funcAlreadyDeclared(id);
         }
     }
 
     private Type getVariableType(String id) {
-        Type result = stVariables.retrieveSymbol(id);
+        ITypeNode idNode = stVariables.retrieveSymbol(id);
+        if (idNode == null) {
+            errorHandler.undeclaredVariable(id);
+            return null;
+        }
+        return idNode.getType();
+    }
+
+    private Func_defNode getFunctionDef(String key) {
+        Func_defNode result = (Func_defNode) stFunctions.retrieveSymbol(key);
         if (result == null) {
-            errorHandler.notDeclaredVar(id);
+            errorHandler.undeclaredFunction(key);
         }
         return result;
     }
 
-    private Type getFunctionType(String id) {
-        Type result = stFunctions.retrieveSymbol(id);
-        if (result == null) {
-            errorHandler.notDeclaredFunc(id);
+    private Type getFunctionReturnType(String key) {
+        Func_defNode node = getFunctionDef(key);
+        if (node == null) {
+            return null;
         }
-        return result;
+        return node.getType();
     }
 
-    private void openScope(){
+    private void openVariableScope() {
         stVariables.openScope();
-        stFunctions.openScope();
     }
 
-    private void closeScope() {
+    private void closeVariableScope() {
         stVariables.closeScope();
+    }
+
+    private void openGeneralScope() {
+        stFunctions.openScope();
+        openVariableScope();
+    }
+
+    private void closeGeneralScope() {
         stFunctions.closeScope();
+        closeVariableScope();
     }
 
     @Override
     public void visit(StartNode node) {
-        openScope();
+        openGeneralScope();
         node.getDcls().accept(this);
         node.getStmts().accept(this);
-        closeScope();
+        closeGeneralScope();
     }
 
     @Override
@@ -95,7 +116,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-        node.setType(getFunctionType(node.getID()));
+        node.setType(getFunctionReturnType(node.getID()));
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -123,14 +144,14 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
-        enterFunctionSymbol(node.getId(), node);
+        enterFunctionSymbol(node);
 
-        openScope();
+        openGeneralScope();
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
         node.getBlockNode().accept(this);
-        closeScope();
+        closeGeneralScope();
     }
 
     @Override
@@ -143,15 +164,15 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(If_stmtNode node) {
         node.getExpr().accept(this);
-        openScope();
+        openVariableScope();
         node.getIfBlock().accept(this);
-        closeScope();
-        openScope();
+        closeVariableScope();
+        openVariableScope();
         BlockNode elseBlock = node.getElseBlock();
         if (elseBlock != null) {
             elseBlock.accept(this);
         }
-        closeScope();
+        closeVariableScope();
     }
 
     @Override
@@ -173,9 +194,9 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(While_stmtNode node) {
         node.getExprNode().accept(this);
-        openScope();
+        openVariableScope();
         node.getBlockNode().accept(this);
-        closeScope();
+        closeVariableScope();
     }
 
     @Override
@@ -244,11 +265,11 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(CustomFuncCallStmtNode node) {
         // Check if function is declared
-        getFunctionType(node.getId());
+        getFunctionDef(node.getId());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
-        node.setType(stFunctions.retrieveSymbol(node.getId()));
+        node.setType(getFunctionReturnType(node.getId()));
 
     }
 

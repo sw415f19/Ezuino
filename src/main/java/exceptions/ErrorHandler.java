@@ -41,11 +41,11 @@ public class ErrorHandler {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Function " + character + " is already defined in this scope."));
     }
 
-    public void notDeclaredVar(String character) {
+    public void undeclaredVariable(String character) {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Variable " + character + " has not been declared."));
     }
 
-    public void notDeclaredFunc(String character) {
+    public void undeclaredFunction(String character) {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Function " + character + " has not been declared."));
     }
 
@@ -111,5 +111,10 @@ public class ErrorHandler {
 
     public void arduinoIntRangeError(int val) {
         messageList.add(new SyntaxError(ErrorType.ERROR, "Int out of Arduino value range: " + val));
+    }
+
+    public void nestedFuncDef(String id) {
+        messageList.add(new GeneralError(ErrorType.ERROR, "The function \"" + id + "\" is defined within a function. This not possible."));
+
     }
 }

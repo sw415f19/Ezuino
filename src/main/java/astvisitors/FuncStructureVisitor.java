@@ -75,7 +75,7 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(Func_callExprNode node) {
-        Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getID());
+        Func_defNode funcdef = (Func_defNode) symtable.retrieveSymbol(node.getID());
         matchParameterList(node.getID(), node.getParameters(), funcdef.getParameters());
 
     }
@@ -247,7 +247,7 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
-        Func_defNode funcdef = (Func_defNode) symtable.getSymbolNode(node.getId());
+        Func_defNode funcdef = (Func_defNode) symtable.retrieveSymbol(node.getId());
         matchParameterList(node.getId(), node.getParameters(), funcdef.getParameters());
 
     }
