@@ -9,7 +9,7 @@ import ast.expr.aexpr.AExpr;
 
 public abstract class Func_callStmtNode extends StmtNode implements ITypeNode {
 
-	protected List<AExpr> parameters;
+	private List<AExpr> parameters;
 	private Type type;
 	private String Id;
 
