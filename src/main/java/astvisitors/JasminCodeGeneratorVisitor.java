@@ -395,6 +395,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		default:
 			appendLine("FEJL");
+			break;
 		}
 
 	}
