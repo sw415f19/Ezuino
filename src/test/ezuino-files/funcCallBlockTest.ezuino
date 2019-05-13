@@ -1,0 +1,7 @@
+func boolean b() {
+return true
+}
+if (true) {
+boolean a
+a := b()
+}

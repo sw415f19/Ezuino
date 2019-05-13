@@ -157,7 +157,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		for (AExpr child : node.getParameters()) {
 			child.accept(this);
 		}
-		append("invokestatic program/");
+		append("invokestatic " + programName +"/");
 		generateFunctionSignature(node);
 		if (!currentLocalFunctions.contains(node.getID())) {
 			currentLocalFunctions.add(node.getID());
@@ -265,7 +265,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("ifeq " + skipLabel); // if condition is false, skip (eq checks top of stack for a 0)
 			decrementStack();
 			node.getIfBlock().accept(this);
-			append("skipLabel" + ": ");
+			appendLabel(skipLabel);
 		} else {
 			int trueLabel = getNextLabel();
 			int endLabel = getNextLabel();
@@ -274,9 +274,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			decrementStack();
 			elseBlock.accept(this);
 			appendLine("goto " + endLabel);
-			append(trueLabel + ": ");
+			appendLabel(trueLabel);
 			node.getIfBlock().accept(this);
-			append(endLabel + ": ");
+			appendLabel(endLabel);
 		}
 	}
 
@@ -301,9 +301,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		int beginLabel = getNextLabel();
 		int enterLabel = getNextLabel();
 		appendLine("goto " + enterLabel);
-		append(beginLabel + ": ");
+		appendLabel(beginLabel);
 		node.getBlockNode().accept(this);
-		append(enterLabel + ": ");
+		appendLabel(enterLabel);
 		node.getExprNode().accept(this);
 		appendLine("ifne " + beginLabel);
 		decrementStack();
@@ -336,9 +336,21 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(RelationalExprNode node) {
 		int trueLabel = getNextLabel();
-		node.getLeftNode().accept(this);
-		node.getRightNode().accept(this);
 		Type comparedType = node.getLeftNode().getType();
+		if(comparedType.equals(Type.INT)) {
+			node.getLeftNode().accept(this);
+			appendLine("i2l");
+			node.getRightNode().accept(this);
+			appendLine("i2l");
+			incrementStack();
+			incrementStack();
+			decrementStack();
+			decrementStack();
+		}
+		else {
+			node.getLeftNode().accept(this);
+			node.getRightNode().accept(this);
+		}
 
 		appendComparisonBasedOnType(comparedType);
 		appendConditionalJump(node.getOperator(), trueLabel);
@@ -348,9 +360,21 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(EqualityExprNode node) {
 		int trueLabel = getNextLabel();
-		node.getLeftNode().accept(this);
-		node.getRightNode().accept(this);
 		Type comparedType = node.getLeftNode().getType();
+		if(comparedType.equals(Type.INT)) {
+			node.getLeftNode().accept(this);
+			appendLine("i2l");
+			node.getRightNode().accept(this);
+			appendLine("i2l");
+			incrementStack();
+			incrementStack();
+			decrementStack();
+			decrementStack();
+		}
+		else {
+			node.getLeftNode().accept(this);
+			node.getRightNode().accept(this);
+		}
 		appendComparisonBasedOnType(comparedType);
 		appendConditionalJump(node.getOperator(), trueLabel);
 		appendConditionalBooleanToStack(trueLabel);
@@ -611,10 +635,10 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("iflt " + label);
 			break;
 		case ">":
-			appendLine("ifgt" + label);
+			appendLine("ifgt " + label);
 			break;
 		case "<=":
-			appendLine("ifle" + label);
+			appendLine("ifle " + label);
 			break;
 		case ">=":
 			appendLine("ifge " + label);
@@ -638,9 +662,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		int endLabel = getNextLabel();
 		appendLine("iconst_0");
 		appendLine("goto " + endLabel);
-		append(trueLabel + ": ");
+		appendLabel(trueLabel);
 		appendLine("iconst_1");
-		append(endLabel + ": ");
+		appendLabel(endLabel);
 		incrementStack();
 	}
 
@@ -821,6 +845,16 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		appendLine(".limit locals " + maxLocals);
 		appendLine(".end method");
 		sb.append(functionStringBuilder);
+	}
+	private void appendLabel(int labelToAppend) {
+		if(getLastCommandFromStringBuilder().matches("[0-9]+: ")) {
+			appendLine("nop");
+		}
+		append(labelToAppend + ": ");
+	}
+	private String getLastCommandFromStringBuilder() {
+		int indexOfLastNewline = sb.lastIndexOf("\n");
+		return sb.substring(indexOfLastNewline + 1);
 	}
 
 }
