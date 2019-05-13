@@ -66,12 +66,18 @@ expr
     : logicalOrExpr
     ;
 func_def
-    : FUNCTION type? ID parameters block;
+    : FUNCTION type? ID '(' parameters ')' block
+    ;
+parameters
+    : dcl(','dcl)*
+    | 
+    ;
 func_call
     : ID '('func_call_param')'
     ;
 func_call_param
-    : expr? | expr(','expr)+
+    : expr(','expr)* 
+    | 
 	;
 val
     : ID
@@ -94,9 +100,6 @@ if_stmt
     ;
 while_stmt
     : WHILE '('expr')' block
-    ;
-parameters
-    : '('dcl?(','dcl)*')'
     ;
 block
     : '{'dcls stmts return_stmt?'}'
