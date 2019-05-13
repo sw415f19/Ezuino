@@ -420,6 +420,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		default:
 			appendLine("FEJL");
+			break;	
 		}
 	}
 
@@ -696,6 +697,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				break;
 			default:
 				appendLine("FEJL");
+				break;
 			}
 		}
 		append(")");
@@ -712,6 +714,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		case VOID:
 			appendLine("V");
+			break;
+		default:
+			appendLine("FEJL");
 			break;
 		}
 
