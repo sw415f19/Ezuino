@@ -1,6 +1,7 @@
 package astvisitors;
 
 import ast.*;
+import ast.arduino.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
@@ -44,9 +45,21 @@ public abstract class AstVisitor {
     public abstract void visit(StringLiteral node);
     public abstract void visit(IdNode node);
 
+    // Arduino nodes
+    public abstract void visit(AnalogReadNode node);
+    public abstract void visit(AnalogWriteNode node);
+    public abstract void visit(DelayMicroNode node);
+    public abstract void visit(DelayNode node);
+    public abstract void visit(DigitalReadNode node);
+    public abstract void visit(DigitalWriteNode node);
+    public abstract void visit(SetPinModeNode node);
+    public abstract void visit(SerialBeginNode node);
+    public abstract void visit(SerialEndNode node);
+    public abstract void visit(PinLevelNode node);
+    public abstract void visit(PinModeNode node);
 
 
-    public void visit(AstNode astNode) {
+    public final void visit(AstNode astNode) {
 		System.err.println("Compiler implementation error: Dont know how to visit: " + astNode.toString());
     }
 

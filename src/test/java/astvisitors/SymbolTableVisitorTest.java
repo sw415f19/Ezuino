@@ -121,7 +121,7 @@ public class SymbolTableVisitorTest {
 
     @Test
     public void definedVarFuncCall() throws IOException {
-        String program = "string a print(a)";
+        String program = "string a Print(a)";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }

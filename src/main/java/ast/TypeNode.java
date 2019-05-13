@@ -13,10 +13,4 @@ public abstract class TypeNode extends AstNode implements ITypeNode {
     public Type getType() {
         return this.type;
     }
-
-    @Override
-    public void accept(AstVisitor v) {
-        v.visit(this);
-
-    }
 }

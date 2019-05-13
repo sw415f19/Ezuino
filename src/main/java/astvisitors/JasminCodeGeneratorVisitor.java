@@ -17,6 +17,17 @@ import ast.StartNode;
 import ast.StmtsNode;
 import ast.Type;
 import ast.While_stmtNode;
+import ast.arduino.AnalogReadNode;
+import ast.arduino.AnalogWriteNode;
+import ast.arduino.DelayMicroNode;
+import ast.arduino.DelayNode;
+import ast.arduino.DigitalReadNode;
+import ast.arduino.DigitalWriteNode;
+import ast.arduino.PinLevelNode;
+import ast.arduino.PinModeNode;
+import ast.arduino.SerialBeginNode;
+import ast.arduino.SerialEndNode;
+import ast.arduino.SetPinModeNode;
 import ast.expr.AdditiveExprNode;
 import ast.expr.EqualityExprNode;
 import ast.expr.Func_callExprNode;
@@ -478,6 +489,72 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 
 	}
 
+	@Override
+	public void visit(AnalogReadNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(AnalogWriteNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(DelayMicroNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(DelayNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(DigitalReadNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(DigitalWriteNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(SetPinModeNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(SerialBeginNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(SerialEndNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(PinLevelNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void visit(PinModeNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
 	private void appendLine(String s) {
 		sb.append(s).append('\n');
 	}
@@ -722,4 +799,5 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		appendLine(".end method");
 		sb.append(functionStringBuilder);
 	}
+
 }

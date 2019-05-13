@@ -6,20 +6,25 @@ import ast.Type;
 import ast.expr.aexpr.AExpr;
 import astvisitors.AstVisitor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Func_callStmtNode extends StmtNode implements ITypeNode {
 
-    protected ArrayList<AExpr> parameters = new ArrayList<AExpr>();
+    protected List<AExpr> parameters;
     private Type type;
+    private String Id;
 
-    public ArrayList<AExpr> getParameters() {
+    public Func_callStmtNode(String id, List<AExpr> parameters) {
+        this.Id = id;
+        this.parameters = parameters;
+    }
+
+    public List<AExpr> getParameters() {
         return parameters;
     }
 
-    @Override
-    public void accept(AstVisitor v) {
-        v.visit(this);
+    public String getId() {
+        return Id;
     }
     public void setType(Type type) {
     	this.type = type;

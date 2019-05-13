@@ -47,21 +47,21 @@ public class FuncStructureTest {
 
     @Test
     public void printWrongType() {
-        String program = "print(1321)";
+        String program = "Print(1321)";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void printWrongLength() {
-        String program = "print(1321, 2)";
+        String program = "Print(1321, 2)";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void printCorrectSignature() {
-        String program = "print(\"test\")";
+        String program = "Print(\"test\")";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
