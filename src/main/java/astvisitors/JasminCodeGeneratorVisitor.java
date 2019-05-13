@@ -125,6 +125,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		default:
 			appendLine("FEJL");
+			break;
 		}
 		decrementStack();
 
@@ -247,6 +248,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 				break;
 			default:
 				appendLine("FEJL");
+				break;
 			}
 		} else {
 			appendLine("return");
@@ -326,6 +328,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		default:
 			appendLine("FEJL");
+			break;
 
 		}
 	}
