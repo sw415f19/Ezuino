@@ -248,6 +248,8 @@ public class SymbolTableVisitor extends AstVisitor {
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
+        node.setType(stFunctions.retrieveSymbol(node.getId()));
+
     }
 
     @Override

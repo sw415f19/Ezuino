@@ -1,0 +1,5 @@
+double c
+double d
+c := 2.4
+d := -5.2
+d := -d * 1.0 / c
