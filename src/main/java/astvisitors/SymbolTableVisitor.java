@@ -6,8 +6,8 @@ import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
-import ast.funcallstmt.cast.DoubleCastNode;
-import ast.funcallstmt.cast.IntegerCastNode;
+import ast.expr.cast.DoubleCastNode;
+import ast.expr.cast.IntegerCastNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -269,6 +269,8 @@ public class SymbolTableVisitor extends AstVisitor {
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
+        node.setType(stFunctions.retrieveSymbol(node.getId()));
+
     }
 
     @Override

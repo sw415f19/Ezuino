@@ -1,6 +1,8 @@
-func int main() {
-    while(1<2){
-        int a
-    }
-    return 1
-}
+int a
+boolean b
+string c
+double d
+a := 5
+b := true
+c := "hello world"
+d := 5.6
