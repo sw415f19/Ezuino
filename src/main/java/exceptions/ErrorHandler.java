@@ -53,6 +53,10 @@ public class ErrorHandler {
         messageList.add(new GeneralError(ErrorType.ERROR, "\"" + Id + "\"" + " is too similar to \"" + Keyword + "\" which is a reserved keyword."));
     }
 
+    public void compatibilityKeyword(String Keyword) {
+        messageList.add(new GeneralError(ErrorType.ERROR, "\"" + Keyword + "\"" + " is a Java specified keyword and therefore unavailable."));
+    }
+
     public void unexpectedType(ITypeNode node, Type type) {
         messageList.add(new GeneralError(ErrorType.ERROR, "Unexpeced type! Expected: " + type.name() + ", was " + node.getType().name() + " - Node: " + node));
     }

@@ -17,23 +17,34 @@ import exceptions.ErrorHandler;
 import java.util.*;
 
 public class ReservedKeywordsVisitor extends AstVisitor {
-    private final Map<String, String> keywords = new HashMap<String, String>();
+    private final Map<String, String> reservedKeywords = new HashMap<String, String>();
+    private final Set<String> compatibilityKeywords = new HashSet<String>();
     private final ErrorHandler errorHandler;
 
     public ReservedKeywordsVisitor(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
-        List<String> stringList = (Arrays.asList("goto", "return", "AND", "OR", "true", "false", "int", "double",
+        List<String> stringList = (Arrays.asList("return", "AND", "OR", "true", "false", "int", "double",
                 "boolean", "string", "while", "if", "else", "Print", "DigitalWrite", "DigitalRead",
                 "AnalogWrite", "AnalogRead", "Delay", "DelayMicro", "PinMode", "SerialBegin", "SerialEnd"));
         for (String word : stringList) {
-            keywords.put(word.toUpperCase(), word);
+            reservedKeywords.put(word.toUpperCase(), word);
         }
+        compatibilityKeywords.addAll(Arrays.asList("goto", "Double", "float", "Integer", "for",
+                "ArrayList", "List", "switch", "Collection"));
     }
 
     private void checkReservedKeywords(String Id) {
         String key = Id.toUpperCase();
-        if (keywords.containsKey(key)) {
-            errorHandler.reservedKeyword(Id, keywords.get(key));
+        if (reservedKeywords.containsKey(key)) {
+            if (!reservedKeywords.get(key).equals(Id)) {
+                errorHandler.reservedKeyword(Id, reservedKeywords.get(key));
+            }
+        }
+    }
+
+    private void checkCompatibilityKeywords(String Id) {
+        if (compatibilityKeywords.contains(Id)) {
+            errorHandler.compatibilityKeyword(Id);
         }
     }
 
@@ -216,6 +227,7 @@ public class ReservedKeywordsVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
+        checkCompatibilityKeywords(node.getVal());
         checkReservedKeywords(node.getVal());
     }
 
