@@ -15,8 +15,8 @@ import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
-import ast.funcallstmt.cast.DoubleCastNode;
-import ast.funcallstmt.cast.IntegerCastNode;
+import ast.expr.cast.DoubleCastNode;
+import ast.expr.cast.IntegerCastNode;
 import ast.type.*;
 import ast.expr.*;
 

@@ -209,7 +209,7 @@ public class MissingReturnStmtTest {
 
         ErrorHandler errorHandler = new ErrorHandler();
         ast.accept(new SymbolTableVisitor(false, errorHandler));
-        ast.accept(new Typechecker(errorHandler));
+        ast.accept(new TypeChecker(errorHandler));
         ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
         ast.accept(new MissingReturnStmtVisitor(errorHandler));
         return errorHandler;

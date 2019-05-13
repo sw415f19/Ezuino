@@ -1,24 +1,37 @@
 package ast.funcallstmt;
 
-import ast.StmtNode;
-import ast.expr.aexpr.AExpr;
-
 import java.util.List;
 
-public abstract class Func_callStmtNode extends StmtNode {
-    private String Id;
-    private List<AExpr> parameters;
+import ast.ITypeNode;
+import ast.StmtNode;
+import ast.Type;
+import ast.expr.aexpr.AExpr;
 
-    public Func_callStmtNode(String id, List<AExpr> parameters) {
-        this.Id = id;
-        this.parameters = parameters;
-    }
+public abstract class Func_callStmtNode extends StmtNode implements ITypeNode {
 
-    public List<AExpr> getParameters() {
-        return parameters;
-    }
+	private List<AExpr> parameters;
+	private Type type;
+	private String Id;
 
-    public String getId() {
-        return Id;
-    }
+	public Func_callStmtNode(String id, List<AExpr> parameters) {
+		this.Id = id;
+		this.parameters = parameters;
+	}
+
+	public List<AExpr> getParameters() {
+		return parameters;
+	}
+
+	public String getId() {
+		return Id;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
 }

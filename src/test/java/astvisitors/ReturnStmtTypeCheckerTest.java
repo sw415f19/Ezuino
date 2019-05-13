@@ -197,7 +197,7 @@ public class ReturnStmtTypeCheckerTest {
 
         ErrorHandler errorHandler = new ErrorHandler();
         ast.accept(new SymbolTableVisitor(false, errorHandler));
-        ast.accept(new Typechecker(errorHandler));
+        ast.accept(new TypeChecker(errorHandler));
         ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
         return errorHandler;
     }

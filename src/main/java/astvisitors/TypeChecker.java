@@ -4,23 +4,20 @@ import ast.*;
 import ast.arduino.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.expr.cast.DoubleCastNode;
+import ast.expr.cast.IntegerCastNode;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
-import ast.funcallstmt.cast.DoubleCastNode;
-import ast.funcallstmt.cast.IntegerCastNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
 import ast.type.StringLiteral;
 import exceptions.ErrorHandler;
 
-import java.util.Arrays;
-
-public class Typechecker extends AstVisitor {
-    private final String keywords[] = { "PRINT", "RETURN", "DEFAULT", "SWITCH" };
+public class TypeChecker extends AstVisitor {
     private ErrorHandler errorHandler;
 
-    public Typechecker(ErrorHandler errorHandler) {
+    public TypeChecker(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
     }
 
@@ -51,10 +48,6 @@ public class Typechecker extends AstVisitor {
         }
     }
 
-    private boolean isReservedKeyword(String word) {
-        return (Arrays.binarySearch(keywords, word.toUpperCase()) >= 0);
-    }
-
     @Override
     public void visit(BlockNode node) {
         if (node.getDclsNode() != null) {
@@ -70,10 +63,10 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(Func_defNode node) {
-        node.getBlockNode().accept(this);
         for (DclNode parameter : node.getParameters()) {
             parameter.accept(this);
         }
+        node.getBlockNode().accept(this);
     }
 
     @Override
@@ -112,8 +105,6 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        if (isReservedKeyword(node.getID()))
-            errorHandler.reservedKeyword(node.getID());
     }
 
     @Override
@@ -215,8 +206,6 @@ public class Typechecker extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        if (node.getVal().toUpperCase().equals("TRUE") || node.getVal().toUpperCase().equals("FALSE"))
-            errorHandler.invalidTF();
     }
 
     @Override
@@ -234,6 +223,7 @@ public class Typechecker extends AstVisitor {
         }
         if (printErr) {
             errorHandler.invalidOperatorForType(nodeOperator, nodeType);
+
         }
     }
 

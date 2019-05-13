@@ -1231,8 +1231,9 @@ public class ArduinoCodeGenerationVisitorTest {
         // Custom AST
         BuildAstVisitor buildAstVisitor = new BuildAstVisitor();
         AstNode ast = parseTree.accept(buildAstVisitor);
+        ast.accept(new ReservedKeywordsVisitor(errorHandler));
         ast.accept(new SymbolTableVisitor(false, errorHandler));
-        ast.accept(new Typechecker(errorHandler));
+        ast.accept(new TypeChecker(errorHandler));
         ast.accept(new ReturnStmtTypeCheckVisitor(errorHandler));
         ast.accept(new MissingReturnStmtVisitor(errorHandler));
         ast.accept(new FuncStructureVisitor(errorHandler));

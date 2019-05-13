@@ -1,0 +1,6 @@
+string a
+string b
+a := "Hello "
+b := "World!"
+Print(a + b)
+Print("x" + "D" + "D" + "D")
