@@ -35,10 +35,8 @@ public class ReservedKeywordsVisitor extends AstVisitor {
 
     private void checkReservedKeywords(String Id) {
         String key = Id.toUpperCase();
-        if (reservedKeywords.containsKey(key)) {
-            if (!reservedKeywords.get(key).equals(Id)) {
+        if (reservedKeywords.containsKey(key) && (!reservedKeywords.get(key).equals(Id))) {
                 errorHandler.reservedKeyword(Id, reservedKeywords.get(key));
-            }
         }
     }
 
