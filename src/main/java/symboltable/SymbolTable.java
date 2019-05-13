@@ -1,7 +1,6 @@
 package symboltable;
 
 import ast.ITypeNode;
-import ast.Type;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,17 +19,13 @@ public class SymbolTable {
         return result;
     }
 
-    private boolean isGlobalScope() {
+    public boolean isGlobalScope() {
         return this.parentTable == null;
     }
 
-    public Type retrieveSymbol(String key) {
-
-        if (key.equalsIgnoreCase("TRUE") || key.equalsIgnoreCase("FALSE"))
-            return null;
-
+    public ITypeNode retrieveSymbol(String key) {
         if (symbolMap.containsKey(key)) {
-            return symbolMap.get(key).getType();
+            return symbolMap.get(key);
         }
 
         if (isGlobalScope()) {
@@ -38,13 +33,6 @@ public class SymbolTable {
         }
 
         return this.parentTable.retrieveSymbol(key);
-    }
-
-    public ITypeNode getSymbolNode(String id) {
-        if (symbolMap.containsKey(id)) {
-            return symbolMap.get(id);
-        }
-        return this.parentTable.getSymbolNode(id);
     }
 
     public ITypeNode getSymbolCurrentScope(String id) {

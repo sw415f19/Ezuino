@@ -72,7 +72,7 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
 
     @Override
     public void visit(Return_stmtNode node) {
-        Func_defNode funcdefnode = (Func_defNode) symtable.getSymbolNode(FUNC_DEF_ID);
+        Func_defNode funcdefnode = (Func_defNode) symtable.retrieveSymbol(FUNC_DEF_ID);
         checkType(funcdefnode, node);
 
     }
@@ -193,13 +193,13 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     @Override
     public void visit(IntegerCastNode node) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void visit(DoubleCastNode node) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override

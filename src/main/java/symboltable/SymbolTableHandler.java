@@ -3,7 +3,6 @@ package symboltable;
 import java.util.Stack;
 
 import ast.ITypeNode;
-import ast.Type;
 
 public class SymbolTableHandler {
     private Stack<SymbolTable> symbolTableStack = new Stack<SymbolTable>();
@@ -20,7 +19,7 @@ public class SymbolTableHandler {
             symbolTableStack.push(firstTable);
         } else {
             // Finds the previous table relative to the newly opened scope
-            SymbolTable symbolTable = new SymbolTable(symbolTableStack.peek());
+            SymbolTable symbolTable = new SymbolTable(getCurrentSymbolTable());
             symbolTableStack.push(symbolTable);
         }
     }
@@ -32,26 +31,26 @@ public class SymbolTableHandler {
         symbolTableStack.pop();
     }
 
+    private SymbolTable getCurrentSymbolTable() {
+        return symbolTableStack.peek();
+    }
+
     public boolean enterSymbol(String name, ITypeNode node) {
         if (printDcl) {
             System.out.println("Setting " + name + " to " + node.toString());
         }
-        return symbolTableStack.peek().enterSymbol(name, node);
+        return getCurrentSymbolTable().enterSymbol(name, node);
     }
 
-    public Type retrieveSymbol(String name) {
-        return symbolTableStack.peek().retrieveSymbol(name);
+    public ITypeNode retrieveSymbol(String key) {
+        return getCurrentSymbolTable().retrieveSymbol(key);
     }
 
-    public ITypeNode getSymbolNode(String id) {
-        return symbolTableStack.peek().getSymbolNode(id);
+    public ITypeNode getSymbolCurrentScope(String key) {
+        return getCurrentSymbolTable().getSymbolCurrentScope(key);
     }
 
-    public ITypeNode getSymbolCurrentScope(String id) {
-        return symbolTableStack.peek().getSymbolCurrentScope(id);
-    }
-    
-    public int getStackSize() {
-        return symbolTableStack.size();
+    public boolean isGlobalScope() {
+        return getCurrentSymbolTable().isGlobalScope();
     }
 }
