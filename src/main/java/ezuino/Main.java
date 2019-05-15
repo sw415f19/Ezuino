@@ -90,7 +90,8 @@ public class Main {
     }
 
     private static void codeGeneration(AstNode ast) {
-        ast.accept(new CCodeGenerationVisitor(System.out));
+
+        ast.accept(new ArduinoCodeGenerationVisitor(System.out));
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
