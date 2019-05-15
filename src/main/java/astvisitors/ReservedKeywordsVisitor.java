@@ -30,7 +30,7 @@ public class ReservedKeywordsVisitor extends AstVisitor {
             reservedKeywords.put(word.toUpperCase(), word);
         }
         compatibilityKeywords.addAll(Arrays.asList("goto", "Double", "float", "Integer", "for",
-                "ArrayList", "List", "switch", "Collection"));
+                "ArrayList", "List", "switch", "Collection", "main"));
     }
 
     private void checkReservedKeywords(String Id) {
