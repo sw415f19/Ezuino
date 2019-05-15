@@ -54,6 +54,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	private PrintStream out;
 	private StringBuilder sb;
 	private StringBuilder functionStringBuilder; // needed to remember the functions and declare them after main
+	private StringBuilder setupBuilder;
+	private StringBuilder loopBuilder;
 	private List<String> currentVariableEnvironment;
 	private List<String> currentLocalFunctions;
 	private String programName;
@@ -72,6 +74,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		currentLocalFunctions = new ArrayList<String>();
 		sb = new StringBuilder();
 		functionStringBuilder = new StringBuilder();
+		setupBuilder = new StringBuilder();
+		loopBuilder = new StringBuilder();
 		this.programName = programName;
 
 	}
@@ -338,6 +342,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(RelationalExprNode node) {
 		int trueLabel = getNextLabel();
+		node.getLeftNode().accept(this);
+		node.getRightNode().accept(this);
 		Type comparedType = node.getLeftNode().getType();
 		if(comparedType.equals(Type.INT)) {
 			node.getLeftNode().accept(this);
@@ -362,6 +368,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(EqualityExprNode node) {
 		int trueLabel = getNextLabel();
+		node.getLeftNode().accept(this);
+		node.getRightNode().accept(this);
 		Type comparedType = node.getLeftNode().getType();
 		if(comparedType.equals(Type.INT)) {
 			node.getLeftNode().accept(this);
@@ -589,6 +597,20 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+    public void visit(SetupNode node) {
+        StringBuilder oldStringBuilder = sb;
+        sb = setupBuilder;
+        node.accept(this);
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+    	StringBuilder oldStringBuilder = sb;
+        sb = loopBuilder;
+        node.accept(this);
+    }
 
 	private void appendLine(String s) {
 		sb.append(s).append('\n');
@@ -854,21 +876,17 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		}
 		append(labelToAppend + ": ");
 	}
+
 	private String getLastCommandFromStringBuilder() {
 		int indexOfLastNewline = sb.lastIndexOf("\n");
 		return sb.substring(indexOfLastNewline + 1);
 	}
 
-    @Override
-    public void visit(SetupNode node) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(LoopNode node) {
-        // TODO Auto-generated method stub
-        
-    }
-
+	private void formatSetupAndLoopToMain() {
+		int loopLabel = getNextLabel();
+		sb.append(setupBuilder);
+		appendLabel(loopLabel);
+		sb.append(loopBuilder);
+		appendLine("goto " + loopLabel);
+	}
 }

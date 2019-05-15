@@ -3,3 +3,9 @@ return true
 }
 if (b()) {
 }
+
+loop(){
+}
+
+setup(){
+}
