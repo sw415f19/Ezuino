@@ -164,7 +164,11 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         for (DclContext child : ctx.parameters().dcl()) {
             parameters.add((DclNode) child.accept(this));
         }
-        return new Func_defNode(ID, type, parameters, blockNode);
+        switch(ID) {
+            case "Setup" : return new SetupNode(ID, type, parameters, blockNode);
+            case "Loop" : return new LoopNode(ID, type, parameters, blockNode);
+            default: return new Func_defNode(ID, type, parameters, blockNode);
+        }
     }
 
     @Override

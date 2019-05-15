@@ -337,4 +337,24 @@ public class TypeChecker extends AstVisitor {
     @Override
     public void visit(PinModeNode node) {
     }
+
+    @Override
+    public void visit(SetupNode node) {
+        checkSpecificType(node, Type.VOID);
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        checkSpecificType(node, Type.VOID);
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        
+    }
 }

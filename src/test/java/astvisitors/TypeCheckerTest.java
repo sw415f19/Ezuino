@@ -19,280 +19,280 @@ public class TypeCheckerTest {
 
     @Test
     public void wrongIfExprType() throws IOException {
-        String program = "if(1){}";
+        String program = "func Setup() {if(1){}}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void correctIfExprType() throws IOException {
-        String program = "if(true){}";
+        String program = "func Setup() {if(true){}}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void wrongVarIfExprType() throws IOException {
-        String program = "int a if(a){}";
+        String program = "func Setup() {int a if(a){}}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void correctVarIfExprType() throws IOException {
-        String program = "boolean a if(a){}";
+        String program = "func Setup() {boolean a if(a){}}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void wrongWhileExprType() throws IOException {
-        String program = "while(1){}";
+        String program = "func Setup() {while(1){}}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void correctWhileExprType() throws IOException {
-        String program = "while(true){}";
+        String program = "func Setup() {while(true){}}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void wrongAssignBooleanExpr() throws IOException {
-        String program = "boolean b b := true AND 1";
+        String program = "func Setup() {boolean b b := true AND 1}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void correctAssignBooleanExpr() throws IOException {
-        String program = "boolean b b := true AND false";
+        String program = "func Setup() {boolean b b := true AND false}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void wrongEqualityCheck() throws IOException {
-        String program = "boolean b b := true = 1";
+        String program = "func Setup() {boolean b b := true = 1}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void correctEqualityCheck() throws IOException {
-        String program = "boolean b b := true = false";
+        String program = "func Setup() {boolean b b := true = false}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void correctDoubleEqualityCheck() throws IOException {
-        String program = "boolean b b := 2.0 = 2.1";
+        String program = "func Setup() {boolean b b := 2.0 = 2.1}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void intNotOperator() throws IOException {
-        String program = "int b b := !2";
+        String program = "func Setup() {int b b := !2}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void intMinusOperator() throws IOException {
-        String program = "int b b := -2";
+        String program = "func Setup() {int b b := -2}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void doubleNotOperator() throws IOException {
-        String program = "double b b := !2.0";
+        String program = "func Setup() {double b b := !2.0}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void doubleMinusOperator() throws IOException {
-        String program = "double b b := -2.0";
+        String program = "func Setup() {double b b := -2.0}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void booleanNotOperator() throws IOException {
-        String program = "boolean b b := !true";
+        String program = "func Setup() {boolean b b := !true}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void notStringTest() throws IOException {
-        String program = "string s s := !\"test\"";
+        String program = "func Setup() {string s s := !\"test\"}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void minusStringTest() throws IOException {
-        String program = "string s s := -\"test\"";
+        String program = "func Setup() {string s s := -\"test\"}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void notIntegerTest() throws IOException {
-        String program = "int i i := !1";
+        String program = "func Setup() {int i i := !1}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void minusIntegerTest() throws IOException {
-        String program = "int i i := -1";
+        String program = "func Setup() {int i i := -1}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void notDoubleTest() throws IOException {
-        String program = "double d d := !1.0";
+        String program = "func Setup() {double d d := !1.0}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void minusDoubleTest() throws IOException {
-        String program = "double d d := -1.0";
+        String program = "func Setup() {double d d := -1.0}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void notBooleanTest() throws IOException {
-        String program = "boolean b b := !true";
+        String program = "func Setup() {boolean b b := !true}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void minusBooleanTest() throws IOException {
-        String program = "boolean b b := -true";
+        String program = "func Setup() {boolean b b := -true}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void addString() throws IOException {
-        String program = "string s s := \"1\" + \"2\"";
+        String program = "func Setup() {string s s := \"1\" + \"2\"}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void addBoolean() throws IOException {
-        String program = "boolean b b := true + false";
+        String program = "func Setup() {boolean b b := true + false}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void addInteger() throws IOException {
-        String program = "int i i := 1 + 1";
+        String program = "func Setup() {int i i := 1 + 1}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void addDouble() throws IOException {
-        String program = "double d d := 1.0 + 1.0";
+        String program = "func Setup() {double d d := 1.0 + 1.0}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void subtractString() throws IOException {
-        String program = "string s s := \"1\" - \"2\"";
+        String program = "func Setup() {string s s := \"1\" - \"2\"}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void subtractBoolean() throws IOException {
-        String program = "boolean b b := true - false";
+        String program = "func Setup() {boolean b b := true - false}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void subtractInteger() throws IOException {
-        String program = "int i i := 1 - 1";
+        String program = "func Setup() {int i i := 1 - 1}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void subtractDouble() throws IOException {
-        String program = "double d d := 1.0 - 1.0";
+        String program = "func Setup() {double d d := 1.0 - 1.0}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void multiplyString() throws IOException {
-        String program = "string s s := \"1\" * \"2\"";
+        String program = "func Setup() {string s s := \"1\" * \"2\"}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void multiplyBoolean() throws IOException {
-        String program = "boolean b b := true * false";
+        String program = "func Setup() {boolean b b := true * false}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void multiplyInteger() throws IOException {
-        String program = "int i i := 1 * 1";
+        String program = "func Setup() {int i i := 1 * 1}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void multiplyDouble() throws IOException {
-        String program = "double d d := 1.0 * 1.0";
+        String program = "func Setup() {double d d := 1.0 * 1.0}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void divideString() throws IOException {
-        String program = "string s s := \"1\" / \"2\"";
+        String program = "func Setup() {string s s := \"1\" / \"2\"}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void divideBoolean() throws IOException {
-        String program = "boolean b b := true / false";
+        String program = "func Setup() {boolean b b := true / false}";
         ErrorHandler e = testProgram(program);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void divideInteger() throws IOException {
-        String program = "int i i := 1 / 1";
+        String program = "func Setup() {int i i := 1 / 1}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void divideDouble() throws IOException {
-        String program = "double d d := 1.0 / 1.0";
+        String program = "func Setup() {double d d := 1.0 / 1.0}";
         ErrorHandler e = testProgram(program);
         assertFalse(e.hasErrors());
     }

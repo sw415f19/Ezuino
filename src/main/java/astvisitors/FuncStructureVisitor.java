@@ -62,6 +62,17 @@ public class FuncStructureVisitor extends AstVisitor {
         }
     }
 
+    private void checkFuncDefSpecial(String nodeId, List<DclNode> parameters, int requiredParameters, Type[] typeList) {
+        if (parameters.size() != requiredParameters) {
+            errorHandler.parameterLengthError(nodeId);
+        }
+        for (int i = 0; i < requiredParameters; i++) {
+            if (parameters.get(i) != null) {
+                checkSpecificType(parameters.get(i), typeList[i]);
+            }
+        }
+    }
+
     private void checkArduinoRange(AExpr parameter) {
         if (parameter instanceof IntegerLiteral) {
             IntegerLiteral integerLiteral = (IntegerLiteral) parameter;
@@ -373,5 +384,21 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(PinModeNode node) {
+    }
+
+    @Override
+    public void visit(SetupNode node) {
+        Type[] expectedType = {};
+        checkFuncDefSpecial(node.getId(), node.getParameters(), 0, expectedType);
+        node.getBlockNode().accept(this);
+        
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        Type[] expectedType = {};
+        checkFuncDefSpecial(node.getId(), node.getParameters(), 0, expectedType);
+        node.getBlockNode().accept(this);
+        
     }
 }

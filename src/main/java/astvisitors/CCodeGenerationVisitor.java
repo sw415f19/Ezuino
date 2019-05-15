@@ -366,4 +366,16 @@ public class CCodeGenerationVisitor extends AstVisitor {
     @Override
     public void visit(PinModeNode node) {
     }
+
+    @Override
+    public void visit(SetupNode node) {
+        builder.append("void ").append(node.getId().toLowerCase()).append("() ");
+        node.getBlockNode().accept(this);
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        builder.append("void ").append(node.getId().toLowerCase()).append("() ");
+        node.getBlockNode().accept(this);        
+    }
 }

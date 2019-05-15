@@ -57,6 +57,8 @@ public abstract class AstVisitor {
     public abstract void visit(SerialEndNode node);
     public abstract void visit(PinLevelNode node);
     public abstract void visit(PinModeNode node);
+    public abstract void visit(SetupNode node);
+    public abstract void visit(LoopNode node);
 
 
     public final void visit(AstNode astNode) {

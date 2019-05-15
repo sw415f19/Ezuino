@@ -81,12 +81,24 @@ public class SymbolTableVisitor extends AstVisitor {
         stFunctions.closeScope();
         closeVariableScope();
     }
+    
+    private void checkEssentialFunctions() {
+        String setup = "Setup";
+        String loop = "Loop";
+        if(stFunctions.retrieveSymbol(setup) == null) {
+            errorHandler.missingEssentialFunction(setup, true);
+        }
+        if(stFunctions.retrieveSymbol(loop) == null) {
+            errorHandler.missingEssentialFunction(loop, false);
+        }
+    }
 
     @Override
     public void visit(StartNode node) {
         openGeneralScope();
         node.getDcls().accept(this);
         node.getStmts().accept(this);
+        checkEssentialFunctions();
         closeGeneralScope();
     }
 
@@ -362,5 +374,29 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(PinModeNode node) {
         node.setType(Type.INT);
+    }
+
+    @Override
+    public void visit(SetupNode node) {
+        enterFunctionSymbol(node);
+
+        openGeneralScope();
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        closeGeneralScope();
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        enterFunctionSymbol(node);
+
+        openGeneralScope();
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        closeGeneralScope();        
     }
 }

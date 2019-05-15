@@ -256,4 +256,16 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     public void visit(PinModeNode node) {
 
     }
+
+    @Override
+    public void visit(SetupNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        // TODO Auto-generated method stub
+        
+    }
 }

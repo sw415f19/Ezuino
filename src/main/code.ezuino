@@ -1,8 +1,2 @@
-int a
-boolean b
-string c
-double d
-a := 5
-b := true
-c := "hello world"
-d := 5.6
+boolean a
+func Setup() {a := true}

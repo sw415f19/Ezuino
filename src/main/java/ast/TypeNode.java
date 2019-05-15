@@ -1,6 +1,5 @@
 package ast;
 
-import astvisitors.AstVisitor;
 
 public abstract class TypeNode extends AstNode implements ITypeNode {
 

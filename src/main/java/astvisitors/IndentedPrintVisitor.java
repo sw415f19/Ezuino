@@ -407,4 +407,28 @@ public class IndentedPrintVisitor extends AstVisitor {
     public void visit(PinModeNode node) {
         print(node);
     }
+
+    @Override
+    public void visit(SetupNode node) {
+        print(node);
+        indentLevel();
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        unindentLevel();
+        
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        print(node);
+        indentLevel();
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        unindentLevel();
+        
+    }
 }

@@ -21,42 +21,42 @@ public class MissingReturnStmtTest {
 
     @Test
     public void missingReturn() {
-        String program = "func int main() { }";
+        String program = "func int main() { } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void hasReturn() {
-        String program = "func int main() { return 2 }";
+        String program = "func int main() { return 2 } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void elseBlockMissingReturn() {
-        String program = "func int main() { if(1<2) { return 1 } }";
+        String program = "func int main() { if(1<2) { return 1 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void ifBlockMissingReturn() {
-        String program = "func int main() { if(1<2) { } else { return 2 } }";
+        String program = "func int main() { if(1<2) { } else { return 2 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void ifElseBlockHasReturn() {
-        String program = "func int main() { if(1<2) { return 1 } else { return 2 } }";
+        String program = "func int main() { if(1<2) { return 1 } else { return 2 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void whileTestNotGuaranteedReturn() throws IOException {
-        String testProgram = "func int main(){ while(1<2){ return 1 } }";
+        String testProgram = "func int main(){ while(1<2){ return 1 } } func Setup() {main()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
@@ -75,7 +75,7 @@ public class MissingReturnStmtTest {
                 "   return 1" +
                 "} " +
                 "  \n" +
-                "}";
+                "} func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
@@ -87,7 +87,7 @@ public class MissingReturnStmtTest {
                 "  if(true){\n" +
                 "        return a\n" +
                 "  } else{} \n" +
-                "}";
+                "} func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
@@ -106,7 +106,7 @@ public class MissingReturnStmtTest {
                 "  " +
                 "} " +
                 "  \n" +
-                "}";
+                "} func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
@@ -122,7 +122,7 @@ public class MissingReturnStmtTest {
                 "    }\n" +
                 "  }\n" +
                 "  \n" +
-                "}";
+                "} func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
@@ -142,14 +142,14 @@ public class MissingReturnStmtTest {
                 "        int c\n" +
                 "        return c\n" +
                 "    }\n" +
-                "}";
+                "} func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void missingElseStmtReturnError() throws IOException {
-        String testProgram = "func int hello(){ int a if(true){ return a } }";
+        String testProgram = "func int hello(){ int a if(true){ return a } } func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
 
@@ -157,7 +157,7 @@ public class MissingReturnStmtTest {
 
     @Test
     public void emptyIfStmtAndReturnValue() throws IOException {
-        String testProgram = "func int hello(){ if(true) { } return 1 }";
+        String testProgram = "func int hello(){ if(true) { } return 1 } func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertFalse(e.hasErrors());
     }
@@ -180,21 +180,21 @@ public class MissingReturnStmtTest {
                 "    else{" +
                 "       return 1" +
                 "    }" +
-                "}";
+                "} func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void returnAsBreakReturn() throws IOException {
-        String testProgram = "func hello(){ if(true){ return } return }";
+        String testProgram = "func hello(){ if(true){ return } return } func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void funcWithWhileStmtWithoutReturn() throws IOException {
-        String testProgram = "func int main(){ while(1<2){ int a } return 1 }";
+        String testProgram = "func int main(){ while(1<2){ int a } return 1 } func Setup() {main()}";
         ErrorHandler e = parseProgram(testProgram);
         assertFalse(e.hasErrors());
     }

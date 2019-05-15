@@ -19,49 +19,49 @@ public class FuncStructureTest {
 
     @Test
     public void correctFunctionCall() {
-        String program = "func main(int a, string b) {} main(1, \"123\")";
+        String program = "func main(int a, string b) {} func Setup() {main(1, \"123\")}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void wrongTypeFunctionCall() {
-        String program = "func main(int a, string b) {} main(1, 123)";
+        String program = "func main(int a, string b) {} func Setup() {main(1, 123)}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void tooFewParametersFunctionCall() {
-        String program = "func main(int a, string b) {} main(1)";
+        String program = "func main(int a, string b) {} func Setup() {main(1)}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void tooManyParametersFunctionCall() {
-        String program = "func main(int a, string b) {} main(1, 1, 2)";
+        String program = "func main(int a, string b) {} func Setup() {main(1, 1, 2)}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void printWrongType() {
-        String program = "Print(1321)";
+        String program = "func Setup() {Print(1321)}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void printWrongLength() {
-        String program = "Print(1321, 2)";
+        String program = "func Setup() {Print(1321, 2)}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void printCorrectSignature() {
-        String program = "Print(\"test\")";
+        String program = "func Setup() {Print(\"test\")}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }

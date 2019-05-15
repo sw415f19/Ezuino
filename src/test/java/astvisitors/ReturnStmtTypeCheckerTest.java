@@ -21,168 +21,168 @@ public class ReturnStmtTypeCheckerTest {
 
     @Test
     public void wrongReturnType() {
-        String program = "func int main() { return 2.0 }";
+        String program = "func int main() { return 2.0 } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void correctReturnType() {
-        String program = "func int main() { return 2 }";
+        String program = "func int main() { return 2 } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void wrongNestedIfReturnType() {
-        String program = "func int main() { if(1<2) { return 2.0 } }";
+        String program = "func int main() { if(1<2) { return 2.0 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void wrongNestedElseReturnType() {
-        String program = "func int main() { if(1<2) { } else { return 2.0 } }";
+        String program = "func int main() { if(1<2) { } else { return 2.0 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void wrongNestedElseOtherScopeReturnType() {
-        String program = "func int main() { if(1<2) { if (2<2) { } } else { return 2.0 } }";
+        String program = "func int main() { if(1<2) { if (2<2) { } } else { return 2.0 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void correctNestedIfReturnType() {
-        String program = "func int main() { if(1<2) { return 2 } }";
+        String program = "func int main() { if(1<2) { return 2 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void correctNestedElseReturnType() {
-        String program = "func int main() { if(1<2) { } else { return 2 } }";
+        String program = "func int main() { if(1<2) { } else { return 2 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void correctNestedElseOtherScopeReturnType() {
-        String program = "func int main() { if(1<2) { if (2<2) { } } else { return 2 } }";
+        String program = "func int main() { if(1<2) { if (2<2) { } } else { return 2 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void wrongTypeWhileStmt() {
-        String program = "func int main() { while(1<2) { return 2.0 } }";
+        String program = "func int main() { while(1<2) { return 2.0 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void correctTypeWhileStmt() {
-        String program = "func int main() { while(1<2) { return 2 } }";
+        String program = "func int main() { while(1<2) { return 2 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void mixedBlockWrongType() {
-        String program = "func int main() { while(1<2) { if(1>2) { return 2.0 } } }";
+        String program = "func int main() { while(1<2) { if(1>2) { return 2.0 } } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void mixedBlockCorrectType() {
-        String program = "func int main() { while(1<2) { if(1>2) { return 2 } } }";
+        String program = "func int main() { while(1<2) { if(1>2) { return 2 } } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void reversedMixedBlockWrongType() {
-        String program = "func int main() { if(1<2) { while(1>2) { return 2.0 } } }";
+        String program = "func int main() { if(1<2) { while(1>2) { return 2.0 } } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void reversedMixedBlockCorrectType() {
-        String program = "func int main() { if(1<2) { while(1>2) { return 2 } } }";
+        String program = "func int main() { if(1<2) { while(1>2) { return 2 } } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void siblingBlockWrongType() {
-        String program = "func int main() { if(1<2) { return 1 } while (1>2) { return 2.0 } }";
+        String program = "func int main() { if(1<2) { return 1 } while (1>2) { return 2.0 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertTrue(errorHandler.hasErrors());
     }
 
     @Test
     public void siblingBlockCorrectType() {
-        String program = "func int main() { if(1<2) { return 1 } while (1>2) { return 2 } }";
+        String program = "func int main() { if(1<2) { return 1 } while (1>2) { return 2 } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void implicitVoid() {
-        String program = "func main() { return }";
+        String program = "func main() { return } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void implicitInIfVoid() {
-        String program = "func main() { if(1<2) { return } }";
+        String program = "func main() { if(1<2) { return } } func Setup() {main()}";
         ErrorHandler errorHandler = parseProgram(program);
         assertFalse(errorHandler.hasErrors());
     }
 
     @Test
     public void whileTestTypeNotTheSame() throws IOException {
-        String testProgram = "func int main() { while(1<2){ return \"hi\" } return \"sup\"}";
+        String testProgram = "func int main() { while(1<2){ return \"hi\" } return \"sup\"} func Setup() {main()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void returnTwoDifferentTypesError() throws IOException {
-        String testProgram = "func int hello(){ if(true){ return 3.4 } else { return 4 }}";
+        String testProgram = "func int hello(){ if(true){ return 3.4 } else { return 4 }} func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void returnAsBreakReturnTypeError() throws IOException {
-        String testProgram = "func hello(){ if(true){ return 1 } return }";
+        String testProgram = "func hello(){ if(true){ return 1 } return } func Setup() {hello()}";
         ErrorHandler e = parseProgram(testProgram);
         assertTrue(e.hasErrors());
     }
 
     @Test
     public void whileTest() throws IOException {
-        String testProgram = "func int main(){ while(1<2) { return 1 } return 1 }";
+        String testProgram = "func int main(){ while(1<2) { return 1 } return 1 } func Setup() {main()}";
         ErrorHandler e = parseProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void whileTestVoidFunc() throws IOException {
-        String testProgram = "func main(){ while(1<2){ int a } }";
+        String testProgram = "func main(){ while(1<2){ int a } } func Setup() {main()}";
         ErrorHandler e = parseProgram(testProgram);
         assertFalse(e.hasErrors());
     }
 
     @Test
     public void ifStmtAfterWhile() throws IOException {
-        String testProgram = "func int main(){ while(1<2){ } if(1>2) { } return 1 }";
+        String testProgram = "func int main(){ while(1<2){ } if(1>2) { } return 1 } func Setup() {main()}";
         ErrorHandler e = parseProgram(testProgram);
         assertFalse(e.hasErrors());
     }

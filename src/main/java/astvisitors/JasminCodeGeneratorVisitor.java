@@ -23,11 +23,13 @@ import ast.arduino.DelayMicroNode;
 import ast.arduino.DelayNode;
 import ast.arduino.DigitalReadNode;
 import ast.arduino.DigitalWriteNode;
+import ast.arduino.LoopNode;
 import ast.arduino.PinLevelNode;
 import ast.arduino.PinModeNode;
 import ast.arduino.SerialBeginNode;
 import ast.arduino.SerialEndNode;
 import ast.arduino.SetPinModeNode;
+import ast.arduino.SetupNode;
 import ast.expr.AdditiveExprNode;
 import ast.expr.EqualityExprNode;
 import ast.expr.Func_callExprNode;
@@ -822,5 +824,17 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		appendLine(".end method");
 		sb.append(functionStringBuilder);
 	}
+
+    @Override
+    public void visit(SetupNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

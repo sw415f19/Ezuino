@@ -15,13 +15,15 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class CCodeGenerationVisitorTest {
     // Each generated code ends with a blank line, therefor every expected string ends with a \n
     @Test
-    public void printNodeTest() throws IOException {
+    public void printNodeTest() {
         String program = "Print (\"Hello world!\")";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
@@ -290,12 +292,12 @@ public class CCodeGenerationVisitorTest {
 
     @Test
     public void lessOrEqualIfStmtTest() throws IOException {
-        String program = "if (1 <= 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 <= 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1<=2) {\n" +
-                "}\n";
+                "void setup() {\nif (1<=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -899,56 +901,56 @@ public class CCodeGenerationVisitorTest {
 
     @Test
     public void falseLogicalOrExprTest() throws IOException {
-        String program = "if (false OR false) {\n" +
-                "}";
+        String program = "func Setup() {if (false OR false) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (0||0) {\n" +
-                "}\n";
+                "void setup() {\nif (0||0) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueLogicalOrExprTest() throws IOException {
-        String program = "if (true OR true) {\n" +
-                "}";
+        String program = "func Setup() {if (true OR true) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1||1) {\n" +
-                "}\n";
+                "void setup() {if (1||1) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void truefalseLogicalAndExprTest() throws IOException {
-        String program = "if (true AND false) {\n" +
-                "}";
+        String program = "func Setup() {if (true AND false) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1&&0) {\n" +
-                "}\n";
+                "void setup() {\nif (1&&0) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void falseLogicalAndExprTest() throws IOException {
-        String program = "if (false AND false) {\n" +
-                "}";
+        String program = "func Setup() {if (false AND false) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (0&&0) {\n" +
-                "}\n";
+                "void setup() {\nif (0&&0) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueLogicalAndExprTest() throws IOException {
-        String program = "if (true AND true) {\n" +
-                "}";
+        String program = "func Setup() {if (true AND true) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1&&1) {\n" +
-                "}\n";
+                "void setup() {\nif (1&&1) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -958,80 +960,80 @@ public class CCodeGenerationVisitorTest {
                 "func int b(int a) {\n" +
                 "return 1\n" +
                 "}\n" +
-                "a := b(1)";
+                "func Setup() {a := b(1)}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
                 "int b(int a) {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "a = b(1);\n";
+                "void setup() {\na = b(1);\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void booleanAssignStmtTest() throws IOException {
         String program = "boolean d\n" +
-                "d := true";
+                "func Setup() {d := true}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int d;\n" +
-                "d = 1;\n";
+                "void setup() {\nd = 1;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void integerAssignStmtTest() throws IOException {
         String program = "int a\n" +
-                "a := 100";
+                "func Setup() {a := 100}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = 100;\n";
+                "void setup() {\na = 100;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void doubleAssignStmtTest() throws IOException {
         String program = "double b\n" +
-                "b := 52.04";
+                "func Setup() {b := 52.04}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "double b;\n" +
-                "b = 52.04;\n";
+                "void setup() {\nb = 52.04;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void stringAssignStmtTest() throws IOException {
         String program = "string c\n" +
-                "c := \"Is anybody there?\"";
+                "func Setup() {c := \"Is anybody there?\"}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "char c[256];\n" +
-                "strcpy(c, \"Is anybody there?\");\n";
+                "void setup() {\nstrcpy(c, \"Is anybody there?\");\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void falseBooleanLiteralTest() throws IOException {
         String program = "boolean a\n" +
-                "a := false";
+                "func Setup() {a := false}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = 0;\n";
+                "void setup() {\na = 0;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueBooleanLiteralTest() throws IOException {
         String program = "boolean a\n" +
-                "a := true";
+                "func Setup() {a := true}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = 1;\n";
+                "void setup() {\na = 1;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1177,7 +1179,7 @@ public class CCodeGenerationVisitorTest {
     }
 
     // Takes a program as a String and returns the generated C code
-    private String getCCode(String input) throws IOException {
+    private String getCCode(String input) {
         ErrorHandler errorHandler = new ErrorHandler();
 
         // ANTLR
@@ -1207,11 +1209,17 @@ public class CCodeGenerationVisitorTest {
         PrintStream ps = new PrintStream(os);
         CCodeGenerationVisitor cCodeGenerationVisitor = new CCodeGenerationVisitor(ps);
         ast.accept(cCodeGenerationVisitor);
+        assertFalse(errorHandler.hasErrors());
         if(errorHandler.hasErrors()) {
             errorHandler.printErrors("Test reason");
         }
 
-        // Return ByteArrayOutputStream String
-        return os.toString("UTF8");
+        String s = null;
+        try {
+            s = os.toString("UTF8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 }
