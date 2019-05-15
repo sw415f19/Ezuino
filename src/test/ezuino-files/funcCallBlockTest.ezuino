@@ -1,7 +1,10 @@
 func boolean b() {
 return true
 }
-if (true) {
-boolean a
-a := b()
+
+func Setup(){
+  if (true) {
+  boolean a
+  a := b()
+  }
 }

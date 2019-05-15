@@ -1,11 +1,8 @@
 func boolean b() {
 return true
 }
-if (b()) {
-}
 
-loop(){
-}
-
-setup(){
+func Setup(){
+  if (b()) {
+  }
 }

@@ -1,4 +1,6 @@
-if (true) {
-string s
-s := "hello world!"
+func Setup(){
+  if (true) {
+    string s
+    s := "hello world!"
+  }
 }

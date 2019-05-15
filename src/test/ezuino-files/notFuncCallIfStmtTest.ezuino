@@ -1,5 +1,8 @@
 func boolean b() {
 return true
 }
-if (!b()) {
+
+func Setup(){
+  if (!b()) {
+  }
 }

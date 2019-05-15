@@ -1,5 +1,7 @@
-int a
-if (true) {
-	if (true) {
-	}
+func Setup(){
+  int a
+  if (true) {
+    if (true) {
+    }
+  }
 }

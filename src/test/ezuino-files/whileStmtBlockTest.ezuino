@@ -1,4 +1,6 @@
-if (true) {
-while (false) {
-}
+func Setup(){
+  if (true) {
+    while (false) {
+    }
+  }
 }

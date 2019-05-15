@@ -1,4 +1,6 @@
-if (true) {
-boolean b
-b := true
+func Setup(){
+  if (true) {
+    boolean b
+    b := true
+  }
 }

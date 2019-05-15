@@ -1,4 +1,6 @@
-if (true) {
-int i
-i := 0
+func Setup(){
+  if (true) {
+    int i
+    i := 0
+  }
 }

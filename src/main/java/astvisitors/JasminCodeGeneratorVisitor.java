@@ -602,14 +602,16 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
     public void visit(SetupNode node) {
         StringBuilder oldStringBuilder = sb;
         sb = setupBuilder;
-        node.accept(this);
+        node.getBlockNode().accept(this);;
+        sb = oldStringBuilder;
     }
 
     @Override
     public void visit(LoopNode node) {
     	StringBuilder oldStringBuilder = sb;
         sb = loopBuilder;
-        node.accept(this);
+        node.getBlockNode().accept(this);
+        sb = oldStringBuilder;
     }
 
 	private void appendLine(String s) {
@@ -885,8 +887,10 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	private void formatSetupAndLoopToMain() {
 		int loopLabel = getNextLabel();
 		sb.append(setupBuilder);
-		appendLabel(loopLabel);
-		sb.append(loopBuilder);
-		appendLine("goto " + loopLabel);
+		if(loopBuilder.length() != 0) {
+			appendLabel(loopLabel);
+			sb.append(loopBuilder);
+			appendLine("goto " + loopLabel);
+		}
 	}
 }

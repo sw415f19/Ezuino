@@ -1,2 +1,4 @@
-if ((((!false)))) {
+func Setup(){
+  if ((((!false)))) {
+  }
 }
