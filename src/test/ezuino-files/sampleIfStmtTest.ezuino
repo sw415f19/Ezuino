@@ -1,0 +1,6 @@
+func boolean b() {
+return false
+}
+if (!(1 > 2) AND (true) AND (!b())) {
+} else {
+}
