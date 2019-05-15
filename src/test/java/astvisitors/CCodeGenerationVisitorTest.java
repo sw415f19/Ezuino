@@ -24,10 +24,10 @@ public class CCodeGenerationVisitorTest {
     // Each generated code ends with a blank line, therefor every expected string ends with a \n
     @Test
     public void printNodeTest() {
-        String program = "Print (\"Hello world!\")";
+        String program = "func Setup() {Print (\"Hello world!\")}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "printf(%s, \"Hello world!\");\n";
+                "void setup() {\nprintf(%s, \"Hello world!\");\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -36,126 +36,109 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "if (true) {\n" +
+                "func Setup() {if (true) {\n" +
                 "boolean a\n" +
                 "a := b()\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "if (1) {\n" +
+                "void setup() {\nif (1) {\n" +
                 "int a;\n" +
                 "a = b();\n" +
-                "}\n";
-        assertEquals(expected, getCCode(program));
-    }
-
-    @Test
-    public void funcDefBlockTest() throws IOException {
-        String program = "if (true) {\n" +
-                "func boolean b() {\n" +
-                "return true\n" +
-                "}\n" +
-                "}";
-        String expected = "#include <stdio.h>\n" +
-                "#include <string.h>\n" +
-                "if (1) {\n" +
-                "int b() {\n" +
-                "return 1;\n" +
-                "}\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void ifStmtBlockTest() throws IOException {
-        String program = "if (true) {\n" +
+        String program = "func Setup() {if (true) {\n" +
                 "if (true) {\n" +
                 "}\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1) {\n" +
+                "void setup() {\nif (1) {\n" +
                 "if (1) {\n" +
                 "}\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void whileStmtBlockTest() throws IOException {
-        String program = "if (true) {\n" +
+        String program = "func Setup() {\nif (true) {\n" +
                 "while (true) {\n" +
                 "}\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1) {\n" +
+                "void setup() {\nif (1) {\n" +
                 "while (1) {\n" +
                 "}\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void booleanBlockTest() throws IOException {
-        String program = "if (true) {\n" +
+        String program = "func Setup() {if (true) {\n" +
                 "boolean b\n" +
                 "b := true\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1) {\n" +
+                "void setup() {\nif (1) {\n" +
                 "int b;\n" +
                 "b = 1;\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void stringBlockTest() throws IOException {
-        String program = "if (true) {\n" +
+        String program = "func Setup() {if (true) {\n" +
                 "string s\n" +
                 "s := \"hello world!\"\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1) {\n" +
+                "void setup() {\nif (1) {\n" +
                 "char s[256];\n" +
                 "strcpy(s, \"hello world!\");\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void doubleBlockTest() throws IOException {
-        String program = "if (true) {\n" +
+        String program = "func Setup() {if (true) {\n" +
                 "double d\n" +
                 "d := 23.14\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1) {\n" +
+                "void setup() {\nif (1) {\n" +
                 "double d;\n" +
                 "d = 23.14;\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void intBlockTest() throws IOException {
-        String program = "if (true) {\n" +
+        String program = "func Setup() {if (true) {\n" +
                 "int i\n" +
                 "i := 0\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1) {\n" +
+                "void setup() {\nif (1) {\n" +
                 "int i;\n" +
                 "i = 0;\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -164,18 +147,18 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return false\n" +
                 "}\n" +
-                "if (!(1 > 2) AND (true) AND (!b())) {\n" +
+                "func Setup() {if (!(1 > 2) AND (true) AND (!b())) {\n" +
                 "} else {\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 0;\n" +
                 "}\n" +
-                "if (!(1>2)&&(1)&&(!b())) {\n" +
+                "void setup() {\nif (!(1>2)&&(1)&&(!b())) {\n" +
                 "}\n" +
                 "else {\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -184,15 +167,15 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "if (!b()) {\n" +
-                "}";
+                "func Setup() {if (!b()) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "if (!b()) {\n" +
-                "}\n";
+                "void setup() {\nif (!b()) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -201,92 +184,92 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "if (b()) {\n" +
-                "}";
+                "func Setup() {if (b()) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "if (b()) {\n" +
-                "}\n";
+                "void setup() {\nif (b()) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notFalseParenthesisIfStmtTest() throws IOException {
-        String program = "if ((((!false)))) {\n" +
-                "}";
+        String program = "func Setup() {if ((((!false)))) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if ((((!0)))) {\n" +
-                "}\n";
+                "void setup() {\nif ((((!0)))) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notTrueParenthesisIfStmtTest() throws IOException {
-        String program = "if ((((!true)))) {\n" +
-                "}";
+        String program = "func Setup() {if ((((!true)))) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if ((((!1)))) {\n" +
-                "}\n";
+                "void setup() {\nif ((((!1)))) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void falseParenthesisIfStmtTest() throws IOException {
-        String program = "if ((((false)))) {\n" +
-                "}";
+        String program = "func Setup() {if ((((false)))) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if ((((0)))) {\n" +
-                "}\n";
+                "void setup() {\nif ((((0)))) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueParenthesisIfStmtTest() throws IOException {
-        String program = "if ((((true)))) {\n" +
-                "}";
+        String program = "func Setup() {if ((((true)))) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if ((((1)))) {\n" +
-                "}\n";
+                "void setup() {\nif ((((1)))) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notEqualIfStmtTest() throws IOException {
-        String program = "if (1 != 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 != 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1!=2) {\n" +
-                "}\n";
+                "void setup() {\nif (1!=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void equalIfStmtTest() throws IOException {
-        String program = "if (1 = 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 = 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1==2) {\n" +
-                "}\n";
+                "void setup() {\nif (1==2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void greaterOrEqualIfStmtTest() throws IOException {
-        String program = "if (1 >= 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 >= 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1>=2) {\n" +
-                "}\n";
+                "void setup() {\nif (1>=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -303,59 +286,59 @@ public class CCodeGenerationVisitorTest {
 
     @Test
     public void greaterIfStmtTest() throws IOException {
-        String program = "if (1 > 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 > 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1>2) {\n" +
-                "}\n";
+                "void setup() {\nif (1>2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void lessIfStmtTest() throws IOException {
-        String program = "if (1 < 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 < 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1<2) {\n" +
-                "}\n";
+                "void setup() {\nif (1<2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void falseIfStmtTest() throws IOException {
-        String program = "if (false) {\n" +
-                "}";
+        String program = "func Setup() {if (false) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (0) {\n" +
-                "}\n";
+                "void setup() {\nif (0) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueIfStmtTest() throws IOException {
-        String program = "if (true) {\n" +
-                "}";
+        String program = "func Setup() {if (true) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1) {\n" +
-                "}\n";
+                "void setup() {\nif (1) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void withElseIfStmtTest() throws IOException {
-        String program = "if(true) {\n" +
+        String program = "func Setup() {if(true) {\n" +
                 "} else {\n" +
-                "}";
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1) {\n" +
+                "void setup() {\nif (1) {\n" +
                 "}\n" +
                 "else {\n" +
-                "}\n";
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -364,15 +347,15 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return false\n" +
                 "}\n" +
-                "while (!(1 > 2) AND (true) AND (!b())) {\n" +
-                "}";
+                "func Setup() {while (!(1 > 2) AND (true) AND (!b())) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 0;\n" +
                 "}\n" +
-                "while (!(1>2)&&(1)&&(!b())) {\n" +
-                "}\n";
+                "void setup() {\nwhile (!(1>2)&&(1)&&(!b())) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -381,15 +364,15 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "while (!b()) {\n" +
-                "}";
+                "func Setup() {while (!b()) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "while (!b()) {\n" +
-                "}\n";
+                "void setup() {\nwhile (!b()) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -398,147 +381,146 @@ public class CCodeGenerationVisitorTest {
         String program = "func boolean b() {\n" +
                 "return true\n" +
                 "}\n" +
-                "while (b()) {\n" +
-                "}";
+                "func Setup() {while (b()) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int b() {\n" +
                 "return 1;\n" +
                 "}\n" +
-                "while (b()) {\n" +
-                "}\n";
+                "void setup() {\nwhile (b()) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notFalseParenthesisWhileStmtTest() throws IOException {
-        String program = "while ((((!false)))) {\n" +
-                "}";
+        String program = "func Setup() {while ((((!false)))) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while ((((!0)))) {\n" +
-                "}\n";
+                "void setup() {\nwhile ((((!0)))) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notTrueParenthesisWhileStmtTest() throws IOException {
-        String program = "while ((((!true)))) {\n" +
-                "}";
+        String program = "func Setup() {while ((((!true)))) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while ((((!1)))) {\n" +
-                "}\n";
+                "void setup() {\nwhile ((((!1)))) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void falseParenthesisWhileStmtTest() throws IOException {
-        String program = "while ((((false)))) {\n" +
-                "}";
+        String program = "func Setup() {while ((((false)))) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while ((((0)))) {\n" +
-                "}\n";
+                "void setup() {\nwhile ((((0)))) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueParenthesisWhileStmtTest() throws IOException {
-        String program = "while ((((true)))) {\n" +
-                "}";
+        String program = "func Setup() {while ((((true)))) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while ((((1)))) {\n" +
-                "}\n";
+                "void setup() {\nwhile ((((1)))) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notEqualWhileStmtTest() throws IOException {
-        String program = "while (1 != 2) {\n" +
-                "}";
+        String program = "func Setup() {while (1 != 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while (1!=2) {\n" +
-                "}\n";
+                "void setup() {\nwhile (1!=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void equalWhileStmtTest() throws IOException {
-        String program = "while (1 = 2) {\n" +
-                "}";
+        String program = "func Setup() {while (1 = 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while (1==2) {\n" +
-                "}\n";
+                "void setup() {\nwhile (1==2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void greaterOrEqualWhileStmtTest() throws IOException {
-        String program = "while (1 >= 2) {\n" +
-                "}";
+        String program = "func Setup() {while (1 >= 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while (1>=2) {\n" +
-                "}\n";
+                "void setup() {\nwhile (1>=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void lessOrEqualWhileStmtTest() throws IOException {
-        String program = "while (1 <= 2) {\n" +
-                "}";
+        String program = "func Setup() {while (1 <= 2) {}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while (1<=2) {\n" +
-                "}\n";
+                "void setup() {\nwhile (1<=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void greaterWhileStmtTest() throws IOException {
-        String program = "while (1 > 2) {\n" +
-                "}";
+        String program = "func Setup() {while (1 > 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while (1>2) {\n" +
-                "}\n";
+                "void setup() {\nwhile (1>2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void lessWhileStmtTest() throws IOException {
-        String program = "while (1 < 2) {\n" +
-                "}";
+        String program = "func Setup() {while (1 < 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while (1<2) {\n" +
-                "}\n";
+                "void setup() {\nwhile (1<2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void falseWhileStmtTest() throws IOException {
-        String program = "while (false) {\n" +
-                "}";
+        String program = "func Setup() {while (false) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while (0) {\n" +
-                "}\n";
+                "void setup() {\nwhile (0) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueWhileStmtTest() throws IOException {
-        String program = "while (true) {\n" +
-                "}";
+        String program = "func Setup() {while (true) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "while (1) {\n" +
-                "}\n";
+                "void setup() {\nwhile (1) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -547,49 +529,49 @@ public class CCodeGenerationVisitorTest {
         String program = "int i\n" +
                 "double d\n" +
                 "string s\n" +
-                "boolean b";
+                "boolean b func Setup() {}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int i;\n" +
                 "double d;\n" +
                 "char s[256];\n" +
-                "int b;\n";
+                "int b;\nvoid setup() {\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void booleanDclTest() throws IOException {
-        String program = "boolean b";
+        String program = "boolean b func Setup() {}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int b;\n";
+                "int b;\nvoid setup() {\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void stringDclTest() throws IOException {
-        String program = "string s";
+        String program = "string s func Setup() {}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "char s[256];\n";
+                "char s[256];\nvoid setup() {\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void doubleDclTest() throws IOException {
-        String program = "double d";
+        String program = "double d func Setup() {}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "double d;\n";
+                "double d;\nvoid setup() {\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void intDclTest() throws IOException {
-        String program = "int i";
+        String program = "int i func Setup() {}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "int i;\n";
+                "int i;\nvoid setup() {\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -599,14 +581,14 @@ public class CCodeGenerationVisitorTest {
                 "func string b(string s) {\n" +
                 "return s\n" +
                 "}\n" +
-                "s := b(\"Hello world!\")";
+                "func Setup() {s := b(\"Hello world!\")}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "char s[256];\n" +
                 "char b(char s[256]) {\n" +
                 "return s;\n" +
                 "}\n" +
-                "strcpy(s, b(\"Hello world!\"));\n";
+                "void setup() {\nstrcpy(s, b(\"Hello world!\"));\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -616,14 +598,14 @@ public class CCodeGenerationVisitorTest {
                 "func double b(double a) {\n" +
                 "return a\n" +
                 "}\n" +
-                "a := b(1.23)";
+                "func Setup() {a := b(1.23)}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "double a;\n" +
                 "double b(double a) {\n" +
                 "return a;\n" +
                 "}\n" +
-                "a = b(1.23);\n";
+                "void setup() {\na = b(1.23);\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -633,14 +615,14 @@ public class CCodeGenerationVisitorTest {
                 "func int b(int a) {\n" +
                 "return a\n" +
                 "}\n" +
-                "a := b(1)";
+                "func Setup() {a := b(1)}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
                 "int b(int a) {\n" +
                 "return a;\n" +
                 "}\n" +
-                "a = b(1);\n";
+                "void setup() {\na = b(1);\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -648,254 +630,254 @@ public class CCodeGenerationVisitorTest {
     public void voidFuncDefTest() throws IOException {
         String program = "func b() {\n" +
                 "return\n" +
-                "}";
+                "} func Setup(){}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "void b() {\n" +
                 "return;\n" +
-                "}\n";
+                "}\nvoid setup() {\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void multipleParenthesisExprTest() throws IOException {
         String program = "int a\n" +
-                "a := (100 + (10 + ((1 + 1000))))";
+                "func Setup(){a := (100 + (10 + ((1 + 1000))))}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = (100+(10+((1+1000))));\n";
+                "void setup() {\na = (100+(10+((1+1000))));\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void stringParenthesisExprTest() throws IOException {
         String program = "string s\n" +
-                "s := (\"Hello world!\")";
+                "func Setup() {s := (\"Hello world!\")}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "char s[256];\n" +
-                "strcpy(s, (\"Hello world!\"));\n";
+                "void setup() {\nstrcpy(s, (\"Hello world!\"));\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void doubleParenthesisExprTest() throws IOException {
         String program = "double a\n" +
-                "a := (34.115)";
+                "func Setup() {a := (34.115)}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "double a;\n" +
-                "a = (34.115);\n";
+                "void setup() {\na = (34.115);\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void integerParenthesisExprTest() throws IOException {
         String program = "int a\n" +
-                "a := (100)";
+                "func Setup() {a := (100)}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = (100);\n";
+                "void setup() {\na = (100);\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void doubleUnaryExprTest() throws IOException {
         String program = "double a\n" +
-                "a := -23.12";
+                "func Setup() {a := -23.12}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "double a;\n" +
-                "a = -23.12;\n";
+                "void setup() {\na = -23.12;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void integerUnaryExprTest() throws IOException {
         String program = "int a\n" +
-                "a := -100";
+                "func Setup() {a := -100}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = -100;\n";
+                "void setup() {\na = -100;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueFalseUnaryExprTest() throws IOException {
-        String program = "if (!true AND !false) {\n" +
-                "}";
+        String program = "func Setup() {if (!true AND !false) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (!1&&!0) {\n" +
-                "}\n";
+                "void setup() {\nif (!1&&!0) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void longNotFalseUnaryExprTest() throws IOException {
-        String program = "if (!(false)) {\n" +
-                "}";
+        String program = "func Setup() {if (!(false)) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (!(0)) {\n" +
-                "}\n";
+                "void setup() {\nif (!(0)) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void shortNotFalseUnaryExprTest() throws IOException {
-        String program = "if (!false) {\n" +
-                "}";
+        String program = "func Setup() {if (!false) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (!0) {\n" +
-                "}\n";
+                "void setup() {\nif (!0) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void longNotTrueUnaryExprTest() throws IOException {
-        String program = "if (!(true)) {\n" +
-                "}";
+        String program = "func Setup() {if (!(true)) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (!(1)) {\n" +
-                "}\n";
+                "void setup() {\nif (!(1)) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void shortNotTrueUnaryExprTest() throws IOException {
-        String program = "if (!true) {\n" +
-                "}";
+        String program = "func Setup() {if (!true) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (!1) {\n" +
-                "}\n";
+                "void setup() {\nif (!1) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void divideMultiplicativeExprTest() throws IOException {
         String program = "int a\n" +
-                "a := 1 / 2";
+                "func Setup() {a := 1 / 2}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = 1/2;\n";
+                "void setup() {\na = 1/2;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void multiplyMultiplicativeExprTest() throws IOException {
         String program = "int a\n" +
-                "a := 1 * 2";
+                "func Setup() {a := 1 * 2}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = 1*2;\n";
+                "void setup() {\na = 1*2;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void minusAdditiveExprTest() throws IOException {
         String program = "int a\n" +
-                "a := 1 - 2";
+                "func Setup() {a := 1 - 2}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = 1-2;\n";
+                "void setup() {\na = 1-2;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void plusAdditiveExprTest() throws IOException {
         String program = "int a\n" +
-                "a := 1 + 2";
+                "func Setup() {a := 1 + 2}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = 1+2;\n";
+                "void setup() {\na = 1+2;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void greaterOrEqualRelationalExprTest() throws IOException {
-        String program = "if (1 >= 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 >= 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1>=2) {\n" +
-                "}\n";
+                "void setup() {\nif (1>=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void lessOrEqualRelationalExprTest() throws IOException {
-        String program = "if (1 <= 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 <= 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1<=2) {\n" +
-                "}\n";
+                "void setup() {\nif (1<=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void greaterRelationalExprTest() throws IOException {
-        String program = "if (1 > 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 > 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1>2) {\n" +
-                "}\n";
+                "void setup() {\nif (1>2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void lessRelationalExprTest() throws IOException {
-        String program = "if (1 < 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 < 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1<2) {\n" +
-                "}\n";
+                "void setup() {\nif (1<2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void notequalEqualityExprTest() throws IOException {
-        String program = "if (1 != 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 != 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1!=2) {\n" +
-                "}\n";
+                "void setup() {\nif (1!=2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void equalEqualityExprTest() throws IOException {
-        String program = "if (1 = 2) {\n" +
-                "}";
+        String program = "func Setup() {if (1 = 2) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1==2) {\n" +
-                "}\n";
+                "void setup() {\nif (1==2) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void trueFalseLogicalOrExprTest() throws IOException {
-        String program = "if (true OR false) {\n" +
-                "}";
+        String program = "func Setup() {if (true OR false) {\n" +
+                "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "if (1||0) {\n" +
-                "}\n";
+                "void setup() {\nif (1||0) {\n" +
+                "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -916,7 +898,7 @@ public class CCodeGenerationVisitorTest {
                 "}}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
-                "void setup() {if (1||1) {\n" +
+                "void setup() {\nif (1||1) {\n" +
                 "}\n}\n";
         assertEquals(expected, getCCode(program));
     }
@@ -1040,52 +1022,52 @@ public class CCodeGenerationVisitorTest {
     @Test
     public void integerLiteralTest() throws IOException {
         String program = "int i\n" +
-                "i := 1001";
+                "func Setup() {i := 1001}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int i;\n" +
-                "i = 1001;\n";
+                "void setup() {\ni = 1001;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void doubleLiteralTest() throws IOException {
         String program = "double d\n" +
-                "d := 23.12";
+                "func Setup() {d := 23.12}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "double d;\n" +
-                "d = 23.12;\n";
+                "void setup() {\nd = 23.12;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void stringLiteralTest() throws IOException {
         String program = "string s\n" +
-                "s := \"Hello World!\"";
+                "func Setup() {s := \"Hello World!\"}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "char s[256];\n" +
-                "strcpy(s, \"Hello World!\");\n";
+                "void setup() {\nstrcpy(s, \"Hello World!\");\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void idNodeTest() throws IOException {
         String program = "int a\n" +
-                "a := 1";
+                "func Setup() {a := 1}";
         String expected = "#include <stdio.h>\n" +
                 "#include <string.h>\n" +
                 "int a;\n" +
-                "a = 1;\n";
+                "void setup() {\na = 1;\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
     @Test
     public void startNodeTest() throws IOException {
-        String program = "";
+        String program = "func Setup() {}";
         String expected = "#include <stdio.h>\n" +
-                "#include <string.h>\n";
+                "#include <string.h>\nvoid setup() {\n}\n";
         assertEquals(expected, getCCode(program));
     }
 
@@ -1103,6 +1085,7 @@ public class CCodeGenerationVisitorTest {
                 "boolean boolTest2\n" +
                 "string stringTest\n" +
                 " \n" +
+                "func Setup() {" +
                 "testOne := 1\n" +
                 "testTwo := 20\n" +
                 "testThree := 30\n" +
@@ -1113,7 +1096,7 @@ public class CCodeGenerationVisitorTest {
                 "boolTest1 := true\n" +
                 "boolTest2 := false\n" +
                 "stringTest := \"Hello world!\"\n" +
-                "\n" +
+                "}\n" +
                 "func int findMedium(int testOne, int testTwo, int testThree, int testFour) {\n" +
                 "        int ret\n" +
                 "        ret := 1\n" +
@@ -1147,6 +1130,7 @@ public class CCodeGenerationVisitorTest {
                 "int boolTest1;\n" +
                 "int boolTest2;\n" +
                 "char stringTest[256];\n" +
+                "void setup() {\n" +
                 "testOne = 1;\n" +
                 "testTwo = 20;\n" +
                 "testThree = 30;\n" +
@@ -1157,6 +1141,7 @@ public class CCodeGenerationVisitorTest {
                 "boolTest1 = 1;\n" +
                 "boolTest2 = 0;\n" +
                 "strcpy(stringTest, \"Hello world!\");\n" +
+                "}\n" +
                 "int findMedium(int testOne, int testTwo, int testThree, int testFour) {\n" +
                 "int ret;\n" +
                 "ret = 1;\n" +
