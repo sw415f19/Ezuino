@@ -58,6 +58,9 @@ public class Main {
             errorHandler.invalidKeyword();
             return null;
         }
+        if(errorHandler.hasErrors()) {
+            return null;
+        }
 
         CSTPrinter cstp = new CSTPrinter();
         cstp.visit(parseTree);
