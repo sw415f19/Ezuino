@@ -9,21 +9,21 @@ public class SymbolTable {
     private Map<String, ITypeNode> symbolMap = new HashMap<String, ITypeNode>();
     private SymbolTable parentTable;
 
-    public SymbolTable(SymbolTable previousTable) {
+    SymbolTable(SymbolTable previousTable) {
         this.parentTable = previousTable;
     }
 
-    public boolean enterSymbol(String key, ITypeNode node) {
+    boolean enterSymbol(String key, ITypeNode node) {
         boolean result = !symbolMap.containsKey(key);
         symbolMap.put(key, node);
         return result;
     }
 
-    public boolean isGlobalScope() {
+    boolean isGlobalScope() {
         return this.parentTable == null;
     }
 
-    public ITypeNode retrieveSymbol(String key) {
+    ITypeNode retrieveSymbol(String key) {
         if (symbolMap.containsKey(key)) {
             return symbolMap.get(key);
         }
@@ -35,7 +35,7 @@ public class SymbolTable {
         return this.parentTable.retrieveSymbol(key);
     }
 
-    public ITypeNode getSymbolCurrentScope(String id) {
+    ITypeNode getSymbolCurrentScope(String id) {
         return symbolMap.get(id);
     }
 }
