@@ -214,7 +214,7 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         }
 
         if (ctx.FLOAT() != null) {
-            return new FloatLiteral(ctx.NUMBER().getText());
+            return new FloatLiteral(ctx.FLOAT().getText());
         }
 
         if (ctx.TEXT() != null) {
