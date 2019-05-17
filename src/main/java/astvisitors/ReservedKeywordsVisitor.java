@@ -8,10 +8,10 @@ import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
-import ast.type.DoubleLiteral;
+import ast.type.FloatLiteral;
 import ast.type.IdNode;
-import ast.type.IntegerLiteral;
-import ast.type.StringLiteral;
+import ast.type.NumberLiteral;
+import ast.type.TextLiteral;
 import exceptions.ErrorHandler;
 
 import java.util.*;
@@ -208,15 +208,15 @@ public class ReservedKeywordsVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerLiteral node) {
+    public void visit(NumberLiteral node) {
     }
 
     @Override
-    public void visit(DoubleLiteral node) {
+    public void visit(FloatLiteral node) {
     }
 
     @Override
-    public void visit(StringLiteral node) {
+    public void visit(TextLiteral node) {
     }
 
     @Override

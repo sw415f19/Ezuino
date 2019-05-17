@@ -123,18 +123,18 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerLiteral node) {
-        node.setType(Type.INT);
+    public void visit(NumberLiteral node) {
+        node.setType(Type.NUMBER);
     }
 
     @Override
-    public void visit(DoubleLiteral node) {
-        node.setType(Type.DOUBLE);
+    public void visit(FloatLiteral node) {
+        node.setType(Type.FLOAT);
     }
 
     @Override
-    public void visit(StringLiteral node) {
-        node.setType(Type.STRING);
+    public void visit(TextLiteral node) {
+        node.setType(Type.TEXT);
     }
 
     @Override
@@ -275,7 +275,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IntegerCastNode node) {
-        node.setType(Type.INT);
+        node.setType(Type.NUMBER);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
@@ -283,7 +283,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DoubleCastNode node) {
-        node.setType(Type.DOUBLE);
+        node.setType(Type.FLOAT);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
@@ -291,7 +291,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(AnalogReadNode node) {
-        node.setType(Type.INT);
+        node.setType(Type.NUMBER);
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -320,7 +320,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DigitalReadNode node) {
-        node.setType(Type.INT);
+        node.setType(Type.NUMBER);
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -356,11 +356,11 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(PinLevelNode node) {
-        node.setType(Type.INT);
+        node.setType(Type.NUMBER);
     }
 
     @Override
     public void visit(PinModeNode node) {
-        node.setType(Type.INT);
+        node.setType(Type.NUMBER);
     }
 }

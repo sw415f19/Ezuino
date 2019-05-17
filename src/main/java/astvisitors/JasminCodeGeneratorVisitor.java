@@ -42,10 +42,10 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
-import ast.type.DoubleLiteral;
+import ast.type.FloatLiteral;
 import ast.type.IdNode;
-import ast.type.IntegerLiteral;
-import ast.type.StringLiteral;
+import ast.type.NumberLiteral;
+import ast.type.TextLiteral;
 
 public class JasminCodeGeneratorVisitor extends AstVisitor {
 
@@ -110,16 +110,16 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		}
 		incrementStack();
 		switch (node.getType()) {
-		case INT:
+		case NUMBER:
 		case BOOL:
 			appendLine("iconst_0");
 			appendLine("istore " + currentVariableEnvironment.indexOf(node.getID()));
 			break;
-		case DOUBLE:
+		case FLOAT:
 			appendLine("fconst_0");
 			appendLine("fstore " + currentVariableEnvironment.indexOf(node.getID()));
 			break;
-		case STRING:
+		case TEXT:
 			appendLine("new java/lang/String");
 			appendLine("astore " + currentVariableEnvironment.indexOf(node.getID()));
 			break;
@@ -135,14 +135,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	public void visit(Assign_stmtNode node) {
 		node.getExprNode().accept(this);
 		switch (node.getExprNode().getType()) {
-		case INT:
+		case NUMBER:
 		case BOOL:
 			appendLine("istore " + currentVariableEnvironment.lastIndexOf(node.getId()));
 			break;
-		case DOUBLE:
+		case FLOAT:
 			appendLine("fstore " + currentVariableEnvironment.lastIndexOf(node.getId()));
 			break;
-		case STRING:
+		case TEXT:
 			appendLine("astore " + currentVariableEnvironment.lastIndexOf(node.getId()));
 			break;
 		default:
@@ -167,13 +167,13 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	}
 
 	@Override
-	public void visit(IntegerLiteral node) {
+	public void visit(NumberLiteral node) {
 		incrementStack();
 		appendLine("bipush " + node.getVal());
 	}
 
 	@Override
-	public void visit(DoubleLiteral node) {
+	public void visit(FloatLiteral node) {
 		incrementStack();
 		appendLine("ldc " + node.getVal());
 	}
@@ -195,7 +195,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	}
 
 	@Override
-	public void visit(StringLiteral node) {
+	public void visit(TextLiteral node) {
 		incrementStack();
 		appendLine("ldc " + node.getVal());
 	}
@@ -236,14 +236,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		if (node.getReturnExpr() != null) {
 			node.getReturnExpr().accept(this);
 			switch (node.getType()) {
-			case INT:
+			case NUMBER:
 			case BOOL:
 				appendLine("ireturn");
 				break;
-			case DOUBLE:
+			case FLOAT:
 				appendLine("freturn");
 				break;
-			case STRING:
+			case TEXT:
 				appendLine("areturn");
 				break;
 			default:
@@ -316,14 +316,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	public void visit(IdNode node) {
 		incrementStack();
 		switch (node.getType()) {
-		case INT:
+		case NUMBER:
 		case BOOL:
 			appendLine("iload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
 			break;
-		case DOUBLE:
+		case FLOAT:
 			appendLine("fload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
 			break;
-		case STRING:
+		case TEXT:
 			appendLine("aload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
 			break;
 		default:
@@ -379,21 +379,21 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		node.getLeftNode().accept(this);
 		node.getRightNode().accept(this);
 		switch (node.getType()) {
-		case INT:
+		case NUMBER:
 			if (node.getOperator().equals("+")) {
 				appendLine("iadd");
 			} else {
 				appendLine("isub");
 			}
 			break;
-		case DOUBLE:
+		case FLOAT:
 			if (node.getOperator().equals("+")) {
 				appendLine("fadd");
 			} else {
 				appendLine("fsub");
 			}
 			break;
-		case STRING:
+		case TEXT:
 			appendLine("invokevirtual java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;");
 			break;
 		default:
@@ -408,14 +408,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		node.getLeftNode().accept(this);
 		node.getRightNode().accept(this);
 		switch (node.getType()) {
-		case INT:
+		case NUMBER:
 			if (node.getOperator().equals("*")) {
 				appendLine("imul");
 			} else {
 				appendLine("idiv");
 			}
 			break;
-		case DOUBLE:
+		case FLOAT:
 			if (node.getOperator().equals("*")) {
 				appendLine("fmul");
 			} else {
@@ -433,11 +433,11 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		node.getNode().accept(this);
 		if (node.getOperator().equals("-")) {
 			switch (node.getType()) {
-			case INT:
+			case NUMBER:
 			case BOOL:
 				appendLine("ineg");
 				break;
-			case DOUBLE:
+			case FLOAT:
 				appendLine("fneg");
 				break;
 			default:
@@ -589,13 +589,13 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 
 	private void appendComparisonBasedOnType(Type comparedType) {
 		switch (comparedType) {
-		case INT:
+		case NUMBER:
 			appendLine("lcmp");
 			break;
-		case DOUBLE:
+		case FLOAT:
 			appendLine("fcmpg");
 			break;
-		case STRING:
+		case TEXT:
 			appendLine("java/lang/String.compareTo:(Ljava/lang/String;)I");
 			break;
 		default:
@@ -689,14 +689,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		append("(");
 		for (AExpr parameter : node.getParameters()) {
 			switch (parameter.getType()) {
-			case INT:
+			case NUMBER:
 			case BOOL:
 				append("I");
 				break;
-			case DOUBLE:
+			case FLOAT:
 				append("F");
 				break;
-			case STRING:
+			case TEXT:
 				append("Ljava/lang/String;");
 				break;
 			default:
@@ -706,14 +706,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		}
 		append(")");
 		switch (node.getType()) {
-		case INT:
+		case NUMBER:
 		case BOOL:
 			appendLine("I");
 			break;
-		case DOUBLE:
+		case FLOAT:
 			appendLine("F");
 			break;
-		case STRING:
+		case TEXT:
 			appendLine("Ljava/lang/String;");
 			break;
 		case VOID:
@@ -731,14 +731,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		append("(");
 		for (DclNode parameter : node.getParameters()) {
 			switch (parameter.getType()) {
-			case INT:
+			case NUMBER:
 			case BOOL:
 				append("I");
 				break;
-			case DOUBLE:
+			case FLOAT:
 				append("F");
 				break;
-			case STRING:
+			case TEXT:
 				append("Ljava/lang/String;");
 				break;
 			default:
@@ -748,14 +748,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		}
 		append(")");
 		switch (node.getType()) {
-		case INT:
+		case NUMBER:
 		case BOOL:
 			appendLine("I");
 			break;
-		case DOUBLE:
+		case FLOAT:
 			appendLine("F");
 			break;
-		case STRING:
+		case TEXT:
 			appendLine("Ljava/lang/String;");
 			break;
 		case VOID:
@@ -773,14 +773,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		append("(");
 		for (AExpr parameter : node.getParameters()) {
 			switch (parameter.getType()) {
-			case INT:
+			case NUMBER:
 			case BOOL:
 				append("I");
 				break;
-			case DOUBLE:
+			case FLOAT:
 				append("F");
 				break;
-			case STRING:
+			case TEXT:
 				append("Ljava/lang/String;");
 				break;
 			default:
@@ -790,14 +790,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		}
 		append(")");
 		switch (node.getType()) {
-		case INT:
+		case NUMBER:
 		case BOOL:
 			appendLine("I");
 			break;
-		case DOUBLE:
+		case FLOAT:
 			appendLine("F");
 			break;
-		case STRING:
+		case TEXT:
 			appendLine("Ljava/lang/String;");
 			break;
 		case VOID:

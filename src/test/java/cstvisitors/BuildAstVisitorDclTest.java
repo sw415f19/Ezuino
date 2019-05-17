@@ -24,7 +24,7 @@ public class BuildAstVisitorDclTest {
 	public void intDclNodeTest() throws IOException {
 		EzuinoParser ep = createParser("int a");
 		DclNode topNode = (DclNode)ep.dcl().accept(visitor);
-		assertEquals(Type.INT, topNode.getType());
+		assertEquals(Type.NUMBER, topNode.getType());
 		assertEquals("a", topNode.getID());
 	}
 	
@@ -32,7 +32,7 @@ public class BuildAstVisitorDclTest {
 	public void doubleDclNodeTest() throws IOException {
 		EzuinoParser ep = createParser("double a");
 		DclNode topNode = (DclNode)ep.dcl().accept(visitor);
-		assertEquals(Type.DOUBLE, topNode.getType());
+		assertEquals(Type.FLOAT, topNode.getType());
 		assertEquals("a", topNode.getID());
 	}
 	
@@ -40,7 +40,7 @@ public class BuildAstVisitorDclTest {
 	public void stringDclNodeTest() throws IOException {
 		EzuinoParser ep = createParser("string a");
 		DclNode topNode = (DclNode)ep.dcl().accept(visitor);
-		assertEquals(Type.STRING, topNode.getType());
+		assertEquals(Type.TEXT, topNode.getType());
 		assertEquals("a", topNode.getID());
 	}
 	
@@ -59,9 +59,9 @@ public class BuildAstVisitorDclTest {
 		DclNode firstChild = topNode.getChild(0);
 		DclNode secondChild = topNode.getChild(1);
 		
-		assertEquals(Type.INT, firstChild.getType());
+		assertEquals(Type.NUMBER, firstChild.getType());
 		assertEquals("a", firstChild.getID());
-		assertEquals(Type.DOUBLE, secondChild.getType());
+		assertEquals(Type.FLOAT, secondChild.getType());
 		assertEquals("b", secondChild.getID());
 	}
 

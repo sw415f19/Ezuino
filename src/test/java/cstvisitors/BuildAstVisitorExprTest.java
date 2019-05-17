@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
-import ast.type.IntegerLiteral;
+import ast.type.NumberLiteral;
 import generated.EzuinoLexer;
 import generated.EzuinoParser;
 
@@ -22,10 +22,10 @@ public class BuildAstVisitorExprTest {
 		EzuinoParser ep = createParser("1 + 2");
 		AdditiveExprNode topNode = (AdditiveExprNode)ep.expr().accept(visitor);
 		
-		assertTrue(topNode.getLeftNode() instanceof IntegerLiteral);
-		assertTrue(topNode.getRightNode() instanceof IntegerLiteral);
-		assertEquals("1", ((IntegerLiteral)topNode.getLeftNode()).getVal());
-		assertEquals("2", ((IntegerLiteral)topNode.getRightNode()).getVal());
+		assertTrue(topNode.getLeftNode() instanceof NumberLiteral);
+		assertTrue(topNode.getRightNode() instanceof NumberLiteral);
+		assertEquals("1", ((NumberLiteral)topNode.getLeftNode()).getVal());
+		assertEquals("2", ((NumberLiteral)topNode.getRightNode()).getVal());
 		assertEquals("+", topNode.getOperator());
 	}
 
@@ -34,10 +34,10 @@ public class BuildAstVisitorExprTest {
 		EzuinoParser ep = createParser("1 * 10");
 		MultiplicativeExprNode topNode = (MultiplicativeExprNode) ep.expr().accept(visitor);
 
-		assertTrue(topNode.getLeftNode() instanceof IntegerLiteral);
-		assertTrue(topNode.getRightNode() instanceof IntegerLiteral);
-		assertEquals("1", ((IntegerLiteral)topNode.getLeftNode()).getVal());
-		assertEquals("10", ((IntegerLiteral)topNode.getRightNode()).getVal());
+		assertTrue(topNode.getLeftNode() instanceof NumberLiteral);
+		assertTrue(topNode.getRightNode() instanceof NumberLiteral);
+		assertEquals("1", ((NumberLiteral)topNode.getLeftNode()).getVal());
+		assertEquals("10", ((NumberLiteral)topNode.getRightNode()).getVal());
 		assertEquals("*", topNode.getOperator());
 	}
 
@@ -46,10 +46,10 @@ public class BuildAstVisitorExprTest {
 		EzuinoParser ep = createParser("1 <= 10");
 		RelationalExprNode topNode = (RelationalExprNode) ep.expr().accept(visitor);
 
-		assertTrue(topNode.getLeftNode() instanceof IntegerLiteral);
-		assertTrue(topNode.getRightNode() instanceof IntegerLiteral);
-		assertEquals("1", ((IntegerLiteral)topNode.getLeftNode()).getVal());
-		assertEquals("10", ((IntegerLiteral)topNode.getRightNode()).getVal());
+		assertTrue(topNode.getLeftNode() instanceof NumberLiteral);
+		assertTrue(topNode.getRightNode() instanceof NumberLiteral);
+		assertEquals("1", ((NumberLiteral)topNode.getLeftNode()).getVal());
+		assertEquals("10", ((NumberLiteral)topNode.getRightNode()).getVal());
 		assertEquals("<=", topNode.getOperator());
 	}
 
@@ -58,10 +58,10 @@ public class BuildAstVisitorExprTest {
 		EzuinoParser ep = createParser("1 = 1");
 		EqualityExprNode topNode = (EqualityExprNode) ep.expr().accept(visitor);
 
-		assertTrue(topNode.getLeftNode() instanceof IntegerLiteral);
-		assertTrue(topNode.getRightNode() instanceof IntegerLiteral);
-		assertEquals("1", ((IntegerLiteral)topNode.getLeftNode()).getVal());
-		assertEquals("1", ((IntegerLiteral)topNode.getRightNode()).getVal());
+		assertTrue(topNode.getLeftNode() instanceof NumberLiteral);
+		assertTrue(topNode.getRightNode() instanceof NumberLiteral);
+		assertEquals("1", ((NumberLiteral)topNode.getLeftNode()).getVal());
+		assertEquals("1", ((NumberLiteral)topNode.getRightNode()).getVal());
 		assertEquals("=", topNode.getOperator());
 	}
 	@Test

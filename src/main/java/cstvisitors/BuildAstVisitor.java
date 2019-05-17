@@ -209,16 +209,16 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitVal(EzuinoParser.ValContext ctx) {
-        if (ctx.INTEGER() != null) {
-            return new IntegerLiteral(ctx.INTEGER().getText());
+        if (ctx.NUMBER() != null) {
+            return new NumberLiteral(ctx.NUMBER().getText());
         }
 
-        if (ctx.DOUBLE() != null) {
-            return new DoubleLiteral(ctx.DOUBLE().getText());
+        if (ctx.FLOAT() != null) {
+            return new FloatLiteral(ctx.NUMBER().getText());
         }
 
-        if (ctx.STRING() != null) {
-            return new StringLiteral(ctx.STRING().getText());
+        if (ctx.TEXT() != null) {
+            return new TextLiteral(ctx.TEXT().getText());
         }
         // Check for reserved keywords in ID
         if (ctx.ID() != null) {
@@ -279,13 +279,13 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
         	return Type.VOID;
         }
         if (ctx.INTDCL() != null) {
-            type = Type.INT;
+            type = Type.NUMBER;
         }
-        if (ctx.DOUBLEDCL() != null) {
-            type = Type.DOUBLE;
+        if (ctx.FLOATDCL() != null) {
+            type = Type.FLOAT;
         }
-        if (ctx.STRINGDCL() != null) {
-            type = Type.STRING;
+        if (ctx.TEXTDCL() != null) {
+            type = Type.TEXT;
         }
         if (ctx.BOOLEANDCL() != null) {
             type = Type.BOOL;

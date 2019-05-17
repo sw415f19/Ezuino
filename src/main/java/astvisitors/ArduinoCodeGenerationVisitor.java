@@ -8,10 +8,10 @@ import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
-import ast.type.DoubleLiteral;
+import ast.type.FloatLiteral;
 import ast.type.IdNode;
-import ast.type.IntegerLiteral;
-import ast.type.StringLiteral;
+import ast.type.NumberLiteral;
+import ast.type.TextLiteral;
 
 import java.io.PrintStream;
 import java.util.Iterator;
@@ -75,13 +75,13 @@ public class ArduinoCodeGenerationVisitor extends AstVisitor {
         String nodeType = "";
         // Formats the defined type to C types
         switch (node.getType()) {
-            case INT:
+            case NUMBER:
                 nodeType = "int ";
                 break;
-            case DOUBLE:
+            case FLOAT:
                 nodeType = "double ";
                 break;
-            case STRING:
+            case TEXT:
                 nodeType = "char ";
                 break;
             case BOOL:
@@ -156,13 +156,13 @@ public class ArduinoCodeGenerationVisitor extends AstVisitor {
         String arrayLength = "";
         // Formats the defined type to C types
         switch (node.getType()) {
-            case INT:
+            case NUMBER:
                 nodeType = "int ";
                 break;
-            case DOUBLE:
+            case FLOAT:
                 nodeType = "double ";
                 break;
-            case STRING:
+            case TEXT:
                 // Converts the java string into a char array of size 42
                 nodeType = "char ";
                 arrayLength = "[42]";
@@ -267,17 +267,17 @@ public class ArduinoCodeGenerationVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerLiteral node) {
+    public void visit(NumberLiteral node) {
         builder.append(node.getVal());
     }
 
     @Override
-    public void visit(DoubleLiteral node) {
+    public void visit(FloatLiteral node) {
         builder.append(node.getVal());
     }
 
     @Override
-    public void visit(StringLiteral node) {
+    public void visit(TextLiteral node) {
         if (node.getVal().length() > 41) {
             System.err.println("ArduinoCodeGenerationVisitor Error: String beyond maximum length!");
         }

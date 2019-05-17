@@ -2,9 +2,9 @@ package ast.type;
 
 import astvisitors.AstVisitor;
 
-public class DoubleLiteral extends ValNode {
+public class FloatLiteral extends ValNode {
 
-    public DoubleLiteral(String val) {
+    public FloatLiteral(String val) {
         this.val = val;
     }
 

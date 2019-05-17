@@ -163,15 +163,15 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerLiteral node) {
+    public void visit(NumberLiteral node) {
     }
 
     @Override
-    public void visit(DoubleLiteral node) {
+    public void visit(FloatLiteral node) {
     }
 
     @Override
-    public void visit(StringLiteral node) {
+    public void visit(TextLiteral node) {
     }
 
     @Override

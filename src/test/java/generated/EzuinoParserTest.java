@@ -32,14 +32,14 @@ public class EzuinoParserTest {
 	public void doubleParseTest() throws IOException{
 		EzuinoParser ep = createParser("double");
 		Token resultToken = (Token)ep.type().getChild(0).getPayload();
-		assertEquals(EzuinoParser.DOUBLEDCL, resultToken.getType());
+		assertEquals(EzuinoParser.FLOATDCL, resultToken.getType());
 	}
 
 	@Test
 	public void stringParseTest() throws IOException{
 		EzuinoParser ep = createParser("string");
 		Token resultToken = (Token)ep.type().getChild(0).getPayload();
-		assertEquals(EzuinoParser.STRINGDCL, resultToken.getType());
+		assertEquals(EzuinoParser.TEXTDCL, resultToken.getType());
 	}
 	
 	private EzuinoParser createParser(String testString) throws IOException {

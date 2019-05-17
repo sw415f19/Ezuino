@@ -81,15 +81,15 @@ func_call_param
 	;
 val
     : ID
-    | INTEGER
-    | DOUBLE
-    | STRING
+    | NUMBER
+    | FLOAT
+    | TEXT
     ;
 type
     : INTDCL
-    | DOUBLEDCL
+    | FLOATDCL
     | BOOLEANDCL
-    | STRINGDCL
+    | TEXTDCL
     ;
 return_stmt
     : RETURN expr?
@@ -106,9 +106,9 @@ block
     ;
 
 // DECLARATIONS
-INTDCL              : 'int' ;
-DOUBLEDCL           : 'double' ;
-STRINGDCL           : 'string' ;
+NUMBERDCL              : 'number' ;
+FLOATDCL           : 'float' ;
+TEXTDCL           : 'text' ;
 BOOLEANDCL          : 'boolean' ;
 // STATEMENTS
 ASSIGN              : ':=' ;
@@ -138,9 +138,9 @@ DEFAULT             : 'default' ;
 BOOL                : 'true' | 'false' ;
 ID                  : [a-zA-Z_]+[a-zA-Z0-9_]*;
 // DATA TYPES
-INTEGER             : [0-9]+ ;
-DOUBLE              : [0-9]+'.'[0-9]+ ;
-STRING              : '"' (~["\r\n] | '""')* '"' ;
+NUMBER             : [0-9]+ ;
+FLOAT              : [0-9]+'.'[0-9]+ ;
+TEXT              : '"' (~["\r\n] | '""')* '"' ;
 // EXTRA
 BLANK               : [ \t\r\n]+ -> skip ;
 COMMENT             : '#' ~[\r\n]*-> skip ;

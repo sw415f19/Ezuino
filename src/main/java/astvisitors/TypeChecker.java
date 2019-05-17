@@ -8,10 +8,10 @@ import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
-import ast.type.DoubleLiteral;
+import ast.type.FloatLiteral;
 import ast.type.IdNode;
-import ast.type.IntegerLiteral;
-import ast.type.StringLiteral;
+import ast.type.NumberLiteral;
+import ast.type.TextLiteral;
 import exceptions.ErrorHandler;
 
 public class TypeChecker extends AstVisitor {
@@ -141,7 +141,7 @@ public class TypeChecker extends AstVisitor {
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(node.getLeftNode().getType());
         if (node.getType().equals(Type.BOOL) ||
-                node.getType().equals(Type.STRING) && node.getOperator().equals("-")) {
+                node.getType().equals(Type.TEXT) && node.getOperator().equals("-")) {
             errorHandler.invalidOperatorForType(node.getOperator(), node.getType());
         }
     }
@@ -152,7 +152,7 @@ public class TypeChecker extends AstVisitor {
         node.getRightNode().accept(this);
         checkType(node.getLeftNode(), node.getRightNode());
         node.setType(node.getLeftNode().getType());
-        if (node.getType().equals(Type.STRING) || node.getType().equals(Type.BOOL)) {
+        if (node.getType().equals(Type.TEXT) || node.getType().equals(Type.BOOL)) {
             errorHandler.invalidOperatorForType(node.getOperator(), node.getType());
         }
     }
@@ -189,15 +189,15 @@ public class TypeChecker extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerLiteral node) {
+    public void visit(NumberLiteral node) {
     }
 
     @Override
-    public void visit(DoubleLiteral node) {
+    public void visit(FloatLiteral node) {
     }
 
     @Override
-    public void visit(StringLiteral node) {
+    public void visit(TextLiteral node) {
     }
 
     @Override
@@ -217,7 +217,7 @@ public class TypeChecker extends AstVisitor {
 
         boolean printErr = false;
         if ("-".equals(nodeOperator)) {
-            printErr = nodeType.equals(Type.BOOL) || nodeType.equals(Type.STRING);
+            printErr = nodeType.equals(Type.BOOL) || nodeType.equals(Type.TEXT);
         } else if ("!".equals(nodeOperator)) {
             printErr = !nodeType.equals(Type.BOOL);
         }
@@ -260,7 +260,7 @@ public class TypeChecker extends AstVisitor {
     @Override
     public void visit(DoubleCastNode node) {
         for (AExpr var : node.getParameters()) {
-            if (var.getType() == Type.INT) {
+            if (var.getType() == Type.NUMBER) {
                 errorHandler.invalidCastException();
             }
             var.accept(this);

@@ -40,9 +40,9 @@ public abstract class AstVisitor {
 
 
     //"Type"
-    public abstract void visit(IntegerLiteral node);
-    public abstract void visit(DoubleLiteral node);
-    public abstract void visit(StringLiteral node);
+    public abstract void visit(NumberLiteral node);
+    public abstract void visit(FloatLiteral node);
+    public abstract void visit(TextLiteral node);
     public abstract void visit(IdNode node);
 
     // Arduino nodes

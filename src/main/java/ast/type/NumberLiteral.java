@@ -2,9 +2,9 @@ package ast.type;
 
 import astvisitors.AstVisitor;
 
-public class StringLiteral extends ValNode {
+public class NumberLiteral extends ValNode {
 
-    public StringLiteral(String val) {
+    public NumberLiteral(String val) {
         this.val = val;
     }
 
