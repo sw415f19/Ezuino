@@ -5,8 +5,10 @@ import ast.arduino.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
+import ast.expr.cast.BooleanCastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.StringCastNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -265,6 +267,18 @@ public class ReturnStmtTypeCheckVisitor extends AstVisitor {
 
     @Override
     public void visit(LoopNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(StringCastNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
         // TODO Auto-generated method stub
         
     }

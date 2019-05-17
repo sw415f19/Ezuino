@@ -13,10 +13,8 @@ import generated.EzuinoParser.ExprContext;
 import ast.expr.ParenthesisExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.*;
-import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.PrintNode;
-import ast.expr.cast.DoubleCastNode;
-import ast.expr.cast.IntegerCastNode;
+import ast.funcallstmt.*;
+import ast.expr.cast.*;
 import ast.type.*;
 import ast.expr.*;
 
@@ -180,20 +178,14 @@ public class BuildAstVisitor extends EzuinoBaseVisitor<AstNode> {
             parameters.add((AExpr) param.accept(this));
         }
 
-        if ("INTEGER".equals(id)) {
-            return new IntegerCastNode(id, parameters);
-        }
-        if ("DOUBLE".equals(id)) {
-            for (int i = 0; i < ctx.getChildCount(); i++) {
-                System.err.println(ctx.getChild(i));
-            }
-            return new DoubleCastNode(id, parameters);
-        }
-
         if (ctx.parent instanceof EzuinoParser.PrimaryExprContext) {
             switch(id) {
                 case "AnalogRead" : return new AnalogReadNode(id, parameters);
                 case "DigitalRead" : return new DigitalReadNode(id, parameters);
+                case "String" : return new StringCastNode(id, parameters);
+                case "Double" : return new DoubleCastNode(id, parameters);
+                case "Integer" : return new IntegerCastNode(id, parameters);
+                case "Boolean" : return new BooleanCastNode(id, parameters);
                 default : return new Func_callExprNode(id, parameters);
             }
         }

@@ -4,8 +4,10 @@ import ast.*;
 import ast.arduino.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.expr.cast.BooleanCastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.StringCastNode;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.DoubleLiteral;
@@ -317,6 +319,18 @@ public class ReservedKeywordsVisitor extends AstVisitor {
 
     @Override
     public void visit(LoopNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(StringCastNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
         // TODO Auto-generated method stub
         
     }

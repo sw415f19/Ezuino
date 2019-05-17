@@ -1,6 +1,9 @@
 package astvisitors;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ast.*;
 import ast.arduino.*;
@@ -8,8 +11,11 @@ import ast.expr.*;
 import ast.expr.aexpr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
+import ast.expr.cast.BooleanCastNode;
+import ast.expr.cast.CastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.StringCastNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -264,15 +270,6 @@ public class FuncStructureVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerCastNode node) {
-
-    }
-
-    @Override
-    public void visit(DoubleCastNode node) {
-    }
-
-    @Override
     public void visit(AnalogReadNode node) {
         Type[] expectedType = {Type.INT};
         AExpr firstParam = node.getParameters().get(0);
@@ -391,7 +388,7 @@ public class FuncStructureVisitor extends AstVisitor {
         Type[] expectedType = {};
         checkFuncDefSpecial(node.getId(), node.getParameters(), 0, expectedType);
         node.getBlockNode().accept(this);
-        
+
     }
 
     @Override
@@ -399,6 +396,49 @@ public class FuncStructureVisitor extends AstVisitor {
         Type[] expectedType = {};
         checkFuncDefSpecial(node.getId(), node.getParameters(), 0, expectedType);
         node.getBlockNode().accept(this);
-        
+
+    }
+
+    @Override
+    public void visit(StringCastNode node) {
+        Set<Type> allowedTypes = new HashSet<Type>(Arrays.asList(Type.BOOL, Type.DOUBLE, Type.INT));
+        Type argumentType = checkValidCast(node, allowedTypes);
+        node.setFromType(argumentType);
+
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
+        Set<Type> allowedTypes = new HashSet<Type>(Arrays.asList(Type.INT));
+        Type argumentType = checkValidCast(node, allowedTypes);
+        node.setFromType(argumentType);
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+        Set<Type> allowedTypes = new HashSet<Type>(Arrays.asList(Type.BOOL, Type.DOUBLE));
+        Type argumentType = checkValidCast(node, allowedTypes);
+        node.setFromType(argumentType);
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+        Set<Type> allowedTypes = new HashSet<Type>(Arrays.asList(Type.BOOL, Type.INT));
+        Type argumentType = checkValidCast(node, allowedTypes);
+        node.setFromType(argumentType);
+    }
+
+    private Type checkValidCast(CastNode node, Set<Type> allowedTypes) {
+        List<AExpr> parameters = node.getParameters();
+        if (parameters.size() != 1) {
+            errorHandler.parameterLengthError(node.getID());
+            return null;
+        }
+        AExpr parameter = parameters.get(0);
+        Type parameterType = parameter.getType();
+        if (!allowedTypes.contains(parameterType)) {
+            errorHandler.invalidCastException(node.getType(), parameterType);
+        }
+        return parameterType;
     }
 }

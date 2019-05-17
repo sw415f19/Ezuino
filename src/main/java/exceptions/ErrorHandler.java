@@ -10,7 +10,7 @@ import ast.funcallstmt.Func_callStmtNode;
 public class ErrorHandler {
 
     private List<ErrorMessage> messageList = new ArrayList<>();
-    private int errorCount = 0; 
+    private int errorCount = 0;
 
     public boolean hasErrors() {
         return errorCount != 0;
@@ -27,9 +27,9 @@ public class ErrorHandler {
             System.err.println(sb.toString());
         }
     }
-    
+
     private void addError(ErrorMessage e) {
-        if(e.getType().equals(ErrorType.ERROR)) {
+        if (e.getType().equals(ErrorType.ERROR)) {
             errorCount += 1;
         }
         messageList.add(e);
@@ -93,10 +93,6 @@ public class ErrorHandler {
         addError(new SyntaxError(ErrorType.ERROR, "Invalid syntax - Conditional syntax error."));
     }
 
-    public void invalidCastException() {
-        addError(new GeneralError(ErrorType.ERROR, "Invalid Cast Error - tried to cast a Double to Integer"));
-    }
-
     public void syntaxError(int errorCount, String msg, int line, int charPositionInLine) {
         String errorMsg = String.format("#" + errorCount + " - " + "Error parsing expression: '%s' on line %s, position %s", msg, line, charPositionInLine);
         addError(new SyntaxError(ErrorType.ERROR, errorMsg));
@@ -123,6 +119,11 @@ public class ErrorHandler {
     public void missingEssentialFunction(String nodeid, boolean essential) {
         ErrorType err = essential ? ErrorType.ERROR : ErrorType.WARNING;
         addError(new GeneralError(err, "The function \"" + nodeid + "\" is missing."));
+
+    }
+
+    public void invalidCastException(Type castType, Type argumentType) {
+        addError(new GeneralError(ErrorType.ERROR, "Invalid cast. Cannot cast " + argumentType + " to " + castType));
 
     }
 }
