@@ -58,7 +58,7 @@ public class Main {
             errorHandler.invalidKeyword();
             return null;
         }
-        if(errorHandler.hasErrors()) {
+        if (errorHandler.hasErrors()) {
             return null;
         }
 
@@ -73,7 +73,7 @@ public class Main {
     private static void contextualAnalysis(AstNode ast, ErrorHandler errorHandler) {
 
         List<AstVisitor> visitors = new ArrayList<>();
-        
+
         boolean printDcl = true;
         visitors.add(new IndentedPrintVisitor());
         visitors.add(new SymbolTableVisitor(printDcl, errorHandler));
