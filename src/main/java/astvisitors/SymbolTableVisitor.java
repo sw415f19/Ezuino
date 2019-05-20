@@ -6,8 +6,10 @@ import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
+import ast.expr.cast.BooleanCastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.StringCastNode;
 import ast.type.*;
 import exceptions.ErrorHandler;
 import symboltable.SymbolTableHandler;
@@ -81,12 +83,24 @@ public class SymbolTableVisitor extends AstVisitor {
         stFunctions.closeScope();
         closeVariableScope();
     }
+    
+    private void checkEssentialFunctions() {
+        String setup = "Setup";
+        String loop = "Loop";
+        if(stFunctions.retrieveSymbol(setup) == null) {
+            errorHandler.missingEssentialFunction(setup, true);
+        }
+        if(stFunctions.retrieveSymbol(loop) == null) {
+            errorHandler.missingEssentialFunction(loop, false);
+        }
+    }
 
     @Override
     public void visit(StartNode node) {
         openGeneralScope();
         node.getDcls().accept(this);
         node.getStmts().accept(this);
+        checkEssentialFunctions();
         closeGeneralScope();
     }
 
@@ -274,22 +288,6 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerCastNode node) {
-        node.setType(Type.INT);
-        for (AExpr var : node.getParameters()) {
-            var.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(DoubleCastNode node) {
-        node.setType(Type.DOUBLE);
-        for (AExpr var : node.getParameters()) {
-            var.accept(this);
-        }
-    }
-
-    @Override
     public void visit(AnalogReadNode node) {
         node.setType(Type.INT);
         for (AExpr child : node.getParameters()) {
@@ -362,5 +360,63 @@ public class SymbolTableVisitor extends AstVisitor {
     @Override
     public void visit(PinModeNode node) {
         node.setType(Type.INT);
+    }
+
+    @Override
+    public void visit(SetupNode node) {
+        enterFunctionSymbol(node);
+
+        openGeneralScope();
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        closeGeneralScope();
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        enterFunctionSymbol(node);
+
+        openGeneralScope();
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        closeGeneralScope();        
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+        node.setType(Type.INT);
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+        node.setType(Type.DOUBLE);
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(StringCastNode node) {
+        node.setType(Type.STRING);
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+        
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
+        node.setType(Type.BOOL);
+        for (AExpr var : node.getParameters()) {
+            var.accept(this);
+        }
+        
     }
 }

@@ -1,13 +1,13 @@
 package ast.expr.cast;
 
+import java.util.List;
+
 import ast.expr.aexpr.AExpr;
 import astvisitors.AstVisitor;
 
-import java.util.List;
+public class BooleanCastNode extends CastNode {
 
-public class IntegerCastNode extends CastNode {
-
-    public IntegerCastNode(String ID, List<AExpr> parameters) {
+    public BooleanCastNode(String ID, List<AExpr> parameters) {
         super(ID, parameters);
     }
 

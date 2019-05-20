@@ -1,0 +1,7 @@
+func Setup(){
+  int a
+  if (true) {
+    if (true) {
+    }
+  }
+}

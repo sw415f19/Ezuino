@@ -1,0 +1,6 @@
+func Setup(){
+  if (true) {
+    boolean b
+    b := true
+  }
+}

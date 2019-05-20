@@ -254,28 +254,6 @@ public class IndentedPrintVisitor extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerCastNode node) {
-        print(node);
-        indentLevel();
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
-        unindentLevel();
-
-    }
-
-    @Override
-    public void visit(DoubleCastNode node) {
-        print(node);
-        indentLevel();
-        for (AExpr child : node.getParameters()) {
-            child.accept(this);
-        }
-        unindentLevel();
-
-    }
-
-    @Override
     public void visit(Assign_stmtNode node) {
         print(node);
         indentLevel();
@@ -406,5 +384,73 @@ public class IndentedPrintVisitor extends AstVisitor {
     @Override
     public void visit(PinModeNode node) {
         print(node);
+    }
+
+    @Override
+    public void visit(SetupNode node) {
+        print(node);
+        indentLevel();
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        print(node);
+        indentLevel();
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(StringCastNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
+        print(node);
+        indentLevel();
+        for (AExpr child : node.getParameters()) {
+            child.accept(this);
+        }
+        unindentLevel();
+
     }
 }

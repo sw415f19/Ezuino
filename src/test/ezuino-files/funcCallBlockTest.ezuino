@@ -1,0 +1,10 @@
+func boolean b() {
+return true
+}
+
+func Setup(){
+  if (true) {
+  boolean a
+  a := b()
+  }
+}

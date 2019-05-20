@@ -1,0 +1,9 @@
+func boolean b() {
+return false
+}
+
+func Setup(){
+  if (!(1 > 2) AND (true) AND (!b())) {
+  } else {
+  }
+}

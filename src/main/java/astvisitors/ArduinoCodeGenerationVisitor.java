@@ -6,8 +6,10 @@ import ast.expr.*;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
+import ast.expr.cast.BooleanCastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.StringCastNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -385,5 +387,31 @@ public class ArduinoCodeGenerationVisitor extends AstVisitor {
     @Override
     public void visit(PinModeNode node) {
         builder.append(node.getVal());
+    }
+
+    @Override
+    public void visit(SetupNode node) {
+        builder.append("void ").append(node.getId().toLowerCase()).append("() ");
+        node.getBlockNode().accept(this);
+        
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        builder.append("void ").append(node.getId().toLowerCase()).append("() ");
+        node.getBlockNode().accept(this);
+        
+    }
+
+    @Override
+    public void visit(StringCastNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
+        // TODO Auto-generated method stub
+        
     }
 }

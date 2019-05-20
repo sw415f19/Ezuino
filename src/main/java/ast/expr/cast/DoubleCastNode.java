@@ -1,12 +1,11 @@
 package ast.expr.cast;
 
-import ast.expr.Func_callExprNode;
 import ast.expr.aexpr.AExpr;
 import astvisitors.AstVisitor;
 
 import java.util.List;
 
-public class DoubleCastNode extends Func_callExprNode {
+public class DoubleCastNode extends CastNode {
 
     public DoubleCastNode(String ID, List<AExpr> parameters) {
         super(ID, parameters);

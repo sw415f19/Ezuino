@@ -23,11 +23,13 @@ import ast.arduino.DelayMicroNode;
 import ast.arduino.DelayNode;
 import ast.arduino.DigitalReadNode;
 import ast.arduino.DigitalWriteNode;
+import ast.arduino.LoopNode;
 import ast.arduino.PinLevelNode;
 import ast.arduino.PinModeNode;
 import ast.arduino.SerialBeginNode;
 import ast.arduino.SerialEndNode;
 import ast.arduino.SetPinModeNode;
+import ast.arduino.SetupNode;
 import ast.expr.AdditiveExprNode;
 import ast.expr.EqualityExprNode;
 import ast.expr.Func_callExprNode;
@@ -40,8 +42,10 @@ import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.AExpr;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
+import ast.expr.cast.BooleanCastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.StringCastNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -52,6 +56,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	private PrintStream out;
 	private StringBuilder sb;
 	private StringBuilder functionStringBuilder; // needed to remember the functions and declare them after main
+	private StringBuilder setupBuilder;
+	private StringBuilder loopBuilder;
 	private List<String> currentVariableEnvironment;
 	private List<String> currentLocalFunctions;
 	private String programName;
@@ -70,6 +76,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		currentLocalFunctions = new ArrayList<String>();
 		sb = new StringBuilder();
 		functionStringBuilder = new StringBuilder();
+		setupBuilder = new StringBuilder();
+		loopBuilder = new StringBuilder();
 		this.programName = programName;
 
 	}
@@ -157,7 +165,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		for (AExpr child : node.getParameters()) {
 			child.accept(this);
 		}
-		append("invokestatic program/");
+		append("invokestatic " + programName +"/");
 		generateFunctionSignature(node);
 		if (!currentLocalFunctions.contains(node.getID())) {
 			currentLocalFunctions.add(node.getID());
@@ -265,7 +273,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("ifeq " + skipLabel); // if condition is false, skip (eq checks top of stack for a 0)
 			decrementStack();
 			node.getIfBlock().accept(this);
-			append("skipLabel" + ": ");
+			appendLabel(skipLabel);
 		} else {
 			int trueLabel = getNextLabel();
 			int endLabel = getNextLabel();
@@ -274,9 +282,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			decrementStack();
 			elseBlock.accept(this);
 			appendLine("goto " + endLabel);
-			append(trueLabel + ": ");
+			appendLabel(trueLabel);
 			node.getIfBlock().accept(this);
-			append(endLabel + ": ");
+			appendLabel(endLabel);
 		}
 	}
 
@@ -301,9 +309,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		int beginLabel = getNextLabel();
 		int enterLabel = getNextLabel();
 		appendLine("goto " + enterLabel);
-		append(beginLabel + ": ");
+		appendLabel(beginLabel);
 		node.getBlockNode().accept(this);
-		append(enterLabel + ": ");
+		appendLabel(enterLabel);
 		node.getExprNode().accept(this);
 		appendLine("ifne " + beginLabel);
 		decrementStack();
@@ -339,6 +347,20 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		node.getLeftNode().accept(this);
 		node.getRightNode().accept(this);
 		Type comparedType = node.getLeftNode().getType();
+		if(comparedType.equals(Type.INT)) {
+			node.getLeftNode().accept(this);
+			appendLine("i2l");
+			node.getRightNode().accept(this);
+			appendLine("i2l");
+			incrementStack();
+			incrementStack();
+			decrementStack();
+			decrementStack();
+		}
+		else {
+			node.getLeftNode().accept(this);
+			node.getRightNode().accept(this);
+		}
 
 		appendComparisonBasedOnType(comparedType);
 		appendConditionalJump(node.getOperator(), trueLabel);
@@ -351,6 +373,20 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		node.getLeftNode().accept(this);
 		node.getRightNode().accept(this);
 		Type comparedType = node.getLeftNode().getType();
+		if(comparedType.equals(Type.INT)) {
+			node.getLeftNode().accept(this);
+			appendLine("i2l");
+			node.getRightNode().accept(this);
+			appendLine("i2l");
+			incrementStack();
+			incrementStack();
+			decrementStack();
+			decrementStack();
+		}
+		else {
+			node.getLeftNode().accept(this);
+			node.getRightNode().accept(this);
+		}
 		appendComparisonBasedOnType(comparedType);
 		appendConditionalJump(node.getOperator(), trueLabel);
 		appendConditionalBooleanToStack(trueLabel);
@@ -563,6 +599,22 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+    public void visit(SetupNode node) {
+        StringBuilder oldStringBuilder = sb;
+        sb = setupBuilder;
+        node.getBlockNode().accept(this);
+        sb = oldStringBuilder;
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+    	StringBuilder oldStringBuilder = sb;
+        sb = loopBuilder;
+        node.getBlockNode().accept(this);
+        sb = oldStringBuilder;
+    }
 
 	private void appendLine(String s) {
 		sb.append(s).append('\n');
@@ -611,10 +663,10 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("iflt " + label);
 			break;
 		case ">":
-			appendLine("ifgt" + label);
+			appendLine("ifgt " + label);
 			break;
 		case "<=":
-			appendLine("ifle" + label);
+			appendLine("ifle " + label);
 			break;
 		case ">=":
 			appendLine("ifge " + label);
@@ -638,9 +690,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		int endLabel = getNextLabel();
 		appendLine("iconst_0");
 		appendLine("goto " + endLabel);
-		append(trueLabel + ": ");
+		appendLabel(trueLabel);
 		appendLine("iconst_1");
-		append(endLabel + ": ");
+		appendLabel(endLabel);
 		incrementStack();
 	}
 
@@ -822,5 +874,27 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		appendLine(".end method");
 		sb.append(functionStringBuilder);
 	}
+	private void appendLabel(int labelToAppend) {
+		if(getLastCommandFromStringBuilder().matches("[0-9]+: ")) {
+			appendLine("nop");
+		}
+		append(labelToAppend + ": ");
+	}
 
+	private String getLastCommandFromStringBuilder() {
+		int indexOfLastNewline = sb.lastIndexOf("\n");
+		return sb.substring(indexOfLastNewline + 1);
+	}
+
+    @Override
+    public void visit(StringCastNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
+        // TODO Auto-generated method stub
+        
+    }
 }

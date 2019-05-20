@@ -5,8 +5,7 @@ import ast.arduino.*;
 import ast.expr.*;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
-import ast.expr.cast.DoubleCastNode;
-import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.*;
 import ast.type.*;
 
 public abstract class AstVisitor {
@@ -32,8 +31,6 @@ public abstract class AstVisitor {
     public abstract void visit(UnaryExprNode node);
     public abstract void visit(PrintNode node);
     public abstract void visit(CustomFuncCallStmtNode node);
-    public abstract void visit(IntegerCastNode node);
-    public abstract void visit(DoubleCastNode node);
 
     //One added assignment nodes.
     public abstract void visit(Assign_stmtNode node);
@@ -57,6 +54,15 @@ public abstract class AstVisitor {
     public abstract void visit(SerialEndNode node);
     public abstract void visit(PinLevelNode node);
     public abstract void visit(PinModeNode node);
+    public abstract void visit(SetupNode node);
+    public abstract void visit(LoopNode node);
+    
+    // Cast nodes
+    public abstract void visit(IntegerCastNode node);
+    public abstract void visit(DoubleCastNode node);
+    public abstract void visit(StringCastNode node);
+    public abstract void visit(BooleanCastNode node);
+    
 
 
     public final void visit(AstNode astNode) {

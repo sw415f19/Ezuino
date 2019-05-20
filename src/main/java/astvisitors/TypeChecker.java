@@ -4,8 +4,10 @@ import ast.*;
 import ast.arduino.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.expr.cast.BooleanCastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.StringCastNode;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.DoubleLiteral;
@@ -251,23 +253,6 @@ public class TypeChecker extends AstVisitor {
     }
 
     @Override
-    public void visit(IntegerCastNode node) {
-        for (AExpr var : node.getParameters()) {
-            var.accept(this);
-        }
-    }
-
-    @Override
-    public void visit(DoubleCastNode node) {
-        for (AExpr var : node.getParameters()) {
-            if (var.getType() == Type.INT) {
-                errorHandler.invalidCastException();
-            }
-            var.accept(this);
-        }
-    }
-
-    @Override
     public void visit(AnalogReadNode node) {
         for (AExpr var : node.getParameters()) {
             var.accept(this);
@@ -336,5 +321,53 @@ public class TypeChecker extends AstVisitor {
 
     @Override
     public void visit(PinModeNode node) {
+    }
+
+    @Override
+    public void visit(SetupNode node) {
+        checkSpecificType(node, Type.VOID);
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        checkSpecificType(node, Type.VOID);
+        for (DclNode parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+        node.getBlockNode().accept(this);
+
+    }
+
+    @Override
+    public void visit(IntegerCastNode node) {
+        for (AExpr parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DoubleCastNode node) {
+        for (AExpr parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(StringCastNode node) {
+        for (AExpr parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
+        for (AExpr parameter : node.getParameters()) {
+            parameter.accept(this);
+        }
     }
 }

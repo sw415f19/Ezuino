@@ -1,0 +1,6 @@
+func Setup(){
+  if (true) {
+    string s
+    s := "hello world!"
+  }
+}

@@ -1,0 +1,8 @@
+func boolean b() {
+return true
+}
+
+func Setup(){
+  if (!b()) {
+  }
+}

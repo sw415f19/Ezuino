@@ -4,8 +4,10 @@ import ast.*;
 import ast.arduino.*;
 import ast.expr.*;
 import ast.expr.aexpr.AExpr;
+import ast.expr.cast.BooleanCastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
+import ast.expr.cast.StringCastNode;
 import ast.funcallstmt.CustomFuncCallStmtNode;
 import ast.funcallstmt.PrintNode;
 import ast.type.DoubleLiteral;
@@ -25,12 +27,12 @@ public class ReservedKeywordsVisitor extends AstVisitor {
         this.errorHandler = errorHandler;
         List<String> stringList = (Arrays.asList("return", "AND", "OR", "true", "false", "int", "double",
                 "boolean", "string", "while", "if", "else", "Print", "DigitalWrite", "DigitalRead",
-                "AnalogWrite", "AnalogRead", "Delay", "DelayMicro", "PinMode", "SerialBegin", "SerialEnd"));
+                "AnalogWrite", "AnalogRead", "Delay", "DelayMicro", "PinMode", "SerialBegin", "SerialEnd", "Setup", "Loop"));
         for (String word : stringList) {
             reservedKeywords.put(word.toUpperCase(), word);
         }
         compatibilityKeywords.addAll(Arrays.asList("goto", "Double", "float", "Integer", "for",
-                "ArrayList", "List", "switch", "Collection"));
+                "ArrayList", "List", "switch", "Collection", "main"));
     }
 
     private void checkReservedKeywords(String Id) {
@@ -307,5 +309,29 @@ public class ReservedKeywordsVisitor extends AstVisitor {
 
     @Override
     public void visit(PinModeNode node) {
+    }
+
+    @Override
+    public void visit(SetupNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(StringCastNode node) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
+        // TODO Auto-generated method stub
+        
     }
 }
