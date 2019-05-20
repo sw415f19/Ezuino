@@ -27,7 +27,7 @@ public class ReservedKeywordsVisitor extends AstVisitor {
         this.errorHandler = errorHandler;
         List<String> stringList = (Arrays.asList("return", "AND", "OR", "true", "false", "int", "double",
                 "boolean", "string", "while", "if", "else", "Print", "DigitalWrite", "DigitalRead",
-                "AnalogWrite", "AnalogRead", "Delay", "DelayMicro", "PinMode", "SerialBegin", "SerialEnd"));
+                "AnalogWrite", "AnalogRead", "Delay", "DelayMicro", "PinMode", "SerialBegin", "SerialEnd", "Setup", "Loop"));
         for (String word : stringList) {
             reservedKeywords.put(word.toUpperCase(), word);
         }
