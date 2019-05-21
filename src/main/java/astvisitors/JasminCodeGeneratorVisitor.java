@@ -554,7 +554,26 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
     public void visit(StringCastNode node) {
 		node.getParameters().get(0).accept(this);
-		appendLine("invokestatic java/lang/String/valueOf(Ljava/lang/String;)V");
+		switch(node.getFromType()) {
+		case INT:
+			appendLine("invokestatic java/lang/String/valueOf(I)Ljava/lang/String;");
+			break;
+		case DOUBLE:
+			appendLine("invokestatic java/lang/String/valueOf(F)Ljava/lang/String;");
+			break;
+		case BOOL:
+			int trueLabel = getNextLabel();
+			int endLabel = getNextLabel();
+			appendLine("ifne " + trueLabel);
+			appendLine("ldc " + "\"false\"");
+			appendLine("goto " + endLabel);
+			appendLabel(trueLabel);
+			appendLine("ldc " + "\"true\"");
+			appendLabel(endLabel);
+			break;
+		default:
+			break;
+		}
     }
 
     @Override
