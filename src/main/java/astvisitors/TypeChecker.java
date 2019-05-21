@@ -219,13 +219,12 @@ public class TypeChecker extends AstVisitor {
 
         boolean printErr = false;
         if ("-".equals(nodeOperator)) {
-            printErr = nodeType.equals(Type.BOOL) || nodeType.equals(Type.STRING);
+            printErr = !(nodeType.equals(Type.INT) || nodeType.equals(Type.DOUBLE));
         } else if ("!".equals(nodeOperator)) {
             printErr = !nodeType.equals(Type.BOOL);
         }
         if (printErr) {
             errorHandler.invalidOperatorForType(nodeOperator, nodeType);
-
         }
     }
 
