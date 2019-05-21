@@ -87,6 +87,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		generatePrefixSetupCode();
 		node.getDcls().accept(this);
 		node.getStmts().accept(this);
+		formatSetupAndLoopToMain();
 		generatePostfixSetupCode();
 		out.print(sb);
 	}
@@ -911,5 +912,15 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	private String getLastCommandFromStringBuilder() {
 		int indexOfLastNewline = sb.lastIndexOf("\n");
 		return sb.substring(indexOfLastNewline + 1);
+	}
+	
+	private void formatSetupAndLoopToMain() {
+		int loopLabel = getNextLabel();
+		sb.append(setupBuilder);
+		if(loopBuilder.length() != 0) {
+			appendLabel(loopLabel);
+			sb.append(loopBuilder);
+			appendLine("goto " + loopLabel);
+		}
 	}
 }
