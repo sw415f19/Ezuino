@@ -297,6 +297,34 @@ public class TypeCheckerTest {
         assertFalse(e.hasErrors());
     }
 
+    @Test
+    public void lessThanString() throws IOException {
+        String program = "func Setup() {boolean s s := \"1\" < \"2\"}";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void lessThanBoolean() throws IOException {
+        String program = "func Setup() {boolean b b := true < false}";
+        ErrorHandler e = testProgram(program);
+        assertTrue(e.hasErrors());
+    }
+
+    @Test
+    public void lessThanInteger() throws IOException {
+        String program = "func Setup() {boolean i i := 1 < 1}";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
+    @Test
+    public void lessThanDouble() throws IOException {
+        String program = "func Setup() {boolean d d := 1.0 < 1.0}";
+        ErrorHandler e = testProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
     private ErrorHandler testProgram(String program) throws IOException {
         CharStream stream = CharStreams.fromString(program);
         

@@ -3,17 +3,10 @@ package astvisitors;
 import ast.*;
 import ast.arduino.*;
 import ast.expr.*;
-import ast.expr.aexpr.AExpr;
-import ast.expr.cast.BooleanCastNode;
-import ast.expr.cast.DoubleCastNode;
-import ast.expr.cast.IntegerCastNode;
-import ast.expr.cast.StringCastNode;
-import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.PrintNode;
-import ast.type.DoubleLiteral;
-import ast.type.IdNode;
-import ast.type.IntegerLiteral;
-import ast.type.StringLiteral;
+import ast.expr.aexpr.*;
+import ast.expr.cast.*;
+import ast.funcallstmt.*;
+import ast.type.*;
 import exceptions.ErrorHandler;
 
 public class TypeChecker extends AstVisitor {
@@ -170,9 +163,15 @@ public class TypeChecker extends AstVisitor {
 
     @Override
     public void visit(RelationalExprNode node) {
-        node.getLeftNode().accept(this);
-        node.getRightNode().accept(this);
-        checkType(node.getLeftNode(), node.getRightNode());
+        ARelationalExpr leftNode = node.getLeftNode();
+        AAddictiveExpr rightNode = node.getRightNode();
+        leftNode.accept(this);
+        rightNode.accept(this);
+        checkType(leftNode, rightNode);
+        Type childType = leftNode.getType();
+        if (!(childType.equals(Type.DOUBLE) || childType.equals(Type.INT))) {
+            errorHandler.invalidOperatorForType(node.getOperator(), childType);
+        }
         node.setType(Type.BOOL);
     }
 
