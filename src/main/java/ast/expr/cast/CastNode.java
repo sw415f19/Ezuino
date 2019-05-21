@@ -22,4 +22,9 @@ public abstract class CastNode extends Func_callExprNode {
         this.fromType = fromType;
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{type:" + this.type + " fromType: " + this.fromType + "}";
+    }
+
 }

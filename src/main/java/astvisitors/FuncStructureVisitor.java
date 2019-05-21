@@ -258,12 +258,18 @@ public class FuncStructureVisitor extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
+        for(AExpr param: node.getParameters()) {
+            param.accept(this);
+        }
         Type[] expectedType = {Type.STRING};
         checkFuncParameters(node.getId(), node.getParameters(), 1, expectedType);
     }
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
+        for(AExpr param: node.getParameters()) {
+            param.accept(this);
+        }
         Func_defNode funcdef = (Func_defNode) symtable.retrieveSymbol(node.getId());
         matchParameterList(node.getId(), node.getParameters(), funcdef.getParameters());
 
