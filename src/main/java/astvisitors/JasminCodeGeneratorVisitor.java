@@ -524,15 +524,42 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 
 	@Override
 	public void visit(IntegerCastNode node) {
-		// TODO Auto-generated method stub
-
+		node.getParameters().get(0).accept(this); //Considered a function by AST, but with only 1 parameter
+		switch(node.getFromType()) {
+		case DOUBLE:
+			appendLine("f2i");
+			break;
+		case BOOL:
+			break;
+		default:
+			appendLine("FEJL");
+			break;
+		}
 	}
 
 	@Override
 	public void visit(DoubleCastNode node) {
-		// TODO Auto-generated method stub
-
+		node.getParameters().get(0).accept(this);
+		switch(node.getFromType()) {
+		case INT: case BOOL:
+			appendLine("i2f");
+			break;
+		default:
+			appendLine("FEJL");
+			break;
+		}
 	}
+	
+	@Override
+    public void visit(StringCastNode node) {
+		node.getParameters().get(0).accept(this);
+		appendLine("invokestatic java/lang/String/valueOf(Ljava/lang/String;)V");
+    }
+
+    @Override
+    public void visit(BooleanCastNode node) {
+    	node.getParameters().get(0).accept(this);
+    }
 
 	@Override
 	public void visit(AnalogReadNode node) {
@@ -885,16 +912,4 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		int indexOfLastNewline = sb.lastIndexOf("\n");
 		return sb.substring(indexOfLastNewline + 1);
 	}
-
-    @Override
-    public void visit(StringCastNode node) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(BooleanCastNode node) {
-        // TODO Auto-generated method stub
-        
-    }
 }
