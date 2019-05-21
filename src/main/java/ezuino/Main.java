@@ -83,6 +83,7 @@ public class Main {
         visitors.add(new ReturnStmtTypeCheckVisitor(errorHandler));
         visitors.add(new MissingReturnStmtVisitor(errorHandler));
         visitors.add(new FuncStructureVisitor(errorHandler));
+        visitors.add(new IndentedPrintVisitor());
 
         for (AstVisitor visitor : visitors) {
             ast.accept(visitor);

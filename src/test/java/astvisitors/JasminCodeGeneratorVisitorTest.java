@@ -97,6 +97,7 @@ public class JasminCodeGeneratorVisitorTest {
 		astNode.accept(symbolTableFillingVisitor);
 		TypeChecker tc = new TypeChecker(errorhandler);
 		astNode.accept(tc);
+		astNode.accept(new FuncStructureVisitor(errorhandler));
 		if (errorhandler.hasErrors()) {
 			errorhandler.printErrors("Jasmin Test Error");
 			fail();
