@@ -95,7 +95,7 @@ public class Main {
 
     private static void codeGeneration(AstNode ast) {
 
-        ast.accept(new ArduinoCodeGenerationVisitor(System.out));
+        ast.accept(new JasminCodeGeneratorVisitor(System.out));
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {

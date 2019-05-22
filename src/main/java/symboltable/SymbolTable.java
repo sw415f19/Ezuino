@@ -38,4 +38,16 @@ public class SymbolTable {
     protected ITypeNode getSymbolCurrentScope(String id) {
         return symbolMap.get(id);
     }
+
+	public boolean isKeyInGlobalScope(String id) {
+		if(symbolMap.containsKey(id)) {
+			return isGlobalScope();
+		}
+		else if (parentTable != null){
+			return this.parentTable.isKeyInGlobalScope(id);
+		}
+		else {
+			return false;
+		}
+	}
 }

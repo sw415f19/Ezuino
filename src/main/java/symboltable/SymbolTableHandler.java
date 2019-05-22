@@ -53,4 +53,7 @@ public class SymbolTableHandler {
     public boolean isGlobalScope() {
         return getCurrentSymbolTable().isGlobalScope();
     }
+    public boolean isKeyInGlobalScope(String Id) {
+    	return getCurrentSymbolTable().isKeyInGlobalScope(Id);
+    }
 }

@@ -11,6 +11,7 @@ import ast.BooleanLiteral;
 import ast.DclNode;
 import ast.DclsNode;
 import ast.Func_defNode;
+import ast.ITypeNode;
 import ast.If_stmtNode;
 import ast.Return_stmtNode;
 import ast.StartNode;
@@ -50,6 +51,7 @@ import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
 import ast.type.StringLiteral;
+import symboltable.SymbolTableHandler;
 
 public class JasminCodeGeneratorVisitor extends AstVisitor {
 
@@ -65,6 +67,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	private int currentStackSize = 0;
 	private int maxStackSize = 1;
 	private int maxLocals = 1;
+	private SymbolTableHandler symbolTable;
 
 	public JasminCodeGeneratorVisitor(PrintStream out) {
 		this(out, "program");
@@ -79,14 +82,17 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		setupBuilder = new StringBuilder();
 		loopBuilder = new StringBuilder();
 		this.programName = programName;
+		this.symbolTable = new SymbolTableHandler(false);
 
 	}
 
 	@Override
 	public void visit(StartNode node) {
 		generatePrefixSetupCode();
+		symbolTable.openScope();
 		node.getDcls().accept(this);
 		node.getStmts().accept(this);
+		symbolTable.closeScope();
 		formatSetupAndLoopToMain();
 		generatePostfixSetupCode();
 		out.print(sb);
@@ -113,50 +119,61 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 
 	@Override
 	public void visit(DclNode node) {
+		symbolTable.enterSymbol(node.getID(), node);
 		currentVariableEnvironment.add(node.getID());
-		if (maxLocals < currentVariableEnvironment.size() + currentLocalFunctions.size()) {
-			maxLocals = currentVariableEnvironment.size() + currentLocalFunctions.size();
+		if(symbolTable.isGlobalScope()) {
+			appendLine(".field public static " + node.getID() + " " + getTypeDescriptor(node.getType()));
 		}
-		incrementStack();
-		switch (node.getType()) {
-		case INT:
-		case BOOL:
-			appendLine("iconst_0");
-			appendLine("istore " + currentVariableEnvironment.indexOf(node.getID()));
-			break;
-		case DOUBLE:
-			appendLine("fconst_0");
-			appendLine("fstore " + currentVariableEnvironment.indexOf(node.getID()));
-			break;
-		case STRING:
-			appendLine("new java/lang/String");
-			appendLine("astore " + currentVariableEnvironment.indexOf(node.getID()));
-			break;
-		default:
-			appendLine("FEJL");
-			break;
+		else {
+			if (maxLocals < currentVariableEnvironment.size() + currentLocalFunctions.size()) {
+				maxLocals = currentVariableEnvironment.size() + currentLocalFunctions.size();
+			}
+			incrementStack();
+			switch (node.getType()) {
+			case INT:
+			case BOOL:
+				appendLine("iconst_0");
+				appendLine("istore " + currentVariableEnvironment.indexOf(node.getID()));
+				break;
+			case DOUBLE:
+				appendLine("fconst_0");
+				appendLine("fstore " + currentVariableEnvironment.indexOf(node.getID()));
+				break;
+			case STRING:
+				appendLine("new java/lang/String");
+				appendLine("astore " + currentVariableEnvironment.indexOf(node.getID()));
+				break;
+			default:
+				appendLine("FEJL");
+				break;
+			}
+			decrementStack();
 		}
-		decrementStack();
 
 	}
 
 	@Override
 	public void visit(Assign_stmtNode node) {
 		node.getExprNode().accept(this);
-		switch (node.getExprNode().getType()) {
-		case INT:
-		case BOOL:
-			appendLine("istore " + currentVariableEnvironment.lastIndexOf(node.getId()));
-			break;
-		case DOUBLE:
-			appendLine("fstore " + currentVariableEnvironment.lastIndexOf(node.getId()));
-			break;
-		case STRING:
-			appendLine("astore " + currentVariableEnvironment.lastIndexOf(node.getId()));
-			break;
-		default:
-			appendLine("FEJL");
-			break;
+		if(symbolTable.isKeyInGlobalScope(node.getId())) {
+			appendLine("putstatic " + programName + "/" + node.getId() + " " + getTypeDescriptor(node.getType()));
+		}
+		else {
+			switch (node.getExprNode().getType()) {
+			case INT:
+			case BOOL:
+				appendLine("istore " + currentVariableEnvironment.lastIndexOf(node.getId()));
+				break;
+			case DOUBLE:
+				appendLine("fstore " + currentVariableEnvironment.lastIndexOf(node.getId()));
+				break;
+			case STRING:
+				appendLine("astore " + currentVariableEnvironment.lastIndexOf(node.getId()));
+				break;
+			default:
+				appendLine("FEJL");
+				break;
+			}
 		}
 		decrementStack();
 	}
@@ -230,6 +247,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			maxLocals++;
 		}
 		node.getBlockNode().accept(this);
+		if(node.getType().equals(Type.VOID)) {
+			appendLine("return");
+		}
 		appendLine(".limit stack " + maxStackSize);
 		appendLine(".limit locals " + maxLocals);
 		appendLine(".end method");
@@ -324,21 +344,25 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(IdNode node) {
 		incrementStack();
-		switch (node.getType()) {
-		case INT:
-		case BOOL:
-			appendLine("iload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
-			break;
-		case DOUBLE:
-			appendLine("fload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
-			break;
-		case STRING:
-			appendLine("aload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
-			break;
-		default:
-			appendLine("FEJL");
-			break;
-
+		if(symbolTable.isKeyInGlobalScope(node.getVal())) {
+			appendLine("getstatic " + programName +"/" + node.getVal() + " " + getTypeDescriptor(node.getType()));
+		}
+		else {
+			switch (node.getType()) {
+			case INT:
+			case BOOL:
+				appendLine("iload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
+				break;
+			case DOUBLE:
+				appendLine("fload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
+				break;
+			case STRING:
+				appendLine("aload " + currentVariableEnvironment.lastIndexOf(node.getVal()));
+				break;
+			default:
+				appendLine("FEJL");
+				break;
+			}
 		}
 	}
 
@@ -787,83 +811,20 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		append(node.getId());
 		append("(");
 		for (AExpr parameter : node.getParameters()) {
-			switch (parameter.getType()) {
-			case INT:
-			case BOOL:
-				append("I");
-				break;
-			case DOUBLE:
-				append("F");
-				break;
-			case STRING:
-				append("Ljava/lang/String;");
-				break;
-			default:
-				appendLine("FEJL");
-				break;
-			}
+			append(getTypeDescriptor(parameter.getType()));
 		}
 		append(")");
-		switch (node.getType()) {
-		case INT:
-		case BOOL:
-			appendLine("I");
-			break;
-		case DOUBLE:
-			appendLine("F");
-			break;
-		case STRING:
-			appendLine("Ljava/lang/String;");
-			break;
-		case VOID:
-			appendLine("V");
-			break;
-		default:
-			appendLine("FEJL");
-			break;
-		}
-
+		appendLine(getTypeDescriptor(node.getType()));
 	}
 
 	private void generateSignatureForFuncDef(Func_defNode node) {
 		append(node.getId());
 		append("(");
 		for (DclNode parameter : node.getParameters()) {
-			switch (parameter.getType()) {
-			case INT:
-			case BOOL:
-				append("I");
-				break;
-			case DOUBLE:
-				append("F");
-				break;
-			case STRING:
-				append("Ljava/lang/String;");
-				break;
-			default:
-				append("FEJL");
-				break;
-			}
+			append(getTypeDescriptor(parameter.getType()));
 		}
 		append(")");
-		switch (node.getType()) {
-		case INT:
-		case BOOL:
-			appendLine("I");
-			break;
-		case DOUBLE:
-			appendLine("F");
-			break;
-		case STRING:
-			appendLine("Ljava/lang/String;");
-			break;
-		case VOID:
-			appendLine("V");
-			break;
-		default:
-			appendLine("FEJL");
-			break;
-		}
+		appendLine(getTypeDescriptor(node.getType()));
 
 	}
 
@@ -871,47 +832,39 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		append(node.getID());
 		append("(");
 		for (AExpr parameter : node.getParameters()) {
-			switch (parameter.getType()) {
-			case INT:
-			case BOOL:
-				append("I");
-				break;
-			case DOUBLE:
-				append("F");
-				break;
-			case STRING:
-				append("Ljava/lang/String;");
-				break;
-			default:
-				append("FEJL");
-				break;
-			}
+			append(getTypeDescriptor(parameter.getType()));
 		}
 		append(")");
-		switch (node.getType()) {
+		appendLine(getTypeDescriptor(node.getType()));
+	}
+	
+	private String getTypeDescriptor(Type t) {
+		String retType;
+		switch (t) {
 		case INT:
 		case BOOL:
-			appendLine("I");
+			retType = "I";
 			break;
 		case DOUBLE:
-			appendLine("F");
+			retType = "F";
 			break;
 		case STRING:
-			appendLine("Ljava/lang/String;");
+			retType = "Ljava/lang/String;";
 			break;
 		case VOID:
-			appendLine("V");
+			retType = "V";
 			break;
 		default:
-			appendLine("FEJL");
+			retType = "FEJL";
 			break;
 		}
+		return retType;
 	}
 
 	private void generatePrefixSetupCode() {
 		appendLine(".class public " + programName);
 		appendLine(".super java/lang/Object");
-		appendLine(".method public static main([Ljava/lang/String;)V");
+		
 	}
 
 	private void generatePostfixSetupCode() {
@@ -935,6 +888,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	
 	private void formatSetupAndLoopToMain() {
 		int loopLabel = getNextLabel();
+		appendLine(".method public static main([Ljava/lang/String;)V");
 		sb.append(setupBuilder);
 		if(loopBuilder.length() != 0) {
 			appendLabel(loopLabel);

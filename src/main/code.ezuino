@@ -1,5 +1,11 @@
+int a
+
+func foobarbaz(){
+  a := 2
+}
+
 func Setup(){
-  int a
-  a := 5
+  a := 100
+  foobarbaz()
   Print(String(a))
 }
