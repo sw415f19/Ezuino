@@ -102,6 +102,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	public void visit(BlockNode node) {
 		// Need to remember the state of the environment, as we cannot rollback the
 		// changes made in this block otherwise
+		symbolTable.openScope();
 		List<String> oldVariableEnvironment = new ArrayList<String>(currentVariableEnvironment);
 		List<String> oldLocalFunctions = new ArrayList<String>(currentLocalFunctions);
 		if (node.getDclsNode() != null) {
@@ -115,16 +116,17 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		}
 		currentVariableEnvironment = oldVariableEnvironment;
 		currentLocalFunctions = oldLocalFunctions;
+		symbolTable.closeScope();
 	}
 
 	@Override
 	public void visit(DclNode node) {
 		symbolTable.enterSymbol(node.getID(), node);
-		currentVariableEnvironment.add(node.getID());
 		if(symbolTable.isGlobalScope()) {
 			appendLine(".field public static " + node.getID() + " " + getTypeDescriptor(node.getType()));
 		}
 		else {
+			currentVariableEnvironment.add(node.getID());
 			if (maxLocals < currentVariableEnvironment.size() + currentLocalFunctions.size()) {
 				maxLocals = currentVariableEnvironment.size() + currentLocalFunctions.size();
 			}
@@ -250,6 +252,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		if(node.getType().equals(Type.VOID)) {
 			appendLine("return");
 		}
+		if(getLastCommandFromStringBuilder().matches("[0-9]+: ")) {
+			appendLine("nop");
+		}
 		appendLine(".limit stack " + maxStackSize);
 		appendLine(".limit locals " + maxLocals);
 		appendLine(".end method");
@@ -369,15 +374,13 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(RelationalExprNode node) {
 		int trueLabel = getNextLabel();
-		node.getLeftNode().accept(this);
-		node.getRightNode().accept(this);
 		Type comparedType = node.getLeftNode().getType();
 		if(comparedType.equals(Type.INT)) {
 			node.getLeftNode().accept(this);
 			appendLine("i2l");
+			incrementStack();
 			node.getRightNode().accept(this);
 			appendLine("i2l");
-			incrementStack();
 			incrementStack();
 			decrementStack();
 			decrementStack();
@@ -395,8 +398,6 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(EqualityExprNode node) {
 		int trueLabel = getNextLabel();
-		node.getLeftNode().accept(this);
-		node.getRightNode().accept(this);
 		Type comparedType = node.getLeftNode().getType();
 		if(comparedType.equals(Type.INT)) {
 			node.getLeftNode().accept(this);
@@ -425,11 +426,14 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(LogicalAndExprNode node) {
 		node.getLeftNode().accept(this);
+		incrementStack();
 		generateCodeForLogicalNegation();
 		node.getRightNode().accept(this);
+		incrementStack();
 		generateCodeForLogicalNegation();
 		generateCodeForLogicalOr();
 		generateCodeForLogicalNegation();
+		decrementStack();
 		// my group: You can't just use formal logic to rewrite code you dislike
 		// DeMorgan's Laws: That's where you're wrong, kiddo
 
@@ -461,6 +465,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("FEJL");
 			break;
 		}
+		decrementStack();
 
 	}
 
@@ -487,6 +492,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			appendLine("FEJL");
 			break;	
 		}
+		decrementStack();
 	}
 
 	@Override
@@ -868,6 +874,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	}
 
 	private void generatePostfixSetupCode() {
+		
 		appendLine("return");
 		appendLine(".limit stack " + maxStackSize);
 		appendLine(".limit locals " + maxLocals);

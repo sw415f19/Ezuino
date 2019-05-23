@@ -1,11 +1,17 @@
-int a
-
-func foobarbaz(){
-  a := 2
+func int fib(int fibNum){
+  if(fibNum < 3){
+    return 1
+  }
+  else{
+    return fib(fibNum - 1) + fib(fibNum - 2)
+  }
 }
 
 func Setup(){
-  a := 100
-  foobarbaz()
-  Print(String(a))
+  int i
+  i := 1
+  while(i <= 20){
+    Print(String(fib(i)))
+    i := i + 1
+  }
 }
