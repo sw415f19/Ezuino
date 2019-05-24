@@ -18,11 +18,13 @@ public class SymbolTableVisitor extends AstVisitor {
     private ErrorHandler errorHandler;
     private SymbolTableHandler stVariables;
     private SymbolTableHandler stFunctions;
+    private boolean firstRunThrough;
 
     public SymbolTableVisitor(boolean printDcl, ErrorHandler errorhandler) {
         this.stVariables = new SymbolTableHandler(printDcl);
         this.stFunctions = new SymbolTableHandler(printDcl);
         this.errorHandler = errorhandler;
+        this.firstRunThrough = true; 
     }
 
     private void enterVariableSymbol(String id, ITypeNode node) {
@@ -32,6 +34,9 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     private void enterFunctionSymbol(Func_defNode node) {
+        if (!firstRunThrough) {
+            return;
+        }
         String id = node.getId();
         if (!stFunctions.isGlobalScope()) {
             errorHandler.nestedFuncDef(id);
@@ -51,6 +56,9 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     private Func_defNode getFunctionDef(String key) {
+        if (firstRunThrough) {
+            return null;
+        }
         Func_defNode result = (Func_defNode) stFunctions.retrieveSymbol(key);
         if (result == null) {
             errorHandler.undeclaredFunction(key);
@@ -83,14 +91,14 @@ public class SymbolTableVisitor extends AstVisitor {
         stFunctions.closeScope();
         closeVariableScope();
     }
-    
+
     private void checkEssentialFunctions() {
         String setup = "Setup";
         String loop = "Loop";
-        if(stFunctions.retrieveSymbol(setup) == null) {
+        if (stFunctions.retrieveSymbol(setup) == null) {
             errorHandler.missingEssentialFunction(setup, true);
         }
-        if(stFunctions.retrieveSymbol(loop) == null) {
+        if (stFunctions.retrieveSymbol(loop) == null) {
             errorHandler.missingEssentialFunction(loop, false);
         }
     }
@@ -101,6 +109,8 @@ public class SymbolTableVisitor extends AstVisitor {
         node.getDcls().accept(this);
         node.getStmts().accept(this);
         checkEssentialFunctions();
+        firstRunThrough = false;
+        node.getStmts().accept(this);
         closeGeneralScope();
     }
 
@@ -383,7 +393,7 @@ public class SymbolTableVisitor extends AstVisitor {
             parameter.accept(this);
         }
         node.getBlockNode().accept(this);
-        closeGeneralScope();        
+        closeGeneralScope();
     }
 
     @Override
@@ -408,7 +418,7 @@ public class SymbolTableVisitor extends AstVisitor {
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
-        
+
     }
 
     @Override
@@ -417,6 +427,6 @@ public class SymbolTableVisitor extends AstVisitor {
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
-        
+
     }
 }
