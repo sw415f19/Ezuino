@@ -320,6 +320,13 @@ public class SymbolTableVisitorTest {
         assertTrue(e.hasErrors());
     }
 
+    @Test
+    public void funcDclAfterCall() {
+        String program = "func Setup() {test()} func test() {}";
+        ErrorHandler e = parseProgram(program);
+        assertFalse(e.hasErrors());
+    }
+
     private ErrorHandler parseProgram(String program) {
 
         CharStream stream = CharStreams.fromString(program);

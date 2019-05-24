@@ -18,11 +18,13 @@ public class SymbolTableVisitor extends AstVisitor {
     private ErrorHandler errorHandler;
     private SymbolTableHandler stVariables;
     private SymbolTableHandler stFunctions;
+    private boolean firstRunThrough;
 
     public SymbolTableVisitor(boolean printDcl, ErrorHandler errorhandler) {
         this.stVariables = new SymbolTableHandler(printDcl);
         this.stFunctions = new SymbolTableHandler(printDcl);
         this.errorHandler = errorhandler;
+        this.firstRunThrough = true; 
     }
 
     private void enterVariableSymbol(String id, ITypeNode node) {
@@ -32,6 +34,9 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     private void enterFunctionSymbol(Func_defNode node) {
+        if (!firstRunThrough) {
+            return;
+        }
         String id = node.getId();
         if (!stFunctions.isGlobalScope()) {
             errorHandler.nestedFuncDef(id);
@@ -57,6 +62,9 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     private Func_defNode getFunctionDef(String key) {
+        if (firstRunThrough) {
+            return null;
+        }
         Func_defNode result = (Func_defNode) stFunctions.retrieveSymbol(key);
         if (result == null) {
             errorHandler.undeclaredFunction(key);
@@ -107,6 +115,8 @@ public class SymbolTableVisitor extends AstVisitor {
         node.getDcls().accept(this);
         node.getStmts().accept(this);
         checkEssentialFunctions();
+        firstRunThrough = false;
+        node.getStmts().accept(this);
         closeGeneralScope();
     }
 
