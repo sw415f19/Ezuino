@@ -11,7 +11,6 @@ import ast.BooleanLiteral;
 import ast.DclNode;
 import ast.DclsNode;
 import ast.Func_defNode;
-import ast.ITypeNode;
 import ast.If_stmtNode;
 import ast.Return_stmtNode;
 import ast.StartNode;
@@ -41,12 +40,12 @@ import ast.expr.ParenthesisExprNode;
 import ast.expr.RelationalExprNode;
 import ast.expr.UnaryExprNode;
 import ast.expr.aexpr.AExpr;
-import ast.funcallstmt.CustomFuncCallStmtNode;
-import ast.funcallstmt.PrintNode;
 import ast.expr.cast.BooleanCastNode;
 import ast.expr.cast.DoubleCastNode;
 import ast.expr.cast.IntegerCastNode;
 import ast.expr.cast.StringCastNode;
+import ast.funcallstmt.CustomFuncCallStmtNode;
+import ast.funcallstmt.PrintNode;
 import ast.type.DoubleLiteral;
 import ast.type.IdNode;
 import ast.type.IntegerLiteral;
@@ -122,10 +121,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(DclNode node) {
 		symbolTable.enterSymbol(node.getID(), node);
-		if(symbolTable.isGlobalScope()) {
+		if (symbolTable.isGlobalScope()) {
 			appendLine(".field public static " + node.getID() + " " + getTypeDescriptor(node.getType()));
-		}
-		else {
+		} else {
 			currentVariableEnvironment.add(node.getID());
 			if (maxLocals < currentVariableEnvironment.size() + currentLocalFunctions.size()) {
 				maxLocals = currentVariableEnvironment.size() + currentLocalFunctions.size();
@@ -157,10 +155,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(Assign_stmtNode node) {
 		node.getExprNode().accept(this);
-		if(symbolTable.isKeyInGlobalScope(node.getId())) {
+		if (symbolTable.isKeyInGlobalScope(node.getId())) {
 			appendLine("putstatic " + programName + "/" + node.getId() + " " + getTypeDescriptor(node.getType()));
-		}
-		else {
+		} else {
 			switch (node.getExprNode().getType()) {
 			case INT:
 			case BOOL:
@@ -185,7 +182,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		for (AExpr child : node.getParameters()) {
 			child.accept(this);
 		}
-		append("invokestatic " + programName +"/");
+		append("invokestatic " + programName + "/");
 		generateFunctionSignature(node);
 		if (!currentLocalFunctions.contains(node.getID())) {
 			currentLocalFunctions.add(node.getID());
@@ -249,10 +246,10 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			maxLocals++;
 		}
 		node.getBlockNode().accept(this);
-		if(node.getType().equals(Type.VOID)) {
+		if (node.getType().equals(Type.VOID)) {
 			appendLine("return");
 		}
-		if(getLastCommandFromStringBuilder().matches("[0-9]+: ")) {
+		if (getLastCommandFromStringBuilder().matches("[0-9]+: ")) {
 			appendLine("nop");
 		}
 		appendLine(".limit stack " + maxStackSize);
@@ -349,10 +346,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(IdNode node) {
 		incrementStack();
-		if(symbolTable.isKeyInGlobalScope(node.getVal())) {
-			appendLine("getstatic " + programName +"/" + node.getVal() + " " + getTypeDescriptor(node.getType()));
-		}
-		else {
+		if (symbolTable.isKeyInGlobalScope(node.getVal())) {
+			appendLine("getstatic " + programName + "/" + node.getVal() + " " + getTypeDescriptor(node.getType()));
+		} else {
 			switch (node.getType()) {
 			case INT:
 			case BOOL:
@@ -375,7 +371,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	public void visit(RelationalExprNode node) {
 		int trueLabel = getNextLabel();
 		Type comparedType = node.getLeftNode().getType();
-		if(comparedType.equals(Type.INT)) {
+		if (comparedType.equals(Type.INT)) {
 			node.getLeftNode().accept(this);
 			appendLine("i2l");
 			incrementStack();
@@ -384,8 +380,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			incrementStack();
 			decrementStack();
 			decrementStack();
-		}
-		else {
+		} else {
 			node.getLeftNode().accept(this);
 			node.getRightNode().accept(this);
 		}
@@ -399,7 +394,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	public void visit(EqualityExprNode node) {
 		int trueLabel = getNextLabel();
 		Type comparedType = node.getLeftNode().getType();
-		if(comparedType.equals(Type.INT)) {
+		if (comparedType.equals(Type.INT)) {
 			node.getLeftNode().accept(this);
 			appendLine("i2l");
 			node.getRightNode().accept(this);
@@ -408,8 +403,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			incrementStack();
 			decrementStack();
 			decrementStack();
-		}
-		else {
+		} else {
 			node.getLeftNode().accept(this);
 			node.getRightNode().accept(this);
 		}
@@ -490,7 +484,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		default:
 			appendLine("FEJL");
-			break;	
+			break;
 		}
 		decrementStack();
 	}
@@ -555,8 +549,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 
 	@Override
 	public void visit(IntegerCastNode node) {
-		node.getParameters().get(0).accept(this); //Considered a function by AST, but with only 1 parameter
-		switch(node.getFromType()) {
+		node.getParameters().get(0).accept(this); // Considered a function by AST, but with only 1 parameter
+		switch (node.getFromType()) {
 		case DOUBLE:
 			appendLine("f2i");
 			break;
@@ -571,8 +565,9 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(DoubleCastNode node) {
 		node.getParameters().get(0).accept(this);
-		switch(node.getFromType()) {
-		case INT: case BOOL:
+		switch (node.getFromType()) {
+		case INT:
+		case BOOL:
 			appendLine("i2f");
 			break;
 		default:
@@ -580,11 +575,11 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 			break;
 		}
 	}
-	
+
 	@Override
-    public void visit(StringCastNode node) {
+	public void visit(StringCastNode node) {
 		node.getParameters().get(0).accept(this);
-		switch(node.getFromType()) {
+		switch (node.getFromType()) {
 		case INT:
 			appendLine("invokestatic java/lang/String/valueOf(I)Ljava/lang/String;");
 			break;
@@ -604,12 +599,12 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		default:
 			break;
 		}
-    }
+	}
 
-    @Override
-    public void visit(BooleanCastNode node) {
-    	node.getParameters().get(0).accept(this);
-    }
+	@Override
+	public void visit(BooleanCastNode node) {
+		node.getParameters().get(0).accept(this);
+	}
 
 	@Override
 	public void visit(AnalogReadNode node) {
@@ -676,22 +671,22 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		// TODO Auto-generated method stub
 
 	}
-	
-	@Override
-    public void visit(SetupNode node) {
-        StringBuilder oldStringBuilder = sb;
-        sb = setupBuilder;
-        node.getBlockNode().accept(this);
-        sb = oldStringBuilder;
-    }
 
-    @Override
-    public void visit(LoopNode node) {
-    	StringBuilder oldStringBuilder = sb;
-        sb = loopBuilder;
-        node.getBlockNode().accept(this);
-        sb = oldStringBuilder;
-    }
+	@Override
+	public void visit(SetupNode node) {
+		StringBuilder oldStringBuilder = sb;
+		sb = setupBuilder;
+		node.getBlockNode().accept(this);
+		sb = oldStringBuilder;
+	}
+
+	@Override
+	public void visit(LoopNode node) {
+		StringBuilder oldStringBuilder = sb;
+		sb = loopBuilder;
+		node.getBlockNode().accept(this);
+		sb = oldStringBuilder;
+	}
 
 	private void appendLine(String s) {
 		sb.append(s).append('\n');
@@ -843,7 +838,7 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		append(")");
 		appendLine(getTypeDescriptor(node.getType()));
 	}
-	
+
 	private String getTypeDescriptor(Type t) {
 		String retType;
 		switch (t) {
@@ -870,19 +865,20 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	private void generatePrefixSetupCode() {
 		appendLine(".class public " + programName);
 		appendLine(".super java/lang/Object");
-		
+
 	}
 
 	private void generatePostfixSetupCode() {
-		
+
 		appendLine("return");
 		appendLine(".limit stack " + maxStackSize);
 		appendLine(".limit locals " + maxLocals);
 		appendLine(".end method");
 		sb.append(functionStringBuilder);
 	}
+
 	private void appendLabel(int labelToAppend) {
-		if(getLastCommandFromStringBuilder().matches("[0-9]+: ")) {
+		if (getLastCommandFromStringBuilder().matches("[0-9]+: ")) {
 			appendLine("nop");
 		}
 		append(labelToAppend + ": ");
@@ -892,12 +888,12 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 		int indexOfLastNewline = sb.lastIndexOf("\n");
 		return sb.substring(indexOfLastNewline + 1);
 	}
-	
+
 	private void formatSetupAndLoopToMain() {
 		int loopLabel = getNextLabel();
 		appendLine(".method public static main([Ljava/lang/String;)V");
 		sb.append(setupBuilder);
-		if(loopBuilder.length() != 0) {
+		if (loopBuilder.length() != 0) {
 			appendLabel(loopLabel);
 			sb.append(loopBuilder);
 			appendLine("goto " + loopLabel);

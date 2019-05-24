@@ -55,6 +55,12 @@ public class SymbolTableVisitor extends AstVisitor {
         return idNode.getType();
     }
 
+    private void checkStmtScope(String key) {
+        if (stVariables.isGlobalScope()) {
+            errorHandler.stmtInGlobalScope(key);
+        }
+    }
+
     private Func_defNode getFunctionDef(String key) {
         if (firstRunThrough) {
             return null;
@@ -134,12 +140,14 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(Assign_stmtNode node) {
+        checkStmtScope(node.getId());
         node.getExprNode().accept(this);
         node.setType(getVariableType(node.getId()));
     }
 
     @Override
     public void visit(Func_callExprNode node) {
+        checkStmtScope(node.getID());
         node.setType(getFunctionReturnType(node.getID()));
         for (AExpr child : node.getParameters()) {
             child.accept(this);
@@ -187,6 +195,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(If_stmtNode node) {
+        checkStmtScope(node.toString());
         node.getExpr().accept(this);
         openVariableScope();
         node.getIfBlock().accept(this);
@@ -217,6 +226,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(While_stmtNode node) {
+        checkStmtScope(node.toString());
         node.getExprNode().accept(this);
         openVariableScope();
         node.getBlockNode().accept(this);
@@ -280,6 +290,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(PrintNode node) {
+        checkStmtScope(node.toString());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -288,6 +299,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(CustomFuncCallStmtNode node) {
+        checkStmtScope(node.toString());
         // Check if function is declared
         getFunctionDef(node.getId());
         for (AExpr child : node.getParameters()) {
@@ -299,6 +311,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(AnalogReadNode node) {
+        checkStmtScope(node.toString());
         node.setType(Type.INT);
         for (AExpr child : node.getParameters()) {
             child.accept(this);
@@ -307,6 +320,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(AnalogWriteNode node) {
+        checkStmtScope(node.toString());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -314,6 +328,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DelayMicroNode node) {
+        checkStmtScope(node.toString());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -321,6 +336,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DelayNode node) {
+        checkStmtScope(node.toString());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -328,6 +344,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DigitalReadNode node) {
+        checkStmtScope(node.toString());
         node.setType(Type.INT);
         for (AExpr child : node.getParameters()) {
             child.accept(this);
@@ -336,6 +353,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DigitalWriteNode node) {
+        checkStmtScope(node.toString());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -343,6 +361,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(SetPinModeNode node) {
+        checkStmtScope(node.toString());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -350,6 +369,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(SerialBeginNode node) {
+        checkStmtScope(node.toString());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -357,6 +377,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(SerialEndNode node) {
+        checkStmtScope(node.toString());
         for (AExpr child : node.getParameters()) {
             child.accept(this);
         }
@@ -398,6 +419,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IntegerCastNode node) {
+        checkStmtScope(node.toString());
         node.setType(Type.INT);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
@@ -406,6 +428,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DoubleCastNode node) {
+        checkStmtScope(node.toString());
         node.setType(Type.DOUBLE);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
@@ -414,6 +437,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(StringCastNode node) {
+        checkStmtScope(node.toString());
         node.setType(Type.STRING);
         for (AExpr var : node.getParameters()) {
             var.accept(this);
@@ -423,6 +447,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(BooleanCastNode node) {
+        checkStmtScope(node.toString());
         node.setType(Type.BOOL);
         for (AExpr var : node.getParameters()) {
             var.accept(this);

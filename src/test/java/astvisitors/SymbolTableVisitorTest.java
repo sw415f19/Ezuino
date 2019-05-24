@@ -298,6 +298,27 @@ public class SymbolTableVisitorTest {
         ErrorHandler e = parseProgram(program);
         assertTrue(e.hasErrors());
     }
+    
+    @Test
+    public void assignStmtInGlobalScope() {
+        String program = "int a a := 2 func Setup() {}";
+        ErrorHandler e = parseProgram(program);
+        assertTrue(e.hasErrors());
+    }
+    
+    @Test
+    public void ifStmtInGlobalScope() {
+        String program = "int a if(1<2) {} func Setup() {}";
+        ErrorHandler e = parseProgram(program);
+        assertTrue(e.hasErrors());
+    }
+    
+    @Test
+    public void whileStmtInGlobalScope() {
+        String program = "int a while(1<2) {} func Setup() {}";
+        ErrorHandler e = parseProgram(program);
+        assertTrue(e.hasErrors());
+    }
 
     @Test
     public void funcDclAfterCall() {

@@ -126,4 +126,9 @@ public class ErrorHandler {
         addError(new GeneralError(ErrorType.ERROR, "Invalid cast. Cannot cast " + argumentType + " to " + castType));
 
     }
+
+    public void stmtInGlobalScope(String key) {
+        addError(new GeneralError(ErrorType.ERROR, "The stmt " + key + " must be within a function block"));
+
+    }
 }
