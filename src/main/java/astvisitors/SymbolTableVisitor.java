@@ -49,9 +49,9 @@ public class SymbolTableVisitor extends AstVisitor {
         }
         return idNode.getType();
     }
-    
+
     private void checkStmtScope(String key) {
-        if(stVariables.isGlobalScope()) {
+        if (stVariables.isGlobalScope()) {
             errorHandler.stmtInGlobalScope(key);
         }
     }
@@ -89,14 +89,14 @@ public class SymbolTableVisitor extends AstVisitor {
         stFunctions.closeScope();
         closeVariableScope();
     }
-    
+
     private void checkEssentialFunctions() {
         String setup = "Setup";
         String loop = "Loop";
-        if(stFunctions.retrieveSymbol(setup) == null) {
+        if (stFunctions.retrieveSymbol(setup) == null) {
             errorHandler.missingEssentialFunction(setup, true);
         }
-        if(stFunctions.retrieveSymbol(loop) == null) {
+        if (stFunctions.retrieveSymbol(loop) == null) {
             errorHandler.missingEssentialFunction(loop, false);
         }
     }
@@ -404,7 +404,7 @@ public class SymbolTableVisitor extends AstVisitor {
             parameter.accept(this);
         }
         node.getBlockNode().accept(this);
-        closeGeneralScope();        
+        closeGeneralScope();
     }
 
     @Override
@@ -432,7 +432,7 @@ public class SymbolTableVisitor extends AstVisitor {
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
-        
+
     }
 
     @Override
@@ -442,6 +442,6 @@ public class SymbolTableVisitor extends AstVisitor {
         for (AExpr var : node.getParameters()) {
             var.accept(this);
         }
-        
+
     }
 }
