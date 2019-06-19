@@ -24,7 +24,7 @@ public class SymbolTableVisitor extends AstVisitor {
         this.stVariables = new SymbolTableHandler(printDcl);
         this.stFunctions = new SymbolTableHandler(printDcl);
         this.errorHandler = errorhandler;
-        this.firstRunThrough = true; 
+        this.firstRunThrough = true;
     }
 
     private void enterVariableSymbol(String id, ITypeNode node) {
@@ -47,6 +47,9 @@ public class SymbolTableVisitor extends AstVisitor {
     }
 
     private Type getVariableType(String id) {
+        if (!firstRunThrough) {
+            return null;
+        }
         ITypeNode idNode = stVariables.retrieveSymbol(id);
         if (idNode == null) {
             errorHandler.undeclaredVariable(id);
@@ -142,7 +145,10 @@ public class SymbolTableVisitor extends AstVisitor {
     public void visit(Assign_stmtNode node) {
         checkStmtScope(node.getId());
         node.getExprNode().accept(this);
-        node.setType(getVariableType(node.getId()));
+        Type nodeType = getVariableType(node.getId());
+        if (nodeType != null) {
+            node.setType(nodeType);
+        }
     }
 
     @Override
@@ -235,7 +241,11 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(IdNode node) {
-        node.setType(getVariableType(node.getVal()));
+
+        Type nodeType = getVariableType(node.getVal());
+        if (nodeType != null) {
+            node.setType(nodeType);
+        }
     }
 
     @Override
