@@ -1,0 +1,37 @@
+int result
+
+func int getCurrentYear() {
+  return 2019
+  #return 2019.0
+}
+
+func checkAge(int yearBorn) {
+
+  int currentYear
+  int currentAge
+  #int yearBorn
+  #double currentAge
+  string message
+  
+  currentYear := 2019
+  currentYear := getCurrentYear()
+  currentAge := currentYear - yearBorn
+  
+  if(currentAge < 12) {
+    message := "You are too young"
+  } else {
+    message := "You are old enough"
+    result := 1
+  }
+  
+  Print(message)
+  
+}
+
+
+func Setup() {
+  int yearBorn
+  yearBorn := 1995
+  checkAge(yearBorn)
+  
+}

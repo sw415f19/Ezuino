@@ -24,7 +24,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        CharStream cs = CharStreams.fromFileName("src/main/code.ezuino");
+        CharStream cs = CharStreams.fromFileName("src/main/example.ezuino");
 
         ErrorHandler errorHandler = new ErrorHandler();
         AstNode ast = syntaxAnalysis(cs, errorHandler);
