@@ -31,7 +31,7 @@ func checkAge(int yearBorn) {
 
 func Setup() {
   int yearBorn
-  yearBorn := 1995
+  yearBorn := 2009
   checkAge(yearBorn)
   
 }

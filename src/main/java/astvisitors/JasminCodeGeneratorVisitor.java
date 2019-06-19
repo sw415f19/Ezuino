@@ -194,7 +194,8 @@ public class JasminCodeGeneratorVisitor extends AstVisitor {
 	@Override
 	public void visit(IntegerLiteral node) {
 		incrementStack();
-		appendLine("bipush " + node.getVal());
+        incrementStack();
+		appendLine("sipush " + node.getVal());
 	}
 
 	@Override

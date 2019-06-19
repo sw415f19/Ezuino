@@ -15,7 +15,13 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import javax.swing.*;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +43,11 @@ public class Main {
             errorHandler.printErrors("Semantic errors");
             return;
         }
-        codeGeneration(ast);
+        //PrintStream stream = System.out;
+        PrintStream stream = new PrintStream(new BufferedOutputStream(new FileOutputStream("src/main/example.j")), true);
+        String programName = "example";
+        
+        codeGeneration(ast, stream, programName);
     }
 
     private static AstNode syntaxAnalysis(CharStream charStream, ErrorHandler errorHandler) {
@@ -93,9 +103,9 @@ public class Main {
         }
     }
 
-    private static void codeGeneration(AstNode ast) {
+    private static void codeGeneration(AstNode ast, PrintStream stream, String programName) {
 
-        ast.accept(new JasminCodeGeneratorVisitor(System.out));
+        ast.accept(new JasminCodeGeneratorVisitor(stream, programName));
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
