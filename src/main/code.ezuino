@@ -1,17 +1,13 @@
-func int fib(int fibNum){
-  if(fibNum < 3){
-    return 1
-  }
-  else{
-    return fib(fibNum - 1) + fib(fibNum - 2)
-  }
+int pinID
+
+func Setup() {
+    pinID := 12
+    PinMode(pinID, OUTPUT)
 }
 
-func Setup(){
-  int i
-  i := 1
-  while(i <= 20){
-    Print(String(fib(i)))
-    i := i + 1
-  }
+func Loop() {
+    DigitalWrite(pinID, HIGH)
+    Delay(1000)
+    DigitalWrite(pinID, LOW)
+    Delay(1000)
 }

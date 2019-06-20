@@ -1,6 +1,9 @@
 int result
 
 func int getCurrentYear() {
+  #func test() { }
+  
+  
   return 2019
   #return 2019.0
 }
@@ -19,6 +22,7 @@ func checkAge(int yearBorn) {
   
   if(currentAge < 12) {
     message := "You are too young"
+    result := 0
   } else {
     message := "You are old enough"
     result := 1
