@@ -27,9 +27,12 @@ public class SymbolTableVisitor extends AstVisitor {
         this.firstRunThrough = true;
     }
 
-    private void enterVariableSymbol(String id, ITypeNode node) {
-        if (!stVariables.enterSymbol(id, node)) {
-            errorHandler.varAlreadyDeclared(id);
+    private void enterVariableSymbol(DclNode node) {
+        if (!firstRunThrough) {
+            return;
+        }
+        if (!stVariables.enterSymbol(node.getID(), node)) {
+            errorHandler.varAlreadyDeclared(node);
         }
     }
 
@@ -138,7 +141,7 @@ public class SymbolTableVisitor extends AstVisitor {
 
     @Override
     public void visit(DclNode node) {
-        enterVariableSymbol(node.getID(), node);
+        enterVariableSymbol(node);
     }
 
     @Override

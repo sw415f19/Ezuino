@@ -3,6 +3,7 @@ package exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import ast.DclNode;
 import ast.ITypeNode;
 import ast.Type;
 import ast.funcallstmt.Func_callStmtNode;
@@ -35,20 +36,20 @@ public class ErrorHandler {
         messageList.add(e);
     }
 
-    public void varAlreadyDeclared(String character) {
-        addError(new SyntaxError(ErrorType.ERROR, "Variable " + character + " is already defined in this scope."));
+    public void varAlreadyDeclared(DclNode node) {
+        addError(new GeneralError(ErrorType.ERROR, "Variable " + node.getID() + " is already defined in this scope."));
     }
 
     public void funcAlreadyDeclared(String character) {
-        addError(new SyntaxError(ErrorType.ERROR, "Function " + character + " is already defined in this scope."));
+        addError(new GeneralError(ErrorType.ERROR, "Function " + character + " is already defined in this scope."));
     }
 
     public void undeclaredVariable(String character) {
-        addError(new SyntaxError(ErrorType.ERROR, "Variable " + character + " has not been declared."));
+        addError(new GeneralError(ErrorType.ERROR, "Variable " + character + " has not been declared."));
     }
 
     public void undeclaredFunction(String character) {
-        addError(new SyntaxError(ErrorType.ERROR, "Function " + character + " has not been declared."));
+        addError(new GeneralError(ErrorType.ERROR, "Function " + character + " has not been declared."));
     }
 
     public void reservedKeyword(String Id, String Keyword) {

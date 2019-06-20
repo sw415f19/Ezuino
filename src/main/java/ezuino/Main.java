@@ -17,10 +17,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import javax.swing.*;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,6 +104,7 @@ public class Main {
     private static void codeGeneration(AstNode ast, PrintStream stream, String programName) {
 
         ast.accept(new JasminCodeGeneratorVisitor(stream, programName));
+        //ast.accept(new ArduinoCodeGenerationVisitor(System.out));
     }
 
     private static void showCST(ParseTree parseTree, EzuinoParser parser) {
